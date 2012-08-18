@@ -278,12 +278,12 @@
 
         expect(10);
 
-        function handler(items, name, item) {
-            equal(this, item, "'this' matches item");
-            deepEqual(item, items[name], "Item '" + name + "' OK");
+        function handler(name, customArg) {
+            deepEqual(this, collection.items[name], "Item '" + name + "' OK");
+            equal(customArg, 'custom', "Custom argument");
         }
 
-        collection.each(handler);
+        collection.each(handler, 'custom');
     });
 }(
     sntls.Collection

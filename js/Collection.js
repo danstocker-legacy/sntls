@@ -27,9 +27,11 @@ troop.promise(sntls, 'Collection', function () {
                 if (!(methodNames instanceof Array) &&
                     typeof methodNames === 'object'
                     ) {
+                    // obtaining property names when methodNames is not array
                     methodNames = Object.getOwnPropertyNames(methodNames);
                 }
 
+                // adding shortcut methods to temp shortcuts object
                 for (i = 0; i < methodNames.length; i++) {
                     methodName = methodNames[i];
                     shortcuts[methodName] = self._genShortcut(methodName);
@@ -41,6 +43,10 @@ troop.promise(sntls, 'Collection', function () {
                 return extended;
             },
 
+            /**
+             * @constructor
+             * @param items {object} Initial contents.
+             */
             init: function (items) {
                 // adding basic properties
                 this.addPublic({
@@ -262,16 +268,19 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Calls a function on each item.
              * @param handler {function} Function to call on each item.
+             * Handler receives the current item as this, and the item name as
+             * first argument. Forwards all other arguments to handler.
+             * Iteration breaks when handler returns false.
              */
             each: function (handler) {
-                var items = this.items,
-                    item,
+                var args = Array.prototype.slice.call(arguments),
+                    items = this.items,
                     name;
 
                 for (name in items) {
                     if (items.hasOwnProperty(name)) {
-                        item = items[name];
-                        if (handler.call(item, items, name, item) === false) {
+                        args[0] = name;
+                        if (handler.apply(items[name], args) === false) {
                             break;
                         }
                     }
