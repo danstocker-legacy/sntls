@@ -152,13 +152,13 @@ troop.promise(sntls, 'Collection', function () {
              * @param item Item variable / object.
              */
             set: function (name, item) {
-                var isAdd = !this.items.hasOwnProperty(name);
+                var isNew = !this.items.hasOwnProperty(name);
 
                 // setting item
                 this.items[name] = item;
 
                 // increasing count when new item was added
-                if (isAdd) {
+                if (isNew) {
                     this.count++;
                 }
 
@@ -253,13 +253,12 @@ troop.promise(sntls, 'Collection', function () {
             move: function (from, to) {
                 var item;
 
-                // destination name must not exist
-                if (!this.items.hasOwnProperty(to)) {
-                    item = this.get(from);
-                    this.unset(from);
-                    this.set(to, item);
+                item = this.get(from);
+                this.unset(from);
+                if (typeof item === 'undefined') {
+                    this.unset(to);
                 } else {
-                    throw "sntls.Collection.rename: Destination item exists.";
+                    this.set(to, item);
                 }
 
                 return this;

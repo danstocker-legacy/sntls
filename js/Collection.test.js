@@ -261,14 +261,13 @@
             "Collection before renaming"
         );
 
-        raises(function () {
-            collection.move('one', 'two');
-        }, "Renaming to existing item raises error");
-
         collection.move('one', 'thousand');
 
         equal(typeof collection.items.one, 'undefined', "Original item after rename");
         equal(collection.items.thousand, 'hello', "New item after rename");
+
+        collection.move('absent', 'five');
+        equal(collection.items.hasOwnProperty('five'), false, "Moving undefined removes destination");
     });
 
     test("Iterating over collection", function () {
