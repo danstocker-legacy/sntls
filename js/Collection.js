@@ -272,14 +272,13 @@ troop.promise(sntls, 'Collection', function () {
              * Iteration breaks when handler returns false.
              */
             each: function (handler) {
-                var args = Array.prototype.slice.call(arguments),
+                var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     name;
 
                 for (name in items) {
                     if (items.hasOwnProperty(name)) {
-                        args[0] = name;
-                        if (handler.apply(items[name], args) === false) {
+                        if (handler.apply(items[name], [name].concat(args)) === false) {
                             break;
                         }
                     }
