@@ -219,7 +219,7 @@
         );
     });
 
-    test("Each w/ handler", function () {
+    test("For Each", function () {
         var collection = Collection.create();
 
         init(collection);
@@ -231,10 +231,10 @@
             equal(customArg, 'custom', "Custom argument");
         }
 
-        collection.each(handler, 'custom');
+        collection.forEach(handler, 'custom');
     });
 
-    test("Each w/ method name", function () {
+    test("Each", function () {
         var collection = Collection.create(),
             i, result;
 

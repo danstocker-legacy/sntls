@@ -227,17 +227,15 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * Calls a function on each item.
-             * @param handler {function|string} Function or method name to call on each item.
-             * When function is passed, handler receives the current item as this, and the item name as
+             * @param handler {function} Function to call on each item.
+             * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
-             * When method name is passed, method results are collected and returned in a new collection.
              */
-            each: function (handler) {
+            forEach: function (handler) {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
-                    result,
-                    name, item, method;
+                    name, item;
 
                 if (typeof handler === 'function') {
                     for (name in items) {
@@ -248,20 +246,34 @@ troop.promise(sntls, 'Collection', function () {
                             }
                         }
                     }
-                    return this;
-                } else if (typeof handler === 'string') {
-                    result = {};
-                    for (name in items) {
-                        if (items.hasOwnProperty(name)) {
-                            item = items[name];
-                            method = item[handler];
-                            if (typeof method === 'function') {
-                                result[name] = method.apply(item, args);
-                            }
+                }
+
+                return this;
+            },
+
+            /**
+             * Calls a function on each item.
+             * Method results are collected and returned in a new collection.
+             * @param methodName {string} Method name on each item.
+             * @return {sntls.Collection}
+             */
+            each: function (methodName) {
+                var args = Array.prototype.slice.call(arguments, 1),
+                    items = this.items,
+                    result = {},
+                    name, item, method;
+
+                for (name in items) {
+                    if (items.hasOwnProperty(name)) {
+                        item = items[name];
+                        method = item[methodName];
+                        if (typeof method === 'function') {
+                            result[name] = method.apply(item, args);
                         }
                     }
-                    return self.create(result);
                 }
+
+                return self.create(result);
             }
         });
 
