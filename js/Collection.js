@@ -165,14 +165,16 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection} Filtered collection
              */
             filter: function (re) {
-                var result = self.create(),
+                var result = {},
                     keys = this.keys(re),
                     i, key;
+
                 for (i = 0; i < keys.length; i++) {
                     key = keys[i];
-                    result.set(key, this.items[key]);
+                    result[key] = this.items[key];
                 }
-                return result;
+
+                return this.getBase().create(result);
             },
 
             //////////////////////////////

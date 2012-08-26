@@ -118,11 +118,34 @@
 
         filtered = collection.filter(/f\w+/);
 
-        equal(Object.getPrototypeOf(filtered), sntls.Collection, "Type of filtered collection is collection");
+       equal(filtered.getBase(), sntls.Collection, "Type of filtered collection is collection");
         deepEqual(filtered.items, {
             four: {},
             five: true
         }, "Filter result");
+    });
+
+    test("Filtering of extended collection", function () {
+        var StringCollection = Collection.extend(String.prototype),
+            names = StringCollection.create({
+                test: 'test',
+                hello: 'hello',
+                world: 'world',
+                foo: 'foo',
+                bar: 'bar'
+            }),
+            filtered = names.filter(/^\w*o$/);
+
+        deepEqual(filtered.items, {
+            hello: 'hello',
+            foo: 'foo'
+        }, "Filtered collection");
+
+        equal(filtered.getBase(), StringCollection, "Type of filtered collection");
+        deepEqual(filtered.toUpperCase().items, {
+            hello: 'HELLO',
+            foo: 'FOO'
+        }, "String method called on filtered string collection");
     });
 
     test("Removal", function () {
