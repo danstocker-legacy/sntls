@@ -82,44 +82,12 @@ troop.promise(sntls, 'Collection', function () {
                         }
                     }
 
-                    return self.create.call(self, result);
+                    return self.create(result);
                 };
             }
         }).addMethod({
             //////////////////////////////
             // Basics
-
-            /**
-             * Tells whether an item is in the collection.
-             * @param name {string} Item name.
-             * @returns {boolean}
-             */
-            has: function (name) {
-                return this.items.hasOwnProperty(name);
-            },
-
-            /**
-             * Retrieves item names filtered by a regexp.
-             * @param [re] {RegExp} Item name filter.
-             * @return {string[]} Array of item names matching the regexp.
-             */
-            keys: function (re) {
-                var result = [],
-                    name;
-
-                if (re instanceof RegExp) {
-                    for (name in this.items) {
-                        if (this.items.hasOwnProperty(name) &&
-                            re.test(name)
-                            ) {
-                            result.push(name);
-                        }
-                    }
-                    return result;
-                } else {
-                    return Object.keys(this.item);
-                }
-            },
 
             /**
              * Retrieves item from the collection.
@@ -128,22 +96,6 @@ troop.promise(sntls, 'Collection', function () {
              */
             get: function (name) {
                 return this.items[name];
-            },
-
-            /**
-             * Filters collection by a regular expression.
-             * @param re {RegExp} Filter expression
-             * @return {sntls.Collection} Filtered collection
-             */
-            filter: function (re) {
-                var result = self.create(),
-                    keys = this.keys(re),
-                    i, key;
-                for (i = 0; i < keys.length; i++) {
-                    key = keys[i];
-                    result.set(key, this.items[key]);
-                }
-                return result;
             },
 
             /**
@@ -169,7 +121,7 @@ troop.promise(sntls, 'Collection', function () {
              * Removes item from wraith.LOOKUP.
              * @param name {string} Item name.
              */
-            unset: function (name) {
+            remove: function (name) {
                 if (this.items.hasOwnProperty(name)) {
                     // removing item
                     delete this.items[name];
@@ -179,6 +131,48 @@ troop.promise(sntls, 'Collection', function () {
                 }
 
                 return this;
+            },
+
+            //////////////////////////////
+            // Filtering
+
+            /**
+             * Retrieves item names filtered by a regexp.
+             * @param [re] {RegExp} Item name filter.
+             * @return {string[]} Array of item names matching the regexp.
+             */
+            keys: function (re) {
+                var result = [],
+                    name;
+
+                if (re instanceof RegExp) {
+                    for (name in this.items) {
+                        if (this.items.hasOwnProperty(name) &&
+                            re.test(name)
+                            ) {
+                            result.push(name);
+                        }
+                    }
+                    return result;
+                } else {
+                    return Object.keys(this.item);
+                }
+            },
+
+            /**
+             * Filters collection by a regular expression.
+             * @param re {RegExp} Filter expression
+             * @return {sntls.Collection} Filtered collection
+             */
+            filter: function (re) {
+                var result = self.create(),
+                    keys = this.keys(re),
+                    i, key;
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    result.set(key, this.items[key]);
+                }
+                return result;
             },
 
             //////////////////////////////
@@ -224,7 +218,7 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Empties collection.
              */
-            empty: function () {
+            clear: function () {
                 // removing items
                 this.items = {};
                 this.count = 0;
@@ -232,59 +226,42 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Swaps the values of two elements in the collection.
-             * @param name1 {string} Name of first item.
-             * @param name2 {string} Name of second item.
-             */
-            swap: function (name1, name2) {
-                var tmp = this.items[name1];
-
-                this.set(name1, this.items[name2]);
-                this.set(name2, tmp);
-
-                return this;
-            },
-
-            /**
-             * Swaps the values of two elements in the collection.
-             * @param from {string} Original name.
-             * @param to {string} New name.
-             */
-            move: function (from, to) {
-                var item;
-
-                item = this.get(from);
-                this.unset(from);
-                if (typeof item === 'undefined') {
-                    this.unset(to);
-                } else {
-                    this.set(to, item);
-                }
-
-                return this;
-            },
-
-            /**
              * Calls a function on each item.
-             * @param handler {function} Function to call on each item.
-             * Handler receives the current item as this, and the item name as
+             * @param handler {function|string} Function or method name to call on each item.
+             * When function is passed, handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
+             * When method name is passed, method results are collected and returned in a new collection.
              */
             each: function (handler) {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
-                    name;
+                    result,
+                    name, item, method;
 
-                for (name in items) {
-                    if (items.hasOwnProperty(name)) {
-                        if (handler.apply(items[name], [name].concat(args)) === false) {
-                            break;
+                if (typeof handler === 'function') {
+                    for (name in items) {
+                        if (items.hasOwnProperty(name)) {
+                            item = items[name];
+                            if (handler.apply(item, [name].concat(args)) === false) {
+                                break;
+                            }
                         }
                     }
+                    return this;
+                } else if (typeof handler === 'string') {
+                    result = {};
+                    for (name in items) {
+                        if (items.hasOwnProperty(name)) {
+                            item = items[name];
+                            method = item[handler];
+                            if (typeof method === 'function') {
+                                result[name] = method.apply(item, args);
+                            }
+                        }
+                    }
+                    return self.create(result);
                 }
-
-                return this;
             }
         });
 

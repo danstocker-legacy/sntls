@@ -98,9 +98,6 @@
 
         init(collection);
 
-        equal(collection.has('one'), true, "Collection has specified item");
-        equal(collection.has('thousand'), false, "Collection doesn't have specified item");
-
         equal(collection.get('one'), 'hello', "Querying string");
         equal(collection.get('two'), 'world', "Querying string");
         equal(collection.get('three'), 5, "Querying number");
@@ -134,7 +131,7 @@
             beforeCount;
 
         beforeCount = collection.count;
-        collection.unset('one');
+        collection.remove('one');
         equal(collection.count, beforeCount, "Attempting to remove non-existing item fails");
 
         init(collection);
@@ -153,12 +150,12 @@
 
         countBefore = collection.count;
 
-        collection.unset('one');
+        collection.remove('one');
         equal(collection.count, countBefore - 1, "Collection count decreased");
         equal(typeof collection.get('one'), 'undefined', "Collection item removed");
 
-        collection.unset('three');
-        collection.unset('five');
+        collection.remove('three');
+        collection.remove('five');
 
         deepEqual(
             collection.items,
@@ -170,7 +167,7 @@
         );
     });
 
-    test("Emptying", function () {
+    test("Clearing", function () {
         var collection = Collection.create();
 
         init(collection);
@@ -187,7 +184,7 @@
             "Collection before emptying"
         );
 
-        collection.empty();
+        collection.clear();
         deepEqual(collection.items, {}, "Items buffer after emptying");
         equal(collection.count, 0, "Item count after emptying");
     });
@@ -222,55 +219,7 @@
         );
     });
 
-    test("Swapping", function () {
-        var collection = Collection.create();
-
-        init(collection);
-
-        deepEqual(
-            collection.items,
-            {
-                'one'  : 'hello',
-                'two'  : 'world',
-                'three': 5,
-                'four' : {},
-                'five' : true
-            },
-            "Collection before swapping"
-        );
-
-        collection.swap('one', 'two');
-        equal(collection.items.one, 'world', "First item assigned value of second");
-        equal(collection.items.two, 'hello', "Second item assigned value of first");
-    });
-
-    test("Renaming", function () {
-        var collection = Collection.create();
-
-        init(collection);
-
-        deepEqual(
-            collection.items,
-            {
-                'one'  : 'hello',
-                'two'  : 'world',
-                'three': 5,
-                'four' : {},
-                'five' : true
-            },
-            "Collection before renaming"
-        );
-
-        collection.move('one', 'thousand');
-
-        equal(typeof collection.items.one, 'undefined', "Original item after rename");
-        equal(collection.items.thousand, 'hello', "New item after rename");
-
-        collection.move('absent', 'five');
-        equal(collection.items.hasOwnProperty('five'), false, "Moving undefined removes destination");
-    });
-
-    test("Iterating over collection", function () {
+    test("Each w/ handler", function () {
         var collection = Collection.create();
 
         init(collection);
@@ -283,6 +232,34 @@
         }
 
         collection.each(handler, 'custom');
+    });
+
+    test("Each w/ method name", function () {
+        var collection = Collection.create(),
+            i, result;
+
+        expect(6);
+
+        function test(customArg) {
+            equal(customArg, 'custom', "Custom argument");
+            return 1;
+        }
+
+        for (i = 0; i < 5; i++) {
+            collection.set(i, {
+                test: test
+            });
+        }
+
+        result = collection.each('test', 'custom');
+
+        deepEqual(result.items, {
+            0: 1,
+            1: 1,
+            2: 1,
+            3: 1,
+            4: 1
+        });
     });
 }(
     sntls.Collection
