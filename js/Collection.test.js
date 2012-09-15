@@ -85,7 +85,7 @@
      */
     function init(lookup) {
         lookup.set('one', 'hello');
-        lookup.set('two', 'world');
+        lookup.set('two', 'world!');
         lookup.set('three', 5);
         lookup.set('four', {});
         lookup.set('five', true);
@@ -99,7 +99,7 @@
         init(collection);
 
         equal(collection.get('one'), 'hello', "Querying string");
-        equal(collection.get('two'), 'world', "Querying string");
+        equal(collection.get('two'), 'world!', "Querying string");
         equal(collection.get('three'), 5, "Querying number");
         deepEqual(collection.get('four'), {}, "Querying object");
         equal(collection.get('five'), true, "Querying boolean");
@@ -117,34 +117,41 @@
         deepEqual(collection.keys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
 
         filtered = collection.filter(/f\w+/);
-
-       equal(filtered.getBase(), sntls.Collection, "Type of filtered collection is collection");
+        equal(filtered.getBase(), sntls.Collection, "Type of filtered collection is collection");
         deepEqual(filtered.items, {
             four: {},
             five: true
-        }, "Filter result");
+        }, "Result of filtering by regexp");
+
+        filtered = collection.filter(function () {
+            return this instanceof String;
+        });
+        deepEqual(filtered.items, {
+            one: 'hello',
+            two: 'world!'
+        }, "Result of filtering by callback");
     });
 
     test("Filtering of extended collection", function () {
         var StringCollection = Collection.extend(String.prototype),
             names = StringCollection.create({
-                test: 'test',
+                test : 'test',
                 hello: 'hello',
-                world: 'world',
-                foo: 'foo',
-                bar: 'bar'
+                world: 'world!',
+                foo  : 'foo',
+                bar  : 'bar'
             }),
             filtered = names.filter(/^\w*o$/);
 
         deepEqual(filtered.items, {
             hello: 'hello',
-            foo: 'foo'
+            foo  : 'foo'
         }, "Filtered collection");
 
         equal(filtered.getBase(), StringCollection, "Type of filtered collection");
         deepEqual(filtered.toUpperCase().items, {
             hello: 'HELLO',
-            foo: 'FOO'
+            foo  : 'FOO'
         }, "String method called on filtered string collection");
     });
 
@@ -163,7 +170,7 @@
             collection.items,
             {
                 'one'  : 'hello',
-                'two'  : 'world',
+                'two'  : 'world!',
                 'three': 5,
                 'four' : {},
                 'five' : true
@@ -183,7 +190,7 @@
         deepEqual(
             collection.items,
             {
-                'two' : 'world',
+                'two' : 'world!',
                 'four': {}
             },
             "Collection after removals"
@@ -199,7 +206,7 @@
             collection.items,
             {
                 'one'  : 'hello',
-                'two'  : 'world',
+                'two'  : 'world!',
                 'three': 5,
                 'four' : {},
                 'five' : true
@@ -221,7 +228,7 @@
             collection.asArray(),
             [
                 'hello',
-                'world',
+                'world!',
                 5,
                 {},
                 true
@@ -236,9 +243,23 @@
                 {},
                 'hello',
                 5,
-                'world'
+                'world!'
             ],
             "In order of names"
+        );
+
+        deepEqual(
+            collection.asSortedArray(function (a, b) {
+                return String(collection.items[a]).length - String(collection.items[b]).length;
+            }),
+            [
+                5,
+                true,
+                'hello',
+                'world!',
+                {}
+            ],
+            "In order of serialized length"
         );
     });
 

@@ -160,18 +160,30 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Filters collection by a regular expression.
-             * @param re {RegExp} Filter expression
+             * Filters collection elements.
+             * @param selector {RegExp|function} Selector expression
              * @return {sntls.Collection} Filtered collection
              */
-            filter: function (re) {
+            filter: function (selector) {
                 var result = {},
-                    keys = this.keys(re),
+                    items = this.items,
+                    keys,
                     i, key;
 
-                for (i = 0; i < keys.length; i++) {
-                    key = keys[i];
-                    result[key] = this.items[key];
+                if (selector instanceof RegExp) {
+                    keys = this.keys(selector);
+                    for (i = 0; i < keys.length; i++) {
+                        key = keys[i];
+                        result[key] = items[key];
+                    }
+                } else if (typeof selector === 'function') {
+                    for (key in items) {
+                        if (items.hasOwnProperty(key) &&
+                            selector.call(items[key], key)
+                            ) {
+                            result[key] = items[key];
+                        }
+                    }
                 }
 
                 return this.getBase().create(result);
@@ -200,10 +212,11 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Retrieves collection items as array
              * in order of their names.
+             * @param comparator {function} Comparator callback.
              * @returns {*[]} Item values in order of names.
              */
-            asSortedArray: function () {
-                var keys = Object.keys(this.items).sort(),
+            asSortedArray: function (comparator) {
+                var keys = Object.keys(this.items).sort(comparator),
                     result = [],
                     i;
 
