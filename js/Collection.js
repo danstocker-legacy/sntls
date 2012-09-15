@@ -254,12 +254,12 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Calls a function on each item.
+             * Calls a method on each item, identified by name.
              * Method results are collected and returned in a new collection.
              * @param methodName {string} Method name on each item.
              * @return {sntls.Collection}
              */
-            each: function (methodName) {
+            callEach: function (methodName) {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     result = {},

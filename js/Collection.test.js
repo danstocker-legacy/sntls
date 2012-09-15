@@ -257,7 +257,7 @@
         collection.forEach(handler, 'custom');
     });
 
-    test("Each", function () {
+    test("Call Each", function () {
         var collection = Collection.create(),
             i, result;
 
@@ -274,7 +274,7 @@
             });
         }
 
-        result = collection.each('test', 'custom');
+        result = collection.callEach('test', 'custom');
 
         deepEqual(result.items, {
             0: 1,
