@@ -20,6 +20,11 @@ troop.promise(sntls, 'Collection', function () {
              * @override
              */
             of: function (methodNames) {
+                // in case methodNames is a fat constructor
+                if (typeof methodNames === 'function') {
+                    methodNames = methodNames.prototype;
+                }
+
                 var extended = base.extend.call(self),
                     shortcuts = {},
                     i, methodName;

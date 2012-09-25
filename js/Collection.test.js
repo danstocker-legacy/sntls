@@ -17,6 +17,7 @@
 
     test("Extension", function () {
         var StringCollection = Collection.of(String.prototype),
+            FatStringCollection = Collection.of(String),
             ArrayCollection = Collection.of(Array.prototype),
             stringData = {
                 'foo': "Hello world!",
@@ -31,6 +32,12 @@
             StringCollection.create(stringData).split(' ').items,
             arrayData,
             "Splitting over collection of strings"
+        );
+
+        deepEqual(
+            FatStringCollection.create(stringData).split(' ').items,
+            arrayData,
+            "Splitting over collection of strings (from fat constructor)"
         );
 
         deepEqual(
