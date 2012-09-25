@@ -144,12 +144,17 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * Retrieves item names filtered by a regexp.
-             * @param [re] {RegExp} Item name filter.
+             * @param [re] {RegExp|string} Item name filter.
              * @return {string[]} Array of item names matching the regexp.
              */
             keys: function (re) {
                 var result = [],
                     name;
+
+                // handling simplified prefix filtering
+                if (typeof re === 'string') {
+                    re = new RegExp(re + '\\w*');
+                }
 
                 if (re instanceof RegExp) {
                     for (name in this.items) {
@@ -167,7 +172,7 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * Filters collection elements.
-             * @param selector {RegExp|function} Selector expression
+             * @param selector {RegExp|string|function} Selector expression
              * @return {sntls.Collection} Filtered collection
              */
             filter: function (selector) {
@@ -176,7 +181,9 @@ troop.promise(sntls, 'Collection', function () {
                     keys,
                     i, key;
 
-                if (selector instanceof RegExp) {
+                if (selector instanceof RegExp ||
+                    typeof selector === 'string'
+                    ) {
                     keys = this.keys(selector);
                     for (i = 0; i < keys.length; i++) {
                         key = keys[i];

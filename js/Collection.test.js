@@ -147,6 +147,7 @@
 
         deepEqual(collection.keys(/one/), ['one'], "Exact key retrieval");
         deepEqual(collection.keys(/f\w+/), ['four', 'five'], "Prefix search");
+        deepEqual(collection.keys('f'), ['four', 'five'], "String prefix search");
         deepEqual(collection.keys(/one|three/), ['one', 'three'], "Multiple search");
         deepEqual(collection.keys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
 
@@ -156,6 +157,12 @@
             four: {},
             five: true
         }, "Result of filtering by regexp");
+
+        filtered = collection.filter('f');
+        deepEqual(filtered.items, {
+            four: {},
+            five: true
+        }, "String prefix filtering");
 
         filtered = collection.filter(function () {
             return this instanceof String;
