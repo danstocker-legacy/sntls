@@ -271,7 +271,11 @@
         expect(10);
 
         function handler(name, customArg) {
-            deepEqual(this, collection.items[name], "Item '" + name + "' OK");
+            if (Object.isPrototypeOf(this)) {
+                deepEqual(this, collection.items[name], "Item '" + name + "' OK");
+            } else {
+                equal(this, collection.items[name], "Item '" + name + "' OK");
+            }
             equal(customArg, 'custom', "Custom argument");
         }
 
