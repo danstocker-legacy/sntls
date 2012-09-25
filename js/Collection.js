@@ -19,7 +19,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param methodNames {string[]|object} Array of method names, or object with method name keys.
              * @override
              */
-            extend: function (methodNames) {
+            of: function (methodNames) {
                 var extended = base.extend.call(self),
                     shortcuts = {},
                     i, methodName;

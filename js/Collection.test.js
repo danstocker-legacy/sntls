@@ -16,8 +16,8 @@
     });
 
     test("Extension", function () {
-        var StringCollection = Collection.extend(String.prototype),
-            ArrayCollection = Collection.extend(Array.prototype),
+        var StringCollection = Collection.of(String.prototype),
+            ArrayCollection = Collection.of(Array.prototype),
             stringData = {
                 'foo': "Hello world!",
                 'bar': "E pluribus unum"
@@ -133,7 +133,7 @@
     });
 
     test("Filtering of extended collection", function () {
-        var StringCollection = Collection.extend(String.prototype),
+        var StringCollection = Collection.of(String.prototype),
             names = StringCollection.create({
                 test : 'test',
                 hello: 'hello',
