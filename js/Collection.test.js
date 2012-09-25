@@ -15,7 +15,7 @@
         );
     });
 
-    test("Extension", function () {
+    test("Collection of...", function () {
         var StringCollection = Collection.of(String.prototype),
             FatStringCollection = Collection.of(String),
             ArrayCollection = Collection.of(Array.prototype),
@@ -44,6 +44,33 @@
             ArrayCollection.create(arrayData).join(' ').items,
             stringData,
             "Joining over collection of arrays"
+        );
+    });
+
+    test("Extended collection of...", function () {
+        var ExtendedCollection = Collection.extend({
+                foo: function () {return "bar";}
+            }),
+            ExtendedStringCollection = ExtendedCollection.of(String),
+            stringData = {
+                'foo': "Hello world!",
+                'bar': "E pluribus unum"
+            },
+            arrayData = {
+                'foo': ["Hello", "world!"],
+                'bar': ["E", "pluribus", "unum"]
+            };
+
+        deepEqual(
+            ExtendedStringCollection.create(stringData).split(' ').items,
+            arrayData,
+            "Splitting over extended collection of strings"
+        );
+
+        equal(
+            ExtendedStringCollection.foo(),
+            "bar",
+            "Calling method of extended collection (of strings)"
         );
     });
 

@@ -25,7 +25,8 @@ troop.promise(sntls, 'Collection', function () {
                     methodNames = methodNames.prototype;
                 }
 
-                var extended = base.extend.call(self),
+                // must work on classes derived from Collection, too
+                var extended = troop.Base.extend.call(this),
                     shortcuts = {},
                     i, methodName;
 
