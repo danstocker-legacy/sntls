@@ -323,6 +323,33 @@
         collection.forEach(handler, 'custom');
     });
 
+    test("For-Next", function () {
+        var collection = Collection.create(),
+            order = [];
+
+        init(collection);
+
+        expect(11);
+
+        function handler(name, customArg) {
+            if (Object.isPrototypeOf(this)) {
+                deepEqual(this, collection.items[name], "Item '" + name + "' OK");
+            } else {
+                equal(this, collection.items[name], "Item '" + name + "' OK");
+            }
+            order.push(name);
+            equal(customArg, 'custom', "Custom argument");
+        }
+
+        collection.forNext(handler, 'custom');
+
+        deepEqual(
+            order,
+            ['five', 'four', 'one', 'three', 'two'],
+            "Items called in order of keys"
+        );
+    });
+
     test("Call Each", function () {
         var collection = Collection.create(),
             i, result;

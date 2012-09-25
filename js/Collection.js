@@ -280,6 +280,30 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
+             * Calls function on each item in order of keys.
+             * @param handler {function} Function to call on each item.
+             * Handler receives the current item as this, and the item name as
+             * first argument. Forwards all other arguments to handler.
+             * Iteration breaks when handler returns false.
+             */
+            forNext: function (handler) {
+                var args = Array.prototype.slice.call(arguments, 1),
+                    items = this.items,
+                    keys = Object.keys(items).sort(),
+                    i, name, item;
+
+                for (i = 0; i < keys.length; i++) {
+                    name = keys[i];
+                    item = items[name];
+                    if (handler.apply(item, [name].concat(args)) === false) {
+                        break;
+                    }
+                }
+
+                return this;
+            },
+
+            /**
              * Calls a method on each item, identified by name.
              * Method results are collected and returned in a new collection.
              * @param methodName {string} Method name on each item.
