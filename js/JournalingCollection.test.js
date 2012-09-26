@@ -11,8 +11,8 @@
             [
                 {
                     method: 'add',
-                    name: 'i1',
-                    item: "foo"
+                    name  : 'i1',
+                    item  : "foo"
                 }
             ],
             "History after first set"
@@ -24,13 +24,13 @@
             [
                 {
                     method: 'add',
-                    name: 'i2',
-                    item: "bar"
+                    name  : 'i2',
+                    item  : "bar"
                 },
                 {
                     method: 'add',
-                    name: 'i1',
-                    item: "foo"
+                    name  : 'i1',
+                    item  : "foo"
                 }
             ],
             "History after another set"
@@ -42,18 +42,18 @@
             [
                 {
                     method: 'remove',
-                    name: 'i1',
-                    item: "foo"
+                    name  : 'i1',
+                    item  : "foo"
                 },
                 {
                     method: 'add',
-                    name: 'i2',
-                    item: "bar"
+                    name  : 'i2',
+                    item  : "bar"
                 },
                 {
                     method: 'add',
-                    name: 'i1',
-                    item: "foo"
+                    name  : 'i1',
+                    item  : "foo"
                 }
             ],
             "History after unset"
@@ -65,26 +65,67 @@
             [
                 {
                     method: 'change',
-                    name: 'i2',
-                    item: "hello"
+                    name  : 'i2',
+                    item  : "hello"
                 },
                 {
                     method: 'remove',
-                    name: 'i1',
-                    item: "foo"
+                    name  : 'i1',
+                    item  : "foo"
                 },
                 {
                     method: 'add',
-                    name: 'i2',
-                    item: "bar"
+                    name  : 'i2',
+                    item  : "bar"
                 },
                 {
                     method: 'add',
-                    name: 'i1',
-                    item: "foo"
+                    name  : 'i1',
+                    item  : "foo"
                 }
             ],
             "History after changing existing item"
+        );
+    });
+
+    test("Specified journ. collection", function () {
+        var Specified = JournalingCollection.of(String),
+            collection = Specified.create({
+                a: "foo",
+                b: "bar"
+            });
+
+        deepEqual(
+            collection.split('').items,
+            {
+                a: ['f', 'o', 'o'],
+                b: ['b', 'a', 'r']
+            },
+            "Specified collection OK"
+        );
+
+        deepEqual(collection.log, [], "No log change");
+
+        collection.unset('a');
+
+        deepEqual(
+            collection.split('').items,
+            {
+                b: ['b', 'a', 'r']
+            },
+            "Specified collection after removal"
+        );
+
+        deepEqual(
+            collection.log,
+            [
+                {
+                    method: 'remove',
+                    name  : 'a',
+                    item  : "foo"
+                }
+            ],
+            "Removal registered"
         );
     });
 }(sntls.JournalingCollection));
