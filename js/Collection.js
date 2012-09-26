@@ -127,7 +127,7 @@ troop.promise(sntls, 'Collection', function () {
              * Removes item from wraith.LOOKUP.
              * @param name {string} Item name.
              */
-            remove: function (name) {
+            unset: function (name) {
                 if (this.items.hasOwnProperty(name)) {
                     // removing item
                     delete this.items[name];

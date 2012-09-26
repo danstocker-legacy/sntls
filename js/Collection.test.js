@@ -202,7 +202,7 @@
             beforeCount;
 
         beforeCount = collection.count;
-        collection.remove('one');
+        collection.unset('one');
         equal(collection.count, beforeCount, "Attempting to remove non-existing item fails");
 
         init(collection);
@@ -221,12 +221,12 @@
 
         countBefore = collection.count;
 
-        collection.remove('one');
+        collection.unset('one');
         equal(collection.count, countBefore - 1, "Collection count decreased");
         equal(typeof collection.get('one'), 'undefined', "Collection item removed");
 
-        collection.remove('three');
-        collection.remove('five');
+        collection.unset('three');
+        collection.unset('five');
 
         deepEqual(
             collection.items,
