@@ -13,7 +13,9 @@ troop.promise(sntls, 'Collection', function () {
             // OOP
 
             /**
-             * Overridden extend adds shortcut methods to items.
+             * Creates "specified colelction".
+             * Adds shortcut methods to items. It is assumed that the collection will only contain
+             * elements of the specified type (ie bearing methods by the specified names).
              * @param methodNames {string[]|object} Array of method names, or object with method name keys.
              * @override
              */

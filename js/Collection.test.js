@@ -12,7 +12,7 @@
         );
     });
 
-    test("Collection of...", function () {
+    test("Specified collection", function () {
         var StringCollection = Collection.of(String.prototype),
             FatStringCollection = Collection.of(String),
             ArrayCollection = Collection.of(Array.prototype),
@@ -44,7 +44,7 @@
         );
     });
 
-    test("Extended collection of...", function () {
+    test("Specified extended collection", function () {
         var ExtendedCollection = Collection.extend({
                 foo: function () {return "bar";}
             }),
