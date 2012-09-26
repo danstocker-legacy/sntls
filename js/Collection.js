@@ -58,7 +58,8 @@ troop.promise(sntls, 'Collection', function () {
                     count: items ? Object.keys(items).length : 0
                 });
             }
-        }).addPrivateMethod({
+        })
+        .addPrivateMethod({
             /**
              * Generates a shortcut method to be applied to the collection.
              * Shortcut methods traverse the collection and call the
@@ -89,7 +90,8 @@ troop.promise(sntls, 'Collection', function () {
                     return self.create(result);
                 };
             }
-        }).addMethod({
+        })
+        .addMethod({
             //////////////////////////////
             // Basics
 
