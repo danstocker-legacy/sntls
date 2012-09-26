@@ -49,7 +49,7 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * @constructor
-             * @param items {object} Initial contents.
+             * @param [items] {object} Initial contents.
              */
             init: function (items) {
                 // adding basic properties
@@ -124,7 +124,7 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Removes item from wraith.LOOKUP.
+             * Removes item from collection.
              * @param name {string} Item name.
              */
             unset: function (name) {
