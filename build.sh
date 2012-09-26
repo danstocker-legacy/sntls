@@ -28,6 +28,7 @@ done
 cat \
 js/sntls.js \
 js/Collection.js \
+js/JournalingCollection.js \
 js/exports.js \
 > "build/$NAME.js"
 
