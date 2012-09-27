@@ -5,6 +5,8 @@
     test("Logging", function () {
         var collection = JournalingCollection.create();
 
+        expect(6);
+
         collection.set('i1', "foo");
         deepEqual(
             collection.log,
@@ -86,6 +88,19 @@
             ],
             "History after changing existing item"
         );
+
+        collection.resetLog();
+        deepEqual(collection.log, [], "Log empty after reset");
+
+        JournalingCollection.addMock({
+            resetLog: function () {
+                ok("Log re-set during clear");
+            }
+        });
+
+        collection.clear();
+
+        JournalingCollection.removeMocks();
     });
 
     test("Specified journ. collection", function () {
