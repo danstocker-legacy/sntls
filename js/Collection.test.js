@@ -45,9 +45,10 @@
     });
 
     test("Specified extended collection", function () {
-        var ExtendedCollection = Collection.extend({
-                foo: function () {return "bar";}
-            }),
+        var ExtendedCollection = Collection.extend()
+                .addMethod({
+                    foo: function () {return "bar";}
+                }),
             ExtendedStringCollection = ExtendedCollection.of(String),
             stringData = {
                 'foo': "Hello world!",
