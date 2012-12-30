@@ -2,7 +2,7 @@
  * General purpose collection for storing, counting, and performing
  * changes on named elements.
  */
-/*global troop, sntls */
+/*global dessert, troop, sntls */
 troop.promise(sntls, 'Collection', function () {
     var base = troop.Base,
         self;
@@ -13,7 +13,7 @@ troop.promise(sntls, 'Collection', function () {
             // OOP
 
             /**
-             * Creates "specified colelction".
+             * Creates "specified collection".
              * Adds shortcut methods to items. It is assumed that the collection will only contain
              * elements of the specified type (ie bearing methods by the specified names).
              * @param methodNames {string[]|object} Array of method names, or object with method name keys.
@@ -24,6 +24,8 @@ troop.promise(sntls, 'Collection', function () {
                 if (typeof methodNames === 'function') {
                     methodNames = methodNames.prototype;
                 }
+
+                dessert.isObject(methodNames);
 
                 // must work on classes derived from Collection, too
                 var extended = troop.Base.extend.call(this),
@@ -71,6 +73,8 @@ troop.promise(sntls, 'Collection', function () {
              * @private
              */
             _genShortcut: function (methodName) {
+                dessert.isString(methodName);
+
                 /**
                  * @this {sntls.Collection} Collection instance.
                  */
@@ -130,6 +134,8 @@ troop.promise(sntls, 'Collection', function () {
              * @param name {string} Item name.
              */
             unset: function (name) {
+                dessert.isString(name);
+
                 if (this.items.hasOwnProperty(name)) {
                     // removing item
                     delete this.items[name];
@@ -157,6 +163,8 @@ troop.promise(sntls, 'Collection', function () {
                 if (typeof re === 'string') {
                     re = new RegExp(re + '\\w*');
                 }
+
+                dessert.isRegExpOptional(re);
 
                 if (re instanceof RegExp) {
                     for (name in this.items) {
@@ -199,6 +207,8 @@ troop.promise(sntls, 'Collection', function () {
                             result[key] = items[key];
                         }
                     }
+                } else {
+                    dessert.assert(false, "Invalid argument `selector`.");
                 }
 
                 return this.getBase().create(result);
@@ -231,6 +241,8 @@ troop.promise(sntls, 'Collection', function () {
              * @returns {*[]} Item values in order of names.
              */
             asSortedArray: function (comparator) {
+                dessert.isFunctionOptional(comparator);
+
                 var keys = Object.keys(this.items).sort(comparator),
                     result = [],
                     i;
@@ -263,17 +275,17 @@ troop.promise(sntls, 'Collection', function () {
              * Iteration breaks when handler returns false.
              */
             forEach: function (handler) {
+                dessert.isFunction(handler);
+
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     name, item;
 
-                if (typeof handler === 'function') {
-                    for (name in items) {
-                        if (items.hasOwnProperty(name)) {
-                            item = items[name];
-                            if (handler.apply(item, [name].concat(args)) === false) {
-                                break;
-                            }
+                for (name in items) {
+                    if (items.hasOwnProperty(name)) {
+                        item = items[name];
+                        if (handler.apply(item, [name].concat(args)) === false) {
+                            break;
                         }
                     }
                 }
@@ -289,6 +301,8 @@ troop.promise(sntls, 'Collection', function () {
              * Iteration breaks when handler returns false.
              */
             forNext: function (handler) {
+                dessert.isFunction(handler);
+
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items).sort(),
@@ -312,6 +326,8 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             callEach: function (methodName) {
+                dessert.isString(methodName);
+
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     result = {},
