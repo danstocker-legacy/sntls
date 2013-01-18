@@ -2,8 +2,8 @@
  * General purpose collection for storing, counting, and performing
  * changes on named elements.
  */
-/*global dessert, troop, sntls */
-troop.promise(sntls, 'Collection', function () {
+/*global dessert, troop */
+troop.promise('sntls.Collection', function (sntls) {
     var base = troop.Base,
         self;
 
