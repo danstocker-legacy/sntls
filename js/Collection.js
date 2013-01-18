@@ -25,19 +25,17 @@ troop.promise(sntls, 'Collection', function () {
                     methodNames = methodNames.prototype;
                 }
 
-                dessert.isObject(methodNames);
-
-                // must work on classes derived from Collection, too
-                var extended = troop.Base.extend.call(this),
-                    shortcuts = {},
-                    i, methodName;
-
-                if (!(methodNames instanceof Array) &&
-                    typeof methodNames === 'object'
-                    ) {
+                if (dessert.validators.isPlainObject(methodNames)) {
                     // obtaining property names when methodNames is not array
                     methodNames = Object.getOwnPropertyNames(methodNames);
+                } else {
+                    dessert.isArray(methodNames);
                 }
+
+                // must work on classes derived from Collection, too
+                var specified = troop.Base.extend.call(this),
+                    shortcuts = {},
+                    i, methodName;
 
                 // adding shortcut methods to temp shortcuts object
                 for (i = 0; i < methodNames.length; i++) {
@@ -46,9 +44,9 @@ troop.promise(sntls, 'Collection', function () {
                 }
 
                 // adding shortcut methods to extended class
-                extended.addMethod(shortcuts);
+                specified.addMethod(shortcuts);
 
-                return extended;
+                return specified;
             },
 
             /**
