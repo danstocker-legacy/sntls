@@ -143,6 +143,7 @@
 
         init(collection);
 
+        deepEqual(collection.keys(), ['one', 'two', 'three', 'four', 'five'], "Retrieving all keys");
         deepEqual(collection.keys(/one/), ['one'], "Exact key retrieval");
         deepEqual(collection.keys(/f\w+/), ['four', 'five'], "Prefix search");
         deepEqual(collection.keys('f'), ['four', 'five'], "String prefix search");

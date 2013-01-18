@@ -54,6 +54,8 @@ troop.promise(sntls, 'Collection', function () {
              * @param [items] {object} Initial contents.
              */
             init: function (items) {
+                dessert.isObjectOptional(items);
+
                 // adding basic properties
                 this.addPublic({
                     items: items || {},
@@ -132,8 +134,6 @@ troop.promise(sntls, 'Collection', function () {
              * @param name {string} Item name.
              */
             unset: function (name) {
-                dessert.isString(name);
-
                 if (this.items.hasOwnProperty(name)) {
                     // removing item
                     delete this.items[name];
@@ -174,7 +174,7 @@ troop.promise(sntls, 'Collection', function () {
                     }
                     return result;
                 } else {
-                    return Object.keys(this.item);
+                    return Object.keys(this.items);
                 }
             },
 
