@@ -16,6 +16,16 @@
         var StringCollection = Collection.of(String.prototype),
             FatStringCollection = Collection.of(String),
             ArrayCollection = Collection.of(Array.prototype),
+            Class = troop.Base.extend()
+                .addMethod({
+                    init: function (a) {
+                        this.a = a;
+                    },
+                    foo: function (a) {
+                        return this.a + ' ' + a;
+                    }
+                }),
+            ClassCollection = Collection.of(Class),
             stringData = {
                 'foo': "Hello world!",
                 'bar': "E pluribus unum"
@@ -23,6 +33,10 @@
             arrayData = {
                 'foo': ["Hello", "world!"],
                 'bar': ["E", "pluribus", "unum"]
+            },
+            classData = {
+                'foo': Class.create('hello'),
+                'bar': Class.create('howdy')
             };
 
         deepEqual(
@@ -41,6 +55,15 @@
             ArrayCollection.create(arrayData).join(' ').items,
             stringData,
             "Joining over collection of arrays"
+        );
+
+        deepEqual(
+            ClassCollection.create(classData).foo('world').items,
+            {
+                foo: "hello world",
+                bar: "howdy world"
+            },
+            "Calling method over collection of troop instances"
         );
     });
 

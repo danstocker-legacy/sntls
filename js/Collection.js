@@ -3,7 +3,7 @@
  * changes on named elements.
  */
 /*global dessert, troop */
-troop.promise('sntls.Collection', function (sntls) {
+troop.promise('sntls.Collection', function (sntls, className) {
     var base = troop.Base,
         self;
 
@@ -16,37 +16,42 @@ troop.promise('sntls.Collection', function (sntls) {
              * Creates "specified collection".
              * Adds shortcut methods to items. It is assumed that the collection will only contain
              * elements of the specified type (ie bearing methods by the specified names).
-             * @param methodNames {string[]|object} Array of method names, or object with method name keys.
+             * @param methodNames {string[]|object|troop.Base} Array of method names, or object with method name keys.
              * @override
              */
             of: function (methodNames) {
                 // in case methodNames is a fat constructor
                 if (typeof methodNames === 'function') {
                     methodNames = methodNames.prototype;
+                } else if (dessert.validators.isClass(methodNames)) {
+                    methodNames = methodNames.getTarget();
                 }
 
-                if (dessert.validators.isPlainObject(methodNames)) {
-                    // obtaining property names when methodNames is not array
+                if (dessert.validators.isObject(methodNames)) {
                     methodNames = Object.getOwnPropertyNames(methodNames);
                 } else {
                     dessert.isArray(methodNames);
                 }
 
                 // must work on classes derived from Collection, too
-                var specified = troop.Base.extend.call(this),
-                    shortcuts = {},
+                var specifiedCollection = troop.Base.extend.call(this),
+                    ownMethods = self.getTarget(),
+                    shortcutMethods = {},
                     i, methodName;
 
                 // adding shortcut methods to temp shortcuts object
                 for (i = 0; i < methodNames.length; i++) {
                     methodName = methodNames[i];
-                    shortcuts[methodName] = self._genShortcut(methodName);
+                    if (!ownMethods.hasOwnProperty(methodName)) {
+                        // only non-interfering methods may be added
+                        shortcutMethods[methodName] = self._genShortcut(methodName);
+                    }
                 }
 
                 // adding shortcut methods to extended class
-                specified.addMethod(shortcuts);
+                specifiedCollection.addMethod(shortcutMethods);
 
-                return specified;
+                return specifiedCollection;
             },
 
             /**
