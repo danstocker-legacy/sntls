@@ -1,4 +1,4 @@
-/*global sntls, troop, module, test, ok, equal, deepEqual, raises, expect */
+/*global sntls, troop, module, test, ok, equal, deepEqual, notDeepEqual, raises, expect */
 (function (Collection) {
     module("Collection");
 
@@ -21,7 +21,7 @@
                     init: function (a) {
                         this.a = a;
                     },
-                    foo: function (a) {
+                    foo : function (a) {
                         return this.a + ' ' + a;
                     }
                 }),
@@ -65,6 +65,50 @@
             },
             "Calling method over collection of troop instances"
         );
+    });
+
+    test("Method conflicts (sp. coll)", function () {
+        var reg = {
+                init          : 0,
+                nonConflicting: 0,
+                filter        : 0
+            },
+
+            MyClass = troop.Base.extend()
+                .addMethod({
+                    init: function () {
+                        this.foo = 'bar';
+
+                        reg.init++;
+                    },
+
+                    nonConflicting: function () {
+                        reg.nonConflicting++;
+                    },
+
+                    filter: function () {
+                        reg.filter++;
+                    }
+                }),
+
+            Specified = Collection.of(MyClass),
+
+            specified = Specified.create();
+
+        equal(reg.init, 0, "Conflicting .init was not called");
+
+        specified.set('foo', MyClass.create());
+
+        // non-conflicting method call
+        specified.nonConflicting();
+        equal(reg.nonConflicting, 1, "Non conflicting method call counter");
+
+        // legitimate filter expression (conflicting method call)
+        var filtered = specified.filter('f');
+
+        equal(filtered.isA(Collection), true, "Filter returns collection");
+        equal(filtered.isA(Specified), false, "Filter returns non-specified collection");
+        equal(reg.filter, 1, "Custom filter ran once");
     });
 
     test("Specified extended collection", function () {

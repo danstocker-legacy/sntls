@@ -16,6 +16,11 @@ troop.promise('sntls.Collection', function (sntls, className) {
              * Creates "specified collection".
              * Adds shortcut methods to items. It is assumed that the collection will only contain
              * elements of the specified type (ie bearing methods by the specified names).
+             *
+             * WARNING: A specified collection may overshadow original collection methods, so
+             * if the specifying class is known to have conflicts, it is better to call
+             * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
+             *
              * @param methodNames {string[]|object|troop.Base} Array of method names, or object with method name keys.
              * @override
              */
@@ -24,7 +29,8 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 if (typeof methodNames === 'function') {
                     methodNames = methodNames.prototype;
                 } else if (dessert.validators.isClass(methodNames)) {
-                    methodNames = methodNames.getTarget();
+                    methodNames = sntls.utils.shallowCopy(methodNames.getTarget());
+                    delete methodNames.init;
                 }
 
                 if (dessert.validators.isObject(methodNames)) {
@@ -35,17 +41,13 @@ troop.promise('sntls.Collection', function (sntls, className) {
 
                 // must work on classes derived from Collection, too
                 var specifiedCollection = troop.Base.extend.call(this),
-                    ownMethods = self.getTarget(),
                     shortcutMethods = {},
                     i, methodName;
 
                 // adding shortcut methods to temp shortcuts object
                 for (i = 0; i < methodNames.length; i++) {
                     methodName = methodNames[i];
-                    if (!ownMethods.hasOwnProperty(methodName)) {
-                        // only non-interfering methods may be added
-                        shortcutMethods[methodName] = self._genShortcut(methodName);
-                    }
+                    shortcutMethods[methodName] = self._genShortcut(methodName);
                 }
 
                 // adding shortcut methods to extended class
