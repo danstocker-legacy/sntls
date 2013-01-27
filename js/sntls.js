@@ -2,10 +2,14 @@
  * Top-Level Library Namespace
  */
 /*global exports, require */
-/** @namespace */
-var sntls = {},
+var sntls,
     dessert,
     troop;
+
+(function () {
+    /** @namespace */
+    sntls = this.sntls = {};
+}());
 
 // adding Node.js dependencies
 if (typeof exports === 'object' && typeof require === 'function') {
