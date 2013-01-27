@@ -351,6 +351,4 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 return self.create(result);
             }
         });
-
-    return self;
 });

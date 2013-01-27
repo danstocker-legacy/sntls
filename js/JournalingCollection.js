@@ -3,10 +3,9 @@
  */
 /*global troop */
 troop.promise('sntls.JournalingCollection', function (sntls) {
-    var base = sntls.Collection,
-        self;
+    var base = sntls.Collection;
 
-    self = sntls.JournalingCollection = base.extend()
+    sntls.JournalingCollection = base.extend()
         .addMethod({
             //////////////////////////////
             // OOP
@@ -86,6 +85,4 @@ troop.promise('sntls.JournalingCollection', function (sntls) {
                 return this;
             }
         });
-
-    return self;
 });
