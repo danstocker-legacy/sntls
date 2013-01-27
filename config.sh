@@ -10,5 +10,4 @@ js/sntls.js
 js/utils.js
 js/Collection.js
 js/JournalingCollection.js
-js/exports.js
 "
