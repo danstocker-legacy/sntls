@@ -6,7 +6,7 @@
 LIB="sntls"
 
 FILES="
-js/sntls.js
+js/namespace.js
 js/utils.js
 js/Collection.js
 js/JournalingCollection.js
