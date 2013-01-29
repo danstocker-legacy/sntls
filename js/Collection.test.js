@@ -1,6 +1,24 @@
-/*global sntls, troop, module, test, ok, equal, deepEqual, notDeepEqual, raises, expect */
+/*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
 (function (Collection) {
     module("Collection");
+
+    test("Method names", function () {
+        deepEqual(
+            Collection._getES5MethodNames({foo: function () {}, bar: "hello"}),
+            ['foo'],
+            "Gets method names from object (ES5)"
+        );
+
+        if (troop.Feature.hasPropertyAttributes()) {
+            strictEqual(Collection._getMethodNames, Collection._getES5MethodNames, "In ES5 same as Object.getOwnPropertyNames");
+        } else {
+            deepEqual(
+                Collection._getMethodNames(Boolean.prototype), // boolean is used b/c of the brevity of its method list
+                ["toString", "valueOf"],
+                "ES3 general purpose object proto"
+            );
+        }
+    });
 
     test("Shortcuts", function () {
         var mockCollection = {items: {a: 'a', b: 'b'}};

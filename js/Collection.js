@@ -8,6 +8,29 @@ troop.promise('sntls.Collection', function (sntls, className) {
         self;
 
     self = sntls.Collection = base.extend()
+        .addConstant({
+            // method names for general purpose constructors
+            ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
+                "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf",
+                "lastIndexOf", "reduce", "reduceRight"],
+            BOOLEAN_METHOD_NAMES : ["toString", "valueOf"],
+            DATE_METHOD_NAMES    : ["toString", "toDateString", "toTimeString", "toLocaleString", "toLocaleDateString",
+                "toLocaleTimeString", "valueOf", "getTime", "getFullYear", "getUTCFullYear", "getMonth", "getUTCMonth",
+                "getDate", "getUTCDate", "getDay", "getUTCDay", "getHours", "getUTCHours", "getMinutes",
+                "getUTCMinutes", "getSeconds", "getUTCSeconds", "getMilliseconds", "getUTCMilliseconds",
+                "getTimezoneOffset", "setTime", "setMilliseconds", "setUTCMilliseconds", "setSeconds", "setUTCSeconds",
+                "setMinutes", "setUTCMinutes", "setHours", "setUTCHours", "setDate", "setUTCDate", "setMonth",
+                "setUTCMonth", "setFullYear", "setUTCFullYear", "toGMTString", "toUTCString", "getYear", "setYear",
+                "toISOString", "toJSON"],
+            FUNCTION_METHOD_NAMES: ["bind", "toString", "call", "apply"],
+            NUMBER_METHOD_NAMES  : ["toString", "toLocaleString", "valueOf", "toFixed", "toExponential", "toPrecision"],
+            REGEXP_METHOD_NAMES  : ["exec", "test", "toString", "compile"],
+            STRING_METHOD_NAMES  : ["valueOf", "toString", "charAt", "charCodeAt", "concat", "indexOf", "lastIndexOf",
+                "localeCompare", "match", "replace", "search", "slice", "split", "substring", "substr", "toLowerCase",
+                "toLocaleLowerCase", "toUpperCase", "toLocaleUpperCase", "trim", "trimLeft", "trimRight", "link",
+                "anchor", "fontcolor", "fontsize", "big", "blink", "bold", "fixed", "italics", "small", "strike", "sub",
+                "sup"]
+        })
         .addMethod({
             //////////////////////////////
             // OOP
@@ -21,22 +44,24 @@ troop.promise('sntls.Collection', function (sntls, className) {
              * if the specifying class is known to have conflicts, it is better to call
              * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
              *
-             * @param methodNames {string[]|object|troop.Base} Array of method names, or object with method name keys.
+             * @param template {string[]|object|troop.Base} Array of method names, or object with method name keys.
              * @override
              */
-            of: function (methodNames) {
+            of: function (template) {
                 // in case methodNames is a fat constructor
-                if (typeof methodNames === 'function') {
-                    methodNames = methodNames.prototype;
-                } else if (dessert.validators.isClass(methodNames)) {
-                    methodNames = sntls.utils.shallowCopy(methodNames.getTarget());
-                    delete methodNames.init;
+                if (typeof template === 'function') {
+                    template = template.prototype;
+                } else if (dessert.validators.isClass(template)) {
+                    template = sntls.utils.shallowCopy(template.getTarget());
+                    delete template.init;
                 }
 
-                if (dessert.validators.isObject(methodNames)) {
-                    methodNames = Object.getOwnPropertyNames(methodNames);
+                var methodNames;
+                if (dessert.validators.isObject(template)) {
+                    methodNames = self._getMethodNames(template);
                 } else {
-                    dessert.isArray(methodNames);
+                    dessert.isArray(template);
+                    methodNames = template;
                 }
 
                 // must work on classes derived from Collection, too
@@ -102,6 +127,25 @@ troop.promise('sntls.Collection', function (sntls, className) {
 
                     return self.create(result);
                 };
+            },
+
+            /**
+             * Retrieves property names from object and returns an array for those that are functions.
+             * @param obj {object}
+             * @return {string[]}
+             * @private
+             */
+            _getES5MethodNames: function (obj) {
+                var propertyNames = Object.getOwnPropertyNames(obj),
+                    methodNames = [],
+                    i, propertyName;
+                for (i = 0; i < propertyNames.length; i++) {
+                    propertyName = propertyNames[i];
+                    if (typeof obj[propertyName] === 'function') {
+                        methodNames.push(propertyName);
+                    }
+                }
+                return methodNames;
             }
         })
         .addMethod({
@@ -351,4 +395,40 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 return self.create(result);
             }
         });
+
+    if (troop.Feature.hasPropertyAttributes()) {
+        /**
+         * For ES5, we go with ordinary method extraction
+         */
+        self.addPrivateMethod({
+            _getMethodNames: self._getES5MethodNames
+        });
+    } else {
+        /**
+         * For ES3 (JavaScript 1.5) we offer the method list for
+         * a list of general purpose objects
+         */
+        self.addPrivateMethod({
+            _getMethodNames: function (obj) {
+                switch (obj) {
+                case Array.prototype:
+                    return self.ARRAY_METHOD_NAMES;
+                case Boolean.prototype:
+                    return self.BOOLEAN_METHOD_NAMES;
+                case Date.prototype:
+                    return self.DATE_METHOD_NAMES;
+                case Function.prototype:
+                    return self.FUNCTION_METHOD_NAMES;
+                case Number.prototype:
+                    return self.NUMBER_METHOD_NAMES;
+                case RegExp.prototype:
+                    return self.REGEXP_METHOD_NAMES;
+                case String.prototype:
+                    return self.STRING_METHOD_NAMES;
+                default:
+                    return Object.getOwnPropertyNames(obj);
+                }
+            }
+        });
+    }
 });
