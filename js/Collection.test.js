@@ -39,6 +39,10 @@
                 'bar': Class.create('howdy')
             };
 
+        equal(typeof StringCollection.split, 'function', "String method assigned to collection");
+        equal(typeof ArrayCollection.join, 'function', "Array method assigned to collection");
+        equal(typeof ClassCollection.foo, 'function', "Class method assigned to collection");
+
         deepEqual(
             StringCollection.create(stringData).split(' ').items,
             arrayData,
