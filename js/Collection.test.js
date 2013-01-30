@@ -211,7 +211,7 @@
             }),
             merged = collection1.merge(collection2);
 
-        equal(
+        deepEqual(
             collection1.items,
             {
                 foo  : 'bar',
@@ -220,7 +220,7 @@
             "Original collection remains intact"
         );
 
-        equal(
+        deepEqual(
             collection2.items,
             {
                 first : 1,
@@ -230,13 +230,48 @@
         );
 
         equal(merged.count, collection1.count + collection2.count, "Merged item count");
-        equal(
+        deepEqual(
             merged.items,
             {
                 foo   : 'bar',
                 hello : 'world',
                 first : 1,
                 second: 2
+            },
+            "Merged items"
+        );
+    });
+
+    test("Merging specified collection", function () {
+        var ArrayCollection = Collection.of(Array),
+            specified = ArrayCollection.create({
+                a: [1, 2, 3, 4],
+                b: [5, 6, 7, 8]
+            }),
+            invalidColl = Collection.create({
+                foo  : 'bar',
+                hello: 'world'
+            }),
+            validColl = ArrayCollection.create({
+                c: [0],
+                d: [9]
+            }),
+            merged;
+
+        raises(function () {
+            specified.merge(invalidColl);
+        }, "Specified collections don't match");
+
+        merged = specified.merge(validColl);
+
+        ok(merged.isA(ArrayCollection), "Merged is specified collection");
+        deepEqual(
+            merged.items,
+            {
+                a: [1, 2, 3, 4],
+                b: [5, 6, 7, 8],
+                c: [0],
+                d: [9]
             },
             "Merged items"
         );

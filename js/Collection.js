@@ -206,11 +206,18 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 dessert.isCollection(collection);
 
                 var base = this.getBase(),
-                    result = base.create(sntls.utils.shallowCopy(this.items));
+                    items = collection.items,
+                    result, propertyName;
 
-                collection.forEach(function (name) {
-                    result.set(name, this);
-                });
+                dessert.assert(collection.isA(base));
+
+                result = base.create(sntls.utils.shallowCopy(this.items));
+
+                for (propertyName in items) {
+                    if (items.hasOwnProperty(propertyName)) {
+                        result.set(propertyName, items[propertyName]);
+                    }
+                }
 
                 return result;
             },
