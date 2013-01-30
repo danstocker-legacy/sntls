@@ -196,6 +196,25 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 return this;
             },
 
+            /**
+             * Merges collection to current collection
+             * @param collection {Collection} Collection to be merged to current
+             * @return {Collection} New collection with items from both collections in it.
+             * When current collection is specified collection,
+             */
+            merge: function (collection) {
+                dessert.isCollection(collection);
+
+                var base = this.getBase(),
+                    result = base.create(sntls.utils.shallowCopy(this.items));
+
+                collection.forEach(function (name) {
+                    result.set(name, this);
+                });
+
+                return result;
+            },
+
             //////////////////////////////
             // Filtering
 
@@ -431,4 +450,15 @@ troop.promise('sntls.Collection', function (sntls, className) {
             }
         });
     }
+
+    dessert.addTypes({
+        isCollection: function (expr) {
+            return self.isPrototypeOf(expr);
+        },
+
+        isCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   self.isPrototypeOf(expr);
+        }
+    });
 });

@@ -200,6 +200,48 @@
         equal(collection.items.otherItem, 'testValue', "String value stored in collection");
     });
 
+    test("Merging collections", function () {
+        var collection1 = Collection.create({
+                foo  : 'bar',
+                hello: 'world'
+            }),
+            collection2 = Collection.create({
+                first : 1,
+                second: 2
+            }),
+            merged = collection1.merge(collection2);
+
+        equal(
+            collection1.items,
+            {
+                foo  : 'bar',
+                hello: 'world'
+            },
+            "Original collection remains intact"
+        );
+
+        equal(
+            collection2.items,
+            {
+                first : 1,
+                second: 2
+            },
+            "Original collection remains intact"
+        );
+
+        equal(merged.count, collection1.count + collection2.count, "Merged item count");
+        equal(
+            merged.items,
+            {
+                foo   : 'bar',
+                hello : 'world',
+                first : 1,
+                second: 2
+            },
+            "Merged items"
+        );
+    });
+
     /**
      * Initializes lookup by filling it with sufficient amount of test data.
      * @param lookup {sntls.Collection} Collection instance.
