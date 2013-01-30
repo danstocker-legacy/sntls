@@ -40,4 +40,15 @@ troop.promise('sntls.Stat', function (sntls, className) {
                 return this.counters[key];
             }
         });
+
+    dessert.addTypes({
+        isStat: function (expr) {
+            return self.isPrototypeOf(expr);
+        },
+
+        isStatOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   self.isPrototypeOf(expr);
+        }
+    });
 });
