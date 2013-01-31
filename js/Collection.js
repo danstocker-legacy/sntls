@@ -213,6 +213,11 @@ troop.promise('sntls.Collection', function (sntls, className) {
 
                 result = base.create(sntls.utils.shallowCopy(this.items));
 
+                /**
+                 * `collection.forEach` is not used because
+                 * a) implicit conversion of primitive values to objects
+                 * b) iteration is faster
+                 */
                 for (propertyName in items) {
                     if (items.hasOwnProperty(propertyName)) {
                         result.set(propertyName, items[propertyName]);
