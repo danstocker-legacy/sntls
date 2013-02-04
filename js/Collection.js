@@ -359,14 +359,14 @@ troop.promise('sntls.Collection', function (sntls, className) {
 
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
-                    name, item;
+                    keys = Object.keys(items),
+                    i, name, item;
 
-                for (name in items) {
-                    if (items.hasOwnProperty(name)) {
-                        item = items[name];
-                        if (handler.apply(item, [name].concat(args)) === false) {
-                            break;
-                        }
+                for (i = 0; i < keys.length; i++) {
+                    name = keys[i];
+                    item = items[name];
+                    if (handler.apply(item, [name].concat(args)) === false) {
+                        break;
                     }
                 }
 
@@ -410,16 +410,16 @@ troop.promise('sntls.Collection', function (sntls, className) {
 
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
+                    keys = Object.keys(items),
                     result = {},
-                    name, item, method;
+                    i, name, item, method;
 
-                for (name in items) {
-                    if (items.hasOwnProperty(name)) {
-                        item = items[name];
-                        method = item[methodName];
-                        if (typeof method === 'function') {
-                            result[name] = method.apply(item, args);
-                        }
+                for (i = 0; i < keys.length; i++) {
+                    name = keys[i];
+                    item = items[name];
+                    method = item[methodName];
+                    if (typeof method === 'function') {
+                        result[name] = method.apply(item, args);
                     }
                 }
 
