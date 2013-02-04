@@ -8,13 +8,13 @@ troop.promise('sntls.Collection', function (sntls, className) {
         self;
 
     self = sntls.Collection = base.extend()
-        .addConstant({
+        .addPrivateConstant({
             // method names for general purpose constructors
-            ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
+            _ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
                 "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf",
                 "lastIndexOf", "reduce", "reduceRight"],
-            BOOLEAN_METHOD_NAMES : ["toString", "valueOf"],
-            DATE_METHOD_NAMES    : ["toString", "toDateString", "toTimeString", "toLocaleString", "toLocaleDateString",
+            _BOOLEAN_METHOD_NAMES : ["toString", "valueOf"],
+            _DATE_METHOD_NAMES    : ["toString", "toDateString", "toTimeString", "toLocaleString", "toLocaleDateString",
                 "toLocaleTimeString", "valueOf", "getTime", "getFullYear", "getUTCFullYear", "getMonth", "getUTCMonth",
                 "getDate", "getUTCDate", "getDay", "getUTCDay", "getHours", "getUTCHours", "getMinutes",
                 "getUTCMinutes", "getSeconds", "getUTCSeconds", "getMilliseconds", "getUTCMilliseconds",
@@ -22,10 +22,11 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 "setMinutes", "setUTCMinutes", "setHours", "setUTCHours", "setDate", "setUTCDate", "setMonth",
                 "setUTCMonth", "setFullYear", "setUTCFullYear", "toGMTString", "toUTCString", "getYear", "setYear",
                 "toISOString", "toJSON"],
-            FUNCTION_METHOD_NAMES: ["bind", "toString", "call", "apply"],
-            NUMBER_METHOD_NAMES  : ["toString", "toLocaleString", "valueOf", "toFixed", "toExponential", "toPrecision"],
-            REGEXP_METHOD_NAMES  : ["exec", "test", "toString", "compile"],
-            STRING_METHOD_NAMES  : ["valueOf", "toString", "charAt", "charCodeAt", "concat", "indexOf", "lastIndexOf",
+            _FUNCTION_METHOD_NAMES: ["bind", "toString", "call", "apply"],
+            _NUMBER_METHOD_NAMES  : ["toString", "toLocaleString", "valueOf", "toFixed", "toExponential", "toPrecision"
+            ],
+            _REGEXP_METHOD_NAMES  : ["exec", "test", "toString", "compile"],
+            _STRING_METHOD_NAMES  : ["valueOf", "toString", "charAt", "charCodeAt", "concat", "indexOf", "lastIndexOf",
                 "localeCompare", "match", "replace", "search", "slice", "split", "substring", "substr", "toLowerCase",
                 "toLocaleLowerCase", "toUpperCase", "toLocaleUpperCase", "trim", "trimLeft", "trimRight", "link",
                 "anchor", "fontcolor", "fontsize", "big", "blink", "bold", "fixed", "italics", "small", "strike", "sub",
@@ -443,19 +444,19 @@ troop.promise('sntls.Collection', function (sntls, className) {
             _getMethodNames: function (obj) {
                 switch (obj) {
                 case Array.prototype:
-                    return self.ARRAY_METHOD_NAMES;
+                    return self._ARRAY_METHOD_NAMES;
                 case Boolean.prototype:
-                    return self.BOOLEAN_METHOD_NAMES;
+                    return self._BOOLEAN_METHOD_NAMES;
                 case Date.prototype:
-                    return self.DATE_METHOD_NAMES;
+                    return self._DATE_METHOD_NAMES;
                 case Function.prototype:
-                    return self.FUNCTION_METHOD_NAMES;
+                    return self._FUNCTION_METHOD_NAMES;
                 case Number.prototype:
-                    return self.NUMBER_METHOD_NAMES;
+                    return self._NUMBER_METHOD_NAMES;
                 case RegExp.prototype:
-                    return self.REGEXP_METHOD_NAMES;
+                    return self._REGEXP_METHOD_NAMES;
                 case String.prototype:
-                    return self.STRING_METHOD_NAMES;
+                    return self._STRING_METHOD_NAMES;
                 default:
                     return Object.getOwnPropertyNames(obj);
                 }
