@@ -1,4 +1,4 @@
-/*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
+/*global sntls, troop, module, test, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises, expect */
 (function (Collection) {
     module("Collection");
 
@@ -198,6 +198,19 @@
 
         collection.set('otherItem', 'testValue');
         equal(collection.items.otherItem, 'testValue', "String value stored in collection");
+    });
+
+    test("Cloning collection", function () {
+        var original = Collection.create({
+                foo  : 'bar',
+                hello: 'world'
+            }),
+            clone = original.clone();
+
+        deepEqual(original.items, clone.items, "Clone has identical content");
+        equal(original.count, clone.count, "Original and clone counts match");
+        notStrictEqual(original, clone, "Original and clone different objects");
+        notStrictEqual(original.items, clone.items, "Original and clone items different objects");
     });
 
     test("Merging collections", function () {

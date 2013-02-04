@@ -198,6 +198,29 @@ troop.promise('sntls.Collection', function (sntls, className) {
             },
 
             /**
+             * Clones collection
+             * @return {Collection} New collection with same contents as this.
+             */
+            clone: function () {
+                var result = this.getBase().create(),
+                    fromItems = this.items,
+                    toItems = result.items,
+                    key;
+
+                // copying item references
+                for (key in fromItems) {
+                    if (fromItems.hasOwnProperty(key)) {
+                        toItems[key] = fromItems[key];
+                    }
+                }
+
+                // copying count
+                result.count = this.count;
+
+                return result;
+            },
+
+            /**
              * Merges collection to current collection
              * @param collection {Collection} Collection to be merged to current
              * @return {Collection} New collection with items from both collections in it.
