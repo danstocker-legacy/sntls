@@ -11,4 +11,5 @@ js/utils.js
 js/Collection.js
 js/JournalingCollection.js
 js/Stat.js
+js/Stats.js
 "
