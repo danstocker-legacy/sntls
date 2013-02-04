@@ -225,23 +225,28 @@ troop.promise('sntls.Collection', function (sntls, className) {
                 dessert.isCollection(collection);
 
                 var base = this.getBase(),
-                    items = collection.items,
-                    result, propertyName;
+                    result, key,
+                    fromItems, toItems;
 
                 dessert.assert(collection.isA(base));
 
-                result = base.create(sntls.utils.shallowCopy(this.items));
+                result = this.clone();
+                fromItems = collection.items;
+                toItems = result.items;
 
                 /**
                  * `collection.forEach` is not used because
                  * a) implicit conversion of primitive values to objects
                  * b) iteration is faster
                  */
-                for (propertyName in items) {
-                    if (items.hasOwnProperty(propertyName)) {
-                        result.set(propertyName, items[propertyName]);
+                for (key in fromItems) {
+                    if (fromItems.hasOwnProperty(key)) {
+                        toItems[key] = fromItems[key];
                     }
                 }
+
+                // matching counts
+                result.count += collection.count;
 
                 return result;
             },
