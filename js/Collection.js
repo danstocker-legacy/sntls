@@ -202,19 +202,14 @@ troop.promise('sntls.Collection', function (sntls, className) {
              * @return {Collection} New collection with same contents as this.
              */
             clone: function () {
-                var result = this.getBase().create(),
-                    fromItems = this.items,
-                    toItems = result.items,
-                    key;
+                var result = this.getBase().create();
 
-                // copying item references
-                for (key in fromItems) {
-                    if (fromItems.hasOwnProperty(key)) {
-                        toItems[key] = fromItems[key];
-                    }
-                }
-
-                // copying count
+                /**
+                 * Copying items and count
+                 * Other properties added by descendants
+                 * must be cloned in override methods
+                 */
+                result.items = sntls.utils.shallowCopy(this.items);
                 result.count = this.count;
 
                 return result;
