@@ -22,14 +22,19 @@ troop.promise('sntls.Stat', function (sntls, className) {
             /**
              * Increases counter
              * @param key {string} Counter key
+             * @param [amount] {number} Amount to add to counter
              */
-            inc: function (key) {
+            inc: function (key, amount) {
+                amount = amount || 1;
+
                 var counters = this.counters;
+
                 if (!counters.hasOwnProperty(key)) {
-                    counters[key] = 1;
+                    counters[key] = amount;
                 } else {
-                    counters[key]++;
+                    counters[key] += amount;
                 }
+
                 return this;
             },
 

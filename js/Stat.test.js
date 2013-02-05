@@ -17,6 +17,9 @@
 
         stat.inc('foo');
         equal(stat.counters.foo, 2, "Counter incremented");
+
+        stat.inc('foo', 3);
+        equal(stat.counters.foo, 5, "Counter incremented by 3");
     });
 
     test("Retrieval", function () {
