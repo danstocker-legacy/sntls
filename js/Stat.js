@@ -5,34 +5,35 @@
  */
 /*global dessert, troop */
 troop.promise('sntls.Stat', function (sntls, className) {
-    var base = troop.Base,
-        self;
-
-    self = sntls.Stat = base.extend()
+    var self = sntls.Stat = troop.Base.extend()
         .addMethod({
             /**
              * @constructor
              */
             init: function () {
                 this.addConstant({
+                    /**
+                     * Lookup of numeric values assigned to named counter bins
+                     * @type {object}
+                     */
                     counters: {}
                 });
             },
 
             /**
              * Increases counter
-             * @param key {string} Counter key
+             * @param counterName {string} Counter identifier
              * @param [amount] {number} Amount to add to counter
              */
-            inc: function (key, amount) {
+            inc: function (counterName, amount) {
                 amount = amount || 1;
 
                 var counters = this.counters;
 
-                if (!counters.hasOwnProperty(key)) {
-                    counters[key] = amount;
+                if (!counters.hasOwnProperty(counterName)) {
+                    counters[counterName] = amount;
                 } else {
-                    counters[key] += amount;
+                    counters[counterName] += amount;
                 }
 
                 return this;
