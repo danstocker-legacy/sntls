@@ -1,11 +1,12 @@
 /**
- * Statistic
+ * Profile
  *
- * Class for collecting statistics
+ * A profile is a collection of named numeric values that
+ * may be incremented by an object the profile represents.
  */
 /*global dessert, troop */
-troop.promise('sntls.Stat', function (sntls, className) {
-    var self = sntls.Stat = troop.Base.extend()
+troop.promise('sntls.Profile', function (sntls, className) {
+    var self = sntls.Profile = troop.Base.extend()
         .addMethod({
             /**
              * @constructor
@@ -48,11 +49,11 @@ troop.promise('sntls.Stat', function (sntls, className) {
         });
 
     dessert.addTypes({
-        isStat: function (expr) {
+        isProfile: function (expr) {
             return self.isPrototypeOf(expr);
         },
 
-        isStatOptional: function (expr) {
+        isProfileOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    self.isPrototypeOf(expr);
         }

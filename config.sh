@@ -10,7 +10,7 @@ js/namespace.js
 js/utils.js
 js/Collection.js
 js/JournalingCollection.js
-js/Stat.js
+js/Profile.js
 js/Stats.js
 js/Profiled.js
 "

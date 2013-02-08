@@ -32,4 +32,4 @@
             "Second increment"
         );
     });
-}(sntls.Stats, sntls.Stat));
+}(sntls.Stats, sntls.Profile));

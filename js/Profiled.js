@@ -19,7 +19,7 @@ troop.promise('sntls.Profiled', function (sntls) {
 
                 this.addConstant({
                     stats: (profiles ? profiles.clone() : sntls.Stats.create())
-                        .set(profileId, sntls.Stat.create())
+                        .set(profileId, sntls.Profile.create())
                 });
 
                 return this;
