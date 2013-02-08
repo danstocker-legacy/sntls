@@ -11,14 +11,14 @@ troop.promise('sntls.Profiled', function (sntls) {
             /**
              * Initializes a profiled instance
              * @param profileId {string} Identifier for profile in profiles
-             * @param profiles {Stats} Profile collection to which the present
+             * @param profiles {Profiles} Profile collection to which the present
              * instance contributes to.
              */
             initProfiled: function (profileId, profiles) {
-                dessert.isStatsOptional(profiles);
+                dessert.isProfilesOptional(profiles);
 
                 this.addConstant({
-                    stats: (profiles ? profiles.clone() : sntls.Stats.create())
+                    stats: (profiles ? profiles.clone() : sntls.Profiles.create())
                         .set(profileId, sntls.Profile.create())
                 });
 

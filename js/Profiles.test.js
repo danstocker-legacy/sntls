@@ -1,13 +1,13 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Stats, Stat) {
-    module("Stats");
+(function (Profiles, Profile) {
+    module("Profiles");
 
     test("Increment", function () {
-        var stats = Stats.create();
+        var stats = Profiles.create();
 
-        // adding first statistic and incrementing
+        // adding first profile and incrementing
         stats
-            .set('first', Stat.create())
+            .set('first', Profile.create())
             .inc('foo');
 
         deepEqual(
@@ -18,9 +18,9 @@
             "First increment"
         );
 
-        // adding new statistic and incrementing all
+        // adding new profile and incrementing all
         stats
-            .set('second', Stat.create())
+            .set('second', Profile.create())
             .inc('foo');
 
         deepEqual(
@@ -32,4 +32,4 @@
             "Second increment"
         );
     });
-}(sntls.Stats, sntls.Profile));
+}(sntls.Profiles, sntls.Profile));

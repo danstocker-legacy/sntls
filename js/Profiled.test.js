@@ -13,6 +13,6 @@
             myProfiled = myClass.create();
 
         ok(myProfiled.hasOwnProperty('stats'), "Profiled object has stats");
-        ok(myProfiled.stats.isA(sntls.Stats), "Profiled object stats are actually stats");
+        ok(myProfiled.stats.isA(sntls.Profiles), "Profiled object stats are actually stats");
     });
 }(sntls.Profiled));

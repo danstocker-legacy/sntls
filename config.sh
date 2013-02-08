@@ -11,6 +11,6 @@ js/utils.js
 js/Collection.js
 js/JournalingCollection.js
 js/Profile.js
-js/Stats.js
+js/Profiles.js
 js/Profiled.js
 "
