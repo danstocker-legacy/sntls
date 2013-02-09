@@ -3,7 +3,7 @@
  * changes on named elements.
  */
 /*global dessert, troop */
-troop.promise('sntls.Collection', function (sntls, className) {
+troop.promise('sntls.Collection', function (sntls) {
     var base = troop.Base,
         self;
 
@@ -486,15 +486,16 @@ troop.promise('sntls.Collection', function (sntls, className) {
             }
         });
     }
+});
 
-    dessert.addTypes({
-        isCollection: function (expr) {
-            return self.isPrototypeOf(expr);
-        },
+/*global sntls */
+dessert.addTypes({
+    isCollection: function (expr) {
+        return sntls.Collection.isPrototypeOf(expr);
+    },
 
-        isCollectionOptional: function (expr) {
-            return typeof expr === 'undefined' ||
-                   self.isPrototypeOf(expr);
-        }
-    });
+    isCollectionOptional: function (expr) {
+        return typeof expr === 'undefined' ||
+               sntls.Collection.isPrototypeOf(expr);
+    }
 });

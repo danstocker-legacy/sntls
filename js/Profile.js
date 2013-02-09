@@ -5,7 +5,7 @@
  * may be incremented by an object the profile represents.
  */
 /*global dessert, troop */
-troop.promise('sntls.Profile', function (sntls, className) {
+troop.promise('sntls.Profile', function (sntls) {
     var self = sntls.Profile = troop.Base.extend()
         .addMethod({
             /**
@@ -47,15 +47,16 @@ troop.promise('sntls.Profile', function (sntls, className) {
                 return this.counters[key];
             }
         });
+});
 
-    dessert.addTypes({
-        isProfile: function (expr) {
-            return self.isPrototypeOf(expr);
-        },
+/*global sntls */
+dessert.addTypes({
+    isProfile: function (expr) {
+        return sntls.Profile.isPrototypeOf(expr);
+    },
 
-        isProfileOptional: function (expr) {
-            return typeof expr === 'undefined' ||
-                   self.isPrototypeOf(expr);
-        }
-    });
+    isProfileOptional: function (expr) {
+        return typeof expr === 'undefined' ||
+               sntls.Profile.isPrototypeOf(expr);
+    }
 });
