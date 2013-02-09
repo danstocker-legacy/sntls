@@ -44,7 +44,7 @@ troop.promise('sntls.Profile', function (sntls) {
              * Retrieves counter value
              */
             counter: function (key) {
-                return this.counters[key];
+                return this.counters[key] || 0;
             }
         });
 });
