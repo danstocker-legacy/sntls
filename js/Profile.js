@@ -41,6 +41,25 @@ troop.promise('sntls.Profile', function (sntls) {
             },
 
             /**
+             * Decreases counter
+             * @param counterName {string} Counter identifier
+             * @param [amount] {number} Amount to add to counter
+             */
+            dec: function (counterName, amount) {
+                amount = amount || 1;
+
+                var counters = this.counters;
+
+                if (!counters.hasOwnProperty(counterName)) {
+                    counters[counterName] = 0 - amount;
+                } else {
+                    counters[counterName] -= amount;
+                }
+
+                return this;
+            },
+
+            /**
              * Retrieves counter value
              */
             counter: function (key) {
