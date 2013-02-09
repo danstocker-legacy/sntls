@@ -30,6 +30,15 @@ troop.promise('sntls.Profiled', function (sntls) {
                 });
 
                 return this;
+            },
+
+            /**
+             * Simple getter for the instance profile.
+             * For gathering profiles from a collection of Profiled instances.
+             * @return {ProfileCollection}
+             */
+            getProfile: function () {
+                return this.profile;
             }
         });
 });

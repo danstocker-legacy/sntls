@@ -4,12 +4,12 @@
 
     test("Construction", function () {
         var myClass = troop.Base.extend()
-            .addTrait(Profiled)
-            .addMethod({
-                init: function () {
-                    this.initProfiled('foo');
-                }
-            }),
+                .addTrait(Profiled)
+                .addMethod({
+                    init: function () {
+                        this.initProfiled('foo');
+                    }
+                }),
             myProfiled = myClass.create();
 
         ok(myProfiled.hasOwnProperty('profile'), "Profiled object has stats");
@@ -17,5 +17,18 @@
 
         equal(myProfiled.profile.count, 1, "New profile collection contains 1 element");
         deepEqual(myProfiled.profile.keys(), ['foo'], "Instance IDs in profile");
+    });
+
+    test("Profile getter", function () {
+        var myClass = troop.Base.extend()
+                .addTrait(Profiled)
+                .addMethod({
+                    init: function () {
+                        this.initProfiled('foo');
+                    }
+                }),
+            myProfiled = myClass.create();
+
+        strictEqual(myProfiled.getProfile(), myProfiled.profile, "Profile getter");
     });
 }(sntls.Profiled));
