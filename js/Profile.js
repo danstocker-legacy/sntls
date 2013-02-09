@@ -12,7 +12,7 @@ troop.promise('sntls.Profile', function (sntls) {
              * @constructor
              */
             init: function () {
-                this.addConstant({
+                this.addPublic({
                     /**
                      * Lookup of numeric values assigned to named counter bins
                      * @type {object}
@@ -64,6 +64,18 @@ troop.promise('sntls.Profile', function (sntls) {
              */
             counter: function (key) {
                 return this.counters[key] || 0;
+            },
+
+            /**
+             * Resets one or all counters
+             * @param [key] {string}
+             */
+            reset: function (key) {
+                if (dessert.validators.isString(key)) {
+                    delete this.counters[key];
+                } else {
+                    this.counters = {};
+                }
             }
         });
 });

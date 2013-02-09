@@ -42,4 +42,26 @@
         profile.inc('foo');
         equal(profile.counter('foo'), profile.counters.foo, "Counter value");
     });
+
+    test("Resetting", function () {
+        var profile = Profile.create()
+            .inc('foo')
+            .inc('bar', 5)
+            .inc('hello', 2);
+
+        deepEqual(profile.counters, {
+            foo  : 1,
+            bar  : 5,
+            hello: 2
+        }, "Counters after initialization");
+
+        profile.reset('hello');
+        deepEqual(profile.counters, {
+            foo: 1,
+            bar: 5
+        }, "Hello removed");
+
+        profile.reset();
+        deepEqual(profile.counters, {}, "Counters after full reset");
+    });
 }(sntls.Profile));
