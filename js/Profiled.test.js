@@ -13,7 +13,7 @@
             myProfiled = myClass.create();
 
         ok(myProfiled.hasOwnProperty('profile'), "Profiled object has stats");
-        ok(myProfiled.profile.isA(sntls.Profiles), "Profiled object stats are actually stats");
+        ok(myProfiled.profile.isA(sntls.ProfileCollection), "Profiled object stats are actually stats");
 
         equal(myProfiled.profile.count, 1, "New profile collection contains 1 element");
         deepEqual(myProfiled.profile.keys(), ['foo'], "Instance IDs in profile");

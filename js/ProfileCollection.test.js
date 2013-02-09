@@ -1,9 +1,9 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Profiles, Profile) {
-    module("Profiles");
+(function (ProfileCollection, Profile) {
+    module("ProfileCollection");
 
     test("Increment", function () {
-        var stats = Profiles.create();
+        var stats = ProfileCollection.create();
 
         // adding first profile and incrementing
         stats
@@ -32,4 +32,4 @@
             "Second increment"
         );
     });
-}(sntls.Profiles, sntls.Profile));
+}(sntls.ProfileCollection, sntls.Profile));
