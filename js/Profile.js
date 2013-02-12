@@ -4,8 +4,8 @@
  * A profile is a collection of named numeric values that
  * may be incremented by an object the profile represents.
  */
-/*global dessert, troop */
-troop.promise('sntls.Profile', function (sntls) {
+/*global dessert, troop, sntls */
+troop.promise(sntls, 'Profile', function (sntls) {
     var self = sntls.Profile = troop.Base.extend()
         .addMethod({
             /**

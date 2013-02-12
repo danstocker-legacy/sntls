@@ -4,8 +4,8 @@
  * Profiled objects expose a profile (collection) object to keep score
  * on the actions of that object.
  */
-/*global dessert, troop */
-troop.promise('sntls.Profiled', function (sntls) {
+/*global dessert, troop, sntls */
+troop.promise(sntls, 'Profiled', function (sntls) {
     var self = sntls.Profiled = troop.Base.extend()
         .addMethod({
             /**

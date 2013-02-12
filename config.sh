@@ -13,4 +13,5 @@ js/JournalingCollection.js
 js/Profile.js
 js/ProfileCollection.js
 js/Profiled.js
+js/exports.js
 "

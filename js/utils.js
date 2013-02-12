@@ -1,8 +1,8 @@
 /**
  * General Utilities
  */
-/*global dessert, troop */
-troop.promise('sntls.utils', function (sntls) {
+/*global dessert, troop, sntls */
+troop.promise(sntls, 'utils', function (sntls) {
     sntls.utils = troop.Base.extend()
         .addMethod({
             /**

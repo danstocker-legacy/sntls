@@ -1,14 +1,14 @@
 /**
  * Top-Level Library Namespace
  */
-/*global exports, require */
-(function () {
-    /** @namespace */
-    this.sntls = {};
-}());
+/*global require */
+/** @namespace */
+var sntls = {},
+    dessert,
+    troop;
 
 // adding Node.js dependencies
 if (typeof require === 'function') {
-    require('dessert-0.2.3');
-    require('troop-0.2.3');
+    dessert = require('dessert-0.2.3').dessert;
+    troop = require('troop-0.2.3').troop;
 }
