@@ -26,7 +26,7 @@ troop.promise(sntls, 'Profiled', function (sntls) {
                      */
                     profile: (profiles ? profiles.clone() : sntls.ProfileCollection.create())
                         // adding new profile for this instance
-                        .set(profileId, sntls.Profile.create())
+                        .setItem(profileId, sntls.Profile.create())
                 });
 
                 return this;

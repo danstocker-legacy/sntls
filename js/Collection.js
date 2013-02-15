@@ -113,16 +113,16 @@ troop.promise(sntls, 'Collection', function (sntls) {
                  */
                 return function () {
                     var items = this.items,
-                        name, item,
+                        itemName, item,
                         result = {};
 
                     // traversing collection items
-                    for (name in items) {
-                        if (items.hasOwnProperty(name)) {
-                            item = items[name];
+                    for (itemName in items) {
+                        if (items.hasOwnProperty(itemName)) {
+                            item = items[itemName];
 
                             // delegating method call to item and adding
-                            result[name] = item[methodName].apply(item, arguments);
+                            result[itemName] = item[methodName].apply(item, arguments);
                         }
                     }
 
@@ -155,23 +155,23 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Retrieves item from the collection.
-             * @param name {string} Item name.
+             * @param itemName {string} Item name.
              * @returns {*} Item variable.
              */
-            get: function (name) {
-                return this.items[name];
+            getItem: function (itemName) {
+                return this.items[itemName];
             },
 
             /**
              * Sets an item in the collection.
-             * @param name {string} Item name.
+             * @param itemName {string} Item name.
              * @param item Item variable / object.
              */
-            set: function (name, item) {
-                var isNew = !this.items.hasOwnProperty(name);
+            setItem: function (itemName, item) {
+                var isNew = !this.items.hasOwnProperty(itemName);
 
                 // setting item
-                this.items[name] = item;
+                this.items[itemName] = item;
 
                 // increasing count when new item was added
                 if (isNew) {
@@ -182,13 +182,13 @@ troop.promise(sntls, 'Collection', function (sntls) {
             },
 
             /**
-             * Removes item from collection.
-             * @param name {string} Item name.
+             * Deletes item from collection.
+             * @param itemName {string} Item name.
              */
-            unset: function (name) {
-                if (this.items.hasOwnProperty(name)) {
+            deleteItem: function (itemName) {
+                if (this.items.hasOwnProperty(itemName)) {
                     // removing item
-                    delete this.items[name];
+                    delete this.items[itemName];
 
                     // decreasing count
                     this.count--;
@@ -261,7 +261,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              */
             keys: function (re) {
                 var result = [],
-                    name;
+                    itemName;
 
                 // handling simplified prefix filtering
                 if (typeof re === 'string') {
@@ -271,11 +271,11 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 dessert.isRegExpOptional(re);
 
                 if (re instanceof RegExp) {
-                    for (name in this.items) {
-                        if (this.items.hasOwnProperty(name) &&
-                            re.test(name)
+                    for (itemName in this.items) {
+                        if (this.items.hasOwnProperty(itemName) &&
+                            re.test(itemName)
                             ) {
-                            result.push(name);
+                            result.push(itemName);
                         }
                     }
                     return result;
@@ -327,11 +327,11 @@ troop.promise(sntls, 'Collection', function (sntls) {
              */
             asArray: function () {
                 var result = [],
-                    name;
+                    itemName;
 
-                for (name in this.items) {
-                    if (this.items.hasOwnProperty(name)) {
-                        result.push(this.items[name]);
+                for (itemName in this.items) {
+                    if (this.items.hasOwnProperty(itemName)) {
+                        result.push(this.items[itemName]);
                     }
                 }
 
@@ -384,12 +384,12 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items),
-                    i, name, item;
+                    i, itemName, item;
 
                 for (i = 0; i < keys.length; i++) {
-                    name = keys[i];
-                    item = items[name];
-                    if (handler.apply(item, [name].concat(args)) === false) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    if (handler.apply(item, [itemName].concat(args)) === false) {
                         break;
                     }
                 }
@@ -410,12 +410,12 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items).sort(),
-                    i, name, item;
+                    i, itemName, item;
 
                 for (i = 0; i < keys.length; i++) {
-                    name = keys[i];
-                    item = items[name];
-                    if (handler.apply(item, [name].concat(args)) === false) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    if (handler.apply(item, [itemName].concat(args)) === false) {
                         break;
                     }
                 }
@@ -436,14 +436,14 @@ troop.promise(sntls, 'Collection', function (sntls) {
                     items = this.items,
                     keys = Object.keys(items),
                     result = {},
-                    i, name, item, method;
+                    i, itemName, item, method;
 
                 for (i = 0; i < keys.length; i++) {
-                    name = keys[i];
-                    item = items[name];
+                    itemName = keys[i];
+                    item = items[itemName];
                     method = item[methodName];
                     if (typeof method === 'function') {
-                        result[name] = method.apply(item, args);
+                        result[itemName] = method.apply(item, args);
                     }
                 }
 

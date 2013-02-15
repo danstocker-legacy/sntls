@@ -7,7 +7,7 @@
 
         expect(6);
 
-        collection.set('i1', "foo");
+        collection.setItem('i1', "foo");
         deepEqual(
             collection.log,
             [
@@ -20,7 +20,7 @@
             "History after first set"
         );
 
-        collection.set('i2', "bar");
+        collection.setItem('i2', "bar");
         deepEqual(
             collection.log,
             [
@@ -38,7 +38,7 @@
             "History after another set"
         );
 
-        collection.unset('i1');
+        collection.deleteItem('i1');
         deepEqual(
             collection.log,
             [
@@ -61,7 +61,7 @@
             "History after unset"
         );
 
-        collection.set('i2', "hello");
+        collection.setItem('i2', "hello");
         deepEqual(
             collection.log,
             [
@@ -121,7 +121,7 @@
 
         deepEqual(collection.log, [], "No log change");
 
-        collection.unset('a');
+        collection.deleteItem('a');
 
         deepEqual(
             collection.split('').items,

@@ -30,7 +30,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
              * @param name {string} Item name.
              * @param item Item variable / object.
              */
-            set: function (name, item) {
+            setItem: function (name, item) {
                 var isAdd = !this.items.hasOwnProperty(name);
 
                 // logging change
@@ -40,7 +40,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
                     item  : item // before the change
                 });
 
-                base.set.apply(this, arguments);
+                base.setItem.apply(this, arguments);
 
                 return this;
             },
@@ -49,7 +49,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
              * Removes item from sntls.LOOKUP.
              * @param name {string} Item name.
              */
-            unset: function (name) {
+            deleteItem: function (name) {
                 if (this.items.hasOwnProperty(name)) {
                     // adding to log
                     this.log.unshift({
@@ -59,7 +59,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
                     });
                 }
 
-                base.unset.apply(this, arguments);
+                base.deleteItem.apply(this, arguments);
 
                 return this;
             },

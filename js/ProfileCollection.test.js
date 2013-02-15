@@ -7,7 +7,7 @@
 
         // adding first profile and incrementing
         stats
-            .set('first', Profile.create())
+            .setItem('first', Profile.create())
             .inc('foo');
 
         deepEqual(
@@ -20,7 +20,7 @@
 
         // adding new profile and incrementing all
         stats
-            .set('second', Profile.create())
+            .setItem('second', Profile.create())
             .inc('foo');
 
         deepEqual(

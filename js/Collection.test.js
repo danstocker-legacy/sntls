@@ -119,7 +119,7 @@
 
         equal(reg.init, 0, "Conflicting .init was not called");
 
-        specified.set('foo', MyClass.create());
+        specified.setItem('foo', MyClass.create());
 
         // non-conflicting method call
         specified.nonConflicting();
@@ -188,15 +188,15 @@
         deepEqual(collection.items, {}, "Initial buffer is empty object");
         equal(collection.count, 0, "Initial count");
 
-        collection.set('testItem', 2);
+        collection.setItem('testItem', 2);
         equal(collection.count, 1, "Collection count increased");
         equal(collection.items.testItem, 2, "Numeric value stored in collection");
 
-        collection.set('testItem', 6, true);
+        collection.setItem('testItem', 6, true);
         equal(collection.count, 1, "Collection count remains the same");
         equal(collection.items.testItem, 6, "Stored item by pre-existing name");
 
-        collection.set('otherItem', 'testValue');
+        collection.setItem('otherItem', 'testValue');
         equal(collection.items.otherItem, 'testValue', "String value stored in collection");
     });
 
@@ -295,25 +295,25 @@
      * @param lookup {sntls.Collection} Collection instance.
      */
     function init(lookup) {
-        lookup.set('one', 'hello');
-        lookup.set('two', 'world!');
-        lookup.set('three', 5);
-        lookup.set('four', {});
-        lookup.set('five', true);
+        lookup.setItem('one', 'hello');
+        lookup.setItem('two', 'world!');
+        lookup.setItem('three', 5);
+        lookup.setItem('four', {});
+        lookup.setItem('five', true);
     }
 
     test("Querying", function () {
         var collection = Collection.create();
 
-        equal(typeof collection.get('one'), 'undefined', "Querying non-existing item");
+        equal(typeof collection.getItem('one'), 'undefined', "Querying non-existing item");
 
         init(collection);
 
-        equal(collection.get('one'), 'hello', "Querying string");
-        equal(collection.get('two'), 'world!', "Querying string");
-        equal(collection.get('three'), 5, "Querying number");
-        deepEqual(collection.get('four'), {}, "Querying object");
-        equal(collection.get('five'), true, "Querying boolean");
+        equal(collection.getItem('one'), 'hello', "Querying string");
+        equal(collection.getItem('two'), 'world!', "Querying string");
+        equal(collection.getItem('three'), 5, "Querying number");
+        deepEqual(collection.getItem('four'), {}, "Querying object");
+        equal(collection.getItem('five'), true, "Querying boolean");
     });
 
     test("Filtering", function () {
@@ -380,7 +380,7 @@
             beforeCount;
 
         beforeCount = collection.count;
-        collection.unset('one');
+        collection.deleteItem('one');
         equal(collection.count, beforeCount, "Attempting to remove non-existing item fails");
 
         init(collection);
@@ -399,12 +399,12 @@
 
         countBefore = collection.count;
 
-        collection.unset('one');
+        collection.deleteItem('one');
         equal(collection.count, countBefore - 1, "Collection count decreased");
-        equal(typeof collection.get('one'), 'undefined', "Collection item removed");
+        equal(typeof collection.getItem('one'), 'undefined', "Collection item removed");
 
-        collection.unset('three');
-        collection.unset('five');
+        collection.deleteItem('three');
+        collection.deleteItem('five');
 
         deepEqual(
             collection.items,
@@ -540,7 +540,7 @@
         }
 
         for (i = 0; i < 5; i++) {
-            collection.set(i, {
+            collection.setItem(i, {
                 test: test
             });
         }
