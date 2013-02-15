@@ -39,8 +39,10 @@
     test("Retrieval", function () {
         var profile = Profile.create();
 
+        strictEqual(profile.getCounters(), profile.counters, "Access to counters object");
+
         profile.inc('foo');
-        equal(profile.counter('foo'), profile.counters.foo, "Counter value");
+        equal(profile.getCount('foo'), profile.counters.foo, "Counter value");
     });
 
     test("Resetting", function () {

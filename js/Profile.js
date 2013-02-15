@@ -61,9 +61,18 @@ troop.promise(sntls, 'Profile', function (sntls) {
 
             /**
              * Retrieves counter value
+             * @return {Number}
              */
-            counter: function (key) {
+            getCount: function (key) {
                 return this.counters[key] || 0;
+            },
+
+            /**
+             * Simple getter for counter object.
+             * @return {object}
+             */
+            getCounters: function () {
+                return this.counters;
             },
 
             /**

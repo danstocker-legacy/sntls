@@ -11,7 +11,7 @@
             .inc('foo');
 
         deepEqual(
-            stats.counter('foo').items,
+            stats.getCount('foo').items,
             {
                 first: 1
             },
@@ -24,7 +24,7 @@
             .inc('foo');
 
         deepEqual(
-            stats.counter('foo').items,
+            stats.getCount('foo').items,
             {
                 first: 2,
                 second: 1
