@@ -10,7 +10,7 @@ Currently available:
 - `sntls.Collection`: Offers to use collections of objects as if they were single objects.
 - `sntls.JournalingCollection`: Collection that records changes
 - `sntls.Profile`: Registers a set of counters that objects may increase or decrease. Offers a way of gathering statistics.
-- `sntls.Profiled`: *Trait* allowing such objects to be profiled ans/or contribute to profiles of other objects.
+- `sntls.Profiled`: *Trait* allowing such objects to be profiled and/or contribute to profiles of other objects.
 
 See the [Sntls wiki](https://github.com/danstocker/sntls/wiki) for reference and examples.
 

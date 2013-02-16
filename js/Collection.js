@@ -341,7 +341,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
             /**
              * Retrieves collection items as array
              * in order of their names.
-             * @param comparator {function} Comparator callback.
+             * @param [comparator] {function} Comparator callback.
              * @returns {*[]} Item values in order of names.
              */
             asSortedArray: function (comparator) {
