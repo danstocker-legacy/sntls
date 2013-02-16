@@ -5,6 +5,13 @@ Sntls
 
 A collection of general purpose classes and traits that formalize frequent operations or constructs such as collections, sets, profiling, stateful objects, etc.
 
+Sntls requires the following libs:
+
+- [Dessert](https://github.com/danstocker/dessert)
+- [Troop](https://github.com/production-minds/troop)
+
+For specific version numbers, consult `js/namespace.js`.
+
 Currently available:
 
 - `sntls.Collection`: Offers to use collections of objects as if they were single objects.
