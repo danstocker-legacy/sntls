@@ -16,8 +16,8 @@ troop.promise(sntls, 'Profiled', function (sntls) {
              */
             initProfiled: function (profileId, profiles) {
                 dessert
-                    .isString(profileId)
-                    .isProfileCollectionOptional(profiles);
+                    .isString(profileId, "Invalid profile ID")
+                    .isProfileCollectionOptional(profiles, "Invalid profile collection");
 
                 this.addConstant({
                     /**

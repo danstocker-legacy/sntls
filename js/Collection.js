@@ -61,7 +61,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 if (dessert.validators.isObject(template)) {
                     methodNames = self._getMethodNames(template);
                 } else {
-                    dessert.isArray(template);
+                    dessert.isArray(template, "Invalid collection template");
                     methodNames = template;
                 }
 
@@ -87,7 +87,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * @param [items] {object} Initial contents.
              */
             init: function (items) {
-                dessert.isObjectOptional(items);
+                dessert.isObjectOptional(items, "Invalid items");
 
                 // adding basic properties
                 this.addPublic({
@@ -106,7 +106,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * @private
              */
             _genShortcut: function (methodName) {
-                dessert.isString(methodName);
+                dessert.isString(methodName, "Invalid method name");
 
                 /**
                  * @this {sntls.Collection} Collection instance.
@@ -222,13 +222,13 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * When current collection is specified collection,
              */
             merge: function (collection) {
-                dessert.isCollection(collection);
+                dessert.isCollection(collection, "Invalid collection");
 
                 var base = this.getBase(),
                     result, key,
                     fromItems, toItems;
 
-                dessert.assert(collection.isA(base));
+                dessert.assert(collection.isA(base), "Collection types do not match");
 
                 result = this.clone();
                 fromItems = collection.items;
@@ -268,7 +268,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
                     re = new RegExp(re + '\\w*');
                 }
 
-                dessert.isRegExpOptional(re);
+                dessert.isRegExpOptional(re, "Invalid key filter");
 
                 if (re instanceof RegExp) {
                     for (itemName in this.items) {
@@ -312,7 +312,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
                         }
                     }
                 } else {
-                    dessert.assert(false, "Invalid argument `selector`.");
+                    dessert.assert(false, "Invalid filter selector");
                 }
 
                 return this.getBase().create(result);
@@ -345,7 +345,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * @returns {*[]} Item values in order of names.
              */
             asSortedArray: function (comparator) {
-                dessert.isFunctionOptional(comparator);
+                dessert.isFunctionOptional(comparator, "Invalid comparator function");
 
                 var keys = Object.keys(this.items).sort(comparator),
                     result = [],
@@ -379,7 +379,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * Iteration breaks when handler returns false.
              */
             forEach: function (handler) {
-                dessert.isFunction(handler);
+                dessert.isFunction(handler, "Invalid callback function");
 
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
@@ -405,7 +405,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * Iteration breaks when handler returns false.
              */
             forNext: function (handler) {
-                dessert.isFunction(handler);
+                dessert.isFunction(handler, "Invalid callback function");
 
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
@@ -430,7 +430,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * @return {sntls.Collection}
              */
             callEach: function (methodName) {
-                dessert.isString(methodName);
+                dessert.isString(methodName, "Invalid method name");
 
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,

@@ -17,7 +17,7 @@ troop.promise(sntls, 'utils', function (sntls) {
                     return original.concat([]);
                 }
 
-                dessert.isObject(original);
+                dessert.isObject(original, "Invalid copy source object");
 
                 var propertyNames = Object.getOwnPropertyNames(original),
                     i, propertyName,
