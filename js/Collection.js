@@ -45,7 +45,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * if the specifying class is known to have conflicts, it is better to call
              * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
              *
-             * @param template {string[]|object|troop.Base} Array of method names, or object with method name keys.
+             * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
              * @override
              */
             of: function (template) {
