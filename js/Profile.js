@@ -23,8 +23,8 @@ troop.promise(sntls, 'Profile', function (sntls) {
 
             /**
              * Increases counter
-             * @param counterName {string} Counter identifier
-             * @param [amount] {number} Amount to add to counter
+             * @param {string} counterName Counter identifier
+             * @param {number} [amount] Amount to add to counter
              */
             inc: function (counterName, amount) {
                 amount = amount || 1;
@@ -42,8 +42,8 @@ troop.promise(sntls, 'Profile', function (sntls) {
 
             /**
              * Decreases counter
-             * @param counterName {string} Counter identifier
-             * @param [amount] {number} Amount to add to counter
+             * @param {string} counterName Counter identifier
+             * @param {number} [amount] Amount to add to counter
              */
             dec: function (counterName, amount) {
                 amount = amount || 1;
@@ -77,7 +77,7 @@ troop.promise(sntls, 'Profile', function (sntls) {
 
             /**
              * Resets one or all counters
-             * @param [key] {string}
+             * @param {string} [key]
              */
             reset: function (key) {
                 if (dessert.validators.isString(key)) {

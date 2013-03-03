@@ -10,8 +10,8 @@ troop.promise(sntls, 'Profiled', function (sntls) {
         .addMethod({
             /**
              * Initializes a profiled instance
-             * @param profileId {string} Identifier for profile in profiles
-             * @param [profiles] {ProfileCollection} Profile collection to which the present
+             * @param {string} profileId Identifier for profile in profiles
+             * @param {ProfileCollection} [profiles] Profile collection to which the present
              * instance contributes to.
              */
             initProfiled: function (profileId, profiles) {

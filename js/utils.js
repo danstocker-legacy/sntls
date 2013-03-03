@@ -9,7 +9,7 @@ troop.promise(sntls, 'utils', function (sntls) {
              * Creates a shallow copy of an object.
              * Property names will be copied, but property values
              * will point to the original references.
-             * @param original {object}
+             * @param {object} original
              */
             shallowCopy: function (original) {
                 if (dessert.validators.isArray(original)) {

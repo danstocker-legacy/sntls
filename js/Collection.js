@@ -84,7 +84,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * @constructor
-             * @param [items] {object} Initial contents.
+             * @param {object} [items] Initial contents.
              */
             init: function (items) {
                 dessert.isObjectOptional(items, "Invalid items");
@@ -102,7 +102,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * Shortcut methods traverse the collection and call the
              * invoked method on all items, collecting the return values
              * and returning them as a collection.
-             * @param methodName {string} Name of method to make shortcut for.
+             * @param {string} methodName Name of method to make shortcut for.
              * @private
              */
             _genShortcut: function (methodName) {
@@ -132,7 +132,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Retrieves property names from object and returns an array for those that are functions.
-             * @param obj {object}
+             * @param {object} obj
              * @return {string[]}
              * @private
              */
@@ -155,7 +155,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Retrieves item from the collection.
-             * @param itemName {string} Item name.
+             * @param {string} itemName Item name.
              * @returns {*} Item variable.
              */
             getItem: function (itemName) {
@@ -164,7 +164,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Sets an item in the collection.
-             * @param itemName {string} Item name.
+             * @param {string} itemName Item name.
              * @param item Item variable / object.
              */
             setItem: function (itemName, item) {
@@ -183,7 +183,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Deletes item from collection.
-             * @param itemName {string} Item name.
+             * @param {string} itemName Item name.
              */
             deleteItem: function (itemName) {
                 if (this.items.hasOwnProperty(itemName)) {
@@ -217,7 +217,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Merges collection to current collection
-             * @param collection {Collection} Collection to be merged to current
+             * @param {Collection} collection Collection to be merged to current
              * @return {Collection} New collection with items from both collections in it.
              * When current collection is specified collection,
              */
@@ -256,7 +256,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Retrieves item names filtered by a regexp.
-             * @param [re] {RegExp|string} Item name filter.
+             * @param {RegExp|string} [re] Item name filter.
              * @return {string[]} Array of item names matching the regexp.
              */
             keys: function (re) {
@@ -286,7 +286,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Filters collection elements.
-             * @param selector {RegExp|string|function} Selector expression
+             * @param {RegExp|string|function} selector Selector expression
              * @return {sntls.Collection} Filtered collection
              */
             filter: function (selector) {
@@ -340,7 +340,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
             /**
              * Retrieves collection items as array
              * in order of their names.
-             * @param [comparator] {function} Comparator callback.
+             * @param {function} [comparator] Comparator callback.
              * @returns {*[]} Item values in order of names.
              */
             asSortedArray: function (comparator) {
@@ -372,7 +372,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Calls a function on each item.
-             * @param handler {function} Function to call on each item.
+             * @param {function} handler Function to call on each item.
              * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
@@ -398,7 +398,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Calls function on each item in order of keys.
-             * @param handler {function} Function to call on each item.
+             * @param {function} handler Function to call on each item.
              * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
@@ -425,7 +425,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
             /**
              * Calls a method on each item, identified by name.
              * Method results are collected and returned in a new collection.
-             * @param methodName {string} Method name on each item.
+             * @param {string} methodName Method name on each item.
              * @return {sntls.Collection}
              */
             callEach: function (methodName) {

@@ -292,7 +292,7 @@
 
     /**
      * Initializes lookup by filling it with sufficient amount of test data.
-     * @param lookup {sntls.Collection} Collection instance.
+     * @param {sntls.Collection} lookup Collection instance.
      */
     function init(lookup) {
         lookup.setItem('one', 'hello');

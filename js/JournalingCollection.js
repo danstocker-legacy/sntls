@@ -12,7 +12,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
 
             /**
              * @constructor
-             * @param [items] {object} Initial contents.
+             * @param {object} [items] Initial contents.
              */
             init: function (items) {
                 base.init.call(this, items);
@@ -27,7 +27,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
 
             /**
              * Sets an item in the collection.
-             * @param name {string} Item name.
+             * @param {string} name Item name.
              * @param item Item variable / object.
              */
             setItem: function (name, item) {
@@ -47,7 +47,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
 
             /**
              * Removes item from sntls.LOOKUP.
-             * @param name {string} Item name.
+             * @param {string} name Item name.
              */
             deleteItem: function (name) {
                 if (this.items.hasOwnProperty(name)) {
