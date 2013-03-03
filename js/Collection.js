@@ -326,13 +326,12 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * @returns {*[]} Item values.
              */
             asArray: function () {
-                var result = [],
-                    itemName;
+                var keys = Object.keys(this.items),
+                    result = [],
+                    i;
 
-                for (itemName in this.items) {
-                    if (this.items.hasOwnProperty(itemName)) {
-                        result.push(this.items[itemName]);
-                    }
+                for (i = 0; i < keys.length; i++) {
+                    result.push(this.items[keys[i]]);
                 }
 
                 return result;
