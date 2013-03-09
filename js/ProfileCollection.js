@@ -4,7 +4,7 @@
  * Collection of profile instances. Aggregates profile information
  * about multiple objects.
  */
-/*global dessert, troop, sntls */
+/* global dessert, troop, sntls */
 troop.promise(sntls, 'ProfileCollection', function (sntls) {
     /**
      * @class sntls.ProfileCollection
@@ -14,7 +14,7 @@ troop.promise(sntls, 'ProfileCollection', function (sntls) {
     return sntls.Collection.of(sntls.Profile);
 });
 
-/*global sntls */
+/* global sntls */
 dessert.addTypes(/** @lends dessert */{
     isProfileCollection: function (expr) {
         return this.isClass(expr) &&

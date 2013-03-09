@@ -4,7 +4,7 @@
  * A profile is a collection of named numeric values that
  * may be incremented by an object the profile represents.
  */
-/*global dessert, troop, sntls */
+/* global dessert, troop, sntls */
 troop.promise(sntls, 'Profile', function () {
     /**
      * @class sntls.Profile
@@ -93,7 +93,7 @@ troop.promise(sntls, 'Profile', function () {
         });
 });
 
-/*global sntls */
+/* global sntls */
 dessert.addTypes(/** @lends dessert */{
     isProfile: function (expr) {
         return sntls.Profile.isPrototypeOf(expr);

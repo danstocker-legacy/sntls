@@ -1,7 +1,7 @@
 /**
  * Top-Level Library Namespace
  */
-/*global require */
+/* global require */
 /** @namespace */
 var sntls = {},
     dessert,

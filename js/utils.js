@@ -1,7 +1,7 @@
 /**
  * General Utilities
  */
-/*global dessert, troop, sntls */
+/* global dessert, troop, sntls */
 troop.promise(sntls, 'utils', function () {
     /**
      * @class sntls.utils
