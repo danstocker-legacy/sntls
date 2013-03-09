@@ -6,8 +6,12 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Profiled', function (sntls) {
-    var self = sntls.Profiled = troop.Base.extend()
-        .addMethod({
+    /**
+     * @class sntls.Profiled
+     * @extends troop.Base
+     */
+    return troop.Base.extend()
+        .addMethod(/** @lends sntls.Profiled */{
             /**
              * Initializes a profiled instance
              * @param {string} profileId Identifier for profile in profiles

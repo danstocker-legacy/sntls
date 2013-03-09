@@ -4,11 +4,12 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Collection', function (sntls) {
-    var base = troop.Base,
-        self;
-
-    self = sntls.Collection = base.extend()
-        .addPrivateConstant({
+    /**
+     * @class sntls.Collection
+     * @extends troop.Base
+     */
+    var self = troop.Base.extend()
+        .addPrivateConstant(/** @lends sntls.Collection */{
             // method names for general purpose constructors
             _ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
                 "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf",
@@ -32,7 +33,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 "anchor", "fontcolor", "fontsize", "big", "blink", "bold", "fixed", "italics", "small", "strike", "sub",
                 "sup"]
         })
-        .addMethod({
+        .addMethod(/** @lends sntls.Collection */{
             //////////////////////////////
             // OOP
 
@@ -46,7 +47,6 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
              *
              * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
-             * @override
              */
             of: function (template) {
                 // in case methodNames is a fat constructor
@@ -96,14 +96,13 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 });
             }
         })
-        .addPrivateMethod({
+        .addPrivateMethod(/** @lends sntls.Collection */{
             /**
              * Generates a shortcut method to be applied to the collection.
              * Shortcut methods traverse the collection and call the
              * invoked method on all items, collecting the return values
              * and returning them as a collection.
              * @param {string} methodName Name of method to make shortcut for.
-             * @private
              */
             _genShortcut: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
@@ -134,7 +133,6 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * Retrieves property names from object and returns an array for those that are functions.
              * @param {object} obj
              * @return {string[]}
-             * @private
              */
             _getES5MethodNames: function (obj) {
                 var propertyNames = Object.getOwnPropertyNames(obj),
@@ -149,7 +147,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
                 return methodNames;
             }
         })
-        .addMethod({
+        .addMethod(/** @lends sntls.Collection */{
             //////////////////////////////
             // Basics
 
@@ -454,7 +452,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
         /**
          * For ES5, we go with ordinary method extraction
          */
-        self.addPrivateMethod({
+        self.addPrivateMethod(/** @lends sntls.Collection */{
             _getMethodNames: self._getES5MethodNames
         });
     } else {
@@ -462,7 +460,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
          * For ES3 (JavaScript 1.5) we offer the method list for
          * a list of general purpose objects
          */
-        self.addPrivateMethod({
+        self.addPrivateMethod(/** @lends sntls.Collection */{
             _getMethodNames: function (obj) {
                 switch (obj) {
                 case Array.prototype:
@@ -485,10 +483,12 @@ troop.promise(sntls, 'Collection', function (sntls) {
             }
         });
     }
+
+    return self;
 });
 
 /*global sntls */
-dessert.addTypes({
+dessert.addTypes(/** @lends dessert */{
     isCollection: function (expr) {
         return sntls.Collection.isPrototypeOf(expr);
     },

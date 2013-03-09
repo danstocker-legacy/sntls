@@ -5,9 +5,13 @@
  * may be incremented by an object the profile represents.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Profile', function (sntls) {
-    var self = sntls.Profile = troop.Base.extend()
-        .addMethod({
+troop.promise(sntls, 'Profile', function () {
+    /**
+     * @class sntls.Profile
+     * @extends troop.Base
+     */
+    return troop.Base.extend()
+        .addMethod(/** @lends sntls.Profile */{
             /**
              * @constructor
              */
@@ -90,7 +94,7 @@ troop.promise(sntls, 'Profile', function (sntls) {
 });
 
 /*global sntls */
-dessert.addTypes({
+dessert.addTypes(/** @lends dessert */{
     isProfile: function (expr) {
         return sntls.Profile.isPrototypeOf(expr);
     },

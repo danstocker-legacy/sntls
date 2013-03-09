@@ -6,11 +6,16 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'ProfileCollection', function (sntls) {
-    sntls.ProfileCollection = sntls.Collection.of(sntls.Profile);
+    /**
+     * @class sntls.ProfileCollection
+     * @extends sntls.Collection
+     * @borrows sntls.Profile
+     */
+    return sntls.Collection.of(sntls.Profile);
 });
 
 /*global sntls */
-dessert.addTypes({
+dessert.addTypes(/** @lends dessert */{
     isProfileCollection: function (expr) {
         return this.isClass(expr) &&
                (expr.isA(sntls.Profile) ||

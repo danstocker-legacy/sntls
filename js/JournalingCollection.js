@@ -5,8 +5,12 @@
 troop.promise(sntls, 'JournalingCollection', function (sntls) {
     var base = sntls.Collection;
 
-    sntls.JournalingCollection = base.extend()
-        .addMethod({
+    /**
+     * @class sntls.JournalingCollection
+     * @extends sntls.Collection
+     */
+    return base.extend()
+        .addMethod(/** @lends sntls.JournalingCollection */{
             //////////////////////////////
             // OOP
 
