@@ -10,13 +10,13 @@ troop.promise(sntls, 'Profile', function () {
      * @class sntls.Profile
      * @extends troop.Base
      */
-    return troop.Base.extend()
+    sntls.Profile = troop.Base.extend()
         .addMethod(/** @lends sntls.Profile */{
             /**
              * @constructor
              */
             init: function () {
-                this.addPublic({
+                this.addPublic(/** @lends sntls.Profile */{
                     /**
                      * Lookup of numeric values assigned to named counter bins
                      * @type {object}

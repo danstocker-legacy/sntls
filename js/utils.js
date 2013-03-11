@@ -7,13 +7,14 @@ troop.promise(sntls, 'utils', function () {
      * @class sntls.utils
      * @extends troop.Base
      */
-    return troop.Base.extend()
+    sntls.utils = troop.Base.extend()
         .addMethod(/** @lends sntls.utils */{
             /**
              * Creates a shallow copy of an object.
              * Property names will be copied, but property values
              * will point to the original references.
              * @param {object} original
+             * @return {object} shallow copy of original
              */
             shallowCopy: function (original) {
                 if (dessert.validators.isArray(original)) {

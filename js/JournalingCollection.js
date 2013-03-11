@@ -2,14 +2,14 @@
  * Collection keeping a log of changes.
  */
 /* global troop, sntls */
-troop.promise(sntls, 'JournalingCollection', function (sntls) {
+troop.promise(sntls, 'JournalingCollection', function () {
     var base = sntls.Collection;
 
     /**
      * @class sntls.JournalingCollection
      * @extends sntls.Collection
      */
-    return base.extend()
+    sntls.JournalingCollection = base.extend()
         .addMethod(/** @lends sntls.JournalingCollection */{
             //////////////////////////////
             // OOP
@@ -21,7 +21,7 @@ troop.promise(sntls, 'JournalingCollection', function (sntls) {
             init: function (items) {
                 base.init.call(this, items);
 
-                this.addConstant({
+                this.addConstant(/** @lends sntls.JournalingCollection */{
                     log: []
                 });
             },

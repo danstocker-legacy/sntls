@@ -10,12 +10,12 @@ troop.promise(sntls, 'Profiled', function (sntls) {
      * @class sntls.Profiled
      * @extends troop.Base
      */
-    return troop.Base.extend()
+    sntls.Profiled = troop.Base.extend()
         .addMethod(/** @lends sntls.Profiled */{
             /**
              * Initializes a profiled instance
              * @param {string} profileId Identifier for profile in profiles
-             * @param {ProfileCollection} [profiles] Profile collection to which the present
+             * @param {sntls.ProfileCollection} [profiles] Profile collection to which the present
              * instance contributes to.
              */
             initProfiled: function (profileId, profiles) {
@@ -23,10 +23,10 @@ troop.promise(sntls, 'Profiled', function (sntls) {
                     .isString(profileId, "Invalid profile ID")
                     .isProfileCollectionOptional(profiles, "Invalid profile collection");
 
-                this.addConstant({
+                this.addConstant(/** @lends sntls.Profiled */{
                     /**
                      * Cloning passed profile collection or creating new
-                     * @type {ProfileCollection}
+                     * @type {sntls.ProfileCollection}
                      */
                     profile: (profiles ? profiles.clone() : sntls.ProfileCollection.create())
                         // adding new profile for this instance
@@ -39,7 +39,7 @@ troop.promise(sntls, 'Profiled', function (sntls) {
             /**
              * Simple getter for the instance profile.
              * For gathering profiles from a collection of Profiled instances.
-             * @return {ProfileCollection}
+             * @return {sntls.ProfileCollection}
              */
             getProfile: function () {
                 return this.profile;

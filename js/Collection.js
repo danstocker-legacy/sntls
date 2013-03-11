@@ -3,12 +3,14 @@
  * changes on named elements.
  */
 /* global dessert, troop, sntls */
-troop.promise(sntls, 'Collection', function (sntls) {
+troop.promise(sntls, 'Collection', function () {
+    var self;
+
     /**
      * @class sntls.Collection
      * @extends troop.Base
      */
-    var self = troop.Base.extend()
+    sntls.Collection = self = troop.Base.extend()
         .addPrivateConstant(/** @lends sntls.Collection */{
             // method names for general purpose constructors
             _ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
@@ -47,6 +49,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
              *
              * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
+             * @return {sntls.Collection}
              */
             of: function (template) {
                 // in case methodNames is a fat constructor
@@ -83,14 +86,13 @@ troop.promise(sntls, 'Collection', function (sntls) {
             },
 
             /**
-             * @constructor
              * @param {object} [items] Initial contents.
              */
             init: function (items) {
                 dessert.isObjectOptional(items, "Invalid items");
 
                 // adding basic properties
-                this.addPublic({
+                this.addPublic(/** @lends sntls.Collection */{
                     items: items || {},
                     count: items ? Object.keys(items).length : 0
                 });
@@ -103,6 +105,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
              * invoked method on all items, collecting the return values
              * and returning them as a collection.
              * @param {string} methodName Name of method to make shortcut for.
+             * @return {function}
              */
             _genShortcut: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
@@ -197,7 +200,7 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Clones collection
-             * @return {Collection} New collection with same contents as this.
+             * @return {sntls.Collection} New collection with same contents as this.
              */
             clone: function () {
                 var result = this.getBase().create();
@@ -215,8 +218,8 @@ troop.promise(sntls, 'Collection', function (sntls) {
 
             /**
              * Merges collection to current collection
-             * @param {Collection} collection Collection to be merged to current
-             * @return {Collection} New collection with items from both collections in it.
+             * @param {sntls.Collection} collection Collection to be merged to current
+             * @return {sntls.Collection} New collection with items from both collections in it.
              * When current collection is specified collection,
              */
             merge: function (collection) {
@@ -483,8 +486,6 @@ troop.promise(sntls, 'Collection', function (sntls) {
             }
         });
     }
-
-    return self;
 });
 
 /* global sntls */
