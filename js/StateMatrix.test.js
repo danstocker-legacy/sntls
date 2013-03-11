@@ -32,4 +32,12 @@
             }
         }, "Edge buffer after subsequent addition");
     });
+
+    test("Load retrieval", function () {
+        var stateMatrix = StateMatrix.create()
+            .addEdge('open', 'closed', 'close');
+
+        equal(stateMatrix.getLoad('open', 'closed'), 'close', "Valid load retrieved");
+        equal(typeof stateMatrix.getLoad('closed', 'open'), 'undefined', "Invalid load retrieved");
+    });
 }(sntls.StateMatrix));

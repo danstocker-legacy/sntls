@@ -9,7 +9,7 @@ troop.promise(sntls, 'StateMatrix', function () {
      * @class sntls.StateMatrix
      * @extends troop.Base
      */
-    return troop.Base.extend()
+    sntls.StateMatrix = troop.Base.extend()
         .addMethod(/** @lends sntls.StateMatrix */{
             init: function () {
                 this.addConstant(/** @lends sntls.StateMatrix */{
@@ -46,6 +46,24 @@ troop.promise(sntls, 'StateMatrix', function () {
                     endVertices[endStateName] = load;
                 }
                 return this;
+            },
+
+            /**
+             * Retrieves load for the edge specified by its start and end.
+             * @param {string} startStateName
+             * @param {string} endStateName
+             */
+            getLoad: function (startStateName, endStateName) {
+                dessert
+                    .isString(startStateName)
+                    .isString(endStateName);
+
+                var endVertices = this.edges[startStateName];
+                if (!endVertices) {
+                    return undefined;
+                } else {
+                    return endVertices[endStateName];
+                }
             }
         });
 });
@@ -62,5 +80,5 @@ troop.promise(sntls, 'StateMatrixCollection', function () {
      * @extends sntls.Collection
      * @borrows sntls.StateMatrix
      */
-    return sntls.Collection.of(sntls.StateMatrix);
+    sntls.StateMatrixCollection = sntls.Collection.of(sntls.StateMatrix);
 });
