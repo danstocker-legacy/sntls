@@ -19,4 +19,18 @@
         strictEqual(copyArray[0], originalArray[0], "Array items identical by reference");
         strictEqual(copyObject.foo, originalObject.foo, "Object properties identical by reference");
     });
+
+    test("Path resolution", function () {
+        var a = {
+            foo: {
+                bar: "hello"
+            }
+        };
+
+        equal(utils.resolve(a, ['foo', 'bar']), "hello", "Primitive resolved");
+        deepEqual(utils.resolve(a, ['foo']), {
+            bar: "hello"
+        }, "Object resolved");
+        equal(typeof utils.resolve(a, ['hello', 'world']), 'undefined', "Invalid path");
+    });
 }(sntls.utils));

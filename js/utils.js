@@ -34,6 +34,32 @@ troop.promise(sntls, 'utils', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Resolves a path relative to a host object.
+             * @param {object} host
+             * @param {string[]} path
+             * @return {*} Whatever is found at the end of the path.
+             * @link http://jsperf.com/path-resolution
+             */
+            resolve: function (host, path) {
+                dessert
+                    .isObject(host)
+                    .isArray(path);
+
+                path = path.concat([]);
+
+                var result = host;
+
+                while (path.length) {
+                    result = result[path.shift()];
+                    if (typeof result !== 'object') {
+                        break;
+                    }
+                }
+
+                return result;
             }
         });
 });
