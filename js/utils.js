@@ -45,8 +45,8 @@ troop.promise(sntls, 'utils', function () {
              */
             resolve: function (host, path) {
                 dessert
-                    .isObject(host)
-                    .isArray(path);
+                    .isObject(host, "Invalid host for path resolution")
+                    .isArray(path, "Invalid path");
 
                 path = path.concat([]);
 
