@@ -33,9 +33,9 @@ troop.promise(sntls, 'StateMatrix', function () {
              */
             addEdge: function (startStateName, endStateName, load) {
                 dessert
-                    .isString(startStateName)
-                    .isString(endStateName)
-                    .isString(load);
+                    .isString(startStateName, "Invalid start state name")
+                    .isString(endStateName, "Invalid end state name")
+                    .isString(load, "Invalid load");
 
                 var startVertices = this.edges,
                     endVertices = startVertices[startStateName];
@@ -45,6 +45,7 @@ troop.promise(sntls, 'StateMatrix', function () {
                 if (!endVertices[endStateName]) {
                     endVertices[endStateName] = load;
                 }
+
                 return this;
             },
 
@@ -55,15 +56,10 @@ troop.promise(sntls, 'StateMatrix', function () {
              */
             getLoad: function (startStateName, endStateName) {
                 dessert
-                    .isString(startStateName)
-                    .isString(endStateName);
+                    .isString(startStateName, "Invalid start state name")
+                    .isString(endStateName, "Invalid end state name");
 
-                var endVertices = this.edges[startStateName];
-                if (!endVertices) {
-                    return undefined;
-                } else {
-                    return endVertices[endStateName];
-                }
+                return sntls.utils.resolve(this.edges, [startStateName, endStateName]);
             }
         });
 });
