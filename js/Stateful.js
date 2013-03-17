@@ -3,7 +3,7 @@
  *
  * Classes that have this trait may define orthogonal state layers.
  */
-/* global dessert, troop, sntls */
+/*global dessert, troop, sntls */
 troop.promise(sntls, 'Stateful', function () {
     /**
      * @class sntls.Stateful

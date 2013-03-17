@@ -1,4 +1,4 @@
-/* global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
+/*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
 (function (ProfileCollection, Profile) {
     module("ProfileCollection");
 

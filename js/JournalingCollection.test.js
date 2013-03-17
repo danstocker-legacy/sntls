@@ -1,4 +1,4 @@
-/* global sntls, module, test, ok, equal, deepEqual, raises, expect */
+/*global sntls, module, test, ok, equal, deepEqual, raises, expect */
 (function (JournalingCollection) {
     module("Journaling collection");
 

@@ -1,7 +1,7 @@
 /**
  * Collection keeping a log of changes.
  */
-/* global troop, sntls */
+/*global troop, sntls */
 troop.promise(sntls, 'JournalingCollection', function () {
     var base = sntls.Collection;
 

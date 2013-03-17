@@ -3,7 +3,7 @@
  *
  * Stores information about transitions between states.
  */
-/* global dessert, troop, sntls */
+/*global dessert, troop, sntls */
 troop.promise(sntls, 'StateMatrix', function () {
     /**
      * @class sntls.StateMatrix

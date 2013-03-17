@@ -2,7 +2,7 @@
  * General purpose collection for storing, counting, and performing
  * changes on named elements.
  */
-/* global dessert, troop, sntls */
+/*global dessert, troop, sntls */
 troop.promise(sntls, 'Collection', function () {
     var self;
 
@@ -488,7 +488,7 @@ troop.promise(sntls, 'Collection', function () {
     }
 });
 
-/* global sntls */
+/*global sntls */
 dessert.addTypes(/** @lends dessert */{
     isCollection: function (expr) {
         return sntls.Collection.isPrototypeOf(expr);
