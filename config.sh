@@ -15,3 +15,5 @@ js/ProfileCollection.js
 js/Profiled.js
 js/exports.js
 "
+
+LICENSE="js/license.js"
