@@ -117,20 +117,45 @@
     });
 
     test("Combine with", function () {
-        var hash1 = /** @type {sntls.Hash} */ Hash.create({
+        deepEqual(
+            Hash.create({
                 foo  : 'bar',
-                hello: ['world', '!']
-            }),
-            hash2 = /** @type {sntls.Hash} */ Hash.create({
-                foo  : 'bar',
+                hello: 'world'
+            }).combineWith(Hash.create({
                 bar  : 'BAR',
                 world: 'WORLD'
-            }),
-            result = hash1.combineWith(hash2);
+            })).items,
+            {
+                foo  : 'BAR',
+                hello: 'WORLD'
+            },
+            "One to one string combine"
+        );
 
-        deepEqual(result.items, {
-            foo  : 'BAR',
-            hello: 'WORLD'
-        }, "Combined");
+        deepEqual(
+            Hash.create({
+                hello: ['there', 'world']
+            }).combineWith(Hash.create({
+                there: 'THERE',
+                world: 'WORLD'
+            })).items,
+            {
+                hello: ['THERE', 'WORLD']
+            },
+            "Simple array combine"
+        );
+
+        deepEqual(
+            Hash.create({
+                hello: ['there', 'world']
+            }).combineWith(Hash.create({
+                there: ['over', 'there'],
+                world: ['my', 'World']
+            })).items,
+            {
+                hello: ['over', 'there', 'my', 'World']
+            },
+            "Array concatenation"
+        );
     });
 }(sntls.Hash));
