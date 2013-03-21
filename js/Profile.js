@@ -6,6 +6,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Profile', function () {
+    var hOP = Object.prototype.hasOwnProperty;
+
     /**
      * @class sntls.Profile
      * @extends troop.Base
@@ -35,7 +37,7 @@ troop.promise(sntls, 'Profile', function () {
 
                 var counters = this.counters;
 
-                if (!counters.hasOwnProperty(counterName)) {
+                if (!hOP.call(counters, counterName)) {
                     counters[counterName] = amount;
                 } else {
                     counters[counterName] += amount;
@@ -54,7 +56,7 @@ troop.promise(sntls, 'Profile', function () {
 
                 var counters = this.counters;
 
-                if (!counters.hasOwnProperty(counterName)) {
+                if (!hOP.call(counters, counterName)) {
                     counters[counterName] = 0 - amount;
                 } else {
                     counters[counterName] -= amount;
