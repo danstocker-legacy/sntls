@@ -4,7 +4,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Collection', function () {
-    var self;
+    var hOP = Object.prototype.hasOwnProperty,
+        self;
 
     /**
      * @class sntls.Collection
@@ -115,17 +116,17 @@ troop.promise(sntls, 'Collection', function () {
                  */
                 return function () {
                     var items = this.items,
-                        itemName, item,
+                        itemNames = Object.keys(items),
+                        i, itemName, item,
                         result = {};
 
                     // traversing collection items
-                    for (itemName in items) {
-                        if (items.hasOwnProperty(itemName)) {
-                            item = items[itemName];
+                    for (i = 0; i < itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        item = items[itemName];
 
-                            // delegating method call to item and adding
-                            result[itemName] = item[methodName].apply(item, arguments);
-                        }
+                        // delegating method call to item and adding
+                        result[itemName] = item[methodName].apply(item, arguments);
                     }
 
                     return self.create(result);
@@ -169,7 +170,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param item Item variable / object.
              */
             setItem: function (itemName, item) {
-                var isNew = !this.items.hasOwnProperty(itemName);
+                var isNew = !hOP.call(this.items, itemName);
 
                 // setting item
                 this.items[itemName] = item;
@@ -187,7 +188,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param {string} itemName Item name.
              */
             deleteItem: function (itemName) {
-                if (this.items.hasOwnProperty(itemName)) {
+                if (hOP.call(this.items, itemName)) {
                     // removing item
                     delete this.items[itemName];
 
@@ -226,13 +227,15 @@ troop.promise(sntls, 'Collection', function () {
                 dessert.isCollection(collection, "Invalid collection");
 
                 var base = this.getBase(),
-                    result, key,
+                    result, itemNames,
+                    i, itemName,
                     fromItems, toItems;
 
                 dessert.assert(collection.isA(base), "Collection types do not match");
 
                 result = this.clone();
                 fromItems = collection.items;
+                itemNames = Object.keys(fromItems);
                 toItems = result.items;
 
                 /**
@@ -240,10 +243,9 @@ troop.promise(sntls, 'Collection', function () {
                  * a) implicit conversion of primitive values to objects
                  * b) iteration is faster
                  */
-                for (key in fromItems) {
-                    if (fromItems.hasOwnProperty(key)) {
-                        toItems[key] = fromItems[key];
-                    }
+                for (i = 0; i < itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    toItems[itemName] = fromItems[itemName];
                 }
 
                 // matching counts
@@ -262,7 +264,8 @@ troop.promise(sntls, 'Collection', function () {
              */
             keys: function (re) {
                 var result = [],
-                    itemName;
+                    items, itemNames,
+                    i, itemName;
 
                 // handling simplified prefix filtering
                 if (typeof re === 'string') {
@@ -271,17 +274,19 @@ troop.promise(sntls, 'Collection', function () {
 
                 dessert.isRegExpOptional(re, "Invalid key filter");
 
+                items = this.items;
+                itemNames = Object.keys(items);
+
                 if (re instanceof RegExp) {
-                    for (itemName in this.items) {
-                        if (this.items.hasOwnProperty(itemName) &&
-                            re.test(itemName)
-                            ) {
+                    for(i = 0; i < itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        if (re.test(itemName)) {
                             result.push(itemName);
                         }
                     }
                     return result;
                 } else {
-                    return Object.keys(this.items);
+                    return itemNames;
                 }
             },
 
@@ -293,23 +298,23 @@ troop.promise(sntls, 'Collection', function () {
             filter: function (selector) {
                 var result = {},
                     items = this.items,
-                    keys,
-                    i, key;
+                    itemNames,
+                    i, itemName;
 
                 if (selector instanceof RegExp ||
                     typeof selector === 'string'
                     ) {
-                    keys = this.keys(selector);
-                    for (i = 0; i < keys.length; i++) {
-                        key = keys[i];
-                        result[key] = items[key];
+                    itemNames = this.keys(selector);
+                    for (i = 0; i < itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        result[itemName] = items[itemName];
                     }
                 } else if (typeof selector === 'function') {
-                    for (key in items) {
-                        if (items.hasOwnProperty(key) &&
-                            selector.call(items[key], key)
-                            ) {
-                            result[key] = items[key];
+                    itemNames = Object.keys(items);
+                    for (i = 0; i < itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        if (selector.call(items[itemName], itemName)) {
+                            result[itemName] = items[itemName];
                         }
                     }
                 } else {
