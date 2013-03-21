@@ -3,7 +3,8 @@
  */
 /*global troop, sntls */
 troop.promise(sntls, 'JournalingCollection', function () {
-    var base = sntls.Collection;
+    var hOP = Object.prototype.hasOwnProperty,
+        base = sntls.Collection;
 
     /**
      * @class sntls.JournalingCollection
@@ -35,7 +36,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
              * @param item Item variable / object.
              */
             setItem: function (name, item) {
-                var isAdd = !this.items.hasOwnProperty(name);
+                var isAdd = !hOP.call(this.items, name);
 
                 // logging change
                 this.log.unshift({
@@ -54,7 +55,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
              * @param {string} name Item name.
              */
             deleteItem: function (name) {
-                if (this.items.hasOwnProperty(name)) {
+                if (hOP.call(this.items, name)) {
                     // adding to log
                     this.log.unshift({
                         method: 'remove',
