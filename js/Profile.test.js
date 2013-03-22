@@ -1,5 +1,5 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Profile) {
+(function (Profile, ProfileCollection) {
     module("Profile");
 
     test("Creation", function () {
@@ -66,4 +66,35 @@
         profile.reset();
         deepEqual(profile.counters, {}, "Counters after full reset");
     });
-}(sntls.Profile));
+
+    test("Collection increment", function () {
+        var stats = ProfileCollection.create();
+
+        // adding first profile and incrementing
+        stats
+            .setItem('first', Profile.create())
+            .inc('foo');
+
+        deepEqual(
+            stats.getCount('foo').items,
+            {
+                first: 1
+            },
+            "First increment"
+        );
+
+        // adding new profile and incrementing all
+        stats
+            .setItem('second', Profile.create())
+            .inc('foo');
+
+        deepEqual(
+            stats.getCount('foo').items,
+            {
+                first: 2,
+                second: 1
+            },
+            "Second increment"
+        );
+    });
+}(sntls.Profile, sntls.ProfileCollection));

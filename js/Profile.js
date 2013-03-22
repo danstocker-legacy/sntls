@@ -95,7 +95,15 @@ troop.promise(sntls, 'Profile', function () {
         });
 });
 
-/*global sntls */
+troop.promise(sntls, 'ProfileCollection', function () {
+    /**
+     * @class sntls.ProfileCollection
+     * @extends sntls.Collection
+     * @extends sntls.Profile
+     */
+    sntls.ProfileCollection = sntls.Collection.of(sntls.Profile);
+});
+
 dessert.addTypes(/** @lends dessert */{
     isProfile: function (expr) {
         return sntls.Profile.isPrototypeOf(expr);
@@ -104,5 +112,18 @@ dessert.addTypes(/** @lends dessert */{
     isProfileOptional: function (expr) {
         return typeof expr === 'undefined' ||
                sntls.Profile.isPrototypeOf(expr);
+    },
+
+    isProfileCollection: function (expr) {
+        return this.isClass(expr) &&
+               (expr.isA(sntls.Profile) ||
+                expr.isA(sntls.ProfileCollection));
+    },
+
+    isProfileCollectionOptional: function (expr) {
+        return typeof expr === 'undefined' ||
+               this.isClass(expr) &&
+               (expr.isA(sntls.Profile) ||
+                expr.isA(sntls.ProfileCollection));
     }
 });
