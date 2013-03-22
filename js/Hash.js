@@ -83,7 +83,9 @@ troop.promise(sntls, 'Hash', function () {
                 var result,
                     i, item;
 
-                if (key instanceof Array) {
+                if (typeof key === 'string') {
+                    result = this.items[key];
+                } else if (key instanceof Array) {
                     // key may be an array of keys
                     result = [];
                     for (i = 0; i < key.length; i++) {
@@ -92,8 +94,6 @@ troop.promise(sntls, 'Hash', function () {
                             result = result.concat(item);
                         }
                     }
-                } else if (typeof key === 'string') {
-                    result = this.items[key];
                 } else {
                     dessert.assert(false, "Invalid key");
                 }
