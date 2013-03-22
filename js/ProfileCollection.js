@@ -9,7 +9,7 @@ troop.promise(sntls, 'ProfileCollection', function () {
     /**
      * @class sntls.ProfileCollection
      * @extends sntls.Collection
-     * @borrows sntls.Profile
+     * @extends sntls.Profile
      */
     sntls.ProfileCollection = sntls.Collection.of(sntls.Profile);
 });

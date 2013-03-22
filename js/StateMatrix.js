@@ -74,7 +74,7 @@ troop.promise(sntls, 'StateMatrixCollection', function () {
     /**
      * @class sntls.StateMatrixCollection
      * @extends sntls.Collection
-     * @borrows sntls.StateMatrix
+     * @extends sntls.StateMatrix
      */
     sntls.StateMatrixCollection = sntls.Collection.of(sntls.StateMatrix);
 });
