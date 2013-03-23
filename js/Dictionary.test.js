@@ -219,19 +219,19 @@
         );
     });
 
-    test("Flip", function () {
+    test("Reversal", function () {
         deepEqual(
             Dictionary.create({
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
                 hello: 'world'
-            }).flip().items,
+            }).reverse().items,
             {
                 bar  : ['foo', 'moo'],
                 cow  : 'moo',
                 world: 'hello'
             },
-            "Flipped simple dictionary"
+            "Reversed simple dictionary"
         );
     });
 
@@ -245,14 +245,14 @@
                 world: 'Earth',
                 bar  : 'BAR',
                 guys : ["y'all", 'men']
-            })).flip().items,
+            })).reverse().items,
             {
                 "y'all": 'hello',
                 BAR    : ['foo', 'big'],
                 Earth  : ['hello', 'big'],
                 men    : 'hello'
             },
-            "Flipped combined dictionaries"
+            "Reversed combined dictionaries"
         );
     });
 }(sntls.Dictionary));

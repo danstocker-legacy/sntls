@@ -4,6 +4,7 @@
  * Specific data structure that is essentially an object
  * with properties that are either strings or arrays of strings.
  * Example:  {foo: 'bar', 'hello': ['all', 'the', 'world']}
+ * Dictionary handles multiplicity.
  *
  * Use the Dictionary class for managing and combining lookup objects.
  */
@@ -153,12 +154,12 @@ troop.promise(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Flips keys and values.
+             * Reverses keys and values.
              * Values from array items end up as separate keys on the new dictionary,
              * and keys associated with the same values stack up in arrays.
-             * @return {sntls.Dictionary} New dictionary instance with flipped items.
+             * @return {sntls.Dictionary} New dictionary instance with reversed key-value pairs.
              */
-            flip: function () {
+            reverse: function () {
                 /**
                  * @type {sntls.Dictionary}
                  */
