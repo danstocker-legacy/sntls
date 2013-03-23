@@ -178,4 +178,41 @@
             "Array concatenation"
         );
     });
+
+    test("Flip", function () {
+        deepEqual(
+            Hash.create({
+                foo  : 'bar',
+                moo  : ['bar', 'cow'],
+                hello: 'world'
+            }).flip().items,
+            {
+                bar: ['foo', 'moo'],
+                cow: 'moo',
+                world: 'hello'
+            },
+            "Flipped simple hash"
+        );
+    });
+
+    test("Integration", function () {
+        deepEqual(
+            Hash.create({
+                foo: 'bar',
+                hello: ['world', 'guys', 'all'],
+                big: ['world', 'bar']
+            }).combineWith(Hash.create({
+                world: 'Earth',
+                bar: 'BAR',
+                guys: ["y'all", 'men']
+            })).flip().items,
+            {
+                "y'all": 'hello',
+                BAR: ['foo', 'big'],
+                Earth: ['hello', 'big'],
+                men: 'hello'
+            },
+            "Flipped combined hashes"
+        );
+    });
 }(sntls.Hash));

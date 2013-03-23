@@ -135,6 +135,35 @@ troop.promise(sntls, 'Hash', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Flips keys and values.
+             * Values from array items end up as separate keys on the new hash,
+             * and keys associated with the same values stack up in arrays.
+             * @return {sntls.Hash} New hash instance with flipped items.
+             */
+            flip: function () {
+                /**
+                 * @type {sntls.Hash}
+                 */
+                var result = this.getBase().create(),
+                    keys = Object.keys(this.items),
+                    i, key, value;
+
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    value = this.items[key];
+
+                    // flipping value and key in new hash
+                    if (value instanceof Array){
+                        result.addItems(value, key);
+                    } else {
+                        result.addItem(value, key);
+                    }
+                }
+
+                return result;
             }
         });
 });
