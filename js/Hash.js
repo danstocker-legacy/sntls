@@ -117,21 +117,24 @@ troop.promise(sntls, 'Hash', function () {
 
             /**
              * Combines current hash with remote hash
-             * @param {sntls.Hash} hash
+             * @param {sntls.Hash} remoteHash Remote hash
              * @return {sntls.Hash} combined hash
              */
-            combineWith: function (hash) {
-                dessert.isHash(hash, "Invalid hash");
+            combineWith: function (remoteHash) {
+                dessert.isHash(remoteHash, "Invalid hash");
 
-                var result = sntls.Hash.create(),
-                    keys = Object.keys(this.items),
-                    i, key, value;
+                var result = this.getBase().create(),
+                    currentKeys = Object.keys(this.items),
+                    i, currentKey, currentValue, remoteValue;
 
-                for (i = 0; i < keys.length; i++) {
-                    key = keys[i];
-                    value = this.getItem(key);
-                    // value is the key in remote hash
-                    result.addItem(key, hash.getItem(value));
+                for (i = 0; i < currentKeys.length; i++) {
+                    currentKey = currentKeys[i];
+                    currentValue = this.getItem(currentKey);
+                    remoteValue = remoteHash.getItem(currentValue);
+
+                    if (typeof remoteValue !== 'undefined') {
+                        result.addItem(currentKey, remoteValue);
+                    }
                 }
 
                 return result;
@@ -156,7 +159,7 @@ troop.promise(sntls, 'Hash', function () {
                     value = this.items[key];
 
                     // flipping value and key in new hash
-                    if (value instanceof Array){
+                    if (value instanceof Array) {
                         result.addItems(value, key);
                     } else {
                         result.addItem(value, key);

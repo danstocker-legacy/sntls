@@ -154,6 +154,46 @@
 
         deepEqual(
             Hash.create({
+                foo  : 'bar',
+                hello: 'world'
+            }).combineWith(Hash.create({
+                world: 'WORLD'
+            })).items,
+            {
+                hello: 'WORLD'
+            },
+            "Absent keys on left side"
+        );
+
+        deepEqual(
+            Hash.create({
+                hello: 'world'
+            }).combineWith(Hash.create({
+                hats : 'off',
+                world: 'WORLD'
+            })).items,
+            {
+                hello: 'WORLD'
+            },
+            "Absent keys on right side"
+        );
+
+        deepEqual(
+            Hash.create({
+                foo  : 'bar',
+                hello: 'world'
+            }).combineWith(Hash.create({
+                hats : 'off',
+                world: 'WORLD'
+            })).items,
+            {
+                hello: 'WORLD'
+            },
+            "Absent keys on both sides"
+        );
+
+        deepEqual(
+            Hash.create({
                 hello: ['there', 'world']
             }).combineWith(Hash.create({
                 there: 'THERE',
@@ -187,8 +227,8 @@
                 hello: 'world'
             }).flip().items,
             {
-                bar: ['foo', 'moo'],
-                cow: 'moo',
+                bar  : ['foo', 'moo'],
+                cow  : 'moo',
                 world: 'hello'
             },
             "Flipped simple hash"
@@ -198,19 +238,19 @@
     test("Integration", function () {
         deepEqual(
             Hash.create({
-                foo: 'bar',
+                foo  : 'bar',
                 hello: ['world', 'guys', 'all'],
-                big: ['world', 'bar']
+                big  : ['world', 'bar']
             }).combineWith(Hash.create({
                 world: 'Earth',
-                bar: 'BAR',
-                guys: ["y'all", 'men']
+                bar  : 'BAR',
+                guys : ["y'all", 'men']
             })).flip().items,
             {
                 "y'all": 'hello',
-                BAR: ['foo', 'big'],
-                Earth: ['hello', 'big'],
-                men: 'hello'
+                BAR    : ['foo', 'big'],
+                Earth  : ['hello', 'big'],
+                men    : 'hello'
             },
             "Flipped combined hashes"
         );
