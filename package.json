@@ -2,7 +2,7 @@
     "name"        : "sntls",
     "version"     : "0.2.1",
     "description" : "Essential JavaScript tools",
-    "keywords"    : ["collection", "journaling", "profile", "stateful", "trait"],
+    "keywords"    : ["dictionary", "collection", "journaling", "profile", "stateful", "trait"],
     "author"      : "Dan Stocker <dan@kwaia.com>",
     "repository"  : {
         "type": "git",
