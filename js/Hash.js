@@ -76,6 +76,20 @@ troop.promise(sntls, 'Hash', function () {
             },
 
             /**
+             * Adds items to hash by assigning the same value(s) to
+             * a set of keys
+             * @param {string[]} keys
+             * @param {string|string[]} value
+             */
+            addItems: function (keys, value) {
+                var i;
+                for (i = 0; i < keys.length; i++) {
+                    this.addItem(keys[i], value);
+                }
+                return this;
+            },
+
+            /**
              * Retrieves item(s) from the hash
              * @param {string|string[]} key
              */

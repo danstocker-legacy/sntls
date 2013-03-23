@@ -84,6 +84,26 @@
         }, "Value added by existing key");
     });
 
+    test("Item addition to multiple keys", function () {
+        /**
+         * @type {sntls.Hash}
+         */
+        var hash = Hash.create();
+
+        hash.addItems(['foo', 'boo'], 'bar');
+        deepEqual(hash.items, {
+            foo: 'bar',
+            boo: 'bar'
+        }, "Key-value pairs added to hash");
+
+        hash.addItems(['foo', 'moo'], 'hello');
+        deepEqual(hash.items, {
+            foo: ['bar', 'hello'],
+            boo: 'bar',
+            moo: 'hello'
+        }, "More key-value pairs added to hash");
+    });
+
     test("Item retrieval", function () {
         /**
          * @type {sntls.Hash}
