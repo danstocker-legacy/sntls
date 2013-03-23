@@ -1,3 +1,12 @@
+/**
+ * General Hash Object
+ *
+ * Specific data structure that is essentially an object
+ * with properties that are either strings or arrays of strings.
+ * Example:  {foo: 'bar', 'hello': ['all', 'the', 'world']}
+ *
+ * Use the Hash class for managing, combining lookup objects.
+ */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Hash', function () {
     dessert.addTypes(/** @lends dessert */{
@@ -24,6 +33,9 @@ troop.promise(sntls, 'Hash', function () {
                 dessert.isObjectOptional(items, "Invalid initial hash items");
 
                 this.addPublic(/** @lends sntls.Hash */{
+                    /**
+                     * @type {object}
+                     */
                     items: items || {}
                 });
             },
