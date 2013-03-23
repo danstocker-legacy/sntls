@@ -9,6 +9,6 @@ var sntls = {},
 
 // adding Node.js dependencies
 if (typeof require === 'function') {
-    dessert = require('dessert').dessert;
-    troop = require('troop').troop;
+    dessert = dessert || require('dessert').dessert;
+    troop = troop || require('troop').troop;
 }
