@@ -1,54 +1,54 @@
 /*global module, test, raises, equal, deepEqual */
 /*global sntls */
-(function (Hash) {
-    module("Hash");
+(function (Dictionary) {
+    module("Dictionary");
 
     test("Instantiation", function () {
         /**
-         * @type sntls.Hash
+         * @type sntls.Dictionary
          */
-        var hash;
+        var dict;
 
         raises(function () {
-            hash = Hash.create('foo');
+            dict = Dictionary.create('foo');
         }, "Invalid items object");
 
-        hash = Hash.create();
-        deepEqual(hash.items, {}, "Empty items property on hash");
+        dict = Dictionary.create();
+        deepEqual(dict.items, {}, "Empty items property on dictionary");
 
-        hash = Hash.create({
+        dict = Dictionary.create({
             foo: 'bar'
         });
-        deepEqual(hash.items, {
+        deepEqual(dict.items, {
             foo: 'bar'
-        }, "Predefined items property on hash");
+        }, "Predefined items property on dictionary");
     });
 
     test("Single item addition", function () {
         /**
-         * @type {sntls.Hash}
+         * @type {sntls.Dictionary}
          */
-        var hash = Hash.create();
+        var dict = Dictionary.create();
 
-        hash.addItem('foo', 'bar');
-        deepEqual(hash.items, {
+        dict.addItem('foo', 'bar');
+        deepEqual(dict.items, {
             foo: 'bar'
-        }, "Key-value pair added to hash");
+        }, "Key-value pair added to dictionary");
 
-        hash.addItem('hello', 'world');
-        deepEqual(hash.items, {
+        dict.addItem('hello', 'world');
+        deepEqual(dict.items, {
             foo  : 'bar',
             hello: 'world'
-        }, "Key-value pair added to hash");
+        }, "Key-value pair added to dictionary");
 
-        hash.addItem('foo', 'moo');
-        deepEqual(hash.items, {
+        dict.addItem('foo', 'moo');
+        deepEqual(dict.items, {
             foo  : ['bar', 'moo'],
             hello: 'world'
         }, "Value added by existing key");
 
-        hash.addItem('foo', 'boo');
-        deepEqual(hash.items, {
+        dict.addItem('foo', 'boo');
+        deepEqual(dict.items, {
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
         }, "Value added by existing key");
@@ -56,29 +56,29 @@
 
     test("Array item addition", function () {
         /**
-         * @type {sntls.Hash}
+         * @type {sntls.Dictionary}
          */
-        var hash = Hash.create();
+        var dict = Dictionary.create();
 
-        hash.addItem('foo', ['bar']);
-        deepEqual(hash.items, {
+        dict.addItem('foo', ['bar']);
+        deepEqual(dict.items, {
             foo: 'bar'
-        }, "Key-value pair added to hash");
+        }, "Key-value pair added to dictionary");
 
-        hash.addItem('hello', ['world']);
-        deepEqual(hash.items, {
+        dict.addItem('hello', ['world']);
+        deepEqual(dict.items, {
             foo  : 'bar',
             hello: 'world'
-        }, "Key-value pair added to hash");
+        }, "Key-value pair added to dictionary");
 
-        hash.addItem('foo', ['moo']);
-        deepEqual(hash.items, {
+        dict.addItem('foo', ['moo']);
+        deepEqual(dict.items, {
             foo  : ['bar', 'moo'],
             hello: 'world'
         }, "Value added by existing key");
 
-        hash.addItem('foo', ['boo']);
-        deepEqual(hash.items, {
+        dict.addItem('foo', ['boo']);
+        deepEqual(dict.items, {
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
         }, "Value added by existing key");
@@ -86,51 +86,51 @@
 
     test("Item addition to multiple keys", function () {
         /**
-         * @type {sntls.Hash}
+         * @type {sntls.Dictionary}
          */
-        var hash = Hash.create();
+        var dict = Dictionary.create();
 
-        hash.addItems(['foo', 'boo'], 'bar');
-        deepEqual(hash.items, {
+        dict.addItems(['foo', 'boo'], 'bar');
+        deepEqual(dict.items, {
             foo: 'bar',
             boo: 'bar'
-        }, "Key-value pairs added to hash");
+        }, "Key-value pairs added to dictionary");
 
-        hash.addItems(['foo', 'moo'], 'hello');
-        deepEqual(hash.items, {
+        dict.addItems(['foo', 'moo'], 'hello');
+        deepEqual(dict.items, {
             foo: ['bar', 'hello'],
             boo: 'bar',
             moo: 'hello'
-        }, "More key-value pairs added to hash");
+        }, "More key-value pairs added to dictionary");
     });
 
     test("Item retrieval", function () {
         /**
-         * @type {sntls.Hash}
+         * @type {sntls.Dictionary}
          */
-        var hash = Hash.create({
+        var dict = Dictionary.create({
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
         });
 
         raises(function () {
-            hash.getItem(true);
+            dict.getItem(true);
         }, "Invalid key");
 
-        equal(hash.getItem('hello'), 'world', "Retrieving string value");
+        equal(dict.getItem('hello'), 'world', "Retrieving string value");
         deepEqual(
-            hash.getItem('foo'),
+            dict.getItem('foo'),
             ['bar', 'moo', 'boo'],
             "Retrieving array value"
         );
         deepEqual(
-            hash.getItem(['hello', 'foo']),
+            dict.getItem(['hello', 'foo']),
             ['world', 'bar', 'moo', 'boo'],
             "Retrieving multiple values"
         );
 
         deepEqual(
-            hash.getItem(['hello', 'INVALID']),
+            dict.getItem(['hello', 'INVALID']),
             ['world'],
             "Retrieving invalid values"
         );
@@ -138,10 +138,10 @@
 
     test("Combine with", function () {
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 foo  : 'bar',
                 hello: 'world'
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 bar  : 'BAR',
                 world: 'WORLD'
             })).items,
@@ -153,10 +153,10 @@
         );
 
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 foo  : 'bar',
                 hello: 'world'
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 world: 'WORLD'
             })).items,
             {
@@ -166,9 +166,9 @@
         );
 
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 hello: 'world'
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 hats : 'off',
                 world: 'WORLD'
             })).items,
@@ -179,10 +179,10 @@
         );
 
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 foo  : 'bar',
                 hello: 'world'
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 hats : 'off',
                 world: 'WORLD'
             })).items,
@@ -193,9 +193,9 @@
         );
 
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 hello: ['there', 'world']
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 there: 'THERE',
                 world: 'WORLD'
             })).items,
@@ -206,9 +206,9 @@
         );
 
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 hello: ['there', 'world']
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 there: ['over', 'there'],
                 world: ['my', 'World']
             })).items,
@@ -221,7 +221,7 @@
 
     test("Flip", function () {
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
                 hello: 'world'
@@ -231,17 +231,17 @@
                 cow  : 'moo',
                 world: 'hello'
             },
-            "Flipped simple hash"
+            "Flipped simple dictionary"
         );
     });
 
     test("Integration", function () {
         deepEqual(
-            Hash.create({
+            Dictionary.create({
                 foo  : 'bar',
                 hello: ['world', 'guys', 'all'],
                 big  : ['world', 'bar']
-            }).combineWith(Hash.create({
+            }).combineWith(Dictionary.create({
                 world: 'Earth',
                 bar  : 'BAR',
                 guys : ["y'all", 'men']
@@ -252,7 +252,7 @@
                 Earth  : ['hello', 'big'],
                 men    : 'hello'
             },
-            "Flipped combined hashes"
+            "Flipped combined dictionaries"
         );
     });
-}(sntls.Hash));
+}(sntls.Dictionary));

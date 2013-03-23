@@ -1,38 +1,38 @@
 /**
- * General Hash Object
+ * Dictionary
  *
  * Specific data structure that is essentially an object
  * with properties that are either strings or arrays of strings.
  * Example:  {foo: 'bar', 'hello': ['all', 'the', 'world']}
  *
- * Use the Hash class for managing, combining lookup objects.
+ * Use the Dictionary class for managing and combining lookup objects.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Hash', function () {
+troop.promise(sntls, 'Dictionary', function () {
     dessert.addTypes(/** @lends dessert */{
-        isHash: function (expr) {
-            return sntls.Hash.isBaseOf(expr);
+        isDictionary: function (expr) {
+            return sntls.Dictionary.isBaseOf(expr);
         },
 
-        isHashOptional: function (expr) {
+        isDictionaryOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   sntls.Hash.isBaseOf(expr);
+                   sntls.Dictionary.isBaseOf(expr);
         }
     });
 
     /**
-     * @class sntls.Hash
+     * @class sntls.Dictionary
      * @extends troop.Base
      */
-    sntls.Hash = troop.Base.extend()
-        .addMethod(/** @lends sntls.Hash */{
+    sntls.Dictionary = troop.Base.extend()
+        .addMethod(/** @lends sntls.Dictionary */{
             /**
-             * @param {object} items Hash items
+             * @param {object} items Initial dictionary items
              */
             init: function (items) {
-                dessert.isObjectOptional(items, "Invalid initial hash items");
+                dessert.isObjectOptional(items, "Invalid initial dictionary items");
 
-                this.addPublic(/** @lends sntls.Hash */{
+                this.addPublic(/** @lends sntls.Dictionary */{
                     /**
                      * @type {object}
                      */
@@ -41,7 +41,7 @@ troop.promise(sntls, 'Hash', function () {
             },
 
             /**
-             * Adds item to hash
+             * Adds item to dictionary
              * @param {string} key
              * @param {string|string[]} value
              */
@@ -75,12 +75,12 @@ troop.promise(sntls, 'Hash', function () {
                             currentValue.push(value);
                         }
                     } else {
-                        dessert.assert(false, "Invalid hash value");
+                        dessert.assert(false, "Invalid dictionary value");
                     }
                     break;
 
                 default:
-                    dessert.assert(false, "Invalid hash value");
+                    dessert.assert(false, "Invalid dictionary value");
                     break;
                 }
 
@@ -88,7 +88,7 @@ troop.promise(sntls, 'Hash', function () {
             },
 
             /**
-             * Adds items to hash by assigning the same value(s) to
+             * Adds items to dictionary by assigning the same value(s) to
              * a set of keys
              * @param {string[]} keys
              * @param {string|string[]} value
@@ -102,7 +102,7 @@ troop.promise(sntls, 'Hash', function () {
             },
 
             /**
-             * Retrieves item(s) from the hash
+             * Retrieves item(s) from the dictionary
              * @param {string|string[]} key
              */
             getItem: function (key) {
@@ -128,12 +128,12 @@ troop.promise(sntls, 'Hash', function () {
             },
 
             /**
-             * Combines current hash with remote hash
-             * @param {sntls.Hash} remoteHash Remote hash
-             * @return {sntls.Hash} combined hash
+             * Combines current dictionary with remote dictionary
+             * @param {sntls.Dictionary} remoteDict Remote dictionary
+             * @return {sntls.Dictionary} Combined dictionary
              */
-            combineWith: function (remoteHash) {
-                dessert.isHash(remoteHash, "Invalid hash");
+            combineWith: function (remoteDict) {
+                dessert.isDictionary(remoteDict, "Invalid dictionary");
 
                 var result = this.getBase().create(),
                     currentKeys = Object.keys(this.items),
@@ -142,7 +142,7 @@ troop.promise(sntls, 'Hash', function () {
                 for (i = 0; i < currentKeys.length; i++) {
                     currentKey = currentKeys[i];
                     currentValue = this.getItem(currentKey);
-                    remoteValue = remoteHash.getItem(currentValue);
+                    remoteValue = remoteDict.getItem(currentValue);
 
                     if (typeof remoteValue !== 'undefined') {
                         result.addItem(currentKey, remoteValue);
@@ -154,13 +154,13 @@ troop.promise(sntls, 'Hash', function () {
 
             /**
              * Flips keys and values.
-             * Values from array items end up as separate keys on the new hash,
+             * Values from array items end up as separate keys on the new dictionary,
              * and keys associated with the same values stack up in arrays.
-             * @return {sntls.Hash} New hash instance with flipped items.
+             * @return {sntls.Dictionary} New dictionary instance with flipped items.
              */
             flip: function () {
                 /**
-                 * @type {sntls.Hash}
+                 * @type {sntls.Dictionary}
                  */
                 var result = this.getBase().create(),
                     keys = Object.keys(this.items),
@@ -170,7 +170,7 @@ troop.promise(sntls, 'Hash', function () {
                     key = keys[i];
                     value = this.items[key];
 
-                    // flipping value and key in new hash
+                    // flipping value and key in new dictionary
                     if (value instanceof Array) {
                         result.addItems(value, key);
                     } else {

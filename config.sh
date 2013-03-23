@@ -8,6 +8,7 @@ LIB="sntls"
 FILES="
 js/namespace.js
 js/utils.js
+js/Dictionary.js
 js/Collection.js
 js/JournalingCollection.js
 js/Profile.js
