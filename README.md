@@ -7,14 +7,18 @@ A collection of general purpose classes and traits that formalize frequent opera
 
 Currently available:
 
-- `sntls.Collection`: Offers to use collections of objects as if they were single objects.
-- `sntls.JournalingCollection`: Collection that records changes
-- `sntls.Profile`: Registers a set of counters that objects may increase or decrease. Offers a way of gathering statistics.
-- `sntls.Profiled`: *Trait* allowing such objects to be profiled and/or contribute to profiles of other objects.
+- `sntls.Dictionary`: For managing dictionaries and lookups.
+- `sntls.Collection`: Offers a way of handling multiple objects as if they were single objects of the same kind.
+- `sntls.JournalingCollection`: Collection that records changes.
+- `sntls.Profile`: Offers a way of gathering statistics in a multi-level fashion.
+- `sntls.Profiled`: *Trait*, lets classes keep a profile.
+- `sntls.StateMatrix`: Associates transitions between named states with arbitrary values.
+- `sntls.Stateful`: *Trait*, adds state matrices to class, triggering specified methods on transitions.
 
 See the [Sntls wiki](https://github.com/danstocker/sntls/wiki) for reference and examples.
 
-In the making:
+Planned (no guarantee that any of it will actually make it into the lib):
 
 - `sntls.Set`: For simple set operations.
-- `sntls.Stateful`: *Trait* allowing objects to define a state matrix and events to be called on transitions between states.
+- `sntls.Memoized`: *Trait*, stores instances of the class it's applied to in a **global** registry.
+- `sntls.Documented`: *Trait*, extending classes with essential meta information. (class name, GUID, inheritence path, etc)
