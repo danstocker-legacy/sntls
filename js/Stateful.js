@@ -31,6 +31,7 @@ troop.promise(sntls, 'Stateful', function () {
              * eg. enabled-disabled, or open-closed.
              * @param {string} layerName
              * @param {sntls.StateMatrix} stateMatrix
+             * @return {sntls.Stateful}
              * @static
              */
             addStateLayer: function (layerName, stateMatrix) {
@@ -57,6 +58,7 @@ troop.promise(sntls, 'Stateful', function () {
              * Changes state on specified state layer.
              * @param {string} stateName Destination state
              * @param {string} layerName Layer name
+             * @return {sntls.Stateful}
              */
             changeStateTo: function (stateName, layerName) {
                 dessert.isString(layerName);

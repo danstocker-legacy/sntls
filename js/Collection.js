@@ -168,6 +168,7 @@ troop.promise(sntls, 'Collection', function () {
              * Sets an item in the collection.
              * @param {string} itemName Item name.
              * @param item Item variable / object.
+             * @return {sntls.Collection}
              */
             setItem: function (itemName, item) {
                 var isNew = !hOP.call(this.items, itemName);
@@ -186,6 +187,7 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Deletes item from collection.
              * @param {string} itemName Item name.
+             * @return {sntls.Collection}
              */
             deleteItem: function (itemName) {
                 if (hOP.call(this.items, itemName)) {
@@ -368,6 +370,7 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * Empties collection.
+             * @return {sntls.Collection}
              */
             clear: function () {
                 // removing items
@@ -382,6 +385,7 @@ troop.promise(sntls, 'Collection', function () {
              * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
+             * @return {sntls.Collection}
              */
             forEach: function (handler) {
                 dessert.isFunction(handler, "Invalid callback function");
@@ -408,6 +412,7 @@ troop.promise(sntls, 'Collection', function () {
              * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
+             * @return {sntls.Collection}
              */
             forNext: function (handler) {
                 dessert.isFunction(handler, "Invalid callback function");

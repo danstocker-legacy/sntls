@@ -45,6 +45,7 @@ troop.promise(sntls, 'Dictionary', function () {
              * Adds item to dictionary
              * @param {string} key
              * @param {string|string[]} value
+             * @return {sntls.Dictionary}
              */
             addItem: function (key, value) {
                 var items = this.items,
@@ -93,6 +94,7 @@ troop.promise(sntls, 'Dictionary', function () {
              * a set of keys
              * @param {string[]} keys
              * @param {string|string[]} value
+             * @return {sntls.Dictionary}
              */
             addItems: function (keys, value) {
                 var i;
@@ -105,6 +107,7 @@ troop.promise(sntls, 'Dictionary', function () {
             /**
              * Retrieves item(s) from the dictionary
              * @param {string|string[]} key
+             * @return {string|string[]} Dictionary item
              */
             getItem: function (key) {
                 var result,

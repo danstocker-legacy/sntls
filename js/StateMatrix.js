@@ -30,6 +30,7 @@ troop.promise(sntls, 'StateMatrix', function () {
              * @param {string} startStateName
              * @param {string} endStateName
              * @param {string} load
+             * @return {sntls.StateMatrix}
              */
             addEdge: function (startStateName, endStateName, load) {
                 dessert
@@ -53,6 +54,7 @@ troop.promise(sntls, 'StateMatrix', function () {
              * Retrieves load for the edge specified by its start and end.
              * @param {string} startStateName
              * @param {string} endStateName
+             * @return {*}
              */
             getLoad: function (startStateName, endStateName) {
                 dessert

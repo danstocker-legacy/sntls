@@ -34,6 +34,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
              * Sets an item in the collection.
              * @param {string} name Item name.
              * @param item Item variable / object.
+             * @return {sntls.JournalingCollection}
              */
             setItem: function (name, item) {
                 var isAdd = !hOP.call(this.items, name);
@@ -53,6 +54,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
             /**
              * Removes item from sntls.LOOKUP.
              * @param {string} name Item name.
+             * @return {sntls.JournalingCollection}
              */
             deleteItem: function (name) {
                 if (hOP.call(this.items, name)) {
@@ -74,6 +76,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
 
             /**
              * Empties collection.
+             * @return {sntls.JournalingCollection}
              */
             clear: function () {
                 this.resetLog();
@@ -83,6 +86,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
 
             /**
              * Resets collection log.
+             * @return {sntls.JournalingCollection}
              */
             resetLog: function () {
                 var log = this.log;

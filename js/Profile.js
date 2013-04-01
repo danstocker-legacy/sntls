@@ -14,9 +14,6 @@ troop.promise(sntls, 'Profile', function () {
      */
     sntls.Profile = troop.Base.extend()
         .addMethod(/** @lends sntls.Profile */{
-            /**
-             * @constructor
-             */
             init: function () {
                 this.addPublic(/** @lends sntls.Profile */{
                     /**
@@ -31,6 +28,7 @@ troop.promise(sntls, 'Profile', function () {
              * Increases counter
              * @param {string} counterName Counter identifier
              * @param {number} [amount] Amount to add to counter
+             * @return {sntls.Profile}
              */
             inc: function (counterName, amount) {
                 amount = amount || 1;
@@ -50,6 +48,7 @@ troop.promise(sntls, 'Profile', function () {
              * Decreases counter
              * @param {string} counterName Counter identifier
              * @param {number} [amount] Amount to add to counter
+             * @return {sntls.Profile}
              */
             dec: function (counterName, amount) {
                 amount = amount || 1;
@@ -84,6 +83,7 @@ troop.promise(sntls, 'Profile', function () {
             /**
              * Resets one or all counters
              * @param {string} [key]
+             * @return {sntls.Profile}
              */
             reset: function (key) {
                 if (dessert.validators.isString(key)) {
@@ -91,6 +91,7 @@ troop.promise(sntls, 'Profile', function () {
                 } else {
                     this.counters = {};
                 }
+                return this;
             }
         });
 });
