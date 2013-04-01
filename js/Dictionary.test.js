@@ -233,6 +233,20 @@
             },
             "Reversed simple dictionary"
         );
+
+        deepEqual(
+            Dictionary.create({
+                foo  : 'bar',
+                moo  : ['bar', 'cow'],
+                hello: 'world'
+            }).reverse().reverse().items,
+            {
+                foo  : 'bar',
+                moo  : ['bar', 'cow'],
+                hello: 'world'
+            },
+            "Reverse-reversed simple dictionary"
+        );
     });
 
     test("Integration", function () {
