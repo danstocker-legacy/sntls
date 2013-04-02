@@ -38,8 +38,8 @@
     });
 
     test("String search", function () {
-        var orderedArray = /** @type {sntls.OrderedArray} */ sntls.OrderedArray.create(["bar", "foo", "hello", "ipsum",
-            "lorem", "world"]);
+        var orderedArray = /** @type {sntls.OrderedArray} */
+            sntls.OrderedArray.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
         equal(orderedArray.spliceIndexOf('hell'), 2, "Lower nearest hit");
         equal(orderedArray.spliceIndexOf('hello'), 2, "Exact hit");
         equal(orderedArray.spliceIndexOf('hew'), 3, "Upper nearest hit");
@@ -47,5 +47,47 @@
         equal(orderedArray.spliceIndexOf('world'), 5, "High extreme");
         equal(orderedArray.spliceIndexOf('ant'), 0, "Lower out of bounds");
         equal(orderedArray.spliceIndexOf('wound'), 6, "Upper out of bounds");
+    });
+
+    test("Item addition", function () {
+        var orderedArray = /** @type {sntls.OrderedArray} */
+            sntls.OrderedArray.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+
+        orderedArray.addItem('hell');
+
+        deepEqual(
+            orderedArray.items,
+            ["bar", "foo", "hell", "hello", "ipsum", "lorem", "world"],
+            "Inserted 'hell'"
+        );
+
+        orderedArray.addItem('wound');
+
+        deepEqual(
+            orderedArray.items,
+            ["bar", "foo", "hell", "hello", "ipsum", "lorem", "world", "wound"],
+            "Inserted 'wound'"
+        );
+    });
+
+    test("Item removal", function () {
+        var orderedArray = /** @type {sntls.OrderedArray} */ sntls.OrderedArray.create(["bar", "foo", "hello", "ipsum",
+            "lorem", "world"]);
+
+        orderedArray.removeItem('hell');
+
+        deepEqual(
+            orderedArray.items,
+            ["bar", "foo", "hello", "ipsum", "lorem", "world"],
+            "Attempted to remove 'hell'"
+        );
+
+        orderedArray.removeItem('hello');
+
+        deepEqual(
+            orderedArray.items,
+            ["bar", "foo", "ipsum", "lorem", "world"],
+            "Removed 'hello'"
+        );
     });
 }());

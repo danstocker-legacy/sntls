@@ -84,11 +84,30 @@ troop.promise(sntls, 'OrderedArray', function () {
                 }
             },
 
+            /**
+             * Inserts value into array while retaining order.
+             * @param {string|number} value
+             * @return {sntls.OrderedArray}
+             */
             addItem: function (value) {
+                this.items.splice(this.spliceIndexOf(value), 0, value);
                 return this;
             },
 
+            /**
+             * Deletes value from array while retaining order.
+             * @param {string|number} value
+             * @return {sntls.OrderedArray}
+             */
             removeItem: function (value) {
+                var items = this.items,
+                    spliceIndex = this.spliceIndexOf(value);
+
+                // must check whether value is present
+                if (items[spliceIndex] === value) {
+                    items.splice(spliceIndex, 1);
+                }
+
                 return this;
             }
         });
