@@ -16,24 +16,40 @@
     });
 
     test("Numeric search", function () {
+        var orderedArray = OrderedArray.create([0, 1, 3, 5, 6, 9]);
+        equal(orderedArray.indexOf(4), 3, "Lower nearest hit");
+        equal(orderedArray.indexOf(6), 4, "Exact hit");
+        equal(orderedArray.indexOf(0), 0, "Low extreme");
+        equal(orderedArray.indexOf(9), 5, "High extreme");
+        equal(orderedArray.indexOf(-4), 0, "Lower out of bounds");
+        equal(orderedArray.indexOf(100), 5, "Upper out of bounds");
+    });
+
+    test("Numeric search in 1-item array", function () {
+        var orderedArray = OrderedArray.create([4]);
+        equal(orderedArray.indexOf(4), 0, "Exact hit");
+        equal(orderedArray.indexOf(-4), 0, "Lower out of bounds");
+        equal(orderedArray.indexOf(100), 0, "Upper out of bounds");
+    });
+
+    test("Numeric search in empty array", function () {
+        var orderedArray = OrderedArray.create([]);
+        equal(orderedArray.indexOf(4), 0, "Out of bounds");
+    });
+
+    test("String search", function () {
+        /**
+         * @type {sntls.OrderedArray}
+         */
         var orderedArray;
 
-        orderedArray = OrderedArray.create([0, 1, 3, 5, 6, 9]);
-        equal(orderedArray.indexOf(4), 2, "Position of 4 (nearest hit)");
-        equal(orderedArray.indexOf(6), 4, "Position of 6 (exact hit)");
-        equal(orderedArray.indexOf(0), 0, "Position of 1 (low extreme)");
-        equal(orderedArray.indexOf(9), 5, "Position of 9 (high extreme)");
-        equal(orderedArray.indexOf(-4), 0, "Position of -4 (out of bounds -)");
-        equal(orderedArray.indexOf(100), 5, "Position of 100 (out of bounds +)");
-
-        // extreme case, only 1 element
-        orderedArray = OrderedArray.create([4]);
-        equal(orderedArray.indexOf(4), 0, "Position of 4 in 1-elem buffer (exact hit)");
-        equal(orderedArray.indexOf(-4), 0, "Position of -4 in 1-elem buffer (out of bounds -)");
-        equal(orderedArray.indexOf(100), 0, "Position of 100 in 1-elem buffer (out of bounds +)");
-
-        // extreme case, zero elements
-        orderedArray = OrderedArray.create([]);
-        equal(orderedArray.indexOf(4), 0, "Position of 4 in empty");
+        orderedArray = OrderedArray.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+        equal(orderedArray.indexOf('hell'), 2, "Lower nearest hit");
+        equal(orderedArray.indexOf('hello'), 2, "Exact hit");
+        equal(orderedArray.indexOf('hew'), 3, "Upper nearest hit");
+        equal(orderedArray.indexOf('bar'), 0, "Low extreme");
+        equal(orderedArray.indexOf('world'), 5, "High extreme");
+        equal(orderedArray.indexOf('ant'), 0, "Lower out of bounds");
+        equal(orderedArray.indexOf('wound'), 5, "Upper out of bounds");
     });
 }(sntls.OrderedArray ));

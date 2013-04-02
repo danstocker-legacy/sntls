@@ -48,18 +48,18 @@ troop.promise(sntls, 'OrderedArray', function () {
 
             /**
              * Performs binary search on items and returns the (suggested) index for the value.
-             * @param {number} value Lookup value.
+             * @param {string|number} value Lookup value.
              * @param {number} [start=0] Start position of search range. Default: 0.
              * @param {number} [end] Ending position of search range. Default: this.length - 1.
              * @return {number|undefined}
              */
             indexOf: function (value, start, end) {
                 var items = this.items,
-                    pos,
-                    hit; //
+                    pos, // next position
+                    hit; // item value at next position
 
                 start = start || 0;
-                end = end || this.items.length - 1;
+                end = end || (items.length || 1) - 1;
 
                 pos = Math.floor((start + end) / 2);
                 hit = items[pos];
@@ -67,12 +67,12 @@ troop.promise(sntls, 'OrderedArray', function () {
                 if (hit === value) {
                     // perfect hit
                     return pos;
-                } else if (items[end] <= value) {
-                    // end of range hit
-                    return end;
+                } else if (items[start] >= value) {
+                    // out of range hit
+                    return start;
                 } else if (end - start <= 1) {
                     // between two adjacent values
-                    return start;
+                    return end;
                 } else if (hit > value) {
                     // narrowing range to lower half
                     return this.indexOf(value, start, pos);
