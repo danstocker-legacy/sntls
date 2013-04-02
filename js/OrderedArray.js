@@ -47,38 +47,40 @@ troop.promise(sntls, 'OrderedArray', function () {
             },
 
             /**
-             * Performs binary search on items and returns the (suggested) index for the value.
-             * @param {string|number} value Lookup value.
+             * Performs binary search on items and returns the index where a given value
+             * would be spliced into the array. For exact hits, this is the actual position,
+             * but no information is given whether the value is present in the array.
+             * @param {string|number} value Array item value.
              * @param {number} [start=0] Start position of search range. Default: 0.
              * @param {number} [end] Ending position of search range. Default: this.length - 1.
              * @return {number|undefined}
              */
-            indexOf: function (value, start, end) {
+            spliceIndexOf: function (value, start, end) {
                 var items = this.items,
-                    pos, // next position
-                    hit; // item value at next position
+                    medianPos, // position of the median within range
+                    medianValue; // median value within range
 
                 start = start || 0;
                 end = end || (items.length || 1) - 1;
 
-                pos = Math.floor((start + end) / 2);
-                hit = items[pos];
+                medianPos = Math.floor((start + end) / 2);
+                medianValue = items[medianPos];
 
-                if (hit === value) {
+                if (medianValue === value) {
                     // perfect hit
-                    return pos;
+                    return medianPos;
                 } else if (items[start] >= value) {
                     // out of range hit
                     return start;
                 } else if (end - start <= 1) {
                     // between two adjacent values
                     return end;
-                } else if (hit > value) {
+                } else if (medianValue > value) {
                     // narrowing range to lower half
-                    return this.indexOf(value, start, pos);
-                } else if (hit < value) {
+                    return this.spliceIndexOf(value, start, medianPos);
+                } else if (medianValue < value) {
                     // narrowing range to upper half
-                    return this.indexOf(value, pos, end);
+                    return this.spliceIndexOf(value, medianPos, end);
                 }
             },
 
