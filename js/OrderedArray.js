@@ -61,7 +61,7 @@ troop.promise(sntls, 'OrderedArray', function () {
                     medianValue; // median value within range
 
                 start = start || 0;
-                end = end || (items.length || 1) - 1;
+                end = end || items.length;
 
                 medianPos = Math.floor((start + end) / 2);
                 medianValue = items[medianPos];
