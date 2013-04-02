@@ -7,6 +7,7 @@ A collection of general purpose classes and traits that formalize frequent opera
 
 Currently available:
 
+- `sntls.OrderedArray`: For manipulating order-retaining arrays of numbers and strings.
 - `sntls.Dictionary`: For managing dictionaries and lookups.
 - `sntls.Collection`: Offers a way of handling multiple objects as if they were single objects of the same kind.
 - `sntls.JournalingCollection`: Collection that records changes.
