@@ -41,4 +41,38 @@
             "Tree node set"
         );
     });
+
+    test("Safe node retrieval", function () {
+        var json = {
+                foo: {
+                    bar: "Hello world!"
+                }
+            },
+            tree = sntls.Tree.create(json),
+            result;
+
+        result = tree.getSafeNode('foo.bar', function () {
+            return "Whatever";
+        });
+
+        equal(result, "Hello world!", "Node retrieved from existing path");
+
+        result = tree.getSafeNode('hello.world', function () {
+            return [];
+        });
+
+        deepEqual(result, [], "New value generated for new path");
+        deepEqual(
+            json,
+            {
+                foo  : {
+                    bar: "Hello world!"
+                },
+                hello: {
+                    world: []
+                }
+            },
+            "New path created and value generated/assigned"
+        );
+    });
 }());
