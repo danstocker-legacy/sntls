@@ -8,7 +8,7 @@ LIB="sntls"
 FILES="
 js/namespace.js
 js/utils.js
-js/OrderedArray.js
+js/OrderedList.js
 js/Dictionary.js
 js/Collection.js
 js/JournalingCollection.js

@@ -1,16 +1,16 @@
 /**
- * Ordered Array
+ * Ordered List
  *
- * Inserts, deletes, searches in an ordered array
+ * Inserts, deletes, searches in an ordered list
  * of strings or numbers.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'OrderedArray', function () {
+troop.promise(sntls, 'OrderedList', function () {
     /**
-     * @class sntls.OrderedArray
+     * @class sntls.OrderedList
      * @extends troop.Base
      */
-    sntls.OrderedArray = troop.Base.extend()
+    sntls.OrderedList = troop.Base.extend()
         .addPrivateMethod({
             /**
              * Compares numbers. To be supplied to Array.sort().
@@ -21,7 +21,7 @@ troop.promise(sntls, 'OrderedArray', function () {
                 return a > b ? 1 : a < b ? -1 : 0;
             }
         })
-        .addMethod(/** @lends sntls.OrderedArray */{
+        .addMethod(/** @lends sntls.OrderedList */{
             /**
              * @param {string[]|number[]} [items] Initial values
              */
@@ -38,7 +38,7 @@ troop.promise(sntls, 'OrderedArray', function () {
                     );
                 }
 
-                this.addPublic(/** @lends sntls.OrderedArray */{
+                this.addPublic(/** @lends sntls.OrderedList */{
                     /**
                      * @type {string[]|number[]}
                      */
@@ -48,9 +48,9 @@ troop.promise(sntls, 'OrderedArray', function () {
 
             /**
              * Performs binary search on items and returns the index where a given value
-             * would be spliced into the array. For exact hits, this is the actual position,
-             * but no information is given whether the value is present in the array.
-             * @param {string|number} value Array item value.
+             * would be spliced into the list. For exact hits, this is the actual position,
+             * but no information is given whether the value is present in the list.
+             * @param {string|number} value List item value.
              * @param {number} [start=0] Start position of search range. Default: 0.
              * @param {number} [end] Ending position of search range. Default: this.length - 1.
              * @return {number|undefined}
@@ -85,9 +85,9 @@ troop.promise(sntls, 'OrderedArray', function () {
             },
 
             /**
-             * Inserts value into array while retaining order.
+             * Inserts value into list while retaining order.
              * @param {string|number} value
-             * @return {sntls.OrderedArray}
+             * @return {sntls.OrderedList}
              */
             addItem: function (value) {
                 this.items.splice(this.spliceIndexOf(value), 0, value);
@@ -95,9 +95,9 @@ troop.promise(sntls, 'OrderedArray', function () {
             },
 
             /**
-             * Deletes value from array while retaining order.
+             * Deletes value from list while retaining order.
              * @param {string|number} value
-             * @return {sntls.OrderedArray}
+             * @return {sntls.OrderedList}
              */
             removeItem: function (value) {
                 var items = this.items,
