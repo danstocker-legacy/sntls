@@ -1,4 +1,4 @@
-/*global sntls, module, test, expect, ok, equal, deepEqual, raises */
+/*global sntls, module, test, expect, ok, equal, notStrictEqual, deepEqual, raises */
 (function () {
     module("Path");
 
@@ -17,6 +17,44 @@
         equal(path.toString(), 'test.path.it.is', "Serialized path");
     });
 
+    test("Trimming", function () {
+        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+            trimmedPath = originalPath.trim();
+
+        notStrictEqual(originalPath, trimmedPath, "Trimming returns new Path");
+
+        deepEqual(
+            originalPath.asArray,
+            ['test', 'originalPath', 'it', 'is'],
+            "Original path intact"
+        );
+
+        deepEqual(
+            trimmedPath.asArray,
+            ['test', 'originalPath', 'it'],
+            "Trimmed path"
+        );
+    });
+
+    test("Prepending", function () {
+        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+            prependedPath = originalPath.prepend('foo.bar');
+
+        notStrictEqual(originalPath, prependedPath, "Prepending returns new Path");
+
+        deepEqual(
+            originalPath.asArray,
+            ['test', 'originalPath', 'it', 'is'],
+            "Original path intact"
+        );
+
+        deepEqual(
+            prependedPath.asArray,
+            ['foo', 'bar', 'test', 'originalPath', 'it', 'is'],
+            "Prepended path"
+        );
+    });
+
     test("Equality", function () {
         /** @type sntls.Path */
         var path = sntls.Path.create('test.path.it.is');
@@ -31,7 +69,7 @@
         equal(path.equal(['path', 'it', 'is']), false, "Non-matching array path");
     });
 
-    test("sntls.Path resolution", function () {
+    test("Path resolution", function () {
         var path = sntls.Path.create('hello.world');
 
         raises(function () {

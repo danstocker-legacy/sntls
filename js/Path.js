@@ -6,13 +6,11 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Path', function () {
-    var self;
-
     /**
      * @class sntls.Path
      * @extends troop.Base
      */
-    sntls.Path = self = troop.Base.extend()
+    sntls.Path = troop.Base.extend()
         .addConstant(/** @lends sntls.Path */{
             RE_PATH_SEPARATOR: /\./
         })
@@ -40,6 +38,29 @@ troop.promise(sntls, 'Path', function () {
                      */
                     asArray: asArray
                 });
+            },
+
+            /**
+             * Trims trailing end of path. (Removes last key)
+             * @return {sntls.Path}
+             */
+            trim: function () {
+                return this.getBase().create(this.asArray.slice(0, -1));
+            },
+
+            /**
+             * Prepends path with other path.
+             * @param {sntls.Path|string|string[]} path
+             * @return {sntls.Path}
+             */
+            prepend: function (path) {
+                var self = sntls.Path;
+
+                if (!self.isBaseOf(path)) {
+                    path = self.create(path);
+                }
+
+                return this.getBase().create(path.asArray.concat(this.asArray));
             },
 
             /**
@@ -95,6 +116,8 @@ troop.promise(sntls, 'Path', function () {
              * @return {boolean}
              */
             equal: function (remotePath) {
+                var self = sntls.Path;
+
                 if (!self.isBaseOf(remotePath)) {
                     remotePath = self.create(remotePath);
                 }
