@@ -76,6 +76,25 @@ troop.promise(sntls, 'Tree', function () {
                 }
 
                 return node[lastKey];
+            },
+
+            /**
+             * Removes node at the specified path.
+             * @param {sntls.Path|string|string[]} path Path to node
+             * @return {sntls.Tree}
+             */
+            unsetNode: function (path) {
+                if (!sntls.Path.isBaseOf(path)) {
+                    path = sntls.Path.create(path);
+                }
+
+                var node = path.trim().resolveOrBuild(this.root),
+                    asArray = path.asArray,
+                    lastKey = asArray[asArray.length - 1];
+
+                delete node[lastKey];
+
+                return this;
             }
         });
 });

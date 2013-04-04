@@ -75,4 +75,18 @@
             "New path created and value generated/assigned"
         );
     });
+
+    test("Node deletion", function () {
+        var tree = sntls.Tree.create({
+                foo: {
+                    bar: "Hello world!"
+                }
+            }),
+            result;
+
+        result = tree.unsetNode('foo.bar');
+
+        strictEqual(result, tree, "Tree.unsetNode is chainable");
+        deepEqual(tree.root, {foo: {}}, "Node removed");
+    });
 }());
