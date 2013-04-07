@@ -122,6 +122,15 @@ troop.promise(sntls, 'OrderedList', function () {
                 }
 
                 return this;
+            },
+
+            /**
+             * Clears list
+             * @return {sntls.OrderedList}
+             */
+            clear: function () {
+                this.items = [];
+                return this;
             }
         });
 });

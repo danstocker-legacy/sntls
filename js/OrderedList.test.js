@@ -125,4 +125,17 @@
             "Removed 'hello'"
         );
     });
+
+    test("List clear", function () {
+        var orderedList = /** @type {sntls.OrderedList} */ sntls.OrderedList.create(["bar", "foo", "hello", "ipsum",
+            "lorem", "world"]);
+
+        orderedList.clear();
+
+        deepEqual(
+            orderedList.items,
+            [],
+            "Cleared list"
+        );
+    });
 }());
