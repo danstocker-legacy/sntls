@@ -17,6 +17,15 @@
         equal(path.toString(), 'test.path.it.is', "Serialized path");
     });
 
+    test("Cloning", function () {
+        var path = sntls.Path.create('test.path.it.is'),
+            clonePath = path.clone();
+
+        deepEqual(path.asArray, clonePath.asArray, "Path buffers represent the same path");
+        notStrictEqual(path, clonePath, "Clone is different from original");
+        notStrictEqual(path.asArray, clonePath.asArray, "Clone's buffer is different from original");
+    });
+
     test("Trimming", function () {
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
             trimmedPath = originalPath.trim();

@@ -41,6 +41,15 @@ troop.promise(sntls, 'Path', function () {
             },
 
             /**
+             * Clones path
+             * @return {sntls.Path}
+             */
+            clone: function () {
+                return this.getBase().create(this.asArray.concat());
+            },
+
+
+            /**
              * Trims trailing end of path. (Removes last key)
              * @return {sntls.Path}
              */
