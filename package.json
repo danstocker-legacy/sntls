@@ -1,6 +1,6 @@
 {
     "name"        : "sntls",
-    "version"     : "0.2.1",
+    "version"     : "0.3.0",
     "description" : "Essential JavaScript tools",
     "keywords"    : ["dictionary", "collection", "journaling", "profile", "stateful", "trait"],
     "author"      : "Dan Stocker <dan@kwaia.com>",

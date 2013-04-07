@@ -15,6 +15,7 @@ Currently available:
 - `sntls.Profiled`: *Trait*, lets classes keep a profile.
 - `sntls.StateMatrix`: Associates transitions between named states with arbitrary values.
 - `sntls.Stateful`: *Trait*, adds state matrices to class, triggering specified methods on transitions.
+- `sntls.Tree`: Accesses, traverses, and modifies tree-like object structures.
 
 See the [Sntls wiki](https://github.com/danstocker/sntls/wiki) for reference and examples.
 
