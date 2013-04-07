@@ -1,19 +1,19 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Collection) {
+(function () {
     module("Collection");
 
     test("Method names", function () {
         deepEqual(
-            Collection._getES5MethodNames({foo: function () {}, bar: "hello"}),
+            sntls.Collection._getES5MethodNames({foo: function () {}, bar: "hello"}),
             ['foo'],
             "Gets method names from object (ES5)"
         );
 
         if (troop.Feature.hasPropertyAttributes()) {
-            strictEqual(Collection._getMethodNames, Collection._getES5MethodNames, "In ES5 same as Object.getOwnPropertyNames");
+            strictEqual(sntls.Collection._getMethodNames, sntls.Collection._getES5MethodNames, "In ES5 same as Object.getOwnPropertyNames");
         } else {
             deepEqual(
-                Collection._getMethodNames(Boolean.prototype), // boolean is used b/c of the brevity of its method list
+                sntls.Collection._getMethodNames(Boolean.prototype), // boolean is used b/c of the brevity of its method list
                 ["toString", "valueOf"],
                 "ES3 general purpose object proto"
             );
@@ -22,7 +22,7 @@
 
     test("Shortcuts", function () {
         var mockCollection = {items: {a: 'a', b: 'b'}};
-        mockCollection.toUpperCase = Collection._genShortcut('toUpperCase');
+        mockCollection.toUpperCase = sntls.Collection._genShortcut('toUpperCase');
         deepEqual(
             mockCollection.toUpperCase().items,
             {a: 'A', b: 'B'},
@@ -31,9 +31,9 @@
     });
 
     test("Specified collection", function () {
-        var StringCollection = Collection.of(String.prototype),
-            FatStringCollection = Collection.of(String),
-            ArrayCollection = Collection.of(Array.prototype),
+        var StringCollection = sntls.Collection.of(String.prototype),
+            FatStringCollection = sntls.Collection.of(String),
+            ArrayCollection = sntls.Collection.of(Array.prototype),
             Class = troop.Base.extend()
                 .addMethod({
                     init: function (a) {
@@ -43,7 +43,7 @@
                         return this.a + ' ' + a;
                     }
                 }),
-            ClassCollection = Collection.of(Class),
+            ClassCollection = sntls.Collection.of(Class),
             stringData = {
                 'foo': "Hello world!",
                 'bar': "E pluribus unum"
@@ -113,7 +113,7 @@
                     }
                 }),
 
-            Specified = Collection.of(MyClass),
+            Specified = sntls.Collection.of(MyClass),
 
             specified = Specified.create();
 
@@ -128,13 +128,13 @@
         // legitimate filter expression (conflicting method call)
         var filtered = specified.filter('f');
 
-        equal(filtered.isA(Collection), true, "Filter returns collection");
+        equal(filtered.isA(sntls.Collection), true, "Filter returns collection");
         equal(filtered.isA(Specified), false, "Filter returns non-specified collection");
         equal(reg.filter, 1, "Custom filter ran once");
     });
 
     test("Specified extended collection", function () {
-        var ExtendedCollection = Collection.extend()
+        var ExtendedCollection = sntls.Collection.extend()
                 .addMethod({
                     foo: function () {return "bar";}
                 }),
@@ -162,7 +162,7 @@
     });
 
     test("Initializing collection", function () {
-        var collection = Collection.create({
+        var collection = sntls.Collection.create({
             0: "hello",
             1: "world",
             2: "what",
@@ -183,7 +183,7 @@
     });
 
     test("Building collection", function () {
-        var collection = Collection.create();
+        var collection = sntls.Collection.create();
 
         deepEqual(collection.items, {}, "Initial buffer is empty object");
         equal(collection.count, 0, "Initial count");
@@ -201,7 +201,7 @@
     });
 
     test("Cloning collection", function () {
-        var original = Collection.create({
+        var original = sntls.Collection.create({
                 foo  : 'bar',
                 hello: 'world'
             }),
@@ -214,11 +214,11 @@
     });
 
     test("Merging collections", function () {
-        var collection1 = Collection.create({
+        var collection1 = sntls.Collection.create({
                 foo  : 'bar',
                 hello: 'world'
             }),
-            collection2 = Collection.create({
+            collection2 = sntls.Collection.create({
                 first : 1,
                 second: 2
             }),
@@ -256,12 +256,12 @@
     });
 
     test("Merging specified collection", function () {
-        var ArrayCollection = Collection.of(Array),
+        var ArrayCollection = sntls.Collection.of(Array),
             specified = ArrayCollection.create({
                 a: [1, 2, 3, 4],
                 b: [5, 6, 7, 8]
             }),
-            invalidColl = Collection.create({
+            invalidColl = sntls.Collection.create({
                 foo  : 'bar',
                 hello: 'world'
             }),
@@ -303,7 +303,7 @@
     }
 
     test("Querying", function () {
-        var collection = Collection.create();
+        var collection = sntls.Collection.create();
 
         equal(typeof collection.getItem('one'), 'undefined', "Querying non-existing item");
 
@@ -317,7 +317,7 @@
     });
 
     test("Filtering", function () {
-        var collection = Collection.create(),
+        var collection = sntls.Collection.create(),
             filtered;
 
         init(collection);
@@ -352,7 +352,7 @@
     });
 
     test("Filtering of extended collection", function () {
-        var StringCollection = Collection.of(String.prototype),
+        var StringCollection = sntls.Collection.of(String.prototype),
             names = StringCollection.create({
                 test : 'test',
                 hello: 'hello',
@@ -375,7 +375,7 @@
     });
 
     test("Removal", function () {
-        var collection = Collection.create(),
+        var collection = sntls.Collection.create(),
             countBefore,
             beforeCount;
 
@@ -417,7 +417,7 @@
     });
 
     test("Clearing", function () {
-        var collection = Collection.create();
+        var collection = sntls.Collection.create();
 
         init(collection);
 
@@ -439,7 +439,7 @@
     });
 
     test("Array representation", function () {
-        var collection = Collection.create();
+        var collection = sntls.Collection.create();
 
         init(collection);
 
@@ -483,7 +483,7 @@
     });
 
     test("For Each", function () {
-        var collection = Collection.create();
+        var collection = sntls.Collection.create();
 
         init(collection);
 
@@ -502,7 +502,7 @@
     });
 
     test("For-Next", function () {
-        var collection = Collection.create(),
+        var collection = sntls.Collection.create(),
             order = [];
 
         init(collection);
@@ -528,8 +528,40 @@
         );
     });
 
+    test("Mapping", function () {
+        var StringCollection = sntls.Collection.of(String),
+            collection = sntls.Collection.create(),
+            result;
+
+        function lastChar() {
+            return this.toString().substr(-1);
+        }
+
+        init(collection);
+
+        result = collection.map(lastChar);
+
+        ok(result.instanceOf(sntls.Collection), "Result plain collection");
+
+        deepEqual(
+            result.items,
+            {
+                'one'  : 'o',
+                'two'  : '!',
+                'three': '5',
+                'four' : ']',
+                'five' : 'e'
+            },
+            "To string & last char"
+        );
+
+        result = collection.map(lastChar, StringCollection);
+
+        ok(result.instanceOf(StringCollection), "Result is specified collection");
+    });
+
     test("Call Each", function () {
-        var collection = Collection.create(),
+        var collection = sntls.Collection.create(),
             i, result;
 
         expect(6);
@@ -555,6 +587,4 @@
             4: 1
         });
     });
-}(
-    sntls.Collection
-));
+}());

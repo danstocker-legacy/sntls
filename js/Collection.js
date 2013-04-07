@@ -280,7 +280,7 @@ troop.promise(sntls, 'Collection', function () {
                 itemNames = Object.keys(items);
 
                 if (re instanceof RegExp) {
-                    for(i = 0; i < itemNames.length; i++) {
+                    for (i = 0; i < itemNames.length; i++) {
                         itemName = itemNames[i];
                         if (re.test(itemName)) {
                             result.push(itemName);
@@ -431,6 +431,33 @@ troop.promise(sntls, 'Collection', function () {
                 }
 
                 return this;
+            },
+
+            /**
+             * Maps the collection's contents to a new collection.
+             * @param {function} handler Transform function. Called on each element,
+             * its return value will be placed in the mapped collection.
+             * @param {sntls.Collection} [returnType] Reference to derived collection class.
+             * When specified, the resulting collection will be an instance of this class.
+             * @return {sntls.Collection}
+             */
+            map: function (handler, returnType) {
+                dessert
+                    .isFunction(handler, "Invalid callback function")
+                    .isCollectionOptional(returnType);
+
+                var items = this.items,
+                    keys = Object.keys(items),
+                    result = {},
+                    i, itemName, item;
+
+                for (i = 0; i < keys.length; i++) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    result[itemName] = handler.call(item, itemName);
+                }
+
+                return (returnType || self).create(result);
             },
 
             /**
