@@ -9,6 +9,7 @@ FILES="
 js/namespace.js
 js/utils.js
 js/OrderedList.js
+js/OrderedStringList.js
 js/Dictionary.js
 js/Collection.js
 js/JournalingCollection.js
