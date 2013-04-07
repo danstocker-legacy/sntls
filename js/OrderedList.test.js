@@ -49,6 +49,70 @@
         equal(orderedList.spliceIndexOf('wound'), 6, "Upper out of bounds");
     });
 
+    test("Range", function () {
+        var orderedList = /** @type {sntls.OrderedList} */
+            sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+
+        deepEqual(
+            orderedList.getRange("bar", "lorem"),
+            ["bar", "foo", "hello", "ipsum"],
+            "Existing edges"
+        );
+
+        deepEqual(
+            orderedList.getRange("bar", "hi"),
+            ["bar", "foo", "hello"],
+            "Non-existing upper edge"
+        );
+
+        deepEqual(
+            orderedList.getRange("hell", "random"),
+            ["hello", "ipsum", "lorem"],
+            "Both edges non-existing"
+        );
+
+        deepEqual(
+            orderedList.getRange("hello", "wound"),
+            ["hello", "ipsum", "lorem", "world"],
+            "Out of bounds upper edge"
+        );
+
+        deepEqual(
+            orderedList.getRange("ant", "hell"),
+            ["bar", "foo"],
+            "Out of bounds lower edge"
+        );
+    });
+
+    test("String prefix search", function () {
+        var orderedList = /** @type {sntls.OrderedList} */
+            sntls.OrderedList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
+
+        deepEqual(
+            orderedList.getRange("a", "b"),
+            ["animal", "ant", "apple"],
+            "Prefix 'a'"
+        );
+
+        deepEqual(
+            orderedList.getRange("an", "ao"),
+            ["animal", "ant"],
+            "Prefix 'an'"
+        );
+
+        deepEqual(
+            orderedList.getRange("i", "j"),
+            ["insect", "insert", "item"],
+            "Prefix 'i'"
+        );
+
+        deepEqual(
+            orderedList.getRange("ins", "int"),
+            ["insect", "insert"],
+            "Prefix 'ins'"
+        );
+    });
+
     test("Item addition", function () {
         var orderedList = /** @type {sntls.OrderedList} */
             sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);

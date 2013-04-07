@@ -85,6 +85,19 @@ troop.promise(sntls, 'OrderedList', function () {
             },
 
             /**
+             * Returns list items starting from startValue up to but not including endValue.
+             * @param {string|number} startValue
+             * @param {string|number} endValue
+             * @return {Array}
+             */
+            getRange: function (startValue, endValue) {
+                var startIndex = this.spliceIndexOf(startValue),
+                    endIndex = this.spliceIndexOf(endValue);
+
+                return this.items.slice(startIndex, endIndex);
+            },
+
+            /**
              * Inserts value into list while retaining order.
              * @param {string|number} value
              * @return {sntls.OrderedList}
