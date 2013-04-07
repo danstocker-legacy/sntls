@@ -398,7 +398,7 @@ troop.promise(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemName = keys[i];
                     item = items[itemName];
-                    if (handler.apply(item, [itemName].concat(args)) === false) {
+                    if (handler.apply(this, [item, itemName].concat(args)) === false) {
                         break;
                     }
                 }
@@ -425,7 +425,7 @@ troop.promise(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemName = keys[i];
                     item = items[itemName];
-                    if (handler.apply(item, [itemName].concat(args)) === false) {
+                    if (handler.apply(this, [item, itemName].concat(args)) === false) {
                         break;
                     }
                 }
@@ -454,7 +454,7 @@ troop.promise(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemName = keys[i];
                     item = items[itemName];
-                    result[itemName] = handler.call(item, itemName);
+                    result[itemName] = handler.call(this, item, itemName);
                 }
 
                 return (returnType || self).create(result);

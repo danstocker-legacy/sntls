@@ -487,14 +487,15 @@
 
         init(collection);
 
-        expect(10);
+        expect(15);
 
-        function handler(name, customArg) {
+        function handler(item, itemName, customArg) {
             if (Object.isPrototypeOf(this)) {
-                deepEqual(this, collection.items[name], "Item '" + name + "' OK");
+                deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
-                equal(this, collection.items[name], "Item '" + name + "' OK");
+                equal(item, collection.items[itemName], "Item '" + itemName + "' OK");
             }
+            strictEqual(this, collection);
             equal(customArg, 'custom', "Custom argument");
         }
 
@@ -507,15 +508,16 @@
 
         init(collection);
 
-        expect(11);
+        expect(16);
 
-        function handler(name, customArg) {
+        function handler(item, itemName, customArg) {
             if (Object.isPrototypeOf(this)) {
-                deepEqual(this, collection.items[name], "Item '" + name + "' OK");
+                deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
-                equal(this, collection.items[name], "Item '" + name + "' OK");
+                equal(item, collection.items[itemName], "Item '" + itemName + "' OK");
             }
-            order.push(name);
+            order.push(itemName);
+            strictEqual(this, collection);
             equal(customArg, 'custom', "Custom argument");
         }
 
@@ -533,8 +535,8 @@
             collection = sntls.Collection.create(),
             result;
 
-        function lastChar() {
-            return this.toString().substr(-1);
+        function lastChar(item) {
+            return item.toString().substr(-1);
         }
 
         init(collection);
