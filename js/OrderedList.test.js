@@ -88,26 +88,30 @@
         var orderedList = /** @type {sntls.OrderedList} */
             sntls.OrderedList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
 
+        function prefixEnd(prefix) {
+            return prefix.slice(0, -1) + String.fromCharCode(prefix.substr(-1).charCodeAt(0) + 1);
+        }
+
         deepEqual(
-            orderedList.getRange("a", "b"),
+            orderedList.getRange("a", prefixEnd('a')),
             ["animal", "ant", "apple"],
             "Prefix 'a'"
         );
 
         deepEqual(
-            orderedList.getRange("an", "ao"),
+            orderedList.getRange("an", prefixEnd("an")),
             ["animal", "ant"],
             "Prefix 'an'"
         );
 
         deepEqual(
-            orderedList.getRange("i", "j"),
+            orderedList.getRange("i", prefixEnd("i")),
             ["insect", "insert", "item"],
             "Prefix 'i'"
         );
 
         deepEqual(
-            orderedList.getRange("ins", "int"),
+            orderedList.getRange("ins", prefixEnd("ins")),
             ["insect", "insert"],
             "Prefix 'ins'"
         );
