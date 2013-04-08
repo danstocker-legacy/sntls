@@ -100,17 +100,18 @@ troop.promise(sntls, 'OrderedList', function () {
             /**
              * Inserts value into list while retaining order.
              * @param {string|number} value
-             * @return {sntls.OrderedList}
+             * @return {number} The index at which the item was spliced in.
              */
             addItem: function (value) {
-                this.items.splice(this.spliceIndexOf(value), 0, value);
-                return this;
+                var spliceIndex = this.spliceIndexOf(value);
+                this.items.splice(spliceIndex, 0, value);
+                return spliceIndex;
             },
 
             /**
              * Deletes value from list while retaining order.
              * @param {string|number} value
-             * @return {sntls.OrderedList}
+             * @return {number} The index from which the item was removed. -1 if item was not present.
              */
             removeItem: function (value) {
                 var items = this.items,
@@ -119,9 +120,11 @@ troop.promise(sntls, 'OrderedList', function () {
                 // must check whether value is present
                 if (items[spliceIndex] === value) {
                     items.splice(spliceIndex, 1);
+                } else {
+                    spliceIndex = -1;
                 }
 
-                return this;
+                return spliceIndex;
             },
 
             /**

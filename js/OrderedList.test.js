@@ -86,18 +86,21 @@
 
     test("Item addition", function () {
         var orderedList = /** @type {sntls.OrderedList} */
-            sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+            sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
+            result;
 
-        orderedList.addItem('hell');
+        result = orderedList.addItem('hell');
 
+        equal(result, 2, "Added at #2");
         deepEqual(
             orderedList.items,
             ["bar", "foo", "hell", "hello", "ipsum", "lorem", "world"],
             "Inserted 'hell'"
         );
 
-        orderedList.addItem('wound');
+        result = orderedList.addItem('wound');
 
+        equal(result, 7, "Added at #7");
         deepEqual(
             orderedList.items,
             ["bar", "foo", "hell", "hello", "ipsum", "lorem", "world", "wound"],
@@ -107,18 +110,21 @@
 
     test("Item removal", function () {
         var orderedList = /** @type {sntls.OrderedList} */ sntls.OrderedList.create(["bar", "foo", "hello", "ipsum",
-            "lorem", "world"]);
+            "lorem", "world"]),
+            result;
 
-        orderedList.removeItem('hell');
+        result = orderedList.removeItem('hell');
 
+        equal(result, -1, "Not found in list");
         deepEqual(
             orderedList.items,
             ["bar", "foo", "hello", "ipsum", "lorem", "world"],
             "Attempted to remove 'hell'"
         );
 
-        orderedList.removeItem('hello');
+        result = orderedList.removeItem('hello');
 
+        equal(result, 2, "Removed from #2");
         deepEqual(
             orderedList.items,
             ["bar", "foo", "ipsum", "lorem", "world"],
