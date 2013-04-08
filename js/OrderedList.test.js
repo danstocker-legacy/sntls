@@ -134,10 +134,12 @@
 
     test("List clear", function () {
         var orderedList = /** @type {sntls.OrderedList} */ sntls.OrderedList.create(["bar", "foo", "hello", "ipsum",
-            "lorem", "world"]);
+            "lorem", "world"]),
+            result;
 
-        orderedList.clear();
+        result = orderedList.clear();
 
+        strictEqual(result, orderedList, "Clear is chainable");
         deepEqual(
             orderedList.items,
             [],
