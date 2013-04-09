@@ -98,7 +98,7 @@ troop.promise(sntls, 'OrderedList', function () {
             },
 
             /**
-             * Inserts value into list while retaining order.
+             * Inserts a single value into list while retaining order.
              * @param {string|number} value
              * @return {number} The index at which the item was spliced in.
              */
@@ -109,7 +109,21 @@ troop.promise(sntls, 'OrderedList', function () {
             },
 
             /**
-             * Deletes value from list while retaining order.
+             * Adds multiple items to list.
+             * @param {string[]|number[]} values
+             * @return {sntls.OrderedList}
+             */
+            addItems: function (values) {
+                dessert.isArray(values, "Invalid item values");
+                var i;
+                for (i = 0; i < values.length; i++) {
+                    this.addItem(values[i]);
+                }
+                return this;
+            },
+
+            /**
+             * Deletes single value from list while retaining order.
              * @param {string|number} value
              * @return {number} The index from which the item was removed. -1 if item was not present.
              */
@@ -125,6 +139,20 @@ troop.promise(sntls, 'OrderedList', function () {
                 }
 
                 return spliceIndex;
+            },
+
+            /**
+             * Removes multiple items from list.
+             * @param {string[]|number[]} values
+             * @return {sntls.OrderedList}
+             */
+            removeItems: function (values) {
+                dessert.isArray(values, "Invalid item values");
+                var i;
+                for (i = 0; i < values.length; i++) {
+                    this.removeItem(values[i]);
+                }
+                return this;
             },
 
             /**

@@ -108,6 +108,20 @@
         );
     });
 
+    test("Multiple item addition", function () {
+        var orderedList = /** @type {sntls.OrderedList} */
+            sntls.OrderedList.create(),
+            result;
+
+        result = orderedList.addItems(['c', 'a', 'b']);
+
+        equal(result, orderedList, "Items addition is chainable");
+        deepEqual(
+            orderedList.items,
+            ['a', 'b', 'c']
+        );
+    });
+
     test("Item removal", function () {
         var orderedList = /** @type {sntls.OrderedList} */ sntls.OrderedList.create(["bar", "foo", "hello", "ipsum",
             "lorem", "world"]),
@@ -129,6 +143,20 @@
             orderedList.items,
             ["bar", "foo", "ipsum", "lorem", "world"],
             "Removed 'hello'"
+        );
+    });
+
+    test("Multiple item removal", function () {
+        var orderedList = /** @type {sntls.OrderedList} */
+            sntls.OrderedList.create(['ahoy', 'a', 'b', 'cool', 'c']),
+            result;
+
+        result = orderedList.removeItems(['c', 'a', 'b']);
+
+        equal(result, orderedList, "Items removal is chainable");
+        deepEqual(
+            orderedList.items,
+            ['ahoy', 'cool']
         );
     });
 
