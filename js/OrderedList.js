@@ -22,6 +22,9 @@ troop.promise(sntls, 'OrderedList', function () {
             }
         })
         .addMethod(/** @lends sntls.OrderedList */{
+            //////////////////////////////
+            // OOP
+
             /**
              * @param {string[]|number[]} [items] Initial values
              */
@@ -45,6 +48,9 @@ troop.promise(sntls, 'OrderedList', function () {
                     items: items
                 });
             },
+
+            //////////////////////////////
+            // Querying
 
             /**
              * Performs binary search on items and returns the index where a given value
@@ -96,6 +102,9 @@ troop.promise(sntls, 'OrderedList', function () {
 
                 return this.items.slice(startIndex, endIndex);
             },
+
+            //////////////////////////////
+            // Content manipulation
 
             /**
              * Inserts a single value into list while retaining order.
