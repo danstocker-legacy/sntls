@@ -213,6 +213,22 @@
         notStrictEqual(original.items, clone.items, "Original and clone items different objects");
     });
 
+    test("Rebasing collection", function () {
+        var original = sntls.Collection.create({foo: 'bar'}),
+            rebased;
+
+
+        raises(function () {
+            rebased = original.mutate('notCollection');
+        }, "Invalid collection type");
+
+        rebased = original.mutate(sntls.Collection.of(String));
+        ok(rebased.isA(sntls.Collection), "Rebased still a collection");
+        equal(typeof rebased.split, 'function', "Rebased is specified collection");
+        strictEqual(rebased.items, original.items, "Rebased shares items w/ original");
+        equal(rebased.count, original.count, "Rebased item count same as in original");
+    });
+
     test("Merging collections", function () {
         var collection1 = sntls.Collection.create({
                 foo  : 'bar',

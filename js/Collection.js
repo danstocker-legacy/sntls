@@ -36,6 +36,58 @@ troop.promise(sntls, 'Collection', function () {
                 "anchor", "fontcolor", "fontsize", "big", "blink", "bold", "fixed", "italics", "small", "strike", "sub",
                 "sup"]
         })
+        .addPrivateMethod(/** @lends sntls.Collection */{
+            /**
+             * Generates a shortcut method to be applied to the collection.
+             * Shortcut methods traverse the collection and call the
+             * invoked method on all items, collecting the return values
+             * and returning them as a collection.
+             * @param {string} methodName Name of method to make shortcut for.
+             * @return {function}
+             */
+            _genShortcut: function (methodName) {
+                dessert.isString(methodName, "Invalid method name");
+
+                /**
+                 * @this {sntls.Collection} Collection instance.
+                 */
+                return function () {
+                    var items = this.items,
+                        itemNames = Object.keys(items),
+                        i, itemName, item,
+                        result = {};
+
+                    // traversing collection items
+                    for (i = 0; i < itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        item = items[itemName];
+
+                        // delegating method call to item and adding
+                        result[itemName] = item[methodName].apply(item, arguments);
+                    }
+
+                    return self.create(result);
+                };
+            },
+
+            /**
+             * Retrieves property names from object and returns an array for those that are functions.
+             * @param {object} obj
+             * @return {string[]}
+             */
+            _getES5MethodNames: function (obj) {
+                var propertyNames = Object.getOwnPropertyNames(obj),
+                    methodNames = [],
+                    i, propertyName;
+                for (i = 0; i < propertyNames.length; i++) {
+                    propertyName = propertyNames[i];
+                    if (typeof obj[propertyName] === 'function') {
+                        methodNames.push(propertyName);
+                    }
+                }
+                return methodNames;
+            }
+        })
         .addMethod(/** @lends sntls.Collection */{
             //////////////////////////////
             // OOP
@@ -97,63 +149,10 @@ troop.promise(sntls, 'Collection', function () {
                     items: items || {},
                     count: items ? Object.keys(items).length : 0
                 });
-            }
-        })
-        .addPrivateMethod(/** @lends sntls.Collection */{
-            /**
-             * Generates a shortcut method to be applied to the collection.
-             * Shortcut methods traverse the collection and call the
-             * invoked method on all items, collecting the return values
-             * and returning them as a collection.
-             * @param {string} methodName Name of method to make shortcut for.
-             * @return {function}
-             */
-            _genShortcut: function (methodName) {
-                dessert.isString(methodName, "Invalid method name");
-
-                /**
-                 * @this {sntls.Collection} Collection instance.
-                 */
-                return function () {
-                    var items = this.items,
-                        itemNames = Object.keys(items),
-                        i, itemName, item,
-                        result = {};
-
-                    // traversing collection items
-                    for (i = 0; i < itemNames.length; i++) {
-                        itemName = itemNames[i];
-                        item = items[itemName];
-
-                        // delegating method call to item and adding
-                        result[itemName] = item[methodName].apply(item, arguments);
-                    }
-
-                    return self.create(result);
-                };
             },
 
-            /**
-             * Retrieves property names from object and returns an array for those that are functions.
-             * @param {object} obj
-             * @return {string[]}
-             */
-            _getES5MethodNames: function (obj) {
-                var propertyNames = Object.getOwnPropertyNames(obj),
-                    methodNames = [],
-                    i, propertyName;
-                for (i = 0; i < propertyNames.length; i++) {
-                    propertyName = propertyNames[i];
-                    if (typeof obj[propertyName] === 'function') {
-                        methodNames.push(propertyName);
-                    }
-                }
-                return methodNames;
-            }
-        })
-        .addMethod(/** @lends sntls.Collection */{
             //////////////////////////////
-            // Basics
+            // Basic functions
 
             /**
              * Retrieves item from the collection.
@@ -214,6 +213,25 @@ troop.promise(sntls, 'Collection', function () {
                  * must be cloned in override methods
                  */
                 result.items = sntls.utils.shallowCopy(this.items);
+                result.count = this.count;
+
+                return result;
+            },
+
+            /**
+             * Creates a collection of specified type initialized with
+             * the contents of the current collection.
+             * WARNING: shares item buffer with old collection,
+             * therefore changes in one will be reflected in the other.
+             * @param {sntls.Collection} collectionType Collection class
+             * @return {sntls.Collection}
+             */
+            mutate: function (collectionType) {
+                dessert.isCollection(collectionType);
+
+                var result = collectionType.create();
+
+                result.items = this.items;
                 result.count = this.count;
 
                 return result;
