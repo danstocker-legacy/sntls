@@ -11,7 +11,7 @@ troop.promise(sntls, 'OrderedList', function () {
      * @extends troop.Base
      */
     sntls.OrderedList = troop.Base.extend()
-        .addPrivateMethod({
+        .addPrivateMethod(/** @lends sntls.OrderedList */{
             /**
              * Compares numbers. To be supplied to Array.sort().
              * @private
