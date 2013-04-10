@@ -217,7 +217,6 @@
         var original = sntls.Collection.create({foo: 'bar'}),
             rebased;
 
-
         raises(function () {
             rebased = original.asType('notCollection');
         }, "Invalid collection type");
@@ -268,6 +267,48 @@
                 second: 2
             },
             "Merged items"
+        );
+    });
+
+    test("Merging with conflict", function () {
+        expect(6);
+
+        var collection1 = sntls.Collection.create({
+                foo  : 'bar',
+                hello: 'world'
+            }),
+            collection2 = sntls.Collection.create({
+                foo   : 1,
+                second: 2
+            }),
+            merged;
+
+        merged = collection1.mergeWith(collection2);
+        equal(merged.count, 3, "Merged item count");
+        deepEqual(
+            merged.items,
+            {
+                foo   : 'bar',
+                hello : 'world',
+                second: 2
+            },
+            "Merged with default conflict resolution"
+        );
+
+        merged = collection1.mergeWith(collection2, function (leftCollection, rightCollection, itemName) {
+            ok(leftCollection.isA(sntls.Collection));
+            ok(rightCollection.isA(sntls.Collection));
+            return rightCollection.items[itemName];
+        });
+        equal(merged.count, 3, "Merged item count");
+        deepEqual(
+            merged.items,
+            {
+                foo   : 1,
+                hello : 'world',
+                second: 2
+            },
+            "Merged with custom conflict resolver"
         );
     });
 

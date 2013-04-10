@@ -239,25 +239,30 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * Merges collection with current collection.
+             * Conflicts are resolved through the optionally supplied callback, or by default,
+             * the value from the current collection will be used.
              * @param {sntls.Collection} collection Collection to be merged to current. Must share
              * a common base with the current collection.
+             * @param {function} [conflictResolver] Callback for resolving merge conflicts.
+             * Callback receives as arguments: current collection, remote collection, and key of
+             * the conflicting item.
              * @return {sntls.Collection} New collection with items from both collections in it.
              * Return type will be that of the current collection.
              */
-            mergeWith: function (collection) {
-                dessert.isCollection(collection, "Invalid collection");
+            mergeWith: function (collection, conflictResolver) {
+                dessert
+                    .isCollection(collection, "Invalid collection")
+                    .isFunctionOptional(conflictResolver, "Invalid conflict resolver callback");
 
-                var base = this.getBase(),
-                    result, itemNames,
-                    i, itemName,
-                    fromItems, toItems;
+                var base = this.getBase();
 
                 dessert.assert(collection.isA(base), "Collection types do not match");
 
-                result = this.clone();
-                fromItems = collection.items;
-                itemNames = Object.keys(fromItems);
-                toItems = result.items;
+                var result = this.clone(),
+                    fromItems = collection.items,
+                    itemNames = Object.keys(fromItems),
+                    toItems = result.items,
+                    i, itemName;
 
                 /**
                  * `collection.forEach` is not used because
@@ -266,11 +271,14 @@ troop.promise(sntls, 'Collection', function () {
                  */
                 for (i = 0; i < itemNames.length; i++) {
                     itemName = itemNames[i];
-                    toItems[itemName] = fromItems[itemName];
+                    if (!toItems.hasOwnProperty(itemName)) {
+                        toItems[itemName] = fromItems[itemName];
+                        result.count++;
+                    } else if (conflictResolver) {
+                        // resolving conflict with supplied function
+                        toItems[itemName] = conflictResolver(this, collection, itemName);
+                    }
                 }
-
-                // matching counts
-                result.count += collection.count;
 
                 return result;
             },
