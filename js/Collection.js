@@ -226,7 +226,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param {sntls.Collection} returnType Collection class
              * @return {sntls.Collection}
              */
-            mutate: function (returnType) {
+            asType: function (returnType) {
                 dessert.isCollection(returnType);
 
                 var result = /** @type sntls.Collection */ returnType.create();
@@ -238,12 +238,13 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Merges collection to current collection
-             * @param {sntls.Collection} collection Collection to be merged to current
+             * Merges collection with current collection.
+             * @param {sntls.Collection} collection Collection to be merged to current. Must share
+             * a common base with the current collection.
              * @return {sntls.Collection} New collection with items from both collections in it.
-             * When current collection is specified collection,
+             * Return type will be that of the current collection.
              */
-            merge: function (collection) {
+            mergeWith: function (collection) {
                 dessert.isCollection(collection, "Invalid collection");
 
                 var base = this.getBase(),

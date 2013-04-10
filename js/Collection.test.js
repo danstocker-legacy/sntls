@@ -219,10 +219,10 @@
 
 
         raises(function () {
-            rebased = original.mutate('notCollection');
+            rebased = original.asType('notCollection');
         }, "Invalid collection type");
 
-        rebased = original.mutate(sntls.Collection.of(String));
+        rebased = original.asType(sntls.Collection.of(String));
         ok(rebased.isA(sntls.Collection), "Rebased still a collection");
         equal(typeof rebased.split, 'function', "Rebased is specified collection");
         strictEqual(rebased.items, original.items, "Rebased shares items w/ original");
@@ -238,7 +238,7 @@
                 first : 1,
                 second: 2
             }),
-            merged = collection1.merge(collection2);
+            merged = collection1.mergeWith(collection2);
 
         deepEqual(
             collection1.items,
@@ -288,10 +288,10 @@
             merged;
 
         raises(function () {
-            specified.merge(invalidColl);
+            specified.mergeWith(invalidColl);
         }, "Specified collections don't match");
 
-        merged = specified.merge(validColl);
+        merged = specified.mergeWith(validColl);
 
         ok(merged.isA(ArrayCollection), "Merged is specified collection");
         deepEqual(
