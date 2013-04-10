@@ -205,7 +205,7 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection} New collection with same contents as this.
              */
             clone: function () {
-                var result = this.getBase().create();
+                var result = /** @type sntls.Collection */ this.getBase().create();
 
                 /**
                  * Copying items and count
@@ -223,13 +223,13 @@ troop.promise(sntls, 'Collection', function () {
              * the contents of the current collection.
              * WARNING: shares item buffer with old collection,
              * therefore changes in one will be reflected in the other.
-             * @param {sntls.Collection} collectionType Collection class
+             * @param {sntls.Collection} returnType Collection class
              * @return {sntls.Collection}
              */
-            mutate: function (collectionType) {
-                dessert.isCollection(collectionType);
+            mutate: function (returnType) {
+                dessert.isCollection(returnType);
 
-                var result = collectionType.create();
+                var result = /** @type sntls.Collection */ returnType.create();
 
                 result.items = this.items;
                 result.count = this.count;
