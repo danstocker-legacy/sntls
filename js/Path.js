@@ -45,16 +45,15 @@ troop.promise(sntls, 'Path', function () {
              * @return {sntls.Path}
              */
             clone: function () {
-                return this.getBase().create(this.asArray.concat());
+                return /** @type sntls.Path */ this.getBase().create(this.asArray.concat());
             },
-
 
             /**
              * Trims trailing end of path. (Removes last key)
              * @return {sntls.Path}
              */
             trim: function () {
-                return this.getBase().create(this.asArray.slice(0, -1));
+                return /** @type sntls.Path */ this.getBase().create(this.asArray.slice(0, -1));
             },
 
             /**
@@ -69,7 +68,7 @@ troop.promise(sntls, 'Path', function () {
                     path = self.create(path);
                 }
 
-                return this.getBase().create(path.asArray.concat(this.asArray));
+                return /** @type sntls.Path */ this.getBase().create(path.asArray.concat(this.asArray));
             },
 
             /**
