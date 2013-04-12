@@ -15,6 +15,8 @@ js/Collection.js
 js/JournalingCollection.js
 js/Profile.js
 js/Profiled.js
+js/StateMatrix.js
+js/Stateful.js
 js/Path.js
 js/Tree.js
 js/exports.js
