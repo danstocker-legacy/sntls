@@ -68,14 +68,14 @@
         /** @type sntls.Path */
         var path = sntls.Path.create('test.path.it.is');
 
-        equal(path.equal(sntls.Path.create('test.path.it.is')), true, "Matching path");
-        equal(path.equal(sntls.Path.create('path.it.is')), false, "Non-matching path");
+        equal(path.equals(sntls.Path.create('test.path.it.is')), true, "Matching path");
+        equal(path.equals(sntls.Path.create('path.it.is')), false, "Non-matching path");
 
-        equal(path.equal('test.path.it.is'), true, "Matching string path");
-        equal(path.equal('path.it.is'), false, "Non-matching string path");
+        equal(path.equals('test.path.it.is'), true, "Matching string path");
+        equal(path.equals('path.it.is'), false, "Non-matching string path");
 
-        equal(path.equal(['test', 'path', 'it', 'is']), true, "Matching array path");
-        equal(path.equal(['path', 'it', 'is']), false, "Non-matching array path");
+        equal(path.equals(['test', 'path', 'it', 'is']), true, "Matching array path");
+        equal(path.equals(['path', 'it', 'is']), false, "Non-matching array path");
     });
 
     test("Relative paths", function () {

@@ -123,7 +123,7 @@ troop.promise(sntls, 'Path', function () {
              * @param {sntls.Path|string|string[]} remotePath Remote path
              * @return {boolean}
              */
-            equal: function (remotePath) {
+            equals: function (remotePath) {
                 var self = sntls.Path;
 
                 if (!self.isBaseOf(remotePath)) {
