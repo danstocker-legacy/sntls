@@ -35,6 +35,7 @@
     test("State transition", function () {
         /**
          * @class Widget
+         * @extends troop.Base
          * @extends sntls.Stateful
          */
         var Widget = troop.Base.extend()
@@ -79,5 +80,32 @@
         widget.changeStateTo('open', 'layer');
 
         ok(isOpen, "Closed -> open state transition done");
+    });
+
+    test("State retrieval", function () {
+        /**
+         * @class Widget
+         * @extends troop.Base
+         * @extends sntls.Stateful
+         */
+        var Widget = troop.Base.extend()
+                .addTrait(Stateful)
+                .addStateLayer('layer', stateMatrix)
+                .addMethod({
+                    init: function () {
+                        this.initStateful();
+                    },
+
+                    open: function () {},
+
+                    close: function () {}
+                }),
+            widget = /** @type {Widget} */ Widget.create();
+
+        equal(widget.currentState('layer'), undefined, "Initial state");
+
+        widget.changeStateTo('open', 'layer');
+
+        equal(widget.currentState('layer'), 'open', "New state");
     });
 }(sntls.Stateful));

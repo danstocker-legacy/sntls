@@ -23,6 +23,17 @@ troop.promise(sntls, 'Stateful', function () {
                      */
                     currentStates: sntls.Collection.create()
                 });
+
+                return this;
+            },
+
+            /**
+             * Retrieves current state name for the specified layer.
+             * @param {string} layerName
+             * @return {string}
+             */
+            currentState: function (layerName) {
+                return this.currentStates.getItem(layerName);
             },
 
             /**
