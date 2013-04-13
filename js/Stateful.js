@@ -21,7 +21,7 @@ troop.promise(sntls, 'Stateful', function () {
                      * Stores current state names for each state layer
                      * @type {sntls.Collection}
                      */
-                    currentStates: sntls.Collection.create()
+                    currentStates: this.defaultStates.clone()
                 });
 
                 return this;
@@ -40,19 +40,28 @@ troop.promise(sntls, 'Stateful', function () {
              * Adds a state layer.
              * A state layer is a set of mutually exclusive states,
              * eg. enabled-disabled, or open-closed.
-             * @param {string} layerName
-             * @param {sntls.StateMatrix} stateMatrix
+             * @param {string} layerName Name of new state layer.
+             * @param {sntls.StateMatrix} stateMatrix State matrix describing transitions.
+             * @param {string} defaultState Default state for this layer.
              * @return {sntls.Stateful}
              * @static
              */
-            addStateLayer: function (layerName, stateMatrix) {
+            addStateLayer: function (layerName, stateMatrix, defaultState) {
                 dessert
-                    .isString(layerName)
-                    .isStateMatrix(stateMatrix);
+                    .isString(layerName, "Invalid layer name")
+                    .isStateMatrix(stateMatrix, "Invalid state matrix")
+                    .isString(defaultState, "Invalid default state");
 
                 if (!this.hasOwnProperty('stateMatrices')) {
                     this.addConstant(/** @lends sntls.Stateful */{
                         /**
+                         * Associates layer names with default state names.
+                         * @type {sntls.Collection}
+                         */
+                        defaultStates: sntls.Collection.create(),
+
+                        /**
+                         * Associates layer names with state matrices.
                          * @type {sntls.StateMatrixCollection}
                          */
                         stateMatrices: sntls.StateMatrixCollection.create()
@@ -61,6 +70,9 @@ troop.promise(sntls, 'Stateful', function () {
 
                 // setting state matrix as layer
                 this.stateMatrices.setItem(layerName, stateMatrix);
+
+                // setting default state for layer
+                this.defaultStates.setItem(layerName, defaultState);
 
                 return this;
             },
@@ -72,7 +84,7 @@ troop.promise(sntls, 'Stateful', function () {
              * @return {sntls.Stateful}
              */
             changeStateTo: function (stateName, layerName) {
-                dessert.isString(layerName);
+                dessert.isString(layerName, "Invalid layer name");
 
                 var currentStateName = this.currentStates.getItem(layerName),
                     methodName;

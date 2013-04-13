@@ -23,12 +23,20 @@
             Widget.addStateLayer('layer', 'foo');
         }, "Invalid state matrix argument");
 
-        result = Widget.addStateLayer('openable', stateMatrix);
+        raises(function () {
+            Widget.addStateLayer('layer', stateMatrix, 1);
+        }, "Invalid default state argument");
+
+        result = Widget.addStateLayer('openable', stateMatrix, 'closed');
 
         strictEqual(result, Widget, "Layer addition returns caller");
 
         deepEqual(Widget.stateMatrices.items, {
             'openable': stateMatrix
+        });
+
+        deepEqual(Widget.defaultStates.items, {
+            'openable': 'closed'
         });
     });
 
@@ -40,7 +48,7 @@
          */
         var Widget = troop.Base.extend()
                 .addTrait(Stateful)
-                .addStateLayer('layer', stateMatrix)
+                .addStateLayer('layer', stateMatrix, 'closed')
                 .addMethod({
                     init: function () {
                         this.initStateful();
@@ -59,7 +67,7 @@
             result;
 
         ok(widget.currentStates.isA(sntls.Collection), "Current state container collection");
-        deepEqual(widget.currentStates.items, {}, "Current states container empty");
+        deepEqual(widget.currentStates.items, {layer: 'closed'}, "Current states container empty");
 
         result = widget.changeStateTo('open', 'layer');
 
@@ -67,19 +75,14 @@
         deepEqual(widget.currentStates.items, {
             layer: 'open'
         }, "Available layers");
+        ok(isOpen, "Closed -> open state transition done");
 
         widget.changeStateTo('closed', 'layer');
 
         deepEqual(widget.currentStates.items, {
             layer: 'closed'
         }, "Available layers");
-
         ok(isClosed, "Open -> closed state transition done");
-        ok(!isOpen, "Closed -> open state transition NOT done");
-
-        widget.changeStateTo('open', 'layer');
-
-        ok(isOpen, "Closed -> open state transition done");
     });
 
     test("State retrieval", function () {
@@ -90,7 +93,7 @@
          */
         var Widget = troop.Base.extend()
                 .addTrait(Stateful)
-                .addStateLayer('layer', stateMatrix)
+                .addStateLayer('layer', stateMatrix, 'closed')
                 .addMethod({
                     init: function () {
                         this.initStateful();
@@ -102,7 +105,7 @@
                 }),
             widget = /** @type {Widget} */ Widget.create();
 
-        equal(widget.currentState('layer'), undefined, "Initial state");
+        equal(widget.currentState('layer'), 'closed', "Initial state");
 
         widget.changeStateTo('open', 'layer');
 
