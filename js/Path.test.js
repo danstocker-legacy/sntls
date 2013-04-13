@@ -78,6 +78,15 @@
         equal(path.equal(['path', 'it', 'is']), false, "Non-matching array path");
     });
 
+    test("Relative paths", function () {
+        var root = sntls.Path.create('test.path'),
+            path = sntls.Path.create('test.path.it.is');
+
+        ok(path.isRelativeTo(root), "Path is relative to root");
+        ok(root.isRelativeTo(root.clone()), "Root is relative to itself");
+        ok(!root.isRelativeTo(path), "Root is not relative to path");
+    });
+
     test("Path resolution", function () {
         var path = sntls.Path.create('hello.world');
 

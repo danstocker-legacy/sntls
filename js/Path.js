@@ -148,6 +148,33 @@ troop.promise(sntls, 'Path', function () {
             },
 
             /**
+             * Tells whether the current path is relative to the
+             * the root path, ie. it matches the beginning of
+             * the current path entirely.
+             * @param {sntls.Path} rootPath
+             * @return {boolean}
+             */
+            isRelativeTo: function (rootPath) {
+                dessert.isPath(rootPath, "Invalid path");
+
+                var thisAsArray = this.asArray,
+                    rootAsArray = rootPath.asArray,
+                    i;
+
+                if (rootAsArray.length > thisAsArray.length) {
+                    return false;
+                }
+
+                for (i = 0; i < rootAsArray.length; i++) {
+                    if (thisAsArray[i] !== rootAsArray[i]) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+
+            /**
              * String representation
              * @return {string}
              */
