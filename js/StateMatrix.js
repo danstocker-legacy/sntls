@@ -61,7 +61,8 @@ troop.promise(sntls, 'StateMatrix', function () {
                     .isString(startStateName, "Invalid start state name")
                     .isString(endStateName, "Invalid end state name");
 
-                return sntls.utils.resolve(this.edges, [startStateName, endStateName]);
+                return sntls.Path.create([startStateName, endStateName])
+                    .resolve(this.edges);
             }
         });
 });

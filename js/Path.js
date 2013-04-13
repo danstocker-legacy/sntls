@@ -77,7 +77,7 @@ troop.promise(sntls, 'Path', function () {
              * @return {object}
              */
             resolve: function (context) {
-                dessert.isObject(context);
+                dessert.isObject(context, "Invalid path context");
 
                 var asArray = this.asArray,
                     result = context,
@@ -101,7 +101,7 @@ troop.promise(sntls, 'Path', function () {
              * @return {object}
              */
             resolveOrBuild: function (context) {
-                dessert.isObject(context);
+                dessert.isObject(context, "Invalid path context");
 
                 var asArray = this.asArray,
                     result = context,
