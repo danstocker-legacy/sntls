@@ -157,16 +157,16 @@ troop.promise(sntls, 'Path', function () {
             isRelativeTo: function (rootPath) {
                 dessert.isPath(rootPath, "Invalid path");
 
-                var thisAsArray = this.asArray,
-                    rootAsArray = rootPath.asArray,
+                var currentArray = this.asArray,
+                    rootArray = rootPath.asArray,
                     i;
 
-                if (rootAsArray.length > thisAsArray.length) {
+                if (rootArray.length > currentArray.length) {
                     return false;
                 }
 
-                for (i = 0; i < rootAsArray.length; i++) {
-                    if (thisAsArray[i] !== rootAsArray[i]) {
+                for (i = 0; i < rootArray.length; i++) {
+                    if (currentArray[i] !== rootArray[i]) {
                         return false;
                     }
                 }
