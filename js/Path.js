@@ -16,6 +16,11 @@ troop.promise(sntls, 'Path', function () {
         })
         .addMethod(/** @lends sntls.Path */{
             /**
+             * @name sntls.Path.create
+             * @return {sntls.Path}
+             */
+
+            /**
              * @path {string|string[]}
              */
             init: function (path) {

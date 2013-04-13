@@ -19,6 +19,11 @@ troop.promise(sntls, 'OrderedStringList', function () {
         })
         .addMethod(/** @lends sntls.OrderedStringList */{
             /**
+             * @name sntls.OrderedStringList.create
+             * @return {sntls.OrderedStringList}
+             */
+
+            /**
              * Retrieves a range of items that match the specified prefix.
              * @param {string} prefix
              * @return {string[]}

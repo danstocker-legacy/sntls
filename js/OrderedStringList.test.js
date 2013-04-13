@@ -8,8 +8,7 @@
     });
 
     test("String prefix search", function () {
-        var orderedStringList = /** @type {sntls.OrderedStringList} */
-            sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
 
         raises(function () {
             orderedStringList.getRangeByPrefix("");

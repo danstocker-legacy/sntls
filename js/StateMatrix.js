@@ -11,6 +11,13 @@ troop.promise(sntls, 'StateMatrix', function () {
      */
     sntls.StateMatrix = troop.Base.extend()
         .addMethod(/** @lends sntls.StateMatrix */{
+            /**
+             * @name sntls.StateMatrix.create
+             * @return {sntls.StateMatrix}
+             */
+
+            /**
+             */
             init: function () {
                 this.addConstant(/** @lends sntls.StateMatrix */{
                     /**

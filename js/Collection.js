@@ -139,6 +139,11 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
+             * @name sntls.Collection.create
+             * @return {sntls.Collection}
+             */
+
+            /**
              * @param {object} [items] Initial contents.
              */
             init: function (items) {

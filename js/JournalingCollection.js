@@ -16,6 +16,11 @@ troop.promise(sntls, 'JournalingCollection', function () {
             // OOP
 
             /**
+             * @name sntls.JournalingCollection.create
+             * @return {sntls.JournalingCollection}
+             */
+
+            /**
              * @constructor
              * @param {object} [items] Initial contents.
              */

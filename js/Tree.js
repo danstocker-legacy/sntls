@@ -12,6 +12,12 @@ troop.promise(sntls, 'Tree', function () {
     sntls.Tree = troop.Base.extend()
         .addMethod(/** @lends sntls.Tree */{
             /**
+             * @name sntls.Tree.create
+             * @param {object} [json] Initial tree buffer
+             * @return {sntls.Tree}
+             */
+
+            /**
              * @param {object} [json] Initial tree buffer
              */
             init: function (json) {

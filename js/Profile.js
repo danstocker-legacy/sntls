@@ -14,6 +14,13 @@ troop.promise(sntls, 'Profile', function () {
      */
     sntls.Profile = troop.Base.extend()
         .addMethod(/** @lends sntls.Profile */{
+            /**
+             * @name sntls.Profile.create
+             * @return {sntls.Profile}
+             */
+
+            /**
+             */
             init: function () {
                 this.addPublic(/** @lends sntls.Profile */{
                     /**

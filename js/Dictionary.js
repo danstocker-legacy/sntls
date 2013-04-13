@@ -28,6 +28,11 @@ troop.promise(sntls, 'Dictionary', function () {
     sntls.Dictionary = troop.Base.extend()
         .addMethod(/** @lends sntls.Dictionary */{
             /**
+             * @name sntls.Dictionary.create
+             * @return {sntls.Dictionary}
+             */
+
+            /**
              * @param {object} items Initial dictionary items
              */
             init: function (items) {

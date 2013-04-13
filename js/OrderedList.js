@@ -26,6 +26,11 @@ troop.promise(sntls, 'OrderedList', function () {
             // OOP
 
             /**
+             * @name sntls.OrderedList.create
+             * @return {sntls.OrderedList}
+             */
+
+            /**
              * @param {string[]|number[]} [items] Initial values
              */
             init: function (items) {
