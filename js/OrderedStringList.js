@@ -31,6 +31,17 @@ troop.promise(sntls, 'OrderedStringList', function () {
             getRangeByPrefix: function (prefix) {
                 dessert.assert(typeof prefix === 'string' && prefix.length > 0, "Empty prefix");
                 return this.getRange(prefix, this._getEndValue(prefix));
+            },
+
+            /**
+             * Removes all occurrence of a specific string from the list.
+             * @param {string} value
+             * @return {sntls.OrderedStringList}
+             */
+            removeAll: function (value) {
+                dessert.isString(value);
+                this.removeRange(value, value + String.fromCharCode(0));
+                return this;
             }
         });
 });

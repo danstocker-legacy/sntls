@@ -38,4 +38,40 @@
             "Prefix 'ins'"
         );
     });
+
+    test("Removing all occurrence of a value", function () {
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "apple", "apple", "fruit"]);
+
+        orderedStringList.removeAll("foo");
+
+        deepEqual(
+            orderedStringList.items,
+            ["animal", "apple", "apple", "apple", "fruit"],
+            "Removing non-existent doesn't change items"
+        );
+
+        orderedStringList.removeAll("animal");
+
+        deepEqual(
+            orderedStringList.items,
+            ["apple", "apple", "apple", "fruit"],
+            "Removing single occurrence"
+        );
+
+        orderedStringList.removeAll("apple");
+
+        deepEqual(
+            orderedStringList.items,
+            ["fruit"],
+            "Removing multiple occurrences"
+        );
+
+        orderedStringList.removeAll("fruit");
+
+        deepEqual(
+            orderedStringList.items,
+            [],
+            "Removing last value(s)"
+        );
+    });
 }());
