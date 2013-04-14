@@ -18,7 +18,7 @@
         "url" : "git://github.com/danstocker/sntls.git"
     },
     "dependencies": {
-        "dessert": ">=0.2.4",
+        "dessert": ">=0.2.6",
         "troop"  : ">=0.3.0"
     },
     "files"       : ["out/sntls.js"],
