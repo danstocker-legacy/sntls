@@ -170,6 +170,24 @@ troop.promise(sntls, 'OrderedList', function () {
             },
 
             /**
+             * Removes a range from the list starting from startValue up to but not including endValue.
+             * @param {string|number} startValue
+             * @param {string|number} endValue
+             * @return {number} The starting position of removal.
+             */
+            removeRange: function (startValue, endValue) {
+                var startIndex = this.spliceIndexOf(startValue),
+                    endIndex = this.spliceIndexOf(endValue),
+                    length = endIndex - startIndex;
+
+                if (length > 0) {
+                    this.items.splice(startIndex, length);
+                }
+
+                return startIndex;
+            },
+
+            /**
              * Clears list
              * @return {sntls.OrderedList}
              */

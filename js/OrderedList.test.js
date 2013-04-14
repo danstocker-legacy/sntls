@@ -154,6 +154,26 @@
         );
     });
 
+    test("Range removal", function () {
+        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+
+        orderedList.removeRange("for", "fun");
+
+        deepEqual(
+            orderedList.items,
+            ["bar", "foo", "hello", "ipsum", "lorem", "world"],
+            "Empty range removed nothing"
+        );
+
+        orderedList.removeRange("foo", "is");
+
+        deepEqual(
+            orderedList.items,
+            ["bar", "lorem", "world"],
+            "Removed all between 'foo' and 'is'"
+        );
+    });
+
     test("List clear", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
             result;
