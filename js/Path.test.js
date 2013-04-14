@@ -143,4 +143,18 @@
             }
         }, "Existing path overwritten");
     });
+
+    test("String conversion", function () {
+        var path = 'test.path.hello.world'.toPath();
+
+        ok(sntls.Path.isBaseOf(path), "Path type");
+        deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "Path contents");
+    });
+
+    test("Array conversion", function () {
+        var path = ['test', 'path', 'hello', 'world'].toPath();
+
+        ok(sntls.Path.isBaseOf(path), "Path type");
+        deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "Path contents");
+    });
 }());

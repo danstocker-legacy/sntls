@@ -21,7 +21,7 @@ troop.promise(sntls, 'Path', function () {
              */
 
             /**
-             * @path {string|string[]}
+             * @path {string|string[]} Path in string or array representation
              */
             init: function (path) {
                 var asArray;
@@ -29,7 +29,7 @@ troop.promise(sntls, 'Path', function () {
                 // array representation is expected to be used more often
                 if (path instanceof Array) {
                     asArray = path;
-                } else if (typeof path === 'string') {
+                } else if (dessert.validators.isString(path)) {
                     asArray = path.split(this.RE_PATH_SEPARATOR);
                 } else {
                     dessert.assert(false, "Invalid path");
@@ -199,3 +199,17 @@ dessert.addTypes(/** @lends dessert */{
                sntls.Path.isBaseOf(expr);
     }
 });
+
+/**
+ * @return {sntls.Path}
+ */
+String.prototype.toPath = function () {
+    return sntls.Path.create(this);
+};
+
+/**
+ * @return {sntls.Path}
+ */
+Array.prototype.toPath = function () {
+    return sntls.Path.create(this);
+};
