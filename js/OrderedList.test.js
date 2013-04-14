@@ -48,7 +48,15 @@
         equal(orderedList.spliceIndexOf('wound'), 6, "Upper out of bounds");
     });
 
-    test("Range", function () {
+    test("Search with repeating items", function () {
+        var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "hello", "hello", "world"]);
+        equal(orderedList.spliceIndexOf('foo'), 1, "First of repeating values");
+        equal(orderedList.spliceIndexOf('foo!'), 4, "Adjacent to repeating values");
+        equal(orderedList.spliceIndexOf('hello'), 4, "First of repeating values");
+        equal(orderedList.spliceIndexOf('hello!'), 6, "Adjacent to repeating values");
+    });
+
+    test("Range retrieval", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
 
         deepEqual(
@@ -79,6 +87,22 @@
             orderedList.getRange("ant", "hell"),
             ["bar", "foo"],
             "Out of bounds lower edge"
+        );
+    });
+
+    test("Range retrieval with repetition", function () {
+        var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "world"]);
+
+        deepEqual(
+            orderedList.getRange("bar", "lorem"),
+            ["bar", "foo", "foo", "foo"],
+            "Range includes repetition"
+        );
+
+        deepEqual(
+            orderedList.getRange("foo", "fooo"),
+            ["foo", "foo", "foo"],
+            "Only repetition"
         );
     });
 
@@ -165,12 +189,20 @@
             "Empty range removed nothing"
         );
 
-        orderedList.removeRange("foo", "is");
+        orderedList.removeRange("foo", "in");
+
+        deepEqual(
+            orderedList.items,
+            ["bar", "ipsum", "lorem", "world"],
+            "Removed all between 'foo' and 'is' (absent)"
+        );
+
+        orderedList.removeRange("ipsum", "lorem");
 
         deepEqual(
             orderedList.items,
             ["bar", "lorem", "world"],
-            "Removed all between 'foo' and 'is'"
+            "Removed all between 'ipsum' and 'lorem'"
         );
     });
 

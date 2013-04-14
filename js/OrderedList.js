@@ -58,7 +58,7 @@ troop.promise(sntls, 'OrderedList', function () {
             // Querying
 
             /**
-             * Performs binary search on items and returns the index where a given value
+             * Performs binary search on items and returns the lowest index where a given value
              * would be spliced into the list. For exact hits, this is the actual position,
              * but no information is given whether the value is present in the list.
              * @param {string|number} value List item value.
@@ -77,16 +77,13 @@ troop.promise(sntls, 'OrderedList', function () {
                 medianPos = Math.floor((start + end) / 2);
                 medianValue = items[medianPos];
 
-                if (medianValue === value) {
-                    // perfect hit
-                    return medianPos;
-                } else if (items[start] >= value) {
+                if (items[start] >= value) {
                     // out of range hit
                     return start;
                 } else if (end - start <= 1) {
                     // between two adjacent values
                     return end;
-                } else if (medianValue > value) {
+                } else if (medianValue >= value) {
                     // narrowing range to lower half
                     return this.spliceIndexOf(value, start, medianPos);
                 } else if (medianValue < value) {
