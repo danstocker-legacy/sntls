@@ -9,12 +9,16 @@
             "Gets method names from object (ES5)"
         );
 
+        // adding user-defined, enumerable method to built-in type
+        // _getMethodNames should retrieve those AND built-in method names
+        Boolean.prototype.sntlsTest = function () {};
+
         if (troop.Feature.hasPropertyAttributes()) {
             strictEqual(sntls.Collection._getMethodNames, sntls.Collection._getES5MethodNames, "In ES5 same as Object.getOwnPropertyNames");
         } else {
             deepEqual(
                 sntls.Collection._getMethodNames(Boolean.prototype), // boolean is used b/c of the brevity of its method list
-                ["toString", "valueOf"],
+                ["toString", "valueOf", "sntlsTest"],
                 "ES3 general purpose object proto"
             );
         }

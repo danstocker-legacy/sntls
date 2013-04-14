@@ -534,24 +534,38 @@ troop.promise(sntls, 'Collection', function () {
          */
         self.addPrivateMethod(/** @lends sntls.Collection */{
             _getMethodNames: function (obj) {
+                var result;
+
+                // collecting official, non-enumerable method names
                 switch (obj) {
                 case Array.prototype:
-                    return self._ARRAY_METHOD_NAMES;
+                    result = self._ARRAY_METHOD_NAMES;
+                    break;
                 case Boolean.prototype:
-                    return self._BOOLEAN_METHOD_NAMES;
+                    result = self._BOOLEAN_METHOD_NAMES;
+                    break;
                 case Date.prototype:
-                    return self._DATE_METHOD_NAMES;
+                    result = self._DATE_METHOD_NAMES;
+                    break;
                 case Function.prototype:
-                    return self._FUNCTION_METHOD_NAMES;
+                    result = self._FUNCTION_METHOD_NAMES;
+                    break;
                 case Number.prototype:
-                    return self._NUMBER_METHOD_NAMES;
+                    result = self._NUMBER_METHOD_NAMES;
+                    break;
                 case RegExp.prototype:
-                    return self._REGEXP_METHOD_NAMES;
+                    result = self._REGEXP_METHOD_NAMES;
+                    break;
                 case String.prototype:
-                    return self._STRING_METHOD_NAMES;
+                    result = self._STRING_METHOD_NAMES;
+                    break;
                 default:
-                    return Object.getOwnPropertyNames(obj);
+                    result = [];
+                    break;
                 }
+
+                // adding any enumerable, user-added method names
+                return result.concat(Object.getOwnPropertyNames(obj));
             }
         });
     }
