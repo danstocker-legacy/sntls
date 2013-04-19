@@ -269,4 +269,24 @@
             "Reversed combined dictionaries"
         );
     });
+
+    test("Joining", function () {
+        deepEqual(
+            Dictionary.create({
+                foo  : 'bar',
+                hello: ['world', 'guys', 'all'],
+                big  : ['world', 'bar']
+            })
+                .reverse()
+                .combineWith(Dictionary.create({
+                foo: 'whatever',
+                big: ['tree', 'house']
+            })).items,
+            {
+                bar  : ['whatever', 'tree', 'house'],
+                world: ['tree', 'house']
+            },
+            "Dictionaries joined by keys"
+        );
+    });
 }(sntls.Dictionary));
