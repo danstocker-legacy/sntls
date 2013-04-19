@@ -548,19 +548,18 @@
 
         init(collection);
 
-        expect(15);
+        expect(10);
 
-        function handler(item, itemName, customArg) {
-            if (Object.isPrototypeOf(this)) {
+        function handler(item, itemName) {
+            if (Object.isPrototypeOf(item)) {
                 deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
                 equal(item, collection.items[itemName], "Item '" + itemName + "' OK");
             }
             strictEqual(this, collection);
-            equal(customArg, 'custom', "Custom argument");
         }
 
-        collection.forEach(handler, 'custom');
+        collection.forEach(handler);
     });
 
     test("For-Next", function () {
@@ -569,25 +568,66 @@
 
         init(collection);
 
-        expect(16);
+        expect(11);
 
-        function handler(item, itemName, customArg) {
-            if (Object.isPrototypeOf(this)) {
+        function handler(item, itemName) {
+            if (Object.isPrototypeOf(item)) {
                 deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
                 equal(item, collection.items[itemName], "Item '" + itemName + "' OK");
             }
             order.push(itemName);
             strictEqual(this, collection);
-            equal(customArg, 'custom', "Custom argument");
         }
 
-        collection.forNext(handler, 'custom');
+        collection.forNext(handler);
 
         deepEqual(
             order,
             ['five', 'four', 'one', 'three', 'two'],
             "Items called in order of keys"
+        );
+    });
+
+    test("For-Next with custom order", function () {
+        var collection = sntls.Collection.create(),
+            order = [],
+            result;
+
+        init(collection);
+
+        expect(12); // 2 for each item + 2
+
+        /**
+         * Test comparator
+         * Compares two strings by their second char
+         * @param a
+         * @param b
+         * @return {Boolean}
+         */
+        function comparator(a, b) {
+            result = this;
+            return a[1] > b[1];
+        }
+
+        function handler(item, itemName) {
+            if (Object.isPrototypeOf(item)) {
+                deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
+            } else {
+                equal(item, collection.items[itemName], "Item '" + itemName + "' OK");
+            }
+            order.push(itemName);
+            strictEqual(this, collection);
+        }
+
+        collection.forNext(handler, comparator);
+
+        strictEqual(result, collection, "Comparator receives collection as this");
+
+        deepEqual(
+            order,
+            ['three', 'five', 'one', 'four', 'two'],
+            "Items called in specified order of keys"
         );
     });
 

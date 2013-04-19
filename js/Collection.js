@@ -380,13 +380,13 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Retrieves collection items as array
              * in order of their names.
-             * @param {function} [comparator] Comparator callback.
+             * @param {function} [comparator] Comparator for sorting keys.
              * @returns {*[]} Item values in order of names.
              */
             asSortedArray: function (comparator) {
                 dessert.isFunctionOptional(comparator, "Invalid comparator function");
 
-                var keys = Object.keys(this.items).sort(comparator),
+                var keys = Object.keys(this.items).sort(comparator ? comparator.bind(this) : undefined),
                     result = [],
                     i;
 
@@ -422,15 +422,14 @@ troop.promise(sntls, 'Collection', function () {
             forEach: function (handler) {
                 dessert.isFunction(handler, "Invalid callback function");
 
-                var args = Array.prototype.slice.call(arguments, 1),
-                    items = this.items,
+                var items = this.items,
                     keys = Object.keys(items),
                     i, itemName, item;
 
                 for (i = 0; i < keys.length; i++) {
                     itemName = keys[i];
                     item = items[itemName];
-                    if (handler.apply(this, [item, itemName].concat(args)) === false) {
+                    if (handler.call(this, item, itemName) === false) {
                         break;
                     }
                 }
@@ -444,20 +443,22 @@ troop.promise(sntls, 'Collection', function () {
              * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
+             * @param {function} [comparator] Comparator for sorting keys.
              * @return {sntls.Collection}
              */
-            forNext: function (handler) {
-                dessert.isFunction(handler, "Invalid callback function");
+            forNext: function (handler, comparator) {
+                dessert
+                    .isFunction(handler, "Invalid callback function")
+                    .isFunctionOptional(comparator, "Invalid comparator function");
 
-                var args = Array.prototype.slice.call(arguments, 1),
-                    items = this.items,
-                    keys = Object.keys(items).sort(),
+                var items = this.items,
+                    keys = Object.keys(items).sort(comparator ? comparator.bind(this) : undefined),
                     i, itemName, item;
 
                 for (i = 0; i < keys.length; i++) {
                     itemName = keys[i];
                     item = items[itemName];
-                    if (handler.apply(this, [item, itemName].concat(args)) === false) {
+                    if (handler.call(this, item, itemName) === false) {
                         break;
                     }
                 }
