@@ -47,7 +47,7 @@
 
     test("Prepending", function () {
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
-            prependedPath = originalPath.prepend('foo.bar');
+            prependedPath = originalPath.prepend('foo.bar'.toPath());
 
         notStrictEqual(originalPath, prependedPath, "Prepending returns new Path");
 
@@ -71,11 +71,11 @@
         equal(path.equals(sntls.Path.create('test.path.it.is')), true, "Matching path");
         equal(path.equals(sntls.Path.create('path.it.is')), false, "Non-matching path");
 
-        equal(path.equals('test.path.it.is'), true, "Matching string path");
-        equal(path.equals('path.it.is'), false, "Non-matching string path");
+        equal(path.equals('test.path.it.is'.toPath()), true, "Matching string path");
+        equal(path.equals('path.it.is'.toPath()), false, "Non-matching string path");
 
-        equal(path.equals(['test', 'path', 'it', 'is']), true, "Matching array path");
-        equal(path.equals(['path', 'it', 'is']), false, "Non-matching array path");
+        equal(path.equals(['test', 'path', 'it', 'is'].toPath()), true, "Matching array path");
+        equal(path.equals(['path', 'it', 'is'].toPath()), false, "Non-matching array path");
     });
 
     test("Relative paths", function () {

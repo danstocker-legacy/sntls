@@ -30,27 +30,20 @@ troop.promise(sntls, 'Tree', function () {
 
             /**
              * Retrieves the value at the specified path.
-             * @param {sntls.Path|string|string[]} path Path to node
+             * @param {sntls.Path} path Path to node
              * @return {*} Whatever value is found at path
              */
             getNode: function (path) {
-                if (!sntls.Path.isBaseOf(path)) {
-                    path = sntls.Path.create(path);
-                }
                 return path.resolve(this.root);
             },
 
             /**
              * Sets the node at the specified path to the given value.
-             * @param {sntls.Path|string|string[]} path Path to node
+             * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
              * @return {sntls.Tree}
              */
             setNode: function (path, value) {
-                if (!sntls.Path.isBaseOf(path)) {
-                    path = sntls.Path.create(path);
-                }
-
                 var node = path.trim().resolveOrBuild(this.root),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
@@ -64,15 +57,11 @@ troop.promise(sntls, 'Tree', function () {
              * Retrieves the value at the specified path, or
              * when the path does not exist, creates path and
              * assigns the return value of the generator.
-             * @param {sntls.Path|string|string[]} path Path to node
+             * @param {sntls.Path} path Path to node
              * @param {function} generator Generator function returning value
              * @return {*}
              */
             getSafeNode: function (path, generator) {
-                if (!sntls.Path.isBaseOf(path)) {
-                    path = sntls.Path.create(path);
-                }
-
                 var node = path.trim().resolveOrBuild(this.root),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
@@ -86,14 +75,10 @@ troop.promise(sntls, 'Tree', function () {
 
             /**
              * Removes node at the specified path.
-             * @param {sntls.Path|string|string[]} path Path to node
+             * @param {sntls.Path} path Path to node
              * @return {sntls.Tree}
              */
             unsetNode: function (path) {
-                if (!sntls.Path.isBaseOf(path)) {
-                    path = sntls.Path.create(path);
-                }
-
                 var node = path.trim().resolveOrBuild(this.root),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];

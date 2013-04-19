@@ -63,16 +63,10 @@ troop.promise(sntls, 'Path', function () {
 
             /**
              * Prepends path with other path.
-             * @param {sntls.Path|string|string[]} path
+             * @param {sntls.Path} path
              * @return {sntls.Path}
              */
             prepend: function (path) {
-                var self = sntls.Path;
-
-                if (!self.isBaseOf(path)) {
-                    path = self.create(path);
-                }
-
                 return /** @type sntls.Path */ this.getBase().create(path.asArray.concat(this.asArray));
             },
 
@@ -125,16 +119,10 @@ troop.promise(sntls, 'Path', function () {
 
             /**
              * Matches remote path to current path.
-             * @param {sntls.Path|string|string[]} remotePath Remote path
+             * @param {sntls.Path} remotePath Remote path
              * @return {boolean}
              */
             equals: function (remotePath) {
-                var self = sntls.Path;
-
-                if (!self.isBaseOf(remotePath)) {
-                    remotePath = self.create(remotePath);
-                }
-
                 var currentArray = this.asArray,
                     remoteArray = remotePath.asArray,
                     i;
