@@ -194,3 +194,10 @@ troop.promise(sntls, 'OrderedList', function () {
             }
         });
 });
+
+/**
+ * @return {sntls.OrderedList}
+ */
+Array.prototype.toOrderedList = function () {
+    return sntls.OrderedList.create(this);
+};

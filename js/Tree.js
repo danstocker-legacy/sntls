@@ -100,3 +100,10 @@ dessert.addTypes(/** @lends dessert */{
                sntls.Tree.isBaseOf(expr);
     }
 });
+
+/**
+ * @return {sntls.Tree}
+ */
+Object.prototype.toTree = function () {
+    return sntls.Tree.create(this);
+};

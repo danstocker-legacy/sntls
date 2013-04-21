@@ -100,3 +100,10 @@ troop.promise(sntls, 'JournalingCollection', function () {
             }
         });
 });
+
+/**
+ * @return {sntls.JournalingCollection}
+ */
+Object.prototype.toJournalingCollection = function () {
+    return sntls.JournalingCollection.create(this);
+};

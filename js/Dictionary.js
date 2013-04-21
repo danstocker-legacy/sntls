@@ -10,17 +10,6 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Dictionary', function () {
-    dessert.addTypes(/** @lends dessert */{
-        isDictionary: function (expr) {
-            return sntls.Dictionary.isBaseOf(expr);
-        },
-
-        isDictionaryOptional: function (expr) {
-            return typeof expr === 'undefined' ||
-                   sntls.Dictionary.isBaseOf(expr);
-        }
-    });
-
     /**
      * @class sntls.Dictionary
      * @extends troop.Base
@@ -191,3 +180,21 @@ troop.promise(sntls, 'Dictionary', function () {
             }
         });
 });
+
+dessert.addTypes(/** @lends dessert */{
+    isDictionary: function (expr) {
+        return sntls.Dictionary.isBaseOf(expr);
+    },
+
+    isDictionaryOptional: function (expr) {
+        return typeof expr === 'undefined' ||
+               sntls.Dictionary.isBaseOf(expr);
+    }
+});
+
+/**
+ * @return {sntls.Dictionary}
+ */
+Object.prototype.toDictionary = function () {
+    return sntls.Dictionary.create(this);
+};

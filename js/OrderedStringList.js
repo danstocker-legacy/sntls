@@ -45,3 +45,10 @@ troop.promise(sntls, 'OrderedStringList', function () {
             }
         });
 });
+
+/**
+ * @return {sntls.OrderedStringList}
+ */
+Array.prototype.toOrderedStringList = function () {
+    return sntls.OrderedStringList.create(this);
+};

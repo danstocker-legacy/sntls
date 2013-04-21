@@ -8,7 +8,7 @@
     });
 
     test("String prefix search", function () {
-        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
+        var orderedStringList = ["animal", "apple", "ant", "bar", "insect", "insert", "item"].toOrderedStringList();
 
         raises(function () {
             orderedStringList.getRangeByPrefix("");
@@ -40,7 +40,7 @@
     });
 
     test("Removing all occurrence of a value", function () {
-        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "apple", "apple", "fruit"]);
+        var orderedStringList = ["animal", "apple", "apple", "apple", "fruit"].toOrderedStringList();
 
         orderedStringList.removeAll("foo");
 

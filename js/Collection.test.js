@@ -205,10 +205,10 @@
     });
 
     test("Cloning collection", function () {
-        var original = sntls.Collection.create({
+        var original = {
                 foo  : 'bar',
                 hello: 'world'
-            }),
+            }.toCollection(),
             clone = original.clone();
 
         deepEqual(original.items, clone.items, "Clone has identical content");
@@ -218,7 +218,7 @@
     });
 
     test("Rebasing collection", function () {
-        var original = sntls.Collection.create({foo: 'bar'}),
+        var original = {foo: 'bar'}.toCollection(),
             rebased;
 
         raises(function () {
@@ -233,14 +233,14 @@
     });
 
     test("Merging collections", function () {
-        var collection1 = sntls.Collection.create({
+        var collection1 = {
                 foo  : 'bar',
                 hello: 'world'
-            }),
-            collection2 = sntls.Collection.create({
+            }.toCollection(),
+            collection2 = {
                 first : 1,
                 second: 2
-            }),
+            }.toCollection(),
             merged = collection1.mergeWith(collection2);
 
         deepEqual(
@@ -277,14 +277,14 @@
     test("Merging with conflict", function () {
         expect(6);
 
-        var collection1 = sntls.Collection.create({
+        var collection1 = {
                 foo  : 'bar',
                 hello: 'world'
-            }),
-            collection2 = sntls.Collection.create({
+            }.toCollection(),
+            collection2 = {
                 foo   : 1,
                 second: 2
-            }),
+            }.toCollection(),
             merged;
 
         merged = collection1.mergeWith(collection2);
@@ -603,11 +603,13 @@
          * Compares two strings by their second char
          * @param a
          * @param b
-         * @return {Boolean}
+         * @return {number}
          */
         function comparator(a, b) {
             result = this;
-            return a[1] > b[1];
+            var x = a[1],
+                y = b[1];
+            return x > y ? 1 : y > x ? -1 : 0;
         }
 
         function handler(item, itemName) {

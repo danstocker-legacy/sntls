@@ -9,23 +9,23 @@
         tree = sntls.Tree.create();
         deepEqual(tree.root, {}, "Empty root");
 
-        tree = sntls.Tree.create(json);
+        tree = json.toTree();
         strictEqual(tree.root, json, "root initialized with custom value");
     });
 
     test("Node retrieval", function () {
-        var tree = sntls.Tree.create({
+        var tree = {
             foo: {
                 bar: "Hello world!"
             }
-        });
+        }.toTree();
 
         equal(tree.getNode('foo.bar'.toPath()), "Hello world!", "Node retrieved");
         equal(typeof tree.getNode('hello.world'.toPath()), 'undefined', "Attempted to retrieve non-existent node");
     });
 
     test("Node setting", function () {
-        var tree = sntls.Tree.create(),
+        var tree = {}.toTree(),
             result;
 
         result = tree.setNode('foo.bar'.toPath(), "Hello world!");
@@ -48,7 +48,7 @@
                     bar: "Hello world!"
                 }
             },
-            tree = sntls.Tree.create(json),
+            tree = json.toTree(),
             result;
 
         result = tree.getSafeNode('foo.bar'.toPath(), function () {
@@ -77,11 +77,11 @@
     });
 
     test("Node deletion", function () {
-        var tree = sntls.Tree.create({
+        var tree = {
                 foo: {
                     bar: "Hello world!"
                 }
-            }),
+            }.toTree(),
             result;
 
         result = tree.unsetNode('foo.bar'.toPath());

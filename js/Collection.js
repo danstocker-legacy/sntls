@@ -583,3 +583,10 @@ dessert.addTypes(/** @lends dessert */{
                sntls.Collection.isPrototypeOf(expr);
     }
 });
+
+/**
+ * @return {sntls.Collection}
+ */
+Object.prototype.toCollection = function () {
+    return sntls.Collection.create(this);
+};

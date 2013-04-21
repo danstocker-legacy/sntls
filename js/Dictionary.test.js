@@ -108,10 +108,10 @@
         /**
          * @type {sntls.Dictionary}
          */
-        var dict = Dictionary.create({
+        var dict = {
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
-        });
+        }.toDictionary();
 
         raises(function () {
             dict.getItem(true);
@@ -138,13 +138,13 @@
 
     test("Combine with", function () {
         deepEqual(
-            Dictionary.create({
+            {
                 foo  : 'bar',
                 hello: 'world'
-            }).combineWith(Dictionary.create({
+            }.toDictionary().combineWith({
                 bar  : 'BAR',
                 world: 'WORLD'
-            })).items,
+            }.toDictionary()).items,
             {
                 foo  : 'BAR',
                 hello: 'WORLD'
@@ -153,12 +153,12 @@
         );
 
         deepEqual(
-            Dictionary.create({
+            {
                 foo  : 'bar',
                 hello: 'world'
-            }).combineWith(Dictionary.create({
+            }.toDictionary().combineWith({
                 world: 'WORLD'
-            })).items,
+            }.toDictionary()).items,
             {
                 hello: 'WORLD'
             },
@@ -166,12 +166,12 @@
         );
 
         deepEqual(
-            Dictionary.create({
+            {
                 hello: 'world'
-            }).combineWith(Dictionary.create({
+            }.toDictionary().combineWith({
                 hats : 'off',
                 world: 'WORLD'
-            })).items,
+            }.toDictionary()).items,
             {
                 hello: 'WORLD'
             },
@@ -193,12 +193,12 @@
         );
 
         deepEqual(
-            Dictionary.create({
+            {
                 hello: ['there', 'world']
-            }).combineWith(Dictionary.create({
+            }.toDictionary().combineWith({
                 there: 'THERE',
                 world: 'WORLD'
-            })).items,
+            }.toDictionary()).items,
             {
                 hello: ['THERE', 'WORLD']
             },
@@ -206,12 +206,12 @@
         );
 
         deepEqual(
-            Dictionary.create({
+            {
                 hello: ['there', 'world']
-            }).combineWith(Dictionary.create({
+            }.toDictionary().combineWith({
                 there: ['over', 'there'],
                 world: ['my', 'World']
-            })).items,
+            }.toDictionary()).items,
             {
                 hello: ['over', 'there', 'my', 'World']
             },
@@ -221,11 +221,11 @@
 
     test("Reversal", function () {
         deepEqual(
-            Dictionary.create({
+            {
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
                 hello: 'world'
-            }).reverse().items,
+            }.toDictionary().reverse().items,
             {
                 bar  : ['foo', 'moo'],
                 cow  : 'moo',
@@ -235,11 +235,11 @@
         );
 
         deepEqual(
-            Dictionary.create({
+            {
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
                 hello: 'world'
-            }).reverse().reverse().items,
+            }.toDictionary().reverse().reverse().items,
             {
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
@@ -251,15 +251,15 @@
 
     test("Integration", function () {
         deepEqual(
-            Dictionary.create({
+            {
                 foo  : 'bar',
                 hello: ['world', 'guys', 'all'],
                 big  : ['world', 'bar']
-            }).combineWith(Dictionary.create({
+            }.toDictionary().combineWith({
                 world: 'Earth',
                 bar  : 'BAR',
                 guys : ["y'all", 'men']
-            })).reverse().items,
+            }.toDictionary()).reverse().items,
             {
                 "y'all": 'hello',
                 BAR    : ['foo', 'big'],
@@ -272,16 +272,16 @@
 
     test("Joining", function () {
         deepEqual(
-            Dictionary.create({
+            {
                 foo  : 'bar',
                 hello: ['world', 'guys', 'all'],
                 big  : ['world', 'bar']
-            })
+            }.toDictionary()
                 .reverse()
-                .combineWith(Dictionary.create({
+                .combineWith({
                 foo: 'whatever',
                 big: ['tree', 'house']
-            })).items,
+            }.toDictionary()).items,
             {
                 bar  : ['whatever', 'tree', 'house'],
                 world: ['tree', 'house']

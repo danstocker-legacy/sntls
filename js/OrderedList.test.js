@@ -16,7 +16,7 @@
     });
 
     test("Numeric search", function () {
-        var orderedList = sntls.OrderedList.create([0, 1, 3, 5, 6, 9]);
+        var orderedList = [0, 1, 3, 5, 6, 9].toOrderedList();
         equal(orderedList.spliceIndexOf(4), 3, "Lower nearest hit");
         equal(orderedList.spliceIndexOf(6), 4, "Exact hit");
         equal(orderedList.spliceIndexOf(0), 0, "Low extreme");
@@ -26,19 +26,19 @@
     });
 
     test("Numeric search in 1-item list", function () {
-        var orderedList = sntls.OrderedList.create([4]);
+        var orderedList = [4].toOrderedList();
         equal(orderedList.spliceIndexOf(4), 0, "Exact hit");
         equal(orderedList.spliceIndexOf(-4), 0, "Lower out of bounds");
         equal(orderedList.spliceIndexOf(100), 1, "Upper out of bounds");
     });
 
     test("Numeric search in empty list", function () {
-        var orderedList = sntls.OrderedList.create([]);
+        var orderedList = [].toOrderedList();
         equal(orderedList.spliceIndexOf(4), 0, "Out of bounds");
     });
 
     test("String search", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+        var orderedList = ["bar", "foo", "hello", "ipsum", "lorem", "world"].toOrderedList();
         equal(orderedList.spliceIndexOf('hell'), 2, "Lower nearest hit");
         equal(orderedList.spliceIndexOf('hello'), 2, "Exact hit");
         equal(orderedList.spliceIndexOf('hew'), 3, "Upper nearest hit");
@@ -49,7 +49,7 @@
     });
 
     test("Search with repeating items", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "hello", "hello", "world"]);
+        var orderedList = ["bar", "foo", "foo", "foo", "hello", "hello", "world"].toOrderedList();
         equal(orderedList.spliceIndexOf('foo'), 1, "First of repeating values");
         equal(orderedList.spliceIndexOf('foo!'), 4, "Adjacent to repeating values");
         equal(orderedList.spliceIndexOf('hello'), 4, "First of repeating values");
@@ -57,7 +57,7 @@
     });
 
     test("Range retrieval", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+        var orderedList = ["bar", "foo", "hello", "ipsum", "lorem", "world"].toOrderedList();
 
         deepEqual(
             orderedList.getRange("bar", "lorem"),
@@ -91,7 +91,7 @@
     });
 
     test("Range retrieval with repetition", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "world"]);
+        var orderedList = ["bar", "foo", "foo", "foo", "world"].toOrderedList();
 
         deepEqual(
             orderedList.getRange("bar", "lorem"),
@@ -107,7 +107,7 @@
     });
 
     test("Item addition", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
+        var orderedList = ["bar", "foo", "hello", "ipsum", "lorem", "world"].toOrderedList(),
             result;
 
         result = orderedList.addItem('hell');
@@ -130,7 +130,7 @@
     });
 
     test("Multiple item addition", function () {
-        var orderedList = sntls.OrderedList.create(),
+        var orderedList = [].toOrderedList(),
             result;
 
         result = orderedList.addItems(['c', 'a', 'b']);
@@ -143,7 +143,7 @@
     });
 
     test("Item removal", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
+        var orderedList = ["bar", "foo", "hello", "ipsum", "lorem", "world"].toOrderedList(),
             result;
 
         result = orderedList.removeItem('hell');
@@ -166,7 +166,7 @@
     });
 
     test("Multiple item removal", function () {
-        var orderedList = sntls.OrderedList.create(['ahoy', 'a', 'b', 'cool', 'c']),
+        var orderedList = ['ahoy', 'a', 'b', 'cool', 'c'].toOrderedList(),
             result;
 
         result = orderedList.removeItems(['c', 'a', 'b']);
@@ -179,7 +179,7 @@
     });
 
     test("Range removal", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
+        var orderedList = ["bar", "foo", "hello", "ipsum", "lorem", "world"].toOrderedList();
 
         orderedList.removeRange("for", "fun");
 
@@ -207,7 +207,7 @@
     });
 
     test("List clear", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
+        var orderedList = ["bar", "foo", "hello", "ipsum", "lorem", "world"].toOrderedList(),
             result;
 
         result = orderedList.clear();
