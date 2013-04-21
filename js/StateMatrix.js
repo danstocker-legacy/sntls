@@ -96,4 +96,3 @@ troop.promise(sntls, 'StateMatrixCollection', function () {
         }
     });
 }());
-
