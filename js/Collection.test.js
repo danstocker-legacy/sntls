@@ -553,6 +553,7 @@
         expect(10);
 
         function handler(item, itemName) {
+            /*jshint validthis: true */
             if (Object.isPrototypeOf(item)) {
                 deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
@@ -573,6 +574,7 @@
         expect(11);
 
         function handler(item, itemName) {
+            /*jshint validthis: true */
             if (Object.isPrototypeOf(item)) {
                 deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
@@ -608,6 +610,7 @@
          * @return {number}
          */
         function comparator(a, b) {
+            /*jshint validthis: true */
             result = this;
             var x = a[1],
                 y = b[1];
@@ -615,6 +618,7 @@
         }
 
         function handler(item, itemName) {
+            /*jshint validthis: true */
             if (Object.isPrototypeOf(item)) {
                 deepEqual(item, collection.items[itemName], "Item '" + itemName + "' OK");
             } else {
