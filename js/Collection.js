@@ -4,6 +4,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Collection', function () {
+    "use strict";
+
     var hOP = Object.prototype.hasOwnProperty,
         self;
 
@@ -347,7 +349,7 @@ troop.promise(sntls, 'Collection', function () {
                     itemNames = Object.keys(items);
                     for (i = 0; i < itemNames.length; i++) {
                         itemName = itemNames[i];
-                        if (selector.call(items[itemName], itemName)) {
+                        if (selector.call(this, items[itemName], itemName)) {
                             result[itemName] = items[itemName];
                         }
                     }
@@ -572,21 +574,25 @@ troop.promise(sntls, 'Collection', function () {
     }
 });
 
-/*global sntls */
-dessert.addTypes(/** @lends dessert */{
-    isCollection: function (expr) {
-        return sntls.Collection.isPrototypeOf(expr);
-    },
+(function () {
+    "use strict";
 
-    isCollectionOptional: function (expr) {
-        return typeof expr === 'undefined' ||
-               sntls.Collection.isPrototypeOf(expr);
-    }
-});
+    /*global sntls */
+    dessert.addTypes(/** @lends dessert */{
+        isCollection: function (expr) {
+            return sntls.Collection.isPrototypeOf(expr);
+        },
 
-/**
- * @return {sntls.Collection}
- */
-Object.prototype.toCollection = function () {
-    return sntls.Collection.create(this);
-};
+        isCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Collection.isPrototypeOf(expr);
+        }
+    });
+
+    /**
+     * @return {sntls.Collection}
+     */
+    Object.prototype.toCollection = function () {
+        return sntls.Collection.create(this);
+    };
+}());

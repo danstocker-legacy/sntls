@@ -3,6 +3,8 @@
  */
 /*global troop, sntls */
 troop.promise(sntls, 'JournalingCollection', function () {
+    "use strict";
+
     var hOP = Object.prototype.hasOwnProperty,
         base = sntls.Collection;
 
@@ -101,9 +103,13 @@ troop.promise(sntls, 'JournalingCollection', function () {
         });
 });
 
-/**
- * @return {sntls.JournalingCollection}
- */
-Object.prototype.toJournalingCollection = function () {
-    return sntls.JournalingCollection.create(this);
-};
+(function () {
+    "use strict";
+
+    /**
+     * @return {sntls.JournalingCollection}
+     */
+    Object.prototype.toJournalingCollection = function () {
+        return sntls.JournalingCollection.create(this);
+    };
+}());

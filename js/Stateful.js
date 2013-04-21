@@ -5,6 +5,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Stateful', function () {
+    "use strict";
+
     /**
      * @class sntls.Stateful
      * @extends troop.Base

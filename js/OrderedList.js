@@ -6,6 +6,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'OrderedList', function () {
+    "use strict";
+
     /**
      * @class sntls.OrderedList
      * @extends troop.Base
@@ -195,9 +197,13 @@ troop.promise(sntls, 'OrderedList', function () {
         });
 });
 
-/**
- * @return {sntls.OrderedList}
- */
-Array.prototype.toOrderedList = function () {
-    return sntls.OrderedList.create(this);
-};
+(function () {
+    "use strict";
+
+    /**
+     * @return {sntls.OrderedList}
+     */
+    Array.prototype.toOrderedList = function () {
+        return sntls.OrderedList.create(this);
+    };
+}());

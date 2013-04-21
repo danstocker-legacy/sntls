@@ -6,6 +6,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Path', function () {
+    "use strict";
+
     /**
      * @class sntls.Path
      * @extends troop.Base
@@ -177,27 +179,31 @@ troop.promise(sntls, 'Path', function () {
         });
 });
 
-dessert.addTypes(/** @lends dessert */{
-    isPath: function (expr) {
-        return sntls.Path.isBaseOf(expr);
-    },
+(function () {
+    "use strict";
 
-    isPathOptional: function (expr) {
-        return typeof expr === 'undefined' ||
-               sntls.Path.isBaseOf(expr);
-    }
-});
+    dessert.addTypes(/** @lends dessert */{
+        isPath: function (expr) {
+            return sntls.Path.isBaseOf(expr);
+        },
 
-/**
- * @return {sntls.Path}
- */
-String.prototype.toPath = function () {
-    return sntls.Path.create(this);
-};
+        isPathOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Path.isBaseOf(expr);
+        }
+    });
 
-/**
- * @return {sntls.Path}
- */
-Array.prototype.toPath = function () {
-    return sntls.Path.create(this);
-};
+    /**
+     * @return {sntls.Path}
+     */
+    String.prototype.toPath = function () {
+        return sntls.Path.create(this);
+    };
+
+    /**
+     * @return {sntls.Path}
+     */
+    Array.prototype.toPath = function () {
+        return sntls.Path.create(this);
+    };
+}());

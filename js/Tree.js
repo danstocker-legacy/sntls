@@ -5,6 +5,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Tree', function () {
+    "use strict";
+
     /**
      * @class sntls.Tree
      * @extends troop.Base
@@ -90,20 +92,24 @@ troop.promise(sntls, 'Tree', function () {
         });
 });
 
-dessert.addTypes(/** @lends dessert */{
-    isTree: function (expr) {
-        return sntls.Tree.isBaseOf(expr);
-    },
+(function () {
+    "use strict";
 
-    isTreeOptional: function (expr) {
-        return typeof expr === 'undefined' ||
-               sntls.Tree.isBaseOf(expr);
-    }
-});
+    dessert.addTypes(/** @lends dessert */{
+        isTree: function (expr) {
+            return sntls.Tree.isBaseOf(expr);
+        },
 
-/**
- * @return {sntls.Tree}
- */
-Object.prototype.toTree = function () {
-    return sntls.Tree.create(this);
-};
+        isTreeOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Tree.isBaseOf(expr);
+        }
+    });
+
+    /**
+     * @return {sntls.Tree}
+     */
+    Object.prototype.toTree = function () {
+        return sntls.Tree.create(this);
+    };
+}());

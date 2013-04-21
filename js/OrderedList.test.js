@@ -1,5 +1,7 @@
 /*global sntls, module, test, ok, equal, strictEqual, notEqual, deepEqual, raises */
 (function () {
+    "use strict";
+
     module("Ordered List");
 
     test("Instantiation w/o items", function () {

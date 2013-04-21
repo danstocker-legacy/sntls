@@ -1,5 +1,7 @@
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'OrderedStringList', function () {
+    "use strict";
+
     /**
      * @class sntls.OrderedStringList
      * @extends sntls.OrderedList
@@ -46,9 +48,13 @@ troop.promise(sntls, 'OrderedStringList', function () {
         });
 });
 
-/**
- * @return {sntls.OrderedStringList}
- */
-Array.prototype.toOrderedStringList = function () {
-    return sntls.OrderedStringList.create(this);
-};
+(function () {
+    "use strict";
+
+    /**
+     * @return {sntls.OrderedStringList}
+     */
+    Array.prototype.toOrderedStringList = function () {
+        return sntls.OrderedStringList.create(this);
+    };
+}());

@@ -6,6 +6,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Profiled', function (sntls) {
+    "use strict";
+
     /**
      * @class sntls.Profiled
      * @extends troop.Base

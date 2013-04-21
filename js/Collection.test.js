@@ -1,5 +1,7 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises, expect */
 (function () {
+    "use strict";
+
     module("Collection");
 
     test("Method names", function () {
@@ -403,8 +405,8 @@
             five: true
         }, "String prefix filtering");
 
-        filtered = collection.filter(function () {
-            return this instanceof String;
+        filtered = collection.filter(function (item) {
+            return typeof item === 'string';
         });
         deepEqual(filtered.items, {
             one: 'hello',

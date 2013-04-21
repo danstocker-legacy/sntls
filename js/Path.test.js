@@ -1,5 +1,7 @@
 /*global sntls, module, test, expect, ok, equal, notStrictEqual, deepEqual, raises */
 (function () {
+    "use strict";
+
     module("Path");
 
     test("Initialized by string", function () {

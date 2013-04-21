@@ -5,6 +5,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'StateMatrix', function () {
+    "use strict";
+
     /**
      * @class sntls.StateMatrix
      * @extends troop.Base
@@ -74,13 +76,9 @@ troop.promise(sntls, 'StateMatrix', function () {
         });
 });
 
-dessert.addTypes(/** @lends dessert */{
-    isStateMatrix: function (expr) {
-        return sntls.StateMatrix.isBaseOf(expr);
-    }
-});
-
 troop.promise(sntls, 'StateMatrixCollection', function () {
+    "use strict";
+
     /**
      * @class sntls.StateMatrixCollection
      * @extends sntls.Collection
@@ -88,3 +86,14 @@ troop.promise(sntls, 'StateMatrixCollection', function () {
      */
     sntls.StateMatrixCollection = sntls.Collection.of(sntls.StateMatrix);
 });
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isStateMatrix: function (expr) {
+            return sntls.StateMatrix.isBaseOf(expr);
+        }
+    });
+}());
+

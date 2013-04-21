@@ -1,5 +1,7 @@
 /*global sntls, module, test, ok, equal, deepEqual, raises, expect */
 (function (JournalingCollection) {
+    "use strict";
+
     module("Journaling collection");
 
     test("Logging", function () {

@@ -1,5 +1,7 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
 (function (Profile, ProfileCollection) {
+    "use strict";
+
     module("Profile");
 
     test("Creation", function () {

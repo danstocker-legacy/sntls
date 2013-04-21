@@ -1,6 +1,8 @@
 /*global module, test, raises, equal, deepEqual */
 /*global sntls */
 (function (Dictionary) {
+    "use strict";
+
     module("Dictionary");
 
     test("Instantiation", function () {

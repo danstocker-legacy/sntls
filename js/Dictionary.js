@@ -10,6 +10,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Dictionary', function () {
+    "use strict";
+
     /**
      * @class sntls.Dictionary
      * @extends troop.Base
@@ -181,20 +183,24 @@ troop.promise(sntls, 'Dictionary', function () {
         });
 });
 
-dessert.addTypes(/** @lends dessert */{
-    isDictionary: function (expr) {
-        return sntls.Dictionary.isBaseOf(expr);
-    },
+(function () {
+    "use strict";
 
-    isDictionaryOptional: function (expr) {
-        return typeof expr === 'undefined' ||
-               sntls.Dictionary.isBaseOf(expr);
-    }
-});
+    dessert.addTypes(/** @lends dessert */{
+        isDictionary: function (expr) {
+            return sntls.Dictionary.isBaseOf(expr);
+        },
 
-/**
- * @return {sntls.Dictionary}
- */
-Object.prototype.toDictionary = function () {
-    return sntls.Dictionary.create(this);
-};
+        isDictionaryOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Dictionary.isBaseOf(expr);
+        }
+    });
+
+    /**
+     * @return {sntls.Dictionary}
+     */
+    Object.prototype.toDictionary = function () {
+        return sntls.Dictionary.create(this);
+    };
+}());

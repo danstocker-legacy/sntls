@@ -1,5 +1,7 @@
 /*global sntls, module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, raises */
 (function () {
+    "use strict";
+
     module("Tree");
 
     test("Instantiation", function () {

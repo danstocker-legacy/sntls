@@ -6,6 +6,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Profile', function () {
+    "use strict";
+
     var hOP = Object.prototype.hasOwnProperty;
 
     /**
@@ -104,6 +106,8 @@ troop.promise(sntls, 'Profile', function () {
 });
 
 troop.promise(sntls, 'ProfileCollection', function () {
+    "use strict";
+
     /**
      * @class sntls.ProfileCollection
      * @extends sntls.Collection
@@ -112,26 +116,30 @@ troop.promise(sntls, 'ProfileCollection', function () {
     sntls.ProfileCollection = sntls.Collection.of(sntls.Profile);
 });
 
-dessert.addTypes(/** @lends dessert */{
-    isProfile: function (expr) {
-        return sntls.Profile.isPrototypeOf(expr);
-    },
+(function () {
+    "use strict";
 
-    isProfileOptional: function (expr) {
-        return typeof expr === 'undefined' ||
-               sntls.Profile.isPrototypeOf(expr);
-    },
+    dessert.addTypes(/** @lends dessert */{
+        isProfile: function (expr) {
+            return sntls.Profile.isPrototypeOf(expr);
+        },
 
-    isProfileCollection: function (expr) {
-        return this.isClass(expr) &&
-               (expr.isA(sntls.Profile) ||
-                expr.isA(sntls.ProfileCollection));
-    },
+        isProfileOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Profile.isPrototypeOf(expr);
+        },
 
-    isProfileCollectionOptional: function (expr) {
-        return typeof expr === 'undefined' ||
-               this.isClass(expr) &&
-               (expr.isA(sntls.Profile) ||
-                expr.isA(sntls.ProfileCollection));
-    }
-});
+        isProfileCollection: function (expr) {
+            return this.isClass(expr) &&
+                   (expr.isA(sntls.Profile) ||
+                    expr.isA(sntls.ProfileCollection));
+        },
+
+        isProfileCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   this.isClass(expr) &&
+                   (expr.isA(sntls.Profile) ||
+                    expr.isA(sntls.ProfileCollection));
+        }
+    });
+}());

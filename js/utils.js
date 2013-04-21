@@ -3,6 +3,8 @@
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'utils', function () {
+    "use strict";
+
     /**
      * @class sntls.utils
      * @extends troop.Base

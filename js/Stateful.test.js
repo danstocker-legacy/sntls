@@ -1,5 +1,7 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
 (function (Stateful) {
+    "use strict";
+
     module("Stateful");
 
     var stateMatrix = sntls.StateMatrix.create()
