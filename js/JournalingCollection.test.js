@@ -1,11 +1,11 @@
 /*global sntls, module, test, ok, equal, deepEqual, raises, expect */
-(function (JournalingCollection) {
+(function () {
     "use strict";
 
     module("Journaling collection");
 
     test("Logging", function () {
-        var collection = JournalingCollection.create();
+        var collection = sntls.JournalingCollection.create();
 
         expect(6);
 
@@ -94,7 +94,7 @@
         collection.resetLog();
         deepEqual(collection.log, [], "Log empty after reset");
 
-        JournalingCollection.addMock({
+        sntls.JournalingCollection.addMock({
             resetLog: function () {
                 ok("Log re-set during clear");
             }
@@ -102,11 +102,11 @@
 
         collection.clear();
 
-        JournalingCollection.removeMocks();
+        sntls.JournalingCollection.removeMocks();
     });
 
     test("Specified journ. collection", function () {
-        var Specified = JournalingCollection.of(String),
+        var Specified = sntls.JournalingCollection.of(String),
             collection = Specified.create({
                 a: "foo",
                 b: "bar"
@@ -145,4 +145,4 @@
             "Removal registered"
         );
     });
-}(sntls.JournalingCollection));
+}());

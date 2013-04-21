@@ -1,5 +1,5 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Stateful) {
+(function () {
     "use strict";
 
     module("Stateful");
@@ -14,7 +14,7 @@
          * @extends sntls.Stateful
          */
         var Widget = troop.Base.extend()
-                .addTrait(Stateful),
+                .addTrait(sntls.Stateful),
             result;
 
         raises(function () {
@@ -49,7 +49,7 @@
          * @extends sntls.Stateful
          */
         var Widget = troop.Base.extend()
-                .addTrait(Stateful)
+                .addTrait(sntls.Stateful)
                 .addStateLayer('layer', stateMatrix, 'closed')
                 .addMethod({
                     init: function () {
@@ -94,7 +94,7 @@
          * @extends sntls.Stateful
          */
         var Widget = troop.Base.extend()
-                .addTrait(Stateful)
+                .addTrait(sntls.Stateful)
                 .addStateLayer('layer', stateMatrix, 'closed')
                 .addMethod({
                     init: function () {

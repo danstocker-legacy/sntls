@@ -1,5 +1,5 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, notStrictEqual, deepEqual, raises, expect */
-(function (utils) {
+(function () {
     "use strict";
 
     module("utils");
@@ -11,8 +11,8 @@
                 bar: referenceObject
             },
             originalArray = [referenceObject, referenceObject],
-            copyObject = utils.shallowCopy(originalObject),
-            copyArray = utils.shallowCopy(originalArray);
+            copyObject = sntls.utils.shallowCopy(originalObject),
+            copyArray = sntls.utils.shallowCopy(originalArray);
 
         deepEqual(copyArray, originalArray, "Arrays identical by value");
         deepEqual(copyObject, originalObject, "Objects identical by value");
@@ -21,4 +21,4 @@
         strictEqual(copyArray[0], originalArray[0], "Array items identical by reference");
         strictEqual(copyObject.foo, originalObject.foo, "Object properties identical by reference");
     });
-}(sntls.utils));
+}());

@@ -1,17 +1,17 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (StateMatrix) {
+(function () {
     "use strict";
 
     module("StateMatrix");
 
     test("Instantiation", function () {
-        var stateMatrix = StateMatrix.create();
+        var stateMatrix = sntls.StateMatrix.create();
 
         deepEqual(stateMatrix.edges, {}, "Edges buffer initially empty");
     });
 
     test("Edge addition", function () {
-        var stateMatrix = StateMatrix.create();
+        var stateMatrix = sntls.StateMatrix.create();
 
         raises(function () {
             stateMatrix.addEdge();
@@ -36,10 +36,10 @@
     });
 
     test("Load retrieval", function () {
-        var stateMatrix = StateMatrix.create()
+        var stateMatrix = sntls.StateMatrix.create()
             .addEdge('open', 'closed', 'close');
 
         equal(stateMatrix.getLoad('open', 'closed'), 'close', "Valid load retrieved");
         equal(typeof stateMatrix.getLoad('closed', 'open'), 'undefined', "Invalid load retrieved");
     });
-}(sntls.StateMatrix));
+}());

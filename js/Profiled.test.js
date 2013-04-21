@@ -1,12 +1,12 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Profiled) {
+(function () {
     "use strict";
 
     module("Profiled");
 
     test("Construction", function () {
         var myClass = troop.Base.extend()
-                .addTrait(Profiled)
+                .addTrait(sntls.Profiled)
                 .addMethod({
                     init: function () {
                         this.initProfiled('foo');
@@ -23,7 +23,7 @@
 
     test("Profile getter", function () {
         var myClass = troop.Base.extend()
-                .addTrait(Profiled)
+                .addTrait(sntls.Profiled)
                 .addMethod({
                     init: function () {
                         this.initProfiled('foo');
@@ -33,4 +33,4 @@
 
         strictEqual(myProfiled.getProfile(), myProfiled.profile, "Profile getter");
     });
-}(sntls.Profiled));
+}());

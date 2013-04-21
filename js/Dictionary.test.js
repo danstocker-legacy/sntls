@@ -1,6 +1,6 @@
 /*global module, test, raises, equal, deepEqual */
 /*global sntls */
-(function (Dictionary) {
+(function () {
     "use strict";
 
     module("Dictionary");
@@ -12,13 +12,13 @@
         var dict;
 
         raises(function () {
-            dict = Dictionary.create('foo');
+            dict = sntls.Dictionary.create('foo');
         }, "Invalid items object");
 
-        dict = Dictionary.create();
+        dict = sntls.Dictionary.create();
         deepEqual(dict.items, {}, "Empty items property on dictionary");
 
-        dict = Dictionary.create({
+        dict = sntls.Dictionary.create({
             foo: 'bar'
         });
         deepEqual(dict.items, {
@@ -30,7 +30,7 @@
         /**
          * @type {sntls.Dictionary}
          */
-        var dict = Dictionary.create();
+        var dict = sntls.Dictionary.create();
 
         dict.addItem('foo', 'bar');
         deepEqual(dict.items, {
@@ -60,7 +60,7 @@
         /**
          * @type {sntls.Dictionary}
          */
-        var dict = Dictionary.create();
+        var dict = sntls.Dictionary.create();
 
         dict.addItem('foo', ['bar']);
         deepEqual(dict.items, {
@@ -90,7 +90,7 @@
         /**
          * @type {sntls.Dictionary}
          */
-        var dict = Dictionary.create();
+        var dict = sntls.Dictionary.create();
 
         dict.addItems(['foo', 'boo'], 'bar');
         deepEqual(dict.items, {
@@ -181,10 +181,10 @@
         );
 
         deepEqual(
-            Dictionary.create({
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 hello: 'world'
-            }).combineWith(Dictionary.create({
+            }).combineWith(sntls.Dictionary.create({
                 hats : 'off',
                 world: 'WORLD'
             })).items,
@@ -291,4 +291,4 @@
             "Dictionaries joined by keys"
         );
     });
-}(sntls.Dictionary));
+}());

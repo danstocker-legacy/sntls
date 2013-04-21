@@ -1,17 +1,17 @@
 /*global sntls, troop, module, test, ok, equal, strictEqual, deepEqual, notDeepEqual, raises, expect */
-(function (Profile, ProfileCollection) {
+(function () {
     "use strict";
 
     module("Profile");
 
     test("Creation", function () {
-        var profile = Profile.create();
+        var profile = sntls.Profile.create();
 
         deepEqual(profile.counters, {}, "Counters' initial state");
     });
 
     test("Increment", function () {
-        var profile = Profile.create();
+        var profile = sntls.Profile.create();
 
         strictEqual(profile.inc('foo'), profile, "Increment returns self");
         ok(profile.counters.hasOwnProperty('foo'), "New counter added");
@@ -25,7 +25,7 @@
     });
 
     test("Decrement", function () {
-        var profile = Profile.create();
+        var profile = sntls.Profile.create();
 
         strictEqual(profile.dec('foo'), profile, "Decrement returns self");
         ok(profile.counters.hasOwnProperty('foo'), "New counter added");
@@ -39,7 +39,7 @@
     });
 
     test("Retrieval", function () {
-        var profile = Profile.create();
+        var profile = sntls.Profile.create();
 
         strictEqual(profile.getCounters(), profile.counters, "Access to counters object");
 
@@ -48,7 +48,7 @@
     });
 
     test("Resetting", function () {
-        var profile = Profile.create()
+        var profile = sntls.Profile.create()
             .inc('foo')
             .inc('bar', 5)
             .inc('hello', 2);
@@ -70,11 +70,11 @@
     });
 
     test("Collection increment", function () {
-        var stats = ProfileCollection.create();
+        var stats = sntls.ProfileCollection.create();
 
         // adding first profile and incrementing
         stats
-            .setItem('first', Profile.create())
+            .setItem('first', sntls.Profile.create())
             .inc('foo');
 
         deepEqual(
@@ -87,7 +87,7 @@
 
         // adding new profile and incrementing all
         stats
-            .setItem('second', Profile.create())
+            .setItem('second', sntls.Profile.create())
             .inc('foo');
 
         deepEqual(
@@ -99,4 +99,4 @@
             "Second increment"
         );
     });
-}(sntls.Profile, sntls.ProfileCollection));
+}());
