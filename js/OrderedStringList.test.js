@@ -9,6 +9,10 @@
         equal(sntls.OrderedStringList._getEndValue('a'), 'b');
     });
 
+    test("Next value", function () {
+        equal(sntls.OrderedStringList._getNextValue('hello'), 'hello' + String.fromCharCode(0));
+    });
+
     test("String prefix search", function () {
         var orderedStringList = ["animal", "apple", "ant", "bar", "insect", "insert", "item"].toOrderedStringList();
 
@@ -38,6 +42,16 @@
             orderedStringList.getRangeByPrefix("ins"),
             ["insect", "insert"],
             "Prefix 'ins'"
+        );
+    });
+
+    test("String prefix search w/ exclusion", function () {
+        var orderedStringList = ["car", "car", "career", "carpet", "foo"].toOrderedStringList();
+
+        deepEqual(
+            orderedStringList.getRangeByPrefix("car", true),
+            ["career", "carpet"],
+            "All items coming after but matching 'car'"
         );
     });
 
