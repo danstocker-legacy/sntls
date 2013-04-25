@@ -1,6 +1,6 @@
 {
     "name"        : "sntls",
-    "version"     : "0.3.2",
+    "version"     : "0.4.0",
     "description" : "Essential data structures and behaviors",
     "keywords"    : [
         "tools",
@@ -18,7 +18,7 @@
         "url" : "git://github.com/danstocker/sntls.git"
     },
     "dependencies": {
-        "dessert": ">=0.2.6",
+        "dessert": ">=0.2.7",
         "troop"  : ">=0.3.3"
     },
     "files"       : ["out/sntls.js"],
