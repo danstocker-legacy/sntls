@@ -123,6 +123,20 @@
         );
     });
 
+    test("Range retrieval as hash", function () {
+        var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "world"]),
+            result;
+
+        result = orderedList.getRangeAsHash("bar", "lorem");
+
+        ok(result.isA(sntls.Hash), "Hash returned");
+        deepEqual(
+            result.items,
+            ["bar", "foo", "foo", "foo"],
+            "Items wrapped in hash"
+        );
+    });
+
     test("Item addition", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
             result;

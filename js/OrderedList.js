@@ -111,6 +111,18 @@ troop.promise(sntls, 'OrderedList', function () {
                 return this.items.slice(startIndex, endIndex);
             },
 
+            /**
+             * Retrieves a range of values and wraps it in a Hash object.
+             * @param {string|number} startValue
+             * @param {string|number} endValue
+             * @return {sntls.Hash} Hash with a shallow copy of the array's affected segment.
+             * @see sntls.OrderedList.getRange
+             */
+            getRangeAsHash: function (startValue, endValue) {
+                var range = this.getRange.apply(this, arguments);
+                return sntls.Hash.create(range);
+            },
+
             //////////////////////////////
             // Content manipulation
 
