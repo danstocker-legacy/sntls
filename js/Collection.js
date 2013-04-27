@@ -152,7 +152,10 @@ troop.promise(sntls, 'Collection', function () {
             init: function (items) {
                 base.init.apply(this, arguments);
 
-                // adding basic properties
+                /**
+                 * Number of items in collection
+                 * @type {Number}
+                 */
                 this.count = items ? Object.keys(items).length : 0;
             },
 
