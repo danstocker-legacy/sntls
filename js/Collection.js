@@ -7,13 +7,14 @@ troop.promise(sntls, 'Collection', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
+        base = sntls.Hash,
         self;
 
     /**
      * @class sntls.Collection
-     * @extends troop.Base
+     * @extends sntls.Hash
      */
-    sntls.Collection = self = troop.Base.extend()
+    sntls.Collection = self = base.extend()
         .addPrivateConstant(/** @lends sntls.Collection */{
             // method names for general purpose constructors
             _ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
@@ -149,13 +150,10 @@ troop.promise(sntls, 'Collection', function () {
              * @param {object} [items] Initial contents.
              */
             init: function (items) {
-                dessert.isObjectOptional(items, "Invalid items");
+                base.init.apply(this, arguments);
 
                 // adding basic properties
-                this.addPublic(/** @lends sntls.Collection */{
-                    items: items || {},
-                    count: items ? Object.keys(items).length : 0
-                });
+                this.count = items ? Object.keys(items).length : 0;
             },
 
             //////////////////////////////
@@ -577,7 +575,6 @@ troop.promise(sntls, 'Collection', function () {
 (function () {
     "use strict";
 
-    /*global sntls */
     dessert.addTypes(/** @lends dessert */{
         isCollection: function (expr) {
             return sntls.Collection.isPrototypeOf(expr);
@@ -586,6 +583,15 @@ troop.promise(sntls, 'Collection', function () {
         isCollectionOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    sntls.Collection.isPrototypeOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+        /**
+         * @return {sntls.Collection}
+         */
+        toCollection: function () {
+            return sntls.Collection.create(this.items);
         }
     });
 }());

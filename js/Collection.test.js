@@ -188,6 +188,13 @@
         equal(collection.count, 4, "Count initialized");
     });
 
+    test("Type conversion", function () {
+        var hash = sntls.Hash.create(),
+            collection = hash.toCollection();
+
+        ok(collection.isA(sntls.Collection), "Hash converted to collection");
+    });
+
     test("Building collection", function () {
         var collection = sntls.Collection.create();
 
