@@ -33,6 +33,29 @@
         equal(typeof tree.getNode('hello.world'.toPath()), 'undefined', "Attempted to retrieve non-existent node");
     });
 
+    test("Node retrieval as Hash", function () {
+        var tree = sntls.Tree.create({
+                foo: {
+                    bar: "Hello world!"
+                }
+            }),
+            result;
+
+        raises(function () {
+            tree.getNodeAsHash('foo.bar'.toPath());
+        }, "Primitive can't be hashed");
+
+        result = tree.getNodeAsHash('foo'.toPath());
+        ok(result.isA(sntls.Hash), "Result is a hash");
+        deepEqual(
+            result.items,
+            {
+                bar: "Hello world!"
+            },
+            "Result hash' contents"
+        );
+    });
+
     test("Node setting", function () {
         var tree = sntls.Tree.create({}),
             result;
@@ -49,6 +72,14 @@
             },
             "Tree node set"
         );
+    });
+
+    test("Node setting (RO)", function () {
+        var tree = sntls.Tree.create({}, true);
+
+        raises(function () {
+            tree.setNode('foo.bar'.toPath(), "Hello world!");
+        }, "Can't set node when read only");
     });
 
     test("Safe node retrieval", function () {
@@ -97,5 +128,17 @@
 
         strictEqual(result, tree, "Tree.unsetNode is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
+    });
+
+    test("Node deletion (RO)", function () {
+        var tree = sntls.Tree.create({
+            foo: {
+                bar: "Hello world!"
+            }
+        }, true);
+
+        raises(function () {
+            tree.unsetNode('foo.bar'.toPath());
+        }, "Can't unset node when read-only");
     });
 }());

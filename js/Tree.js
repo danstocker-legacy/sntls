@@ -28,12 +28,27 @@ troop.promise(sntls, 'Tree', function () {
             },
 
             /**
+             * Retrieves object at the specified path wrapped in a Hash object.
+             * @param {sntls.Path} path Path to node
+             * @return {sntls.Hash}
+             */
+            getNodeAsHash: function (path) {
+                var node = path.resolve(this.items);
+                dessert.isObjectOptional(node, "Node is not object");
+                return node ?
+                    sntls.Hash.create(node) :
+                    node;
+            },
+
+            /**
              * Sets the node at the specified path to the given value.
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
              * @return {sntls.Tree}
              */
             setNode: function (path, value) {
+                dessert.assert(!this.readOnly, "Tree is read only");
+
                 var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
@@ -69,6 +84,8 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             unsetNode: function (path) {
+                dessert.assert(!this.readOnly, "Tree is read only");
+
                 var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
