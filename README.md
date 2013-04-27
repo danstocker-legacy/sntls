@@ -7,6 +7,7 @@ A collection of general purpose classes and behaviors (class traits) such as col
 
 Currently available:
 
+- `sntls.Hash`: Base for all data-manipulating classes.
 - `sntls.OrderedList`: For manipulating order-retaining lists of numbers and strings.
 - `sntls.OrderedStringList`: Same as `OrderedList` but with extra string-specific functionality.
 - `sntls.Dictionary`: For managing dictionaries and lookups.
