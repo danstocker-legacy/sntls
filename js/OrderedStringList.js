@@ -70,10 +70,12 @@ troop.promise(sntls, 'OrderedStringList', function () {
 (function () {
     "use strict";
 
-    /**
-     * @return {sntls.OrderedStringList}
-     */
-    Array.prototype.toOrderedStringList = function () {
-        return sntls.OrderedStringList.create(this);
-    };
+    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+        /**
+         * @return {sntls.OrderedStringList}
+         */
+        toOrderedStringList: function () {
+            return sntls.OrderedStringList.create(this.items);
+        }
+    });
 }());

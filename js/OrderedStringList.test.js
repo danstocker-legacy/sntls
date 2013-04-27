@@ -4,6 +4,13 @@
 
     module("Ordered String List");
 
+    test("Type conversion", function () {
+        var hash = sntls.Hash.create([]),
+            list = hash.toOrderedStringList();
+
+        ok(list.isA(sntls.OrderedStringList), "Hash converted to OrderedStringList");
+    });
+
     test("End value", function () {
         equal(sntls.OrderedStringList._getEndValue('hello'), 'hellp');
         equal(sntls.OrderedStringList._getEndValue('a'), 'b');
@@ -14,7 +21,7 @@
     });
 
     test("String prefix search", function () {
-        var orderedStringList = ["animal", "apple", "ant", "bar", "insect", "insert", "item"].toOrderedStringList();
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
 
         raises(function () {
             orderedStringList.getRangeByPrefix("");
@@ -46,7 +53,7 @@
     });
 
     test("String prefix search w/ exclusion", function () {
-        var orderedStringList = ["car", "car", "career", "carpet", "foo"].toOrderedStringList();
+        var orderedStringList = sntls.OrderedStringList.create(["car", "car", "career", "carpet", "foo"]);
 
         deepEqual(
             orderedStringList.getRangeByPrefix("car", true),
@@ -56,7 +63,7 @@
     });
 
     test("Removing all occurrence of a value", function () {
-        var orderedStringList = ["animal", "apple", "apple", "apple", "fruit"].toOrderedStringList();
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "apple", "apple", "fruit"]);
 
         orderedStringList.removeAll("foo");
 

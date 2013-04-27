@@ -8,11 +8,13 @@
 troop.promise(sntls, 'OrderedList', function () {
     "use strict";
 
+    var base = sntls.Hash;
+
     /**
      * @class sntls.OrderedList
-     * @extends troop.Base
+     * @extends sntls.Hash
      */
-    sntls.OrderedList = troop.Base.extend()
+    sntls.OrderedList = base.extend()
         .addPrivateMethod(/** @lends sntls.OrderedList */{
             /**
              * Compares numbers. To be supplied to Array.sort().
@@ -34,9 +36,11 @@ troop.promise(sntls, 'OrderedList', function () {
 
             /**
              * @param {string[]|number[]} [items] Initial values
+             * @param {boolean} readOnly
+             * @see sntls.Hash.init
              */
-            init: function (items) {
-                dessert.isArrayOptional(items, "Invalid initial items");
+            init: function (items, readOnly) {
+                dessert.isArrayOptional(items, "Invalid items");
 
                 // preparing items buffer
                 items = items || [];
@@ -48,12 +52,12 @@ troop.promise(sntls, 'OrderedList', function () {
                     );
                 }
 
-                this.addPublic(/** @lends sntls.OrderedList */{
-                    /**
-                     * @type {string[]|number[]}
-                     */
-                    items: items
-                });
+                /**
+                 * @name sntls.OrderedList.items
+                 * @type {string[]|number[]}
+                 */
+
+                base.init.call(this, items, readOnly);
             },
 
             //////////////////////////////
@@ -200,10 +204,12 @@ troop.promise(sntls, 'OrderedList', function () {
 (function () {
     "use strict";
 
-    /**
-     * @return {sntls.OrderedList}
-     */
-    Array.prototype.toOrderedList = function () {
-        return sntls.OrderedList.create(this);
-    };
+    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+        /**
+         * @return {sntls.OrderedList}
+         */
+        toOrderedList: function () {
+            return sntls.OrderedList.create(this.items);
+        }
+    });
 }());
