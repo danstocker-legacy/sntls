@@ -14,28 +14,14 @@ troop.promise(sntls, 'Dictionary', function () {
 
     /**
      * @class sntls.Dictionary
-     * @extends troop.Base
+     * @extends sntls.Hash
      */
-    sntls.Dictionary = troop.Base.extend()
+    sntls.Dictionary = sntls.Hash.extend()
         .addMethod(/** @lends sntls.Dictionary */{
             /**
              * @name sntls.Dictionary.create
              * @return {sntls.Dictionary}
              */
-
-            /**
-             * @param {object} items Initial dictionary items
-             */
-            init: function (items) {
-                dessert.isObjectOptional(items, "Invalid initial dictionary items");
-
-                this.addPublic(/** @lends sntls.Dictionary */{
-                    /**
-                     * @type {object}
-                     */
-                    items: items || {}
-                });
-            },
 
             /**
              * Adds item to dictionary
@@ -135,7 +121,7 @@ troop.promise(sntls, 'Dictionary', function () {
             combineWith: function (remoteDict) {
                 dessert.isDictionary(remoteDict, "Invalid dictionary");
 
-                var result = this.getBase().create(),
+                var result = /** @type {sntls.Dictionary} */ this.getBase().create(),
                     currentKeys = Object.keys(this.items),
                     i, currentKey, currentValue, remoteValue;
 
@@ -159,10 +145,7 @@ troop.promise(sntls, 'Dictionary', function () {
              * @return {sntls.Dictionary} New dictionary instance with reversed key-value pairs.
              */
             reverse: function () {
-                /**
-                 * @type {sntls.Dictionary}
-                 */
-                var result = this.getBase().create(),
+                var result = /** @type {sntls.Dictionary} */ this.getBase().create(),
                     keys = Object.keys(this.items),
                     i, key, value;
 
@@ -194,6 +177,15 @@ troop.promise(sntls, 'Dictionary', function () {
         isDictionaryOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    sntls.Dictionary.isBaseOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+        /**
+         * @return {sntls.Dictionary}
+         */
+        toDictionary: function () {
+            return sntls.Dictionary.create(this.items);
         }
     });
 }());
