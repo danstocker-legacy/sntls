@@ -37,14 +37,12 @@ troop.promise(sntls, 'Path', function () {
                     dessert.assert(false, "Invalid path");
                 }
 
-                this.addPublic(/** @lends sntls.Path */{
-                    /**
-                     * Array buffer. Public because grants fast access.
-                     * Should not be changed from the outside.
-                     * @type {Array}
-                     */
-                    asArray: asArray
-                });
+                /**
+                 * Array buffer. Public because grants fast access.
+                 * Should not be changed from the outside.
+                 * @type {Array}
+                 */
+                this.asArray = asArray;
             },
 
             /**

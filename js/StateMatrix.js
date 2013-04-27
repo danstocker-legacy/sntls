@@ -21,17 +21,15 @@ troop.promise(sntls, 'StateMatrix', function () {
             /**
              */
             init: function () {
-                this.addConstant(/** @lends sntls.StateMatrix */{
-                    /**
-                     * Edges in the state matrix.
-                     * Each edge defines a start state, an end state, and a load.
-                     * Therefore this object is two levels deep.
-                     * @type {object}
-                     * @example
-                     * {"enabled":{"disabled":"disable"},"disabled":{"enabled":"enable"}}
-                     */
-                    edges: {}
-                });
+                /**
+                 * Edges in the state matrix.
+                 * Each edge defines a start state, an end state, and a load.
+                 * Therefore this object is two levels deep.
+                 * @type {object}
+                 * @example
+                 * {"enabled":{"disabled":"disable"},"disabled":{"enabled":"enable"}}
+                 */
+                this.edges = {};
             },
 
             /**

@@ -24,13 +24,11 @@ troop.promise(sntls, 'Profile', function () {
             /**
              */
             init: function () {
-                this.addPublic(/** @lends sntls.Profile */{
-                    /**
-                     * Lookup of numeric values assigned to named counter bins
-                     * @type {object}
-                     */
-                    counters: {}
-                });
+                /**
+                 * Lookup of numeric values assigned to named counter bins
+                 * @type {object}
+                 */
+                this.counters = {};
             },
 
             /**
