@@ -92,9 +92,6 @@ troop.promise(sntls, 'Collection', function () {
             }
         })
         .addMethod(/** @lends sntls.Collection */{
-            //////////////////////////////
-            // OOP
-
             /**
              * Creates "specified collection".
              * Adds shortcut methods to items. It is assumed that the collection will only contain
