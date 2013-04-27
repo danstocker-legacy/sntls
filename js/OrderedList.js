@@ -26,9 +26,6 @@ troop.promise(sntls, 'OrderedList', function () {
             }
         })
         .addMethod(/** @lends sntls.OrderedList */{
-            //////////////////////////////
-            // OOP
-
             /**
              * @name sntls.OrderedList.create
              * @return {sntls.OrderedList}
@@ -70,7 +67,7 @@ troop.promise(sntls, 'OrderedList', function () {
              * @param {string|number} value List item value.
              * @param {number} [start=0] Start position of search range. Default: 0.
              * @param {number} [end] Ending position of search range. Default: this.length - 1.
-             * @return {number|undefined}
+             * @return {number}
              */
             spliceIndexOf: function (value, start, end) {
                 var items = this.items,
@@ -96,13 +93,16 @@ troop.promise(sntls, 'OrderedList', function () {
                     // narrowing range to upper half
                     return this.spliceIndexOf(value, medianPos, end);
                 }
+
+                // default index, should never be reached
+                return -1;
             },
 
             /**
              * Returns list items starting from startValue up to but not including endValue.
              * @param {string|number} startValue
              * @param {string|number} endValue
-             * @return {Array}
+             * @return {Array} Shallow copy of the array's affected segment.
              */
             getRange: function (startValue, endValue) {
                 var startIndex = this.spliceIndexOf(startValue),
@@ -120,6 +120,8 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {number} The index at which the item was spliced in.
              */
             addItem: function (value) {
+                dessert.assert(!this.readOnly, "List is read only");
+
                 var spliceIndex = this.spliceIndexOf(value);
                 this.items.splice(spliceIndex, 0, value);
                 return spliceIndex;
@@ -145,6 +147,8 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {number} The index from which the item was removed. -1 if item was not present.
              */
             removeItem: function (value) {
+                dessert.assert(!this.readOnly, "List is read only");
+
                 var items = this.items,
                     spliceIndex = this.spliceIndexOf(value);
 
@@ -179,6 +183,8 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {number} The starting position of removal.
              */
             removeRange: function (startValue, endValue) {
+                dessert.assert(!this.readOnly, "List is read only");
+
                 var startIndex = this.spliceIndexOf(startValue),
                     endIndex = this.spliceIndexOf(endValue),
                     length = endIndex - startIndex;
@@ -195,6 +201,7 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {sntls.OrderedList}
              */
             clear: function () {
+                dessert.assert(!this.readOnly, "List is read only");
                 this.items = [];
                 return this;
             }
