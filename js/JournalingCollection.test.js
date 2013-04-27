@@ -4,6 +4,13 @@
 
     module("Journaling collection");
 
+    test("Type conversion", function () {
+        var hash = sntls.Hash.create(),
+            collection = hash.toJournalingCollection();
+
+        ok(collection.isA(sntls.JournalingCollection), "Hash converted to journaling collection");
+    });
+
     test("Logging", function () {
         var collection = sntls.JournalingCollection.create();
 

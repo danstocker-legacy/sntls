@@ -14,9 +14,6 @@ troop.promise(sntls, 'JournalingCollection', function () {
      */
     sntls.JournalingCollection = base.extend()
         .addMethod(/** @lends sntls.JournalingCollection */{
-            //////////////////////////////
-            // OOP
-
             /**
              * @name sntls.JournalingCollection.create
              * @return {sntls.JournalingCollection}
@@ -27,15 +24,14 @@ troop.promise(sntls, 'JournalingCollection', function () {
              * @param {object} [items] Initial contents.
              */
             init: function (items) {
-                base.init.call(this, items);
+                base.init.apply(this, arguments);
 
-                this.addConstant(/** @lends sntls.JournalingCollection */{
-                    log: []
-                });
+                /**
+                 * Change log
+                 * @type {Array}
+                 */
+                this.log = [];
             },
-
-            //////////////////////////////
-            // Overrides
 
             /**
              * Sets an item in the collection.
@@ -44,16 +40,16 @@ troop.promise(sntls, 'JournalingCollection', function () {
              * @return {sntls.JournalingCollection}
              */
             setItem: function (name, item) {
-                var isAdd = !hOP.call(this.items, name);
+                var isInCollection = hOP.call(this.items, name);
+
+                base.setItem.apply(this, arguments);
 
                 // logging change
                 this.log.unshift({
-                    method: isAdd ? 'add' : 'change',
+                    method: isInCollection ? 'change': 'add',
                     name  : name,
                     item  : item // before the change
                 });
-
-                base.setItem.apply(this, arguments);
 
                 return this;
             },
@@ -64,30 +60,30 @@ troop.promise(sntls, 'JournalingCollection', function () {
              * @return {sntls.JournalingCollection}
              */
             deleteItem: function (name) {
-                if (hOP.call(this.items, name)) {
+                var isInCollection = hOP.call(this.items, name),
+                    oldItem = this.items[name];
+
+                base.deleteItem.apply(this, arguments);
+
+                if (isInCollection) {
                     // adding to log
                     this.log.unshift({
                         method: 'remove',
                         name  : name,
-                        item  : this.items[name]
+                        item  : oldItem
                     });
                 }
 
-                base.deleteItem.apply(this, arguments);
-
                 return this;
             },
-
-            //////////////////////////////
-            // Content manipulation
 
             /**
              * Empties collection.
              * @return {sntls.JournalingCollection}
              */
             clear: function () {
-                this.resetLog();
                 base.clear.apply(this, arguments);
+                this.resetLog();
                 return this;
             },
 
@@ -102,3 +98,16 @@ troop.promise(sntls, 'JournalingCollection', function () {
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+        /**
+         * @return {sntls.JournalingCollection}
+         */
+        toJournalingCollection: function () {
+            return sntls.JournalingCollection.create(this.items);
+        }
+    });
+}());
