@@ -102,14 +102,3 @@ troop.promise(sntls, 'JournalingCollection', function () {
             }
         });
 });
-
-(function () {
-    "use strict";
-
-    /**
-     * @return {sntls.JournalingCollection}
-     */
-    Object.prototype.toJournalingCollection = function () {
-        return sntls.JournalingCollection.create(this);
-    };
-}());

@@ -110,10 +110,10 @@
         /**
          * @type {sntls.Dictionary}
          */
-        var dict = {
+        var dict = sntls.Dictionary.create({
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
-        }.toDictionary();
+        });
 
         raises(function () {
             dict.getItem(true);
@@ -140,13 +140,13 @@
 
     test("Combine with", function () {
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 hello: 'world'
-            }.toDictionary().combineWith({
+            }).combineWith(sntls.Dictionary.create({
                 bar  : 'BAR',
                 world: 'WORLD'
-            }.toDictionary()).items,
+            })).items,
             {
                 foo  : 'BAR',
                 hello: 'WORLD'
@@ -155,12 +155,12 @@
         );
 
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 hello: 'world'
-            }.toDictionary().combineWith({
+            }).combineWith(sntls.Dictionary.create({
                 world: 'WORLD'
-            }.toDictionary()).items,
+            })).items,
             {
                 hello: 'WORLD'
             },
@@ -168,12 +168,12 @@
         );
 
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 hello: 'world'
-            }.toDictionary().combineWith({
+            }).combineWith(sntls.Dictionary.create({
                 hats : 'off',
                 world: 'WORLD'
-            }.toDictionary()).items,
+            })).items,
             {
                 hello: 'WORLD'
             },
@@ -195,12 +195,12 @@
         );
 
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 hello: ['there', 'world']
-            }.toDictionary().combineWith({
+            }).combineWith(sntls.Dictionary.create({
                 there: 'THERE',
                 world: 'WORLD'
-            }.toDictionary()).items,
+            })).items,
             {
                 hello: ['THERE', 'WORLD']
             },
@@ -208,12 +208,12 @@
         );
 
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 hello: ['there', 'world']
-            }.toDictionary().combineWith({
+            }).combineWith(sntls.Dictionary.create({
                 there: ['over', 'there'],
                 world: ['my', 'World']
-            }.toDictionary()).items,
+            })).items,
             {
                 hello: ['over', 'there', 'my', 'World']
             },
@@ -223,11 +223,11 @@
 
     test("Reversal", function () {
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
                 hello: 'world'
-            }.toDictionary().reverse().items,
+            }).reverse().items,
             {
                 bar  : ['foo', 'moo'],
                 cow  : 'moo',
@@ -237,11 +237,11 @@
         );
 
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
                 hello: 'world'
-            }.toDictionary().reverse().reverse().items,
+            }).reverse().reverse().items,
             {
                 foo  : 'bar',
                 moo  : ['bar', 'cow'],
@@ -253,15 +253,15 @@
 
     test("Integration", function () {
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 hello: ['world', 'guys', 'all'],
                 big  : ['world', 'bar']
-            }.toDictionary().combineWith({
+            }).combineWith(sntls.Dictionary.create({
                 world: 'Earth',
                 bar  : 'BAR',
                 guys : ["y'all", 'men']
-            }.toDictionary()).reverse().items,
+            })).reverse().items,
             {
                 "y'all": 'hello',
                 BAR    : ['foo', 'big'],
@@ -274,16 +274,16 @@
 
     test("Joining", function () {
         deepEqual(
-            {
+            sntls.Dictionary.create({
                 foo  : 'bar',
                 hello: ['world', 'guys', 'all'],
                 big  : ['world', 'bar']
-            }.toDictionary()
+            })
                 .reverse()
-                .combineWith({
+                .combineWith(sntls.Dictionary.create({
                 foo: 'whatever',
                 big: ['tree', 'house']
-            }.toDictionary()).items,
+            })).items,
             {
                 bar  : ['whatever', 'tree', 'house'],
                 world: ['tree', 'house']

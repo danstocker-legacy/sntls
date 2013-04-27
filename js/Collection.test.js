@@ -207,10 +207,10 @@
     });
 
     test("Cloning collection", function () {
-        var original = {
+        var original = sntls.Collection.create({
                 foo  : 'bar',
                 hello: 'world'
-            }.toCollection(),
+            }),
             clone = original.clone();
 
         deepEqual(original.items, clone.items, "Clone has identical content");
@@ -220,7 +220,7 @@
     });
 
     test("Rebasing collection", function () {
-        var original = {foo: 'bar'}.toCollection(),
+        var original = sntls.Collection.create({foo: 'bar'}),
             rebased;
 
         raises(function () {
@@ -235,14 +235,14 @@
     });
 
     test("Merging collections", function () {
-        var collection1 = {
+        var collection1 = sntls.Collection.create({
                 foo  : 'bar',
                 hello: 'world'
-            }.toCollection(),
-            collection2 = {
+            }),
+            collection2 = sntls.Collection.create({
                 first : 1,
                 second: 2
-            }.toCollection(),
+            }),
             merged = collection1.mergeWith(collection2);
 
         deepEqual(
@@ -279,14 +279,14 @@
     test("Merging with conflict", function () {
         expect(6);
 
-        var collection1 = {
+        var collection1 = sntls.Collection.create({
                 foo  : 'bar',
                 hello: 'world'
-            }.toCollection(),
-            collection2 = {
+            }),
+            collection2 = sntls.Collection.create({
                 foo   : 1,
                 second: 2
-            }.toCollection(),
+            }),
             merged;
 
         merged = collection1.mergeWith(collection2);

@@ -196,11 +196,4 @@ troop.promise(sntls, 'Dictionary', function () {
                    sntls.Dictionary.isBaseOf(expr);
         }
     });
-
-    /**
-     * @return {sntls.Dictionary}
-     */
-    Object.prototype.toDictionary = function () {
-        return sntls.Dictionary.create(this);
-    };
 }());
