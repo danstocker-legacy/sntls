@@ -55,6 +55,18 @@ troop.promise(sntls, 'OrderedStringList', function () {
             },
 
             /**
+             * Retrieves a range by prefix and wraps it in a Hash object.
+             * @param {string} prefix
+             * @param {boolean} [excludeOriginal=false] Whether to exclude `prefix` from the results
+             * @return {sntls.Hash}
+             * @see sntls.OrderedList.getRange
+             */
+            getRangeByPrefixAsHash: function (prefix, excludeOriginal) {
+                var range = this.getRangeByPrefix.apply(this, arguments);
+                return sntls.Hash.create(range);
+            },
+
+            /**
              * Removes all occurrence of a specific string from the list.
              * @param {string} value
              * @return {sntls.OrderedStringList}

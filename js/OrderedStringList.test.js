@@ -62,6 +62,19 @@
         );
     });
 
+    test("String prefix search as hash", function () {
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"], true),
+            result;
+
+        result = orderedStringList.getRangeByPrefixAsHash("a");
+        ok(result.isA(sntls.Hash), "Hash returned");
+        deepEqual(
+            result.items,
+            ["animal", "ant", "apple"],
+            "Search results extracted from hash"
+        );
+    });
+
     test("Removing all occurrence of a value", function () {
         var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "apple", "apple", "fruit"]);
 
