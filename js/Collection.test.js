@@ -213,6 +213,14 @@
         equal(collection.items.otherItem, 'testValue', "String value stored in collection");
     });
 
+    test("Item addition (RO)", function () {
+        var collection = sntls.Collection.create({}, true);
+
+        raises(function () {
+            collection.setItem('testItem', 2);
+        }, "Item cannot be added");
+    });
+
     test("Cloning collection", function () {
         var original = sntls.Collection.create({
                 foo  : 'bar',
@@ -486,6 +494,18 @@
         );
     });
 
+    test("Removal (RO)", function () {
+        var collection = sntls.Collection.create();
+
+        init(collection);
+
+        collection.readOnly = true;
+
+        raises(function () {
+            collection.deleteItem('one');
+        }, "Item cannot be removed");
+    });
+
     test("Clearing", function () {
         var collection = sntls.Collection.create();
 
@@ -506,6 +526,18 @@
         collection.clear();
         deepEqual(collection.items, {}, "Items buffer after emptying");
         equal(collection.count, 0, "Item count after emptying");
+    });
+
+    test("Clearing (RO)", function () {
+        var collection = sntls.Collection.create();
+
+        init(collection);
+
+        collection.readOnly = true;
+
+        raises(function () {
+            collection.clear();
+        }, "Collection cannot be cleared");
     });
 
     test("Array representation", function () {

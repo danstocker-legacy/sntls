@@ -175,6 +175,8 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             setItem: function (itemName, item) {
+                dessert.assert(!this.readOnly, "Collection is read only");
+
                 var isNew = !hOP.call(this.items, itemName);
 
                 // setting item
@@ -194,6 +196,8 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             deleteItem: function (itemName) {
+                dessert.assert(!this.readOnly, "Collection is read only");
+
                 if (hOP.call(this.items, itemName)) {
                     // removing item
                     delete this.items[itemName];
@@ -229,10 +233,11 @@ troop.promise(sntls, 'Collection', function () {
              * WARNING: shares item buffer with old collection,
              * therefore changes in one will be reflected in the other.
              * @param {sntls.Collection} returnType Collection class
-             * @return {sntls.Collection}
+             * @return {sntls.Collection} New instance of the specified
+             * (collection-based) type initialized w/ with same contents.
              */
             asType: function (returnType) {
-                dessert.isCollection(returnType);
+                dessert.isCollection(returnType, "Type must be Collection-based");
 
                 var result = /** @type sntls.Collection */ returnType.create();
 
@@ -327,7 +332,7 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Filters collection elements.
              * @param {RegExp|string|function} selector Selector expression
-             * @return {sntls.Collection} Filtered collection
+             * @return {sntls.Collection} New collection of same type w/ filtered results.
              */
             filter: function (selector) {
                 var result = {},
@@ -405,6 +410,8 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             clear: function () {
+                dessert.assert(!this.readOnly, "Collection is read only");
+
                 // removing items
                 this.items = {};
                 this.count = 0;
@@ -472,7 +479,8 @@ troop.promise(sntls, 'Collection', function () {
              * its return value will be placed in the mapped collection.
              * @param {sntls.Collection} [returnType] Reference to derived collection class.
              * When specified, the resulting collection will be an instance of this class.
-             * @return {sntls.Collection}
+             * @return {sntls.Collection} New collection instance (of the specified type)
+             * containing mapped items.
              */
             map: function (handler, returnType) {
                 dessert
