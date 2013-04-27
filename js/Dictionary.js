@@ -30,6 +30,8 @@ troop.promise(sntls, 'Dictionary', function () {
              * @return {sntls.Dictionary}
              */
             addItem: function (key, value) {
+                dessert.assert(!this.readOnly, "Dictionary is read only");
+
                 var items = this.items,
                     currentValue = items[key];
 
@@ -116,7 +118,7 @@ troop.promise(sntls, 'Dictionary', function () {
             /**
              * Combines current dictionary with remote dictionary
              * @param {sntls.Dictionary} remoteDict Remote dictionary
-             * @return {sntls.Dictionary} Combined dictionary
+             * @return {sntls.Dictionary} New dictionary instance with combined items
              */
             combineWith: function (remoteDict) {
                 dessert.isDictionary(remoteDict, "Invalid dictionary");

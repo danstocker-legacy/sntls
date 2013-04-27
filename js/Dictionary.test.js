@@ -1,29 +1,15 @@
-/*global module, test, raises, equal, deepEqual */
+/*global module, test, raises, ok, equal, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
 
     module("Dictionary");
 
-    test("Instantiation", function () {
-        /**
-         * @type sntls.Dictionary
-         */
-        var dict;
+    test("Type conversion", function () {
+        var hash = sntls.Hash.create(),
+            dict = hash.toDictionary();
 
-        raises(function () {
-            dict = sntls.Dictionary.create('foo');
-        }, "Invalid items object");
-
-        dict = sntls.Dictionary.create();
-        deepEqual(dict.items, {}, "Empty items property on dictionary");
-
-        dict = sntls.Dictionary.create({
-            foo: 'bar'
-        });
-        deepEqual(dict.items, {
-            foo: 'bar'
-        }, "Predefined items property on dictionary");
+        ok(dict.isA(sntls.Dictionary), "Hash converted to dictionary");
     });
 
     test("Single item addition", function () {
@@ -54,6 +40,17 @@
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
         }, "Value added by existing key");
+    });
+
+    test("Single item addition (RO)", function () {
+        /**
+         * @type {sntls.Dictionary}
+         */
+        var dict = sntls.Dictionary.create({}, true);
+
+        raises(function () {
+            dict.addItem('foo', 'bar');
+        });
     });
 
     test("Array item addition", function () {
