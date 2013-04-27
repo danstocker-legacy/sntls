@@ -9,10 +9,17 @@
             json = {foo: 'bar'};
 
         tree = sntls.Tree.create();
-        deepEqual(tree.root, {}, "Empty root");
+        deepEqual(tree.items, {}, "Empty root");
 
         tree = sntls.Tree.create(json);
-        strictEqual(tree.root, json, "root initialized with custom value");
+        strictEqual(tree.items, json, "root initialized with custom value");
+    });
+
+    test("Type conversion", function () {
+        var hash = sntls.Hash.create(),
+            tree = hash.toTree();
+
+        ok(tree.isA(sntls.Tree), "Hash converted to Tree");
     });
 
     test("Node retrieval", function () {
@@ -34,7 +41,7 @@
 
         strictEqual(result, tree, "Tree.setNode is chainable");
         deepEqual(
-            tree.root,
+            tree.items,
             {
                 foo: {
                     bar: "Hello world!"
@@ -89,6 +96,6 @@
         result = tree.unsetNode('foo.bar'.toPath());
 
         strictEqual(result, tree, "Tree.unsetNode is chainable");
-        deepEqual(tree.root, {foo: {}}, "Node removed");
+        deepEqual(tree.items, {foo: {}}, "Node removed");
     });
 }());

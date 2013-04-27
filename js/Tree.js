@@ -9,26 +9,14 @@ troop.promise(sntls, 'Tree', function () {
 
     /**
      * @class sntls.Tree
-     * @extends troop.Base
+     * @extends sntls.Hash
      */
-    sntls.Tree = troop.Base.extend()
+    sntls.Tree = sntls.Hash.extend()
         .addMethod(/** @lends sntls.Tree */{
             /**
              * @name sntls.Tree.create
-             * @param {object} [json] Initial tree buffer
              * @return {sntls.Tree}
              */
-
-            /**
-             * @param {object} [json] Initial tree buffer
-             */
-            init: function (json) {
-                dessert.isObjectOptional(json);
-
-                this.addPublic(/** @lends sntls.Tree */{
-                    root: json || {}
-                });
-            },
 
             /**
              * Retrieves the value at the specified path.
@@ -36,7 +24,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {*} Whatever value is found at path
              */
             getNode: function (path) {
-                return path.resolve(this.root);
+                return path.resolve(this.items);
             },
 
             /**
@@ -46,7 +34,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             setNode: function (path, value) {
-                var node = path.trim().resolveOrBuild(this.root),
+                var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -64,7 +52,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {*}
              */
             getSafeNode: function (path, generator) {
-                var node = path.trim().resolveOrBuild(this.root),
+                var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -81,7 +69,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             unsetNode: function (path) {
-                var node = path.trim().resolveOrBuild(this.root),
+                var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -103,6 +91,15 @@ troop.promise(sntls, 'Tree', function () {
         isTreeOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    sntls.Tree.isBaseOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+        /**
+         * @return {sntls.Tree}
+         */
+        toTree: function () {
+            return sntls.Tree.create(this.items);
         }
     });
 }());
