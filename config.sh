@@ -8,11 +8,12 @@ LIB="sntls"
 FILES="
 js/namespace.js
 js/utils.js
-js/OrderedList.js
-js/OrderedStringList.js
+js/Hash.js
 js/Dictionary.js
 js/Collection.js
 js/JournalingCollection.js
+js/OrderedList.js
+js/OrderedStringList.js
 js/Profile.js
 js/Profiled.js
 js/StateMatrix.js
