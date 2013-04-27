@@ -29,7 +29,7 @@ troop.promise(sntls, 'Hash', function () {
              * allowing write operations.
              */
             init: function (items, readOnly) {
-                dessert.isObjectOptional(items);
+                dessert.isObjectOptional(items, "Invalid items");
 
                 this.items = items || {};
                 this.readOnly = !!readOnly || false;
