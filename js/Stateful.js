@@ -17,14 +17,12 @@ troop.promise(sntls, 'Stateful', function () {
              * Adds properties required by trait.
              */
             initStateful: function () {
-                this.addPublic(/** @lends sntls.Stateful */{
-                    /**
-                     * (Unspecified) collection of strings
-                     * Stores current state names for each state layer
-                     * @type {sntls.Collection}
-                     */
-                    currentStates: this.defaultStates.clone()
-                });
+                /**
+                 * (Unspecified) collection of strings
+                 * Stores current state names for each state layer
+                 * @type {sntls.Collection}
+                 */
+                this.currentStates = this.defaultStates.clone();
 
                 return this;
             },

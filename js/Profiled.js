@@ -25,15 +25,13 @@ troop.promise(sntls, 'Profiled', function (sntls) {
                     .isString(profileId, "Invalid profile ID")
                     .isProfileCollectionOptional(profiles, "Invalid profile collection");
 
-                this.addConstant(/** @lends sntls.Profiled */{
-                    /**
-                     * Cloning passed profile collection or creating new
-                     * @type {sntls.ProfileCollection}
-                     */
-                    profile: (profiles ? profiles.clone() : sntls.ProfileCollection.create())
-                        // adding new profile for this instance
-                        .setItem(profileId, sntls.Profile.create())
-                });
+                /**
+                 * Cloning passed profile collection or creating new
+                 * @type {sntls.ProfileCollection}
+                 */
+                this.profile = (profiles ? profiles.clone() : sntls.ProfileCollection.create())
+                    // adding new profile for this instance
+                    .setItem(profileId, sntls.Profile.create());
 
                 return this;
             },
