@@ -596,10 +596,17 @@ troop.promise(sntls, 'Collection', function () {
 
     sntls.Hash.addMethod(/** @lends sntls.Hash */{
         /**
+         * @param {sntls.Collection} returnType
          * @return {sntls.Collection}
          */
-        toCollection: function () {
-            return sntls.Collection.create(this.items);
+        toCollection: function (returnType) {
+            dessert.isCollectionOptional(returnType);
+
+            if (returnType) {
+                return returnType.create(this.items);
+            } else {
+                return sntls.Collection.create(this.items);
+            }
         }
     });
 }());

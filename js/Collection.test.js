@@ -193,6 +193,11 @@
             collection = hash.toCollection();
 
         ok(collection.isA(sntls.Collection), "Hash converted to collection");
+
+        collection = hash.toCollection(sntls.Collection.of(String));
+
+        ok(collection.isA(sntls.Collection), "Hash converted to specified collection");
+        equal(typeof collection.split, 'function', "String collection");
     });
 
     test("Building collection", function () {
