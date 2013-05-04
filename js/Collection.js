@@ -330,6 +330,24 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
+             * Selects specified collection items and returns them in a
+             * new collection of the same type.
+             * @return {sntls.Collection}
+             */
+            select: function () {
+                var items = this.items,
+                    result = {},
+                    i, itemName;
+
+                for (i = 0; i < arguments.length; i++) {
+                    itemName = arguments[i];
+                    result[itemName] = items[itemName];
+                }
+
+                return this.getBase().create(result);
+            },
+
+            /**
              * Filters collection elements.
              * @param {RegExp|string|function} selector Selector expression
              * @return {sntls.Collection} New collection of same type w/ filtered results.

@@ -399,6 +399,26 @@
         equal(collection.getItem('five'), true, "Querying boolean");
     });
 
+    test("Selection", function () {
+        var collection = sntls.Collection.create(),
+            result;
+
+        init(collection);
+
+        result = collection.select('one', 'three');
+
+        notStrictEqual(result.items, collection.items, "Different buffer");
+
+        deepEqual(
+            result.items,
+            {
+                one: 'hello',
+                three: 5
+            },
+            "Items 'one' and 'three' selected"
+        );
+    });
+
     test("Filtering", function () {
         var collection = sntls.Collection.create(),
             filtered;
