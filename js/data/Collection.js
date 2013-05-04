@@ -646,7 +646,7 @@ troop.promise(sntls, 'Collection', function () {
 
     sntls.Hash.addMethod(/** @lends sntls.Hash */{
         /**
-         * @param {sntls.Collection} returnType
+         * @param {sntls.Collection} [returnType]
          * @return {sntls.Collection}
          */
         toCollection: function (returnType) {
