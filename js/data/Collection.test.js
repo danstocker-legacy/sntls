@@ -423,9 +423,8 @@
         );
     });
 
-    test("Filtering", function () {
-        var collection = sntls.Collection.create(),
-            filtered;
+    test("Key extraction", function () {
+        var collection = sntls.Collection.create();
 
         init(collection);
 
@@ -435,6 +434,26 @@
         deepEqual(collection.keys('f'), ['four', 'five'], "String prefix search");
         deepEqual(collection.keys(/one|three/), ['one', 'three'], "Multiple search");
         deepEqual(collection.keys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
+    });
+
+    test("Key extraction wrapped in hash", function () {
+        var collection = sntls.Collection.create(),
+            result;
+
+        init(collection);
+
+        result = collection.keysAsHash();
+
+        ok(result.isA(sntls.Hash), "Keys wrapped in hash");
+
+        deepEqual(result.items, ['one', 'two', 'three', 'four', 'five'], "Items in hash");
+    });
+
+    test("Filtering", function () {
+        var collection = sntls.Collection.create(),
+            filtered;
+
+        init(collection);
 
         filtered = collection.filter(/f\w+/);
         equal(filtered.getBase(), sntls.Collection, "Type of filtered collection is collection");
@@ -610,6 +629,45 @@
                 {}
             ],
             "In order of serialized length"
+        );
+    });
+
+    test("Array representation wrapped", function () {
+        var collection = sntls.Collection.create(),
+            result;
+
+        init(collection);
+
+        result = collection.asArrayInHash();
+
+        ok(result.isA(sntls.Hash), "Hash retrieved");
+
+        deepEqual(
+            result.items,
+            [
+                'hello',
+                'world!',
+                5,
+                {},
+                true
+            ],
+            "Array wrapped in hash"
+        );
+
+        result = collection.asSortedArrayInHash();
+
+        ok(result.isA(sntls.Hash), "Hash retrieved");
+
+        deepEqual(
+            result.items,
+            [
+                true,
+                {},
+                'hello',
+                5,
+                'world!'
+            ],
+            "Sorted array wrapped in hash"
         );
     });
 

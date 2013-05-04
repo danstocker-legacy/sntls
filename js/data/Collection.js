@@ -330,6 +330,16 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
+             * Retrieves item names filtered and wrapped in a hash.
+             * @param {RegExp|string} [re] Item name filter.
+             * @return {sntls.Hash}
+             * @see sntls.Collection.keys
+             */
+            keysAsHash: function (re) {
+                return sntls.Hash.create(this.keys(re));
+            },
+
+            /**
              * Selects specified collection items and returns them in a
              * new collection of the same type.
              * @param {string[]} itemNames Names of items to include in result
@@ -404,8 +414,17 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection items as array
-             * in order of their names.
+             * Retrieves item values array wrapped in a hash.
+             * @return {sntls.Hash}
+             * @see sntls.Collection.asArray
+             */
+            asArrayInHash: function () {
+                return sntls.Hash.create(this.asArray());
+            },
+
+            /**
+             * Retrieves collection items as array in order of their names
+             * or according to the supplied comparator.
              * @param {function} [comparator] Comparator for sorting keys.
              * @returns {*[]} Item values in order of names.
              */
@@ -421,6 +440,16 @@ troop.promise(sntls, 'Collection', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Retrieves sorted item values array wrapped in a hash.
+             * @param {function} [comparator] Comparator for sorting keys.
+             * @return {sntls.Hash}
+             * @see sntls.Collection.asSortedArray
+             */
+            asSortedArrayInHash: function (comparator) {
+                return sntls.Hash.create(this.asSortedArray(comparator));
             },
 
             //////////////////////////////
