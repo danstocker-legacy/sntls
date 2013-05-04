@@ -405,7 +405,11 @@
 
         init(collection);
 
-        result = collection.select('one', 'three');
+        raises(function () {
+            collection.select('foo', 'bar');
+        }, "Invalid item names");
+
+        result = collection.select(['one', 'three']);
 
         notStrictEqual(result.items, collection.items, "Different buffer");
 

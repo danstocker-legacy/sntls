@@ -332,15 +332,18 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Selects specified collection items and returns them in a
              * new collection of the same type.
+             * @param {string[]} itemNames Names of items to include in result
              * @return {sntls.Collection}
              */
-            select: function () {
+            select: function (itemNames) {
+                dessert.isArray(itemNames, "Invalid item names");
+
                 var items = this.items,
                     result = {},
                     i, itemName;
 
-                for (i = 0; i < arguments.length; i++) {
-                    itemName = arguments[i];
+                for (i = 0; i < itemNames.length; i++) {
+                    itemName = itemNames[i];
                     result[itemName] = items[itemName];
                 }
 
