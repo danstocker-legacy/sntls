@@ -71,7 +71,7 @@ troop.promise(sntls, 'OrderedStringList', function () {
              * @param {string} value
              * @return {sntls.OrderedStringList}
              */
-            removeAll: function (value) {
+            removeEvery: function (value) {
                 dessert.isString(value);
                 this.removeRange(value, this._getNextValue(value));
                 return this;

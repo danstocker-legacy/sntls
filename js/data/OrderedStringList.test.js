@@ -78,7 +78,7 @@
     test("Removing all occurrence of a value", function () {
         var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "apple", "apple", "fruit"]);
 
-        orderedStringList.removeAll("foo");
+        orderedStringList.removeEvery("foo");
 
         deepEqual(
             orderedStringList.items,
@@ -86,7 +86,7 @@
             "Removing non-existent doesn't change items"
         );
 
-        orderedStringList.removeAll("animal");
+        orderedStringList.removeEvery("animal");
 
         deepEqual(
             orderedStringList.items,
@@ -94,7 +94,7 @@
             "Removing single occurrence"
         );
 
-        orderedStringList.removeAll("apple");
+        orderedStringList.removeEvery("apple");
 
         deepEqual(
             orderedStringList.items,
@@ -102,7 +102,7 @@
             "Removing multiple occurrences"
         );
 
-        orderedStringList.removeAll("fruit");
+        orderedStringList.removeEvery("fruit");
 
         deepEqual(
             orderedStringList.items,
