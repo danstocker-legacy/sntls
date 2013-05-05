@@ -123,8 +123,10 @@ troop.promise(sntls, 'Dictionary', function () {
             combineWith: function (remoteDict) {
                 dessert.isDictionary(remoteDict, "Invalid dictionary");
 
-                var result = /** @type {sntls.Dictionary} */ this.getBase().create(),
-                    currentKeys = Object.keys(this.items),
+                var items = this.items,
+                    resultBuffer = items instanceof Array ? [] : {},
+                    result = /** @type {sntls.Dictionary} */ this.getBase().create(resultBuffer),
+                    currentKeys = Object.keys(items),
                     i, currentKey, currentValue, remoteValue;
 
                 for (i = 0; i < currentKeys.length; i++) {

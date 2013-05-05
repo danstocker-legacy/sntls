@@ -218,6 +218,16 @@
         );
     });
 
+    test("Combining on left array buffer", function () {
+        deepEqual(
+            sntls.Dictionary.create(['foo', 'bar'])
+                .combineWith(sntls.Dictionary.create({ foo: 'FOO', bar: 'BAR' }))
+                .items,
+            ['FOO', 'BAR'],
+            "Array type of first buffer retained"
+        );
+    });
+
     test("Reversal", function () {
         deepEqual(
             sntls.Dictionary.create({
