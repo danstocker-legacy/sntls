@@ -99,7 +99,7 @@
         var reg = {
                 init          : 0,
                 nonConflicting: 0,
-                filter        : 0
+                filterByExpr  : 0
             },
 
             MyClass = troop.Base.extend()
@@ -114,8 +114,8 @@
                         reg.nonConflicting++;
                     },
 
-                    filter: function () {
-                        reg.filter++;
+                    filterByExpr: function () {
+                        reg.filterByExpr++;
                     }
                 }),
 
@@ -132,11 +132,11 @@
         equal(reg.nonConflicting, 1, "Non conflicting method call counter");
 
         // legitimate filter expression (conflicting method call)
-        var filtered = specified.filter('f');
+        var filtered = specified.filterByExpr('f');
 
         equal(filtered.isA(sntls.Collection), true, "Filter returns collection");
         equal(filtered.isA(Specified), false, "Filter returns non-specified collection");
-        equal(reg.filter, 1, "Custom filter ran once");
+        equal(reg.filterByExpr, 1, "Custom filter ran once");
     });
 
     test("Specified extended collection", function () {
@@ -406,17 +406,17 @@
         init(collection);
 
         raises(function () {
-            collection.select('foo', 'bar');
+            collection.filterByKeys('foo', 'bar');
         }, "Invalid item names");
 
-        result = collection.select(['one', 'three']);
+        result = collection.filterByKeys(['one', 'three']);
 
         notStrictEqual(result.items, collection.items, "Different buffer");
 
         deepEqual(
             result.items,
             {
-                one: 'hello',
+                one  : 'hello',
                 three: 5
             },
             "Items 'one' and 'three' selected"
@@ -428,12 +428,12 @@
 
         init(collection);
 
-        deepEqual(collection.keys(), ['one', 'two', 'three', 'four', 'five'], "Retrieving all keys");
-        deepEqual(collection.keys(/one/), ['one'], "Exact key retrieval");
-        deepEqual(collection.keys(/f\w+/), ['four', 'five'], "Prefix search");
-        deepEqual(collection.keys('f'), ['four', 'five'], "String prefix search");
-        deepEqual(collection.keys(/one|three/), ['one', 'three'], "Multiple search");
-        deepEqual(collection.keys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
+        deepEqual(collection.getKeys(), ['one', 'two', 'three', 'four', 'five'], "Retrieving all keys");
+        deepEqual(collection.getKeys(/one/), ['one'], "Exact key retrieval");
+        deepEqual(collection.getKeys(/f\w+/), ['four', 'five'], "Prefix search");
+        deepEqual(collection.getKeys('f'), ['four', 'five'], "String prefix search");
+        deepEqual(collection.getKeys(/one|three/), ['one', 'three'], "Multiple search");
+        deepEqual(collection.getKeys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
     });
 
     test("Key extraction wrapped in hash", function () {
@@ -442,7 +442,7 @@
 
         init(collection);
 
-        result = collection.keysAsHash();
+        result = collection.getKeysAsHash();
 
         ok(result.isA(sntls.Hash), "Keys wrapped in hash");
 
@@ -455,20 +455,20 @@
 
         init(collection);
 
-        filtered = collection.filter(/f\w+/);
+        filtered = collection.filterByExpr(/f\w+/);
         equal(filtered.getBase(), sntls.Collection, "Type of filtered collection is collection");
         deepEqual(filtered.items, {
             four: {},
             five: true
         }, "Result of filtering by regexp");
 
-        filtered = collection.filter('f');
+        filtered = collection.filterByExpr('f');
         deepEqual(filtered.items, {
             four: {},
             five: true
         }, "String prefix filtering");
 
-        filtered = collection.filter(function (item) {
+        filtered = collection.filterByExpr(function (item) {
             return typeof item === 'string';
         });
         deepEqual(filtered.items, {
@@ -486,7 +486,7 @@
                 foo  : 'foo',
                 bar  : 'bar'
             }),
-            filtered = names.filter(/^\w*o$/);
+            filtered = names.filterByExpr(/^\w*o$/);
 
         deepEqual(filtered.items, {
             hello: 'hello',
@@ -594,7 +594,7 @@
         init(collection);
 
         deepEqual(
-            collection.asArray(),
+            collection.getValues(),
             [
                 'hello',
                 'world!',
@@ -606,7 +606,7 @@
         );
 
         deepEqual(
-            collection.asSortedArray(),
+            collection.getSortedValues(),
             [
                 true,
                 {},
@@ -618,7 +618,7 @@
         );
 
         deepEqual(
-            collection.asSortedArray(function (a, b) {
+            collection.getSortedValues(function (a, b) {
                 return String(collection.items[a]).length - String(collection.items[b]).length;
             }),
             [
@@ -638,7 +638,7 @@
 
         init(collection);
 
-        result = collection.asArrayInHash();
+        result = collection.getValuesAsHash();
 
         ok(result.isA(sntls.Hash), "Hash retrieved");
 
@@ -654,7 +654,7 @@
             "Array wrapped in hash"
         );
 
-        result = collection.asSortedArrayInHash();
+        result = collection.getSortedValuesAsHash();
 
         ok(result.isA(sntls.Hash), "Hash retrieved");
 
@@ -688,7 +688,7 @@
             strictEqual(this, collection);
         }
 
-        collection.forEach(handler);
+        collection.forEachItem(handler);
     });
 
     test("For-Next", function () {
@@ -710,7 +710,7 @@
             strictEqual(this, collection);
         }
 
-        collection.forNext(handler);
+        collection.forEachItemSorted(handler);
 
         deepEqual(
             order,
@@ -754,7 +754,7 @@
             strictEqual(this, collection);
         }
 
-        collection.forNext(handler, comparator);
+        collection.forEachItemSorted(handler, comparator);
 
         strictEqual(result, collection, "Comparator receives collection as this");
 
@@ -776,7 +776,7 @@
 
         init(collection);
 
-        result = collection.map(lastChar);
+        result = collection.mapContents(lastChar);
 
         ok(result.instanceOf(sntls.Collection), "Result plain collection");
 
@@ -792,7 +792,7 @@
             "To string & last char"
         );
 
-        result = collection.map(lastChar, StringCollection);
+        result = collection.mapContents(lastChar, StringCollection);
 
         ok(result.instanceOf(StringCollection), "Result is specified collection");
     });
@@ -814,7 +814,7 @@
             });
         }
 
-        result = collection.callEach('test', 'custom');
+        result = collection.callOnEachItem('test', 'custom');
 
         deepEqual(result.items, {
             0: 1,

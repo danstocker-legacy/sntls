@@ -301,7 +301,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param {RegExp|string} [re] Item name filter.
              * @return {string[]} Array of item names matching the regexp.
              */
-            keys: function (re) {
+            getKeys: function (re) {
                 var result = [],
                     items, itemNames,
                     i, itemName;
@@ -333,10 +333,10 @@ troop.promise(sntls, 'Collection', function () {
              * Retrieves item names filtered and wrapped in a hash.
              * @param {RegExp|string} [re] Item name filter.
              * @return {sntls.Hash}
-             * @see sntls.Collection.keys
+             * @see sntls.Collection.getKeys
              */
-            keysAsHash: function (re) {
-                return sntls.Hash.create(this.keys(re));
+            getKeysAsHash: function (re) {
+                return sntls.Hash.create(this.getKeys(re));
             },
 
             /**
@@ -345,7 +345,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param {string[]} itemNames Names of items to include in result
              * @return {sntls.Collection}
              */
-            select: function (itemNames) {
+            filterByKeys: function (itemNames) {
                 dessert.isArray(itemNames, "Invalid item names");
 
                 var items = this.items,
@@ -361,11 +361,11 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Filters collection elements.
+             * Filters collection items by an expression.
              * @param {RegExp|string|function} selector Selector expression
              * @return {sntls.Collection} New collection of same type w/ filtered results.
              */
-            filter: function (selector) {
+            filterByExpr: function (selector) {
                 var result = {},
                     items = this.items,
                     itemNames,
@@ -374,7 +374,7 @@ troop.promise(sntls, 'Collection', function () {
                 if (selector instanceof RegExp ||
                     typeof selector === 'string'
                     ) {
-                    itemNames = this.keys(selector);
+                    itemNames = this.getKeys(selector);
                     for (i = 0; i < itemNames.length; i++) {
                         itemName = itemNames[i];
                         result[itemName] = items[itemName];
@@ -401,7 +401,7 @@ troop.promise(sntls, 'Collection', function () {
              * Retrieves collection items as array.
              * @returns {*[]} Item values.
              */
-            asArray: function () {
+            getValues: function () {
                 var keys = Object.keys(this.items),
                     result = [],
                     i;
@@ -416,10 +416,10 @@ troop.promise(sntls, 'Collection', function () {
             /**
              * Retrieves item values array wrapped in a hash.
              * @return {sntls.Hash}
-             * @see sntls.Collection.asArray
+             * @see sntls.Collection.getValues
              */
-            asArrayInHash: function () {
-                return sntls.Hash.create(this.asArray());
+            getValuesAsHash: function () {
+                return sntls.Hash.create(this.getValues());
             },
 
             /**
@@ -428,7 +428,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param {function} [comparator] Comparator for sorting keys.
              * @returns {*[]} Item values in order of names.
              */
-            asSortedArray: function (comparator) {
+            getSortedValues: function (comparator) {
                 dessert.isFunctionOptional(comparator, "Invalid comparator function");
 
                 var keys = Object.keys(this.items).sort(comparator ? comparator.bind(this) : undefined),
@@ -446,10 +446,10 @@ troop.promise(sntls, 'Collection', function () {
              * Retrieves sorted item values array wrapped in a hash.
              * @param {function} [comparator] Comparator for sorting keys.
              * @return {sntls.Hash}
-             * @see sntls.Collection.asSortedArray
+             * @see sntls.Collection.getSortedValues
              */
-            asSortedArrayInHash: function (comparator) {
-                return sntls.Hash.create(this.asSortedArray(comparator));
+            getSortedValuesAsHash: function (comparator) {
+                return sntls.Hash.create(this.getSortedValues(comparator));
             },
 
             //////////////////////////////
@@ -476,7 +476,7 @@ troop.promise(sntls, 'Collection', function () {
              * Iteration breaks when handler returns false.
              * @return {sntls.Collection}
              */
-            forEach: function (handler) {
+            forEachItem: function (handler) {
                 dessert.isFunction(handler, "Invalid callback function");
 
                 var items = this.items,
@@ -495,15 +495,16 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Calls function on each item in order of keys.
+             * Calls function on each item in a specific order.
              * @param {function} handler Function to call on each item.
              * Handler receives the current item as this, and the item name as
              * first argument. Forwards all other arguments to handler.
              * Iteration breaks when handler returns false.
              * @param {function} [comparator] Comparator for sorting keys.
+             * Receives collection instance as context for accessing item values.
              * @return {sntls.Collection}
              */
-            forNext: function (handler, comparator) {
+            forEachItemSorted: function (handler, comparator) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
                     .isFunctionOptional(comparator, "Invalid comparator function");
@@ -532,7 +533,7 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection} New collection instance (of the specified type)
              * containing mapped items.
              */
-            map: function (handler, returnType) {
+            mapContents: function (handler, returnType) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
                     .isCollectionOptional(returnType);
@@ -552,12 +553,12 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Calls a method on each item, identified by name.
+             * Invokes a method on each item, identified by name.
              * Method results are collected and returned in a new collection.
              * @param {string} methodName Method name on each item.
              * @return {sntls.Collection}
              */
-            callEach: function (methodName) {
+            callOnEachItem: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
 
                 var args = Array.prototype.slice.call(arguments, 1),
