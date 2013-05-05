@@ -36,6 +36,22 @@
         );
     });
 
+    test("Shortcuts with array buffer", function () {
+        var mockCollection = {items: ['a', 'b']},
+            result;
+        mockCollection.toUpperCase = sntls.Collection._genShortcut('toUpperCase');
+
+        result = mockCollection.toUpperCase();
+
+        ok(result.items instanceof Array, "Array buffer type retained");
+
+        deepEqual(
+            result.items,
+            ['A', 'B'],
+            "Array buffer contents"
+        );
+    });
+
     test("Specified collection", function () {
         var StringCollection = sntls.Collection.of(String.prototype),
             FatStringCollection = sntls.Collection.of(String),
@@ -239,6 +255,15 @@
         notStrictEqual(original.items, clone.items, "Original and clone items different objects");
     });
 
+    test("Cloning with array buffer", function () {
+        var original = sntls.Collection.create(['foo', 'bar']),
+            clone = original.clone();
+
+        ok (clone.items instanceof Array, "Cloning retains array buffer type");
+
+        deepEqual(clone.items, ['foo', 'bar'], "Clone array buffer");
+    });
+
     test("Rebasing collection", function () {
         var original = sntls.Collection.create({foo: 'bar'}),
             rebased;
@@ -399,7 +424,7 @@
         equal(collection.getItem('five'), true, "Querying boolean");
     });
 
-    test("Selection", function () {
+    test("Selection by keys", function () {
         var collection = sntls.Collection.create(),
             result;
 
@@ -420,6 +445,21 @@
                 three: 5
             },
             "Items 'one' and 'three' selected"
+        );
+    });
+
+    test("Selection by keys on array buffer", function () {
+        var collection = sntls.Collection.create(['foo', 'friend', 'field', 'boom', 'bar']),
+            filtered;
+
+        filtered = collection.filterByKeys([1, 3]);
+
+        ok(filtered.items instanceof Array, "Array type retained");
+
+        deepEqual(
+            filtered.items,
+            [undefined, 'friend', undefined, 'boom'],
+            "Array buffer filtered"
         );
     });
 
@@ -475,6 +515,23 @@
             one: 'hello',
             two: 'world!'
         }, "Result of filtering by callback");
+    });
+
+    test("Filtering on array buffer", function () {
+        var collection = sntls.Collection.create(['foo', 'friend', 'field', 'boom', 'bar']),
+            filtered;
+
+        filtered = collection.filterByExpr(function (item) {
+            return item[0] === 'b';
+        });
+
+        ok(filtered.items instanceof Array, "Array type retained");
+
+        deepEqual(
+            filtered.items,
+            [undefined, undefined, undefined, 'boom', 'bar'],
+            "Array buffer filtered"
+        );
     });
 
     test("Filtering of extended collection", function () {
@@ -797,6 +854,23 @@
         ok(result.instanceOf(StringCollection), "Result is specified collection");
     });
 
+    test("Mapping with array buffer", function () {
+        var collection = sntls.Collection.create(['foo', 'bar']),
+            result;
+
+        result = collection.mapContents(function (item) {
+            return 'a' + item;
+        });
+
+        ok(result.items instanceof Array, "Array type retained");
+
+        deepEqual(
+            result.items,
+            ['afoo', 'abar'],
+            "Methods called"
+        );
+    });
+
     test("Call Each", function () {
         var collection = sntls.Collection.create(),
             i, result;
@@ -823,5 +897,23 @@
             3: 1,
             4: 1
         });
+    });
+
+    test("Call each on array buffer", function () {
+        var collection = sntls.Collection.create(['foo', 'bar']),
+            result;
+
+        result = collection.callOnEachItem('split', '');
+
+        ok(result.items instanceof Array, "Array type retained");
+
+        deepEqual(
+            result.items,
+            [
+                ['f', 'o', 'o'],
+                ['b', 'a', 'r']
+            ],
+            "Methods called"
+        );
     });
 }());

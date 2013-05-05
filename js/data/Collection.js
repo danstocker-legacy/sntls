@@ -56,9 +56,9 @@ troop.promise(sntls, 'Collection', function () {
                  */
                 return function () {
                     var items = this.items,
+                        result = items instanceof Array ? [] : {},
                         itemNames = Object.keys(items),
-                        i, itemName, item,
-                        result = {};
+                        i, itemName, item;
 
                     // traversing collection items
                     for (i = 0; i < itemNames.length; i++) {
@@ -122,7 +122,7 @@ troop.promise(sntls, 'Collection', function () {
                 }
 
                 // must work on classes derived from Collection, too
-                var specifiedCollection = troop.Base.extend.call(this),
+                var specifiedCollection = /** @type {sntls.Collection} */ troop.Base.extend.call(this),
                     shortcutMethods = {},
                     i, methodName;
 
@@ -349,7 +349,7 @@ troop.promise(sntls, 'Collection', function () {
                 dessert.isArray(itemNames, "Invalid item names");
 
                 var items = this.items,
-                    result = {},
+                    result = items instanceof Array ? [] : {},
                     i, itemName;
 
                 for (i = 0; i < itemNames.length; i++) {
@@ -366,8 +366,8 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection} New collection of same type w/ filtered results.
              */
             filterByExpr: function (selector) {
-                var result = {},
-                    items = this.items,
+                var items = this.items,
+                    result = items instanceof Array ? [] : {},
                     itemNames,
                     i, itemName;
 
@@ -540,7 +540,7 @@ troop.promise(sntls, 'Collection', function () {
 
                 var items = this.items,
                     keys = Object.keys(items),
-                    result = {},
+                    result = items instanceof Array ? [] : {},
                     i, itemName, item;
 
                 for (i = 0; i < keys.length; i++) {
@@ -564,7 +564,7 @@ troop.promise(sntls, 'Collection', function () {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items),
-                    result = {},
+                    result = items instanceof Array ? [] : {},
                     i, itemName, item, method;
 
                 for (i = 0; i < keys.length; i++) {
