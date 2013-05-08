@@ -25,5 +25,4 @@ See the [Sntls wiki](https://github.com/danstocker/sntls/wiki) for reference and
 Planned (no guarantee that any of it will actually make it into the lib):
 
 - `sntls.Set`: For simple set operations.
-- `sntls.Memoized`: *Behavior*, stores instances of the class it's applied to in a **global** registry.
 - `sntls.Documented`: *Behavior*, extending classes with essential meta information. (class name, GUID, inheritence path, etc)
