@@ -108,6 +108,9 @@ troop.promise(sntls, 'Dictionary', function () {
                             result = result.concat(item);
                         }
                     }
+                    if (!result.length) {
+                        result = undefined;
+                    }
                 } else {
                     dessert.assert(false, "Invalid key");
                 }
@@ -140,6 +143,14 @@ troop.promise(sntls, 'Dictionary', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Performs combine with current dictionary as remote dictionary too.
+             * @return {sntls.Dictionary} New dictionary instance with combined items
+             */
+            combineWithSelf: function () {
+                return this.combineWith(this);
             },
 
             /**

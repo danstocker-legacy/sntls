@@ -133,6 +133,18 @@
             ['world'],
             "Retrieving invalid values"
         );
+
+        deepEqual(
+            dict.getItem('INVALID1'),
+            undefined,
+            "Retrieving non-existing item"
+        );
+
+        deepEqual(
+            dict.getItem(['INVALID1', 'INVALID2']),
+            undefined,
+            "Retrieving non existing items"
+        );
     });
 
     test("Combine with", function () {
@@ -215,6 +227,29 @@
                 hello: ['over', 'there', 'my', 'World']
             },
             "Array concatenation"
+        );
+
+        deepEqual(
+            sntls.Dictionary.create({
+                hello: ['there', 'world']
+            }).combineWith(sntls.Dictionary.create({})).items,
+            {},
+            "Combining with empty dictionary"
+        );
+    });
+
+    test("Combine with self", function () {
+        deepEqual(
+            sntls.Dictionary.create({
+                foo: ["hello", "world"],
+                bar: ["foo"],
+                etc: ["bar", "hello"]
+            }).combineWithSelf().items,
+            {
+                bar: ["hello", "world"],
+                etc: "foo"
+            },
+            "Dictionary combined with self"
         );
     });
 
