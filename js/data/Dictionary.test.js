@@ -139,6 +139,53 @@
         );
     });
 
+    test("Multiple items removal", function () {
+        var dict = sntls.Dictionary.create({
+            foo: ['bar', 'hello'],
+            boo: 'bar',
+            moo: 'hello'
+        });
+
+        raises(function () {
+            dict.removeItems('foo');
+        }, "Invalid keys");
+
+        dict.removeItems(['foo', 'moo']);
+
+        deepEqual(
+            dict.items,
+            {
+                boo: 'bar'
+            },
+            "Two items removed"
+        );
+    });
+
+    test("Removing specified values from items", function () {
+        // this is more complicated underneath, but the expression is simple
+
+        var dict = sntls.Dictionary.create({
+                foo: ['bar', 'hello'],
+                boo: 'bar',
+                moo: 'hello'
+            }),
+            valueToRemove = 'hello';
+
+        var result = dict
+            .reverse()
+            .removeItem(valueToRemove)
+            .reverse();
+
+        deepEqual(
+            result.items,
+            {
+                foo: 'bar',
+                boo: 'bar'
+            },
+            "Specified values removed"
+        );
+    });
+
     test("Item retrieval", function () {
         /**
          * @type {sntls.Dictionary}

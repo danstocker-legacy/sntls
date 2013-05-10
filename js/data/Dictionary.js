@@ -122,6 +122,21 @@ troop.promise(sntls, 'Dictionary', function () {
             },
 
             /**
+             * Removes items from dictionary.
+             * @param {string[]} keys
+             * @return {sntls.Dictionary}
+             */
+            removeItems: function (keys) {
+                dessert.isArray(keys, "Invalid keys");
+
+                var i;
+                for (i = 0; i < keys.length; i++) {
+                    this.removeItem(keys[i]);
+                }
+                return this;
+            },
+
+            /**
              * Retrieves item(s) from the dictionary
              * @param {string|string[]} key
              * @return {string|string[]} Dictionary item
