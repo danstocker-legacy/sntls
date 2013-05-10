@@ -103,6 +103,53 @@
         }, "More key-value pairs added to dictionary");
     });
 
+    test("Item removal", function () {
+        var dict = sntls.Dictionary.create({
+            foo  : ['bar', 'BAR', 'woot'],
+            hello: 'world'
+        });
+
+        dict.removeItem('foo', 'BAR');
+
+        deepEqual(
+            dict.items,
+            {
+                foo  : ['bar', 'woot'],
+                hello: 'world'
+            },
+            "Removed value from item holding many values"
+        );
+
+        dict.removeItem('foo', 'bar');
+
+        deepEqual(
+            dict.items,
+            {
+                foo  : 'woot',
+                hello: 'world'
+            },
+            "Single value remains in item"
+        );
+
+        dict.removeItem('foo', 'woot');
+
+        deepEqual(
+            dict.items,
+            {
+                hello: 'world'
+            },
+            "Lat value removed from item"
+        );
+
+        dict.removeItem('hello');
+
+        deepEqual(
+            dict.items,
+            {},
+            "Full item removed"
+        );
+    });
+
     test("Item retrieval", function () {
         /**
          * @type {sntls.Dictionary}

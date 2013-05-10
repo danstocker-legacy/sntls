@@ -89,6 +89,43 @@ troop.promise(sntls, 'Dictionary', function () {
             },
 
             /**
+             * Removes key - value pair from dictionary. When item value is omitted,
+             * all values associated with `key` are removed.
+             * @param {string} key Key from which to remove value
+             * @param {string} [value] Item value.
+             * @return {sntls.Dictionary}
+             */
+            removeItem: function (key, value) {
+                dessert.assert(!this.readOnly, "Dictionary is read only");
+
+                var items = this.items,
+                    currentValue = items[key],
+                    currentValueType = typeof currentValue,
+                    valueIndex;
+
+                if (currentValueType === 'string' ||
+                    typeof value === 'undefined'
+                    ) {
+                    // removing full item
+                    delete items[key];
+                } else if (currentValue instanceof Array) {
+                    valueIndex = currentValue.indexOf(value);
+                    if (valueIndex > -1) {
+                        // value is present at specified key
+                        if (currentValue.length > 2) {
+                            // splicing out value from array
+                            currentValue.splice(valueIndex, 1);
+                        } else {
+                            // replacing array with remaining value
+                            items[key] = currentValue[1 - valueIndex];
+                        }
+                    }
+                }
+
+                return this;
+            },
+
+            /**
              * Retrieves item(s) from the dictionary
              * @param {string|string[]} key
              * @return {string|string[]} Dictionary item
