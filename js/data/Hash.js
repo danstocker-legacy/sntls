@@ -2,8 +2,8 @@
  * Hash Object
  *
  * General wrapper around objects to treat them as hash.
- * No `Object`-delegated methods on `.init` should be called as they mey break code.
- * All methods that operate *on* `.init` should be implemented on `Hash`.
+ * No `Object`-delegated methods on `.items` should be called as they may break code.
+ * All methods that operate *on* `.items` should be implemented on `Hash`.
  *
  * Other `Hash`-based classes may delegate conversion methods to this class.
  */
@@ -24,15 +24,13 @@ troop.promise(sntls, 'Hash', function () {
 
             /**
              * @param {object} items Container for hash items.
-             * @param {boolean} [readOnly=false] Whether the hash is read-only.
              * Setter methods in derived classes should refer to this flag when
              * allowing write operations.
              */
-            init: function (items, readOnly) {
+            init: function (items) {
                 dessert.isObjectOptional(items, "Invalid items");
 
                 this.items = items || {};
-                this.readOnly = !!readOnly || false;
             }
         });
 });

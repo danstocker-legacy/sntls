@@ -30,8 +30,6 @@ troop.promise(sntls, 'Dictionary', function () {
              * @return {sntls.Dictionary}
              */
             addItem: function (key, value) {
-                dessert.assert(!this.readOnly, "Dictionary is read only");
-
                 var items = this.items,
                     currentValue = items[key];
 
@@ -96,8 +94,6 @@ troop.promise(sntls, 'Dictionary', function () {
              * @return {sntls.Dictionary}
              */
             removeItem: function (key, value) {
-                dessert.assert(!this.readOnly, "Dictionary is read only");
-
                 var items = this.items,
                     currentValue = items[key],
                     currentValueType = typeof currentValue,

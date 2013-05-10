@@ -33,10 +33,9 @@ troop.promise(sntls, 'OrderedList', function () {
 
             /**
              * @param {string[]|number[]} [items] Initial values
-             * @param {boolean} readOnly
              * @see sntls.Hash.init
              */
-            init: function (items, readOnly) {
+            init: function (items) {
                 dessert.isArrayOptional(items, "Invalid items");
 
                 // preparing items buffer
@@ -54,7 +53,7 @@ troop.promise(sntls, 'OrderedList', function () {
                  * @type {string[]|number[]}
                  */
 
-                base.init.call(this, items, readOnly);
+                base.init.call(this, items);
             },
 
             //////////////////////////////
@@ -132,8 +131,6 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {number} The index at which the item was spliced in.
              */
             addItem: function (value) {
-                dessert.assert(!this.readOnly, "List is read only");
-
                 var spliceIndex = this.spliceIndexOf(value);
                 this.items.splice(spliceIndex, 0, value);
                 return spliceIndex;
@@ -159,8 +156,6 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {number} The index from which the item was removed. -1 if item was not present.
              */
             removeItem: function (value) {
-                dessert.assert(!this.readOnly, "List is read only");
-
                 var items = this.items,
                     spliceIndex = this.spliceIndexOf(value);
 
@@ -195,8 +190,6 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {number} The starting position of removal.
              */
             removeRange: function (startValue, endValue) {
-                dessert.assert(!this.readOnly, "List is read only");
-
                 var startIndex = this.spliceIndexOf(startValue),
                     endIndex = this.spliceIndexOf(endValue),
                     length = endIndex - startIndex;
@@ -213,7 +206,6 @@ troop.promise(sntls, 'OrderedList', function () {
              * @return {sntls.OrderedList}
              */
             clear: function () {
-                dessert.assert(!this.readOnly, "List is read only");
                 this.items = [];
                 return this;
             }

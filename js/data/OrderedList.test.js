@@ -160,14 +160,6 @@
         );
     });
 
-    test("Item addition (RO)", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"], true);
-
-        raises(function () {
-            orderedList.addItem('hell');
-        }, "Can't add item when read only");
-    });
-
     test("Multiple item addition", function () {
         var orderedList = sntls.OrderedList.create(),
             result;
@@ -202,14 +194,6 @@
             ["bar", "foo", "ipsum", "lorem", "world"],
             "Removed 'hello'"
         );
-    });
-
-    test("Item removal (RO)", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"], true);
-
-        raises(function () {
-            orderedList.removeItem('hell');
-        }, "Can't remove item when read only");
     });
 
     test("Multiple item removal", function () {
@@ -253,14 +237,6 @@
         );
     });
 
-    test("Range removal (RO)", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"], true);
-
-        raises(function () {
-            orderedList.removeRange("for", "fun");
-        }, "Can't remove range when read only");
-    });
-
     test("List clear", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
             result;
@@ -273,13 +249,5 @@
             [],
             "Cleared list"
         );
-    });
-
-    test("List clear (RO)", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"], true);
-
-        raises(function () {
-            orderedList.clear();
-        }, "Can't clear list when read only");
     });
 }());

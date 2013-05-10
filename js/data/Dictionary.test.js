@@ -42,17 +42,6 @@
         }, "Value added by existing key");
     });
 
-    test("Single item addition (RO)", function () {
-        /**
-         * @type {sntls.Dictionary}
-         */
-        var dict = sntls.Dictionary.create({}, true);
-
-        raises(function () {
-            dict.addItem('foo', 'bar');
-        });
-    });
-
     test("Array item addition", function () {
         /**
          * @type {sntls.Dictionary}

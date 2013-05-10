@@ -74,14 +74,6 @@
         );
     });
 
-    test("Node setting (RO)", function () {
-        var tree = sntls.Tree.create({}, true);
-
-        raises(function () {
-            tree.setNode('foo.bar'.toPath(), "Hello world!");
-        }, "Can't set node when read only");
-    });
-
     test("Safe node retrieval", function () {
         var json = {
                 foo: {
@@ -128,17 +120,5 @@
 
         strictEqual(result, tree, "Tree.unsetNode is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
-    });
-
-    test("Node deletion (RO)", function () {
-        var tree = sntls.Tree.create({
-            foo: {
-                bar: "Hello world!"
-            }
-        }, true);
-
-        raises(function () {
-            tree.unsetNode('foo.bar'.toPath());
-        }, "Can't unset node when read-only");
     });
 }());

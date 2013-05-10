@@ -47,8 +47,6 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             setNode: function (path, value) {
-                dessert.assert(!this.readOnly, "Tree is read only");
-
                 var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
@@ -84,8 +82,6 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             unsetNode: function (path) {
-                dessert.assert(!this.readOnly, "Tree is read only");
-
                 var node = path.trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];

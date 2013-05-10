@@ -175,8 +175,6 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             setItem: function (itemName, item) {
-                dessert.assert(!this.readOnly, "Collection is read only");
-
                 var isNew = !hOP.call(this.items, itemName);
 
                 // setting item
@@ -196,8 +194,6 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             deleteItem: function (itemName) {
-                dessert.assert(!this.readOnly, "Collection is read only");
-
                 if (hOP.call(this.items, itemName)) {
                     // removing item
                     delete this.items[itemName];
@@ -460,8 +456,6 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             clear: function () {
-                dessert.assert(!this.readOnly, "Collection is read only");
-
                 // removing items
                 this.items = {};
                 this.count = 0;
