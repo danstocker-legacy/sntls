@@ -79,6 +79,8 @@ troop.promise(sntls, 'Dictionary', function () {
              * @return {sntls.Dictionary}
              */
             addItems: function (keys, value) {
+                dessert.isArray(keys, "Invalid keys");
+
                 var i;
                 for (i = 0; i < keys.length; i++) {
                     this.addItem(keys[i], value);

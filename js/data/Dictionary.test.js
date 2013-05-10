@@ -78,6 +78,10 @@
          */
         var dict = sntls.Dictionary.create();
 
+        raises(function () {
+            dict.addItems('foo', 'bar');
+        }, "Invalid keys");
+
         dict.addItems(['foo', 'boo'], 'bar');
         deepEqual(dict.items, {
             foo: 'bar',
