@@ -28,37 +28,28 @@ troop.promise(sntls, 'Dictionary', function () {
              */
             addItem: function (key, value) {
                 var items = this.items,
-                    currentValue = items[key];
+                    currentValue = items[key],
+                    currentValueType = typeof currentValue;
 
-                switch (typeof currentValue) {
-                case 'undefined':
+                if (currentValue instanceof Array) {
+                    // current item is array
+                    if (value instanceof Array) {
+                        items[key] = currentValue.concat(value);
+                    } else {
+                        currentValue.push(value);
+                    }
+                } else if (currentValueType === 'undefined') {
                     // current item does not exist
                     items[key] = value instanceof Array ?
                         value.length === 1 ?
                             value[0] :
                             value :
                         value;
-                    break;
-
-                case 'object':
-                    if (currentValue instanceof Array) {
-                        // current item is array
-                        if (value instanceof Array) {
-                            items[key] = currentValue.concat(value);
-                        } else {
-                            currentValue.push(value);
-                        }
-                    } else {
-                        dessert.assert(false, "Invalid dictionary value");
-                    }
-                    break;
-
-                default:
+                } else {
                     // current item is single value
                     items[key] = value instanceof Array ?
                         [currentValue].concat(value) :
                         items[key] = [currentValue, value];
-                    break;
                 }
 
                 return this;
