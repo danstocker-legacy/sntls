@@ -40,13 +40,6 @@ troop.promise(sntls, 'Dictionary', function () {
                         value;
                     break;
 
-                case 'string':
-                    // current item is single string
-                    items[key] = value instanceof Array ?
-                        [currentValue].concat(value) :
-                        items[key] = [currentValue, value];
-                    break;
-
                 case 'object':
                     if (currentValue instanceof Array) {
                         // current item is array
@@ -61,7 +54,10 @@ troop.promise(sntls, 'Dictionary', function () {
                     break;
 
                 default:
-                    dessert.assert(false, "Invalid dictionary value");
+                    // current item is single value
+                    items[key] = value instanceof Array ?
+                        [currentValue].concat(value) :
+                        items[key] = [currentValue, value];
                     break;
                 }
 
@@ -95,15 +91,11 @@ troop.promise(sntls, 'Dictionary', function () {
             removeItem: function (key, value) {
                 var items = this.items,
                     currentValue = items[key],
-                    currentValueType = typeof currentValue,
                     valueIndex;
 
-                if (currentValueType === 'string' ||
-                    typeof value === 'undefined'
+                if (currentValue instanceof Array &&
+                    typeof value !== 'undefined'
                     ) {
-                    // removing full item
-                    delete items[key];
-                } else if (currentValue instanceof Array) {
                     valueIndex = currentValue.indexOf(value);
                     if (valueIndex > -1) {
                         // value is present at specified key
@@ -115,6 +107,9 @@ troop.promise(sntls, 'Dictionary', function () {
                             items[key] = currentValue[1 - valueIndex];
                         }
                     }
+                } else {
+                    // removing full item
+                    delete items[key];
                 }
 
                 return this;
