@@ -9,16 +9,60 @@
 troop.promise(sntls, 'Dictionary', function () {
     "use strict";
 
+    var base = sntls.Hash;
+
     /**
      * @class sntls.Dictionary
      * @extends sntls.Hash
      */
-    sntls.Dictionary = sntls.Hash.extend()
+    sntls.Dictionary = base.extend()
+        .addPrivateMethod(/** @lends sntls.Dictionary */{
+            /**
+             * Counts values in dictionary.
+             * Since one item may hold multiple values, value count =/= item count.
+             * @param {object} dictionaryItems Dictionary item buffer
+             * @return {number}
+             * @private
+             */
+            _countValues: function (dictionaryItems) {
+                var keys = Object.keys(dictionaryItems),
+                    result = 0,
+                    i, item;
+
+                for (i = 0; i < keys.length; i++) {
+                    item = dictionaryItems[keys[i]];
+                    result += item instanceof Array ?
+                        item.length :
+                        1;
+                }
+
+                return result;
+            }
+        })
         .addMethod(/** @lends sntls.Dictionary */{
             /**
              * @name sntls.Dictionary.create
              * @return {sntls.Dictionary}
              */
+
+            /**
+             * @param {object} items
+             */
+            init: function (items) {
+                base.init.call(this, items);
+
+                /**
+                 * Item count.
+                 * @type {number}
+                 */
+                this.itemCount = items ? Object.keys(items).length : 0;
+
+                /**
+                 * Value count.
+                 * @type {number}
+                 */
+                this.valueCount = items ? this._countValues(items) : 0;
+            },
 
             /**
              * Adds item to dictionary
@@ -29,28 +73,37 @@ troop.promise(sntls, 'Dictionary', function () {
             addItem: function (key, value) {
                 var items = this.items,
                     currentValue = items[key],
-                    currentValueType = typeof currentValue;
+                    currentValueType = typeof currentValue,
+                    valueIsArray = value instanceof Array;
 
                 if (currentValue instanceof Array) {
                     // current item is array
-                    if (value instanceof Array) {
+                    if (valueIsArray) {
                         items[key] = currentValue.concat(value);
                     } else {
                         currentValue.push(value);
                     }
                 } else if (currentValueType === 'undefined') {
                     // current item does not exist
-                    items[key] = value instanceof Array ?
+                    items[key] = valueIsArray ?
                         value.length === 1 ?
                             value[0] :
                             value :
                         value;
+
+                    // updating item count (new key was added)
+                    this.itemCount++;
                 } else {
                     // current item is single value
-                    items[key] = value instanceof Array ?
+                    items[key] = valueIsArray ?
                         [currentValue].concat(value) :
-                        items[key] = [currentValue, value];
+                        [currentValue, value];
                 }
+
+                // updating value count
+                this.valueCount += valueIsArray ?
+                    value.length :
+                    1;
 
                 return this;
             },
@@ -82,11 +135,10 @@ troop.promise(sntls, 'Dictionary', function () {
             removeItem: function (key, value) {
                 var items = this.items,
                     currentValue = items[key],
+                    currentValueIsArray = currentValue instanceof Array,
                     valueIndex;
 
-                if (currentValue instanceof Array &&
-                    typeof value !== 'undefined'
-                    ) {
+                if (currentValueIsArray && typeof value !== 'undefined') {
                     valueIndex = currentValue.indexOf(value);
                     if (valueIndex > -1) {
                         // value is present at specified key
@@ -97,10 +149,19 @@ troop.promise(sntls, 'Dictionary', function () {
                             // replacing array with remaining value
                             items[key] = currentValue[1 - valueIndex];
                         }
+
+                        // updating value counter
+                        this.valueCount--;
                     }
                 } else {
                     // removing full item
                     delete items[key];
+
+                    // updating counters
+                    this.itemCount--;
+                    this.valueCount -= currentValueIsArray ?
+                        currentValue.length :
+                        1;
                 }
 
                 return this;

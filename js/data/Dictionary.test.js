@@ -12,6 +12,34 @@
         ok(dict.isA(sntls.Dictionary), "Hash converted to dictionary");
     });
 
+    test("Value count", function () {
+        equal(
+            sntls.Dictionary._countValues({
+                foo  : ['bar', 'moo'],
+                hello: 'world'
+            }),
+            3,
+            "Two in array, one aside"
+        );
+    });
+
+    test("Instantiation", function () {
+        var dict;
+
+        dict = sntls.Dictionary.create();
+
+        equal(dict.itemCount, 0, "Item count in empty buffer");
+        equal(dict.valueCount, 0, "Value count in empty buffer");
+
+        dict = sntls.Dictionary.create({
+            foo  : ['bar', 'moo'],
+            hello: 'world'
+        });
+
+        equal(dict.itemCount, 2, "Item count in populated buffer");
+        equal(dict.valueCount, 3, "Value count in populated buffer");
+    });
+
     test("Single item addition", function () {
         /**
          * @type {sntls.Dictionary}
@@ -19,23 +47,31 @@
         var dict = sntls.Dictionary.create();
 
         dict.addItem('foo', 'bar');
+        equal(dict.itemCount, 1, "Item count");
+        equal(dict.valueCount, 1, "Value count");
         deepEqual(dict.items, {
             foo: 'bar'
         }, "Key-value pair added to dictionary");
 
         dict.addItem('hello', 'world');
+        equal(dict.itemCount, 2, "Item count");
+        equal(dict.valueCount, 2, "Value count");
         deepEqual(dict.items, {
             foo  : 'bar',
             hello: 'world'
         }, "Key-value pair added to dictionary");
 
         dict.addItem('foo', 'moo');
+        equal(dict.itemCount, 2, "Item count");
+        equal(dict.valueCount, 3, "Value count");
         deepEqual(dict.items, {
             foo  : ['bar', 'moo'],
             hello: 'world'
         }, "Value added by existing key");
 
         dict.addItem('foo', 'boo');
+        equal(dict.itemCount, 2, "Item count");
+        equal(dict.valueCount, 4, "Value count");
         deepEqual(dict.items, {
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
@@ -104,6 +140,8 @@
 
         dict.removeItem('foo', 'BAR');
 
+        equal(dict.itemCount, 2, "Item count");
+        equal(dict.valueCount, 3, "Value count");
         deepEqual(
             dict.items,
             {
@@ -115,6 +153,8 @@
 
         dict.removeItem('foo', 'bar');
 
+        equal(dict.itemCount, 2, "Item count");
+        equal(dict.valueCount, 2, "Value count");
         deepEqual(
             dict.items,
             {
@@ -126,6 +166,8 @@
 
         dict.removeItem('foo', 'woot');
 
+        equal(dict.itemCount, 1, "Item count");
+        equal(dict.valueCount, 1, "Value count");
         deepEqual(
             dict.items,
             {
@@ -136,6 +178,8 @@
 
         dict.removeItem('hello');
 
+        equal(dict.itemCount, 0, "Item count");
+        equal(dict.valueCount, 0, "Value count");
         deepEqual(
             dict.items,
             {},
