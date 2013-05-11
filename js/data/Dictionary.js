@@ -1,10 +1,7 @@
 /**
  * Dictionary
  *
- * Specific data structure that is essentially an object
- * with properties that are either strings or arrays of strings.
- * Example:  {foo: 'bar', 'hello': ['all', 'the', 'world']}
- * Dictionary handles multiplicity.
+ * Associates values to keys.
  *
  * Use the Dictionary class for managing and combining lookup objects.
  */
@@ -26,7 +23,7 @@ troop.promise(sntls, 'Dictionary', function () {
             /**
              * Adds item to dictionary
              * @param {string} key
-             * @param {string|string[]} value
+             * @param {*|*[]} value
              * @return {sntls.Dictionary}
              */
             addItem: function (key, value) {
@@ -75,7 +72,7 @@ troop.promise(sntls, 'Dictionary', function () {
              * Adds items to dictionary by assigning the same value(s) to
              * a set of keys
              * @param {string[]} keys
-             * @param {string|string[]} value
+             * @param {*|*[]} value
              * @return {sntls.Dictionary}
              */
             addItems: function (keys, value) {
@@ -92,7 +89,7 @@ troop.promise(sntls, 'Dictionary', function () {
              * Removes key - value pair from dictionary. When item value is omitted,
              * all values associated with `key` are removed.
              * @param {string} key Key from which to remove value
-             * @param {string} [value] Item value.
+             * @param {*} [value] Item value.
              * @return {sntls.Dictionary}
              */
             removeItem: function (key, value) {
@@ -140,8 +137,8 @@ troop.promise(sntls, 'Dictionary', function () {
 
             /**
              * Retrieves item(s) from the dictionary
-             * @param {string|string[]} key
-             * @return {string|string[]} Dictionary item
+             * @param {*|*[]} key
+             * @return {*|*[]} Dictionary item
              */
             getItem: function (key) {
                 var result,
@@ -163,67 +160,6 @@ troop.promise(sntls, 'Dictionary', function () {
                     }
                 } else {
                     dessert.assert(false, "Invalid key");
-                }
-
-                return result;
-            },
-
-            /**
-             * Combines current dictionary with remote dictionary
-             * @param {sntls.Dictionary} remoteDict Remote dictionary
-             * @return {sntls.Dictionary} New dictionary instance with combined items
-             */
-            combineWith: function (remoteDict) {
-                dessert.isDictionary(remoteDict, "Invalid dictionary");
-
-                var items = this.items,
-                    resultBuffer = items instanceof Array ? [] : {},
-                    result = /** @type {sntls.Dictionary} */ this.getBase().create(resultBuffer),
-                    currentKeys = Object.keys(items),
-                    i, currentKey, currentValue, remoteValue;
-
-                for (i = 0; i < currentKeys.length; i++) {
-                    currentKey = currentKeys[i];
-                    currentValue = this.getItem(currentKey);
-                    remoteValue = remoteDict.getItem(currentValue);
-
-                    if (typeof remoteValue !== 'undefined') {
-                        result.addItem(currentKey, remoteValue);
-                    }
-                }
-
-                return result;
-            },
-
-            /**
-             * Performs combine with current dictionary as remote dictionary too.
-             * @return {sntls.Dictionary} New dictionary instance with combined items
-             */
-            combineWithSelf: function () {
-                return this.combineWith(this);
-            },
-
-            /**
-             * Reverses keys and values.
-             * Values from array items end up as separate keys on the new dictionary,
-             * and keys associated with the same values stack up in arrays.
-             * @return {sntls.Dictionary} New dictionary instance with reversed key-value pairs.
-             */
-            reverse: function () {
-                var result = /** @type {sntls.Dictionary} */ this.getBase().create(),
-                    keys = Object.keys(this.items),
-                    i, key, value;
-
-                for (i = 0; i < keys.length; i++) {
-                    key = keys[i];
-                    value = this.items[key];
-
-                    // flipping value and key in new dictionary
-                    if (value instanceof Array) {
-                        result.addItems(value, key);
-                    } else {
-                        result.addItem(value, key);
-                    }
                 }
 
                 return result;
