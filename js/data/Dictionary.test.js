@@ -209,6 +209,25 @@
         );
     });
 
+    test("Multiple values removal", function () {
+        var dict = sntls.Dictionary.create({
+            foo: ['bar', 'hello'],
+            boo: 'bar',
+            moo: 'hello'
+        });
+
+        dict.removeItems(['foo', 'moo'], 'hello');
+
+        deepEqual(
+            dict.items,
+            {
+                foo: 'bar',
+                boo: 'bar'
+            },
+            "One value removed from two items"
+        );
+    });
+
     test("Item retrieval", function () {
         /**
          * @type {sntls.Dictionary}

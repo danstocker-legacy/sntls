@@ -170,14 +170,15 @@ troop.promise(sntls, 'Dictionary', function () {
             /**
              * Removes items from dictionary.
              * @param {string[]} keys
+             * @param {*} [value]
              * @return {sntls.Dictionary}
              */
-            removeItems: function (keys) {
+            removeItems: function (keys, value) {
                 dessert.isArray(keys, "Invalid keys");
 
                 var i;
                 for (i = 0; i < keys.length; i++) {
-                    this.removeItem(keys[i]);
+                    this.removeItem(keys[i], value);
                 }
                 return this;
             },
