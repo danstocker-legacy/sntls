@@ -23,15 +23,15 @@ troop.promise(sntls, 'StringDictionary', function () {
 
             /**
              * Combines current dictionary with remote dictionary
-             * @param {sntls.StringDictionary} remoteDict Remote string dictionary
-             * @return {sntls.StringDictionary} New dictionary instance with combined items
+             * @param {sntls.Dictionary} remoteDict Remote dictionary (doesn't have to be string dictionary)
+             * @return {sntls.Dictionary} New dictionary instance with combined items
              */
             combineWith: function (remoteDict) {
                 dessert.isDictionary(remoteDict, "Invalid dictionary");
 
                 var items = this.items,
                     resultBuffer = items instanceof Array ? [] : {},
-                    result = /** @type {sntls.StringDictionary} */ this.getBase().create(resultBuffer),
+                    result = /** @type {sntls.Dictionary} */ remoteDict.getBase().create(resultBuffer),
                     currentKeys = Object.keys(items),
                     i, currentKey, currentValue, remoteValue;
 
