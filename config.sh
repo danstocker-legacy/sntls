@@ -10,6 +10,7 @@ js/namespace.js
 js/utils.js
 js/data/Hash.js
 js/data/Dictionary.js
+js/data/StringDictionary.js
 js/data/Collection.js
 js/data/JournalingCollection.js
 js/data/OrderedList.js
