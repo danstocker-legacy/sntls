@@ -624,6 +624,61 @@
         equal(collection.count, 0, "Item count after emptying");
     });
 
+    test("Sorted value extraction", function () {
+        var collection = sntls.Collection.create();
+
+        init(collection);
+
+        deepEqual(
+            collection.getSortedValues(),
+            [
+                true,
+                {},
+                'hello',
+                5,
+                'world!'
+            ],
+            "In order of names"
+        );
+
+        deepEqual(
+            collection.getSortedValues(function (a, b) {
+                return String(collection.items[a]).length - String(collection.items[b]).length;
+            }),
+            [
+                5,
+                true,
+                'hello',
+                'world!',
+                {}
+            ],
+            "In order of serialized length"
+        );
+    });
+
+    test("Sorted value extraction wrapped", function () {
+        var collection = sntls.Collection.create(),
+            result;
+
+        init(collection);
+
+        result = collection.getSortedValuesAsHash();
+
+        ok(result.isA(sntls.Hash), "Hash retrieved");
+
+        deepEqual(
+            result.items,
+            [
+                true,
+                {},
+                'hello',
+                5,
+                'world!'
+            ],
+            "Sorted array wrapped in hash"
+        );
+    });
+
     test("For Each", function () {
         var collection = sntls.Collection.create();
 

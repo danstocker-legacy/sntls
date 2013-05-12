@@ -294,45 +294,54 @@ troop.promise(sntls, 'Collection', function () {
 
             /**
              * Retrieves item names filtered by a regexp.
-             * @param {RegExp|string} [re] Item name filter.
+             * @param {RegExp|string} [filter] Item name filter.
              * @return {string[]} Array of item names matching the regexp.
              */
-            getKeys: function (re) {
-                var result = [],
-                    items, itemNames,
-                    i, itemName;
-
-                // handling simplified prefix filtering
-                if (typeof re === 'string') {
-                    re = new RegExp('^' + re);
+            getKeys: function (filter) {
+                if (typeof filter === 'undefined') {
+                    // reverting to base key extraction when filter is absent
+                    return base.getKeys.call(this);
                 }
 
-                dessert.isRegExpOptional(re, "Invalid key filter");
+                var result = [],
+                    items = this.items,
+                    itemNames = Object.keys(items),
+                    i, itemName;
 
-                items = this.items;
-                itemNames = Object.keys(items);
-
-                if (re instanceof RegExp) {
+                if (filter instanceof RegExp) {
+                    // regexp-based filtering
                     for (i = 0; i < itemNames.length; i++) {
                         itemName = itemNames[i];
-                        if (re.test(itemName)) {
+                        if (filter.test(itemName)) {
+                            // filter matches item name
                             result.push(itemName);
                         }
                     }
                     return result;
+                } else if (typeof filter === 'string') {
+                    // prefixed filtering
+                    for (i = 0; i < itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        if (itemName.indexOf(filter) === 0) {
+                            // prefix matches item name
+                            result.push(itemName);
+                        }
+                    }
                 } else {
-                    return itemNames;
+                    dessert.assert(false, "Invalid filter");
                 }
+
+                return result;
             },
 
             /**
              * Retrieves item names filtered and wrapped in a hash.
-             * @param {RegExp|string} [re] Item name filter.
+             * @param {RegExp|string} [filter] Item name filter.
              * @return {sntls.Hash}
              * @see sntls.Collection.getKeys
              */
-            getKeysAsHash: function (re) {
-                return sntls.Hash.create(this.getKeys(re));
+            getKeysAsHash: function (filter) {
+                return sntls.Hash.create(this.getKeys(filter));
             },
 
             /**
