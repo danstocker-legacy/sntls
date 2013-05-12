@@ -304,7 +304,7 @@ troop.promise(sntls, 'Collection', function () {
 
                 // handling simplified prefix filtering
                 if (typeof re === 'string') {
-                    re = new RegExp(re + '\\w*');
+                    re = new RegExp('^' + re);
                 }
 
                 dessert.isRegExpOptional(re, "Invalid key filter");

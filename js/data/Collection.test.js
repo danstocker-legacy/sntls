@@ -468,6 +468,17 @@
         deepEqual(collection.getKeys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
     });
 
+    test("Key extraction (prefix)", function () {
+        var collection = sntls.Collection.create({
+            'hello world': 'foo',
+            'world hello': 'bar',
+            'hello': 'all'
+        });
+
+        deepEqual(collection.getKeys('world').sort(), ['world hello'], "Prefix 'world'");
+        deepEqual(collection.getKeys('hello').sort(), ['hello', 'hello world'], "Prefix 'hello'");
+    });
+
     test("Key extraction wrapped in hash", function () {
         var collection = sntls.Collection.create(),
             result;
