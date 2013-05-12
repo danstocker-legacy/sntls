@@ -31,6 +31,47 @@ troop.promise(sntls, 'Hash', function () {
                 dessert.isObjectOptional(items, "Invalid items");
 
                 this.items = items || {};
+            },
+
+            /**
+             * Retrieves all item keys.
+             * @return {string[]}
+             */
+            getKeys: function () {
+                return Object.keys(this.items);
+            },
+
+            /**
+             * Retrieves item keys wrapped ina hash.
+             * @return {sntls.Hash}
+             */
+            getKeysAsHash: function () {
+                return sntls.Hash.create(Object.keys(this.items));
+            },
+
+            /**
+             * Retrieves item values as an array.
+             * @return {Array}
+             */
+            getValues: function () {
+                var items = this.items,
+                    keys = Object.keys(items),
+                    result = [],
+                    i;
+
+                for (i = 0; i < keys.length; i++) {
+                    result.push(items[keys[i]]);
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves item values wrapped in a hash.
+             * @return {sntls.Hash}
+             */
+            getValuesAsHash: function () {
+                return sntls.Hash.create(this.getValues());
             }
         });
 });

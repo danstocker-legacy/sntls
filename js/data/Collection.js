@@ -394,31 +394,6 @@ troop.promise(sntls, 'Collection', function () {
             // Array representation
 
             /**
-             * Retrieves collection items as array.
-             * @returns {*[]} Item values.
-             */
-            getValues: function () {
-                var keys = Object.keys(this.items),
-                    result = [],
-                    i;
-
-                for (i = 0; i < keys.length; i++) {
-                    result.push(this.items[keys[i]]);
-                }
-
-                return result;
-            },
-
-            /**
-             * Retrieves item values array wrapped in a hash.
-             * @return {sntls.Hash}
-             * @see sntls.Collection.getValues
-             */
-            getValuesAsHash: function () {
-                return sntls.Hash.create(this.getValues());
-            },
-
-            /**
              * Retrieves collection items as array in order of their names
              * or according to the supplied comparator.
              * @param {function} [comparator] Comparator for sorting keys.
