@@ -211,6 +211,21 @@ troop.promise(sntls, 'Dictionary', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Clears dictionary
+             * @return {sntls.Dictionary}
+             */
+            clear: function () {
+                // clearing items buffer
+                base.clear.call(this);
+
+                // resetting counters
+                this.itemCount = 0;
+                this.valueCount = 0;
+
+                return this;
             }
         });
 });

@@ -1,4 +1,4 @@
-/*global module, test, raises, ok, equal, deepEqual */
+/*global module, test, expect, raises, ok, equal, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -270,5 +270,26 @@
             undefined,
             "Retrieving non existing items"
         );
+    });
+
+    test("Clearing", function () {
+        expect(3);
+
+        var dict = sntls.Dictionary.create({
+            foo: 'bar',
+            hello: ['world', 'all']
+        });
+
+        sntls.Hash.addMock({
+            clear: function () {
+                ok(true, "Base clear called");
+            }
+        });
+
+        dict.clear();
+        equal(dict.itemCount, 0, "Item count after emptying");
+        equal(dict.valueCount, 0, "Value count after emptying");
+
+        sntls.Hash.removeMocks();
     });
 }());
