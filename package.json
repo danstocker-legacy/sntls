@@ -20,7 +20,7 @@
     },
     "dependencies": {
         "dessert": "~0.2.7",
-        "troop"  : "~0.3.3"
+        "troop"  : "~0.3.5"
     },
     "files"       : ["out/sntls.js"],
     "main"        : "out/sntls.js"
