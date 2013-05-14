@@ -18,7 +18,7 @@
         ok(myProfiled.profile.isA(sntls.ProfileCollection), "Profiled object stats are actually stats");
 
         equal(myProfiled.profile.count, 1, "New profile collection contains 1 element");
-        deepEqual(myProfiled.profile.keys(), ['foo'], "Instance IDs in profile");
+        deepEqual(myProfiled.profile.getKeys(), ['foo'], "Instance IDs in profile");
     });
 
     test("Profile getter", function () {
