@@ -22,6 +22,11 @@ troop.promise(sntls, 'StringDictionary', function () {
              */
 
             /**
+             * @name sntls.StringDictionary.clear
+             * @return {sntls.StringDictionary}
+             */
+
+            /**
              * Combines current dictionary with remote dictionary
              * @param {sntls.Dictionary} remoteDict Remote dictionary (doesn't have to be string dictionary)
              * @return {sntls.Dictionary} New dictionary instance with combined items
@@ -53,17 +58,22 @@ troop.promise(sntls, 'StringDictionary', function () {
              * @return {sntls.StringDictionary} New dictionary instance with combined items
              */
             combineWithSelf: function () {
-                return this.combineWith(this);
+                return /** @type sntls.StringDictionary */ this.combineWith(this);
             },
 
             /**
              * Reverses keys and values.
              * Values from array items end up as separate keys on the new dictionary,
              * and keys associated with the same values stack up in arrays.
+             * @param {function} [bufferType=Object] Constructor function specifying buffer type
+             * for result dictionary (Array or Object)
              * @return {sntls.StringDictionary} New dictionary instance with reversed key-value pairs.
              */
-            reverse: function () {
-                var result = /** @type {sntls.StringDictionary} */ this.getBase().create(),
+            reverse: function (bufferType) {
+                dessert.isFunctionOptional(bufferType, "Invalid buffer type");
+
+                var resultBuffer = bufferType === Array ? [] : {},
+                    result = this.getBase().create(resultBuffer),
                     keys = Object.keys(this.items),
                     i, key, value;
 
