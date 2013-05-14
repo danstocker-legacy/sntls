@@ -191,17 +191,29 @@ troop.promise(sntls, 'Path', function () {
         }
     });
 
-    /**
-     * @return {sntls.Path}
-     */
-    String.prototype.toPath = function () {
-        return sntls.Path.create(this);
-    };
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String.prototype */{
+            /**
+             * @return {sntls.Path}
+             */
+            toPath: function () {
+                return sntls.Path.create(this);
+            }
+        },
+        false, false, false
+    );
 
-    /**
-     * @return {sntls.Path}
-     */
-    Array.prototype.toPath = function () {
-        return sntls.Path.create(this);
-    };
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array.prototype */{
+            /**
+             * @return {sntls.Path}
+             */
+            toPath: function () {
+                return sntls.Path.create(this);
+            }
+        },
+        false, false, false
+    );
 }());
