@@ -236,18 +236,4 @@
             "Removed all between 'ipsum' and 'lorem'"
         );
     });
-
-    test("List clear", function () {
-        var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
-            result;
-
-        result = orderedList.clear();
-
-        strictEqual(result, orderedList, "Clear is chainable");
-        deepEqual(
-            orderedList.items,
-            [],
-            "Cleared list"
-        );
-    });
 }());

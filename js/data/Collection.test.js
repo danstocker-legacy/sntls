@@ -251,7 +251,7 @@
         var original = sntls.Collection.create(['foo', 'bar']),
             clone = original.clone();
 
-        ok (clone.items instanceof Array, "Cloning retains array buffer type");
+        ok(clone.items instanceof Array, "Cloning retains array buffer type");
 
         deepEqual(clone.items, ['foo', 'bar'], "Clone array buffer");
     });
@@ -472,7 +472,7 @@
         var collection = sntls.Collection.create({
             'hello world': 'foo',
             'world hello': 'bar',
-            'hello': 'all'
+            'hello'      : 'all'
         });
 
         deepEqual(collection.getKeys('world').sort(), ['world hello'], "Prefix 'world'");
@@ -603,6 +603,8 @@
     });
 
     test("Clearing", function () {
+        expect(3);
+
         var collection = sntls.Collection.create();
 
         init(collection);
@@ -619,9 +621,16 @@
             "Collection before emptying"
         );
 
+        sntls.Hash.addMock({
+            clear: function () {
+                ok(true, "Base clear called");
+            }
+        });
+
         collection.clear();
-        deepEqual(collection.items, {}, "Items buffer after emptying");
         equal(collection.count, 0, "Item count after emptying");
+
+        sntls.Hash.removeMocks();
     });
 
     test("Sorted value extraction", function () {

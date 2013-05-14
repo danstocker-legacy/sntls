@@ -72,6 +72,15 @@ troop.promise(sntls, 'Hash', function () {
              */
             getValuesAsHash: function () {
                 return sntls.Hash.create(this.getValues());
+            },
+
+            /**
+             * Clears items buffer.
+             * @return {sntls.Hash}
+             */
+            clear: function () {
+                this.items = this.items instanceof Array ? [] : {};
+                return this;
             }
         });
 });

@@ -199,16 +199,12 @@ troop.promise(sntls, 'OrderedList', function () {
                 }
 
                 return startIndex;
-            },
+            }
 
             /**
-             * Clears list
+             * @name sntls.OrderedList.clear
              * @return {sntls.OrderedList}
              */
-            clear: function () {
-                this.items = [];
-                return this;
-            }
         });
 });
 

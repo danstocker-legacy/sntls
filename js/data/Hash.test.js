@@ -1,4 +1,4 @@
-/*global module, test, ok, raises, equal, deepEqual */
+/*global module, test, ok, raises, equal, strictEqual, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -82,5 +82,24 @@
             ],
             "Array wrapped in hash"
         );
+    });
+
+    test("Clearing", function () {
+        var hash,
+            result;
+
+        hash = sntls.Hash.create({
+            foo: 'bar',
+            hello: 'world'
+        });
+
+        result = hash.clear();
+        strictEqual(result, hash, "Clearing is chainable");
+        deepEqual(hash.items, {}, "Object buffer emptied");
+
+        hash = sntls.Hash.create(['foo', 'bar', 'hello', 'world']);
+
+        hash.clear();
+        deepEqual(hash.items, [], "Array buffer emptied");
     });
 }());

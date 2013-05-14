@@ -440,9 +440,12 @@ troop.promise(sntls, 'Collection', function () {
              * @return {sntls.Collection}
              */
             clear: function () {
-                // removing items
-                this.items = {};
+                // clearing items buffer
+                base.clear.call(this);
+
+                // resetting counter
                 this.count = 0;
+
                 return this;
             },
 
