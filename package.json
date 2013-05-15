@@ -1,13 +1,15 @@
 {
     "name"        : "sntls",
-    "version"     : "0.5.0",
+    "version"     : "0.6.0",
     "description" : "Essential data structures and behaviors",
     "keywords"    : [
         "tools",
         "data",
+        "hash",
         "dictionary",
         "collection",
         "list",
+        "ordered list",
         "journaling",
         "profile",
         "stateful",

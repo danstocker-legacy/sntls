@@ -10,7 +10,8 @@ Currently available:
 - `sntls.Hash`: Base for all data-manipulating classes.
 - `sntls.OrderedList`: For manipulating order-retaining lists of numbers and strings.
 - `sntls.OrderedStringList`: Same as `OrderedList` but with extra string-specific functionality.
-- `sntls.Dictionary`: For managing dictionaries and lookups.
+- `sntls.Dictionary`: Key-value associations with value multiplicity.
+- `sntls.StringDictionary`: For manipulating dictionaries of string values.
 - `sntls.Collection`: Offers a way of handling multiple objects as if they were single objects of the same kind.
 - `sntls.JournalingCollection`: Collection that records changes.
 - `sntls.Profile`: Offers a way of gathering statistics in a multi-level fashion.
