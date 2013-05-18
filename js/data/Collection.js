@@ -8,13 +8,13 @@ troop.promise(sntls, 'Collection', function () {
 
     var hOP = Object.prototype.hasOwnProperty,
         base = sntls.Hash,
-        self;
+        self = base.extend();
 
     /**
      * @class sntls.Collection
      * @extends sntls.Hash
      */
-    sntls.Collection = self = base.extend()
+    sntls.Collection = self
         .addPrivateConstant(/** @lends sntls.Collection */{
             // method names for general purpose constructors
             _ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
