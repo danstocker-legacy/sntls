@@ -192,7 +192,9 @@ troop.promise(sntls, 'Dictionary', function () {
                 var result,
                     i, item;
 
-                if (typeof key === 'string') {
+                if (typeof key === 'string' ||
+                    typeof key === 'number'
+                    ) {
                     result = this.items[key];
                 } else if (key instanceof Array) {
                     // key may be an array of keys

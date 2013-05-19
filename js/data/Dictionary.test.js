@@ -234,14 +234,17 @@
          */
         var dict = sntls.Dictionary.create({
             foo  : ['bar', 'moo', 'boo'],
-            hello: 'world'
+            hello: 'world',
+            1    : 'howdy'
         });
 
         raises(function () {
             dict.getItem(true);
         }, "Invalid key");
 
-        equal(dict.getItem('hello'), 'world', "Retrieving string value");
+        equal(dict.getItem(1), 'howdy', "Retrieving by numeric key");
+
+        equal(dict.getItem('hello'), 'world', "Retrieving by string key");
         deepEqual(
             dict.getItem('foo'),
             ['bar', 'moo', 'boo'],
@@ -276,7 +279,7 @@
         expect(3);
 
         var dict = sntls.Dictionary.create({
-            foo: 'bar',
+            foo  : 'bar',
             hello: ['world', 'all']
         });
 
