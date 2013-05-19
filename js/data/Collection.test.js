@@ -115,7 +115,7 @@
         var reg = {
                 init          : 0,
                 nonConflicting: 0,
-                filterByExpr  : 0
+                filterByPrefix: 0
             },
 
             MyClass = troop.Base.extend()
@@ -130,8 +130,8 @@
                         reg.nonConflicting++;
                     },
 
-                    filterByExpr: function () {
-                        reg.filterByExpr++;
+                    filterByPrefix: function () {
+                        reg.filterByPrefix++;
                     }
                 }),
 
@@ -148,11 +148,11 @@
         equal(reg.nonConflicting, 1, "Non conflicting method call counter");
 
         // legitimate filter expression (conflicting method call)
-        var filtered = specified.filterByExpr('f');
+        var filtered = specified.filterByPrefix('f');
 
         equal(filtered.isA(sntls.Collection), true, "Filter returns collection");
         equal(filtered.isA(Specified), false, "Filter returns non-specified collection");
-        equal(reg.filterByExpr, 1, "Custom filter ran once");
+        equal(reg.filterByPrefix, 1, "Custom filter ran once");
     });
 
     test("Specified extended collection", function () {
@@ -455,17 +455,19 @@
         );
     });
 
-    test("Key extraction", function () {
+    test("Key extraction (RegExp)", function () {
         var collection = sntls.Collection.create();
 
         init(collection);
 
-        deepEqual(collection.getKeys(), ['one', 'two', 'three', 'four', 'five'], "Retrieving all keys");
-        deepEqual(collection.getKeys(/one/), ['one'], "Exact key retrieval");
-        deepEqual(collection.getKeys(/f\w+/), ['four', 'five'], "Prefix search");
-        deepEqual(collection.getKeys('f'), ['four', 'five'], "String prefix search");
-        deepEqual(collection.getKeys(/one|three/), ['one', 'three'], "Multiple search");
-        deepEqual(collection.getKeys(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
+        raises(function () {
+            collection.getKeysByRegExp('foo');
+        }, "Invalid prefix");
+
+        deepEqual(collection.getKeysByRegExp(/one/), ['one'], "Exact key retrieval");
+        deepEqual(collection.getKeysByRegExp(/f\w+/), ['four', 'five'], "Prefix search");
+        deepEqual(collection.getKeysByRegExp(/one|three/), ['one', 'three'], "Multiple search");
+        deepEqual(collection.getKeysByRegExp(/\w*o\w*/), ['one', 'two', 'four'], "Full-text search");
     });
 
     test("Key extraction (prefix)", function () {
@@ -475,8 +477,12 @@
             'hello'      : 'all'
         });
 
-        deepEqual(collection.getKeys('world').sort(), ['world hello'], "Prefix 'world'");
-        deepEqual(collection.getKeys('hello').sort(), ['hello', 'hello world'], "Prefix 'hello'");
+        raises(function () {
+            collection.getKeysByPrefix(true);
+        }, "Invalid prefix");
+
+        deepEqual(collection.getKeysByPrefix('world').sort(), ['world hello'], "Prefix 'world'");
+        deepEqual(collection.getKeysByPrefix('hello').sort(), ['hello', 'hello world'], "Prefix 'hello'");
     });
 
     test("Key extraction wrapped in hash", function () {
@@ -498,20 +504,20 @@
 
         init(collection);
 
-        filtered = collection.filterByExpr(/f\w+/);
+        filtered = collection.filterByRegExp(/f\w+/);
         equal(filtered.getBase(), sntls.Collection, "Type of filtered collection is collection");
         deepEqual(filtered.items, {
             four: {},
             five: true
         }, "Result of filtering by regexp");
 
-        filtered = collection.filterByExpr('f');
+        filtered = collection.filterByPrefix('f');
         deepEqual(filtered.items, {
             four: {},
             five: true
         }, "String prefix filtering");
 
-        filtered = collection.filterByExpr(function (item) {
+        filtered = collection.filterBySelector(function (item) {
             return typeof item === 'string';
         });
         deepEqual(filtered.items, {
@@ -524,7 +530,7 @@
         var collection = sntls.Collection.create(['foo', 'friend', 'field', 'boom', 'bar']),
             filtered;
 
-        filtered = collection.filterByExpr(function (item) {
+        filtered = collection.filterBySelector(function (item) {
             return item[0] === 'b';
         });
 
@@ -546,7 +552,7 @@
                 foo  : 'foo',
                 bar  : 'bar'
             }),
-            filtered = names.filterByExpr(/^\w*o$/);
+            filtered = names.filterByRegExp(/^\w*o$/);
 
         deepEqual(filtered.items, {
             hello: 'hello',

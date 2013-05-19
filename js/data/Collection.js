@@ -276,59 +276,66 @@ troop.promise(sntls, 'Collection', function () {
                 return result;
             },
 
-            //////////////////////////////
-            // Filtering
-
             /**
-             * Retrieves item names filtered by a regexp.
-             * @param {RegExp|string} [filter] Item name filter.
-             * @return {string[]} Array of item names matching the regexp.
+             * Retrieves collection keys matching the specified prefix
+             * @param {string} prefix
+             * @return {string[]}
              */
-            getKeys: function (filter) {
-                if (typeof filter === 'undefined') {
-                    // reverting to base key extraction when filter is absent
-                    return base.getKeys.call(this);
-                }
+            getKeysByPrefix: function (prefix) {
+                dessert.isString(prefix, "Invalid prefix");
 
                 var result = [],
-                    items = this.items,
-                    itemNames = Object.keys(items),
+                    itemNames = Object.keys(this.items),
                     i, itemName;
 
-                if (filter instanceof RegExp) {
-                    // regexp-based filtering
-                    for (i = 0; i < itemNames.length; i++) {
-                        itemName = itemNames[i];
-                        if (filter.test(itemName)) {
-                            // filter matches item name
-                            result.push(itemName);
-                        }
+                for (i = 0; i < itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    if (itemName.indexOf(prefix) === 0) {
+                        // prefix matches item name
+                        result.push(itemName);
                     }
-                    return result;
-                } else if (typeof filter === 'string') {
-                    // prefixed filtering
-                    for (i = 0; i < itemNames.length; i++) {
-                        itemName = itemNames[i];
-                        if (itemName.indexOf(filter) === 0) {
-                            // prefix matches item name
-                            result.push(itemName);
-                        }
-                    }
-                } else {
-                    dessert.assert(false, "Invalid filter");
                 }
 
                 return result;
             },
 
             /**
-             * Retrieves item names filtered and wrapped in a hash.
-             * @param {RegExp|string} [filter] Item name filter.
+             * Retrieves collection keys matching the specified prefix, wrapped in a hash.
+             * @param {string} prefix
              * @return {sntls.Hash}
-             * @see sntls.Collection.getKeys
              */
-            getKeysAsHash: function (filter) {
-                return sntls.Hash.create(this.getKeys(filter));
+            getKeysByPrefixAsHash: function (prefix) {
+                return sntls.Hash.create(this.getKeysByPrefix(prefix));
+            },
+
+            /**
+             * Retrieves collection keys matching the specified regular expression.
+             * @param {RegExp} regExp
+             * @return {Array}
+             */
+            getKeysByRegExp: function (regExp) {
+                var result = [],
+                    itemNames = Object.keys(this.items),
+                    i, itemName;
+
+                for (i = 0; i < itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    if (regExp.test(itemName)) {
+                        // filter matches item name
+                        result.push(itemName);
+                    }
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves collection keys matching the specified regular expression, wrapped in a hash.
+             * @param {RegExp} regExp
+             * @return {sntls.Hash}
+             */
+            getKeysByRegExpAsHash: function (regExp) {
+                return sntls.Hash.create(this.getKeysByRegExp(regExp));
             },
 
             /**
@@ -353,41 +360,45 @@ troop.promise(sntls, 'Collection', function () {
             },
 
             /**
-             * Filters collection items by an expression.
-             * @param {RegExp|string|function} selector Selector expression
-             * @return {sntls.Collection} New collection of same type w/ filtered results.
+             * Filters collection by key prefix.
+             * @param {string} prefix
+             * @return {sntls.Collection}
              */
-            filterByExpr: function (selector) {
+            filterByPrefix: function (prefix) {
+                return this.filterByKeys(this.getKeysByPrefix(prefix));
+            },
+
+            /**
+             * Filters collection by matching keys to the specified regular expression.
+             * @param {RegExp} regExp
+             * @return {sntls.Collection}
+             */
+            filterByRegExp: function (regExp) {
+                return this.filterByKeys(this.getKeysByRegExp(regExp));
+            },
+
+            /**
+             * Filters collection by a selector function.
+             * @param {function} selector Selector function. Receives `item` and `itemName`
+             * as arguments, and the collection as `this`, and should return true when
+             * item should be included in results.
+             * @return {sntls.Collection}
+             */
+            filterBySelector: function (selector) {
                 var items = this.items,
                     result = items instanceof Array ? [] : {},
-                    itemNames,
+                    itemNames = Object.keys(items),
                     i, itemName;
 
-                if (selector instanceof RegExp ||
-                    typeof selector === 'string'
-                    ) {
-                    itemNames = this.getKeys(selector);
-                    for (i = 0; i < itemNames.length; i++) {
-                        itemName = itemNames[i];
+                for (i = 0; i < itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    if (selector.call(this, items[itemName], itemName)) {
                         result[itemName] = items[itemName];
                     }
-                } else if (typeof selector === 'function') {
-                    itemNames = Object.keys(items);
-                    for (i = 0; i < itemNames.length; i++) {
-                        itemName = itemNames[i];
-                        if (selector.call(this, items[itemName], itemName)) {
-                            result[itemName] = items[itemName];
-                        }
-                    }
-                } else {
-                    dessert.assert(false, "Invalid filter selector");
                 }
 
                 return this.getBase().create(result);
             },
-
-            //////////////////////////////
-            // Array representation
 
             /**
              * Retrieves collection items as array in order of their names
@@ -418,9 +429,6 @@ troop.promise(sntls, 'Collection', function () {
             getSortedValuesAsHash: function (comparator) {
                 return sntls.Hash.create(this.getSortedValues(comparator));
             },
-
-            //////////////////////////////
-            // Content manipulation
 
             /**
              * Empties collection.
