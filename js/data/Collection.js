@@ -258,33 +258,20 @@ troop.promise(sntls, 'Collection', function () {
             mergeWith: function (collection, conflictResolver) {
                 dessert
                     .isCollection(collection, "Invalid collection")
-                    .isFunctionOptional(conflictResolver, "Invalid conflict resolver callback");
-
-                var base = this.getBase();
-
-                dessert.assert(collection.isA(base), "Collection types do not match");
+                    .isFunctionOptional(conflictResolver, "Invalid conflict resolver callback")
+                    .assert(collection.isA(this.getBase()), "Collection types do not match");
 
                 var result = this.clone(),
-                    fromItems = collection.items,
-                    itemNames = Object.keys(fromItems),
-                    toItems = result.items,
-                    i, itemName;
+                    resultItems = result.items;
 
-                /**
-                 * `collection.forEach` is not used because
-                 * a) implicit conversion of primitive values to objects
-                 * b) iteration is faster
-                 */
-                for (i = 0; i < itemNames.length; i++) {
-                    itemName = itemNames[i];
-                    if (!toItems.hasOwnProperty(itemName)) {
-                        toItems[itemName] = fromItems[itemName];
-                        result.count++;
+                collection.forEachItem(function (item, itemName) {
+                    if (!hOP.call(resultItems, itemName)) {
+                        result.setItem(itemName, item);
                     } else if (conflictResolver) {
                         // resolving conflict with supplied function
-                        toItems[itemName] = conflictResolver(this, collection, itemName);
+                        result.setItem(itemName, conflictResolver(this, collection, itemName));
                     }
-                }
+                });
 
                 return result;
             },
