@@ -3,16 +3,16 @@ troop.promise(sntls, 'ArrayCollection', function () {
     "use strict";
 
     /**
-     * @name sntls.ArrayCollection.create
-     * @return {sntls.ArrayCollection}
-     */
-
-    /**
      * @class sntls.ArrayCollection
      * @extends sntls.Collection
      * @extends Array
      */
     sntls.ArrayCollection = sntls.Collection.of(Array);
+
+    /**
+     * @name sntls.ArrayCollection.create
+     * @return {sntls.ArrayCollection}
+     */
 });
 
 (function () {

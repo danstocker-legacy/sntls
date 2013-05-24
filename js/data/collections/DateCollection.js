@@ -3,16 +3,16 @@ troop.promise(sntls, 'DateCollection', function () {
     "use strict";
 
     /**
-     * @name sntls.DateCollection.create
-     * @return {sntls.DateCollection}
-     */
-
-    /**
      * @class sntls.DateCollection
      * @extends sntls.Collection
      * @extends Date
      */
     sntls.DateCollection = sntls.Collection.of(Date);
+
+    /**
+     * @name sntls.DateCollection.create
+     * @return {sntls.DateCollection}
+     */
 });
 
 (function () {
