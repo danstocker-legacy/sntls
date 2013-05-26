@@ -1,8 +1,8 @@
 {
-    "name"        : "sntls",
-    "version"     : "0.7.2",
-    "description" : "Essential data structures and behaviors",
-    "keywords"    : [
+    "name"           : "sntls",
+    "version"        : "0.7.2",
+    "description"    : "Essential data structures and behaviors",
+    "keywords"       : [
         "tools",
         "data",
         "hash",
@@ -15,15 +15,18 @@
         "stateful",
         "behaviors"
     ],
-    "author"      : "Dan Stocker <dan@kwaia.com>",
-    "repository"  : {
+    "author"         : "Dan Stocker <dan@kwaia.com>",
+    "repository"     : {
         "type": "git",
         "url" : "git://github.com/danstocker/sntls.git"
     },
-    "dependencies": {
-        "dessert": "~0.2.8",
-        "troop"  : "~0.3.6"
+    "dependencies"   : {
+        "dessert": "~0.2.9",
+        "troop"  : "~0.3.8"
     },
-    "files"       : ["out/sntls.js"],
-    "main"        : "out/sntls.js"
+    "devDependencies": {
+        "phil": "~0.2.0"
+    },
+    "files"          : ["out/sntls.js"],
+    "main"           : "out/sntls.js"
 }
