@@ -1,6 +1,6 @@
 {
     "name"        : "sntls",
-    "version"     : "0.7.1",
+    "version"     : "0.7.2",
     "description" : "Essential data structures and behaviors",
     "keywords"    : [
         "tools",
