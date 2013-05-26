@@ -2,7 +2,7 @@
  * General Path
  *
  * Represents a composite linear key, essentially
- * an array, or a dot-separated string.
+ * an array, or a '>'-delimited string.
  */
 /*global dessert, troop, sntls */
 troop.promise(sntls, 'Path', function () {
@@ -14,7 +14,38 @@ troop.promise(sntls, 'Path', function () {
      */
     sntls.Path = troop.Base.extend()
         .addConstant(/** @lends sntls.Path */{
-            RE_PATH_SEPARATOR: /\./
+            RE_PATH_SEPARATOR: />/
+        })
+        .addPrivateMethod(/** @lends sntls.Path */{
+            /**
+             * URI encodes all items of an array.
+             * @param {string[]} asArray Array of plain strings
+             * @return {string[]} Array of URI-encoded strings
+             * @private
+             */
+            _encodeURI: function (asArray) {
+                var result = [],
+                    i;
+                for (i = 0; i < asArray.length; i++) {
+                    result.push(encodeURI(asArray[i]));
+                }
+                return result;
+            },
+
+            /**
+             * URI decodes all items of an array.
+             * @param {string[]} asArray Array of URI-encoded strings
+             * @return {string[]} Array of plain strings
+             * @private
+             */
+            _decodeURI: function (asArray) {
+                var result = [],
+                    i;
+                for (i = 0; i < asArray.length; i++) {
+                    result.push(decodeURI(asArray[i]));
+                }
+                return result;
+            }
         })
         .addMethod(/** @lends sntls.Path */{
             /**
@@ -32,7 +63,7 @@ troop.promise(sntls, 'Path', function () {
                 if (path instanceof Array) {
                     asArray = path;
                 } else if (dessert.validators.isString(path)) {
-                    asArray = path.split(this.RE_PATH_SEPARATOR);
+                    asArray = this._decodeURI(path.split(this.RE_PATH_SEPARATOR));
                 } else {
                     dessert.assert(false, "Invalid path");
                 }
@@ -172,7 +203,7 @@ troop.promise(sntls, 'Path', function () {
              * @return {string}
              */
             toString: function () {
-                return this.asArray.join('.');
+                return this._encodeURI(this.asArray).join('>');
             }
         });
 });

@@ -29,8 +29,8 @@
             }
         });
 
-        equal(tree.getNode('foo.bar'.toPath()), "Hello world!", "Node retrieved");
-        equal(typeof tree.getNode('hello.world'.toPath()), 'undefined', "Attempted to retrieve non-existent node");
+        equal(tree.getNode('foo>bar'.toPath()), "Hello world!", "Node retrieved");
+        equal(typeof tree.getNode('hello>world'.toPath()), 'undefined', "Attempted to retrieve non-existent node");
     });
 
     test("Node retrieval as Hash", function () {
@@ -42,7 +42,7 @@
             result;
 
         raises(function () {
-            tree.getNodeAsHash('foo.bar'.toPath());
+            tree.getNodeAsHash('foo>bar'.toPath());
         }, "Primitive can't be hashed");
 
         result = tree.getNodeAsHash('foo'.toPath());
@@ -60,7 +60,7 @@
         var tree = sntls.Tree.create({}),
             result;
 
-        result = tree.setNode('foo.bar'.toPath(), "Hello world!");
+        result = tree.setNode('foo>bar'.toPath(), "Hello world!");
 
         strictEqual(result, tree, "Tree.setNode is chainable");
         deepEqual(
@@ -83,13 +83,13 @@
             tree = sntls.Tree.create(json),
             result;
 
-        result = tree.getSafeNode('foo.bar'.toPath(), function () {
+        result = tree.getSafeNode('foo>bar'.toPath(), function () {
             return "Whatever";
         });
 
         equal(result, "Hello world!", "Node retrieved from existing path");
 
-        result = tree.getSafeNode('hello.world'.toPath(), function () {
+        result = tree.getSafeNode('hello>world'.toPath(), function () {
             return [];
         });
 
@@ -116,7 +116,7 @@
             }),
             result;
 
-        result = tree.unsetNode('foo.bar'.toPath());
+        result = tree.unsetNode('foo>bar'.toPath());
 
         strictEqual(result, tree, "Tree.unsetNode is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
