@@ -15,30 +15,6 @@ troop.promise(sntls, 'Collection', function () {
      * @extends sntls.Hash
      */
     sntls.Collection = self
-        .addPrivateConstant(/** @lends sntls.Collection */{
-            // method names for general purpose constructors
-            _ARRAY_METHOD_NAMES   : ["toString", "toLocaleString", "join", "pop", "push", "concat", "reverse", "shift",
-                "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf",
-                "lastIndexOf", "reduce", "reduceRight"],
-            _BOOLEAN_METHOD_NAMES : ["toString", "valueOf"],
-            _DATE_METHOD_NAMES    : ["toString", "toDateString", "toTimeString", "toLocaleString", "toLocaleDateString",
-                "toLocaleTimeString", "valueOf", "getTime", "getFullYear", "getUTCFullYear", "getMonth", "getUTCMonth",
-                "getDate", "getUTCDate", "getDay", "getUTCDay", "getHours", "getUTCHours", "getMinutes",
-                "getUTCMinutes", "getSeconds", "getUTCSeconds", "getMilliseconds", "getUTCMilliseconds",
-                "getTimezoneOffset", "setTime", "setMilliseconds", "setUTCMilliseconds", "setSeconds", "setUTCSeconds",
-                "setMinutes", "setUTCMinutes", "setHours", "setUTCHours", "setDate", "setUTCDate", "setMonth",
-                "setUTCMonth", "setFullYear", "setUTCFullYear", "toGMTString", "toUTCString", "getYear", "setYear",
-                "toISOString", "toJSON"],
-            _FUNCTION_METHOD_NAMES: ["bind", "toString", "call", "apply"],
-            _NUMBER_METHOD_NAMES  : ["toString", "toLocaleString", "valueOf", "toFixed", "toExponential", "toPrecision"
-            ],
-            _REGEXP_METHOD_NAMES  : ["exec", "test", "toString", "compile"],
-            _STRING_METHOD_NAMES  : ["valueOf", "toString", "charAt", "charCodeAt", "concat", "indexOf", "lastIndexOf",
-                "localeCompare", "match", "replace", "search", "slice", "split", "substring", "substr", "toLowerCase",
-                "toLocaleLowerCase", "toUpperCase", "toLocaleUpperCase", "trim", "trimLeft", "trimRight", "link",
-                "anchor", "fontcolor", "fontsize", "big", "blink", "bold", "fixed", "italics", "small", "strike", "sub",
-                "sup"]
-        })
         .addPrivateMethod(/** @lends sntls.Collection */{
             /**
              * Generates a shortcut method to be applied to the collection.
@@ -78,7 +54,7 @@ troop.promise(sntls, 'Collection', function () {
              * @param {object} obj
              * @return {string[]}
              */
-            _getES5MethodNames: function (obj) {
+            _getMethodNames: function (obj) {
                 var propertyNames = Object.getOwnPropertyNames(obj),
                     methodNames = [],
                     i, propertyName;
@@ -555,56 +531,6 @@ troop.promise(sntls, 'Collection', function () {
                 return self.create(result);
             }
         });
-
-    if (troop.Feature.hasPropertyAttributes()) {
-        /**
-         * For ES5, we go with ordinary method extraction
-         */
-        self.addPrivateMethod(/** @lends sntls.Collection */{
-            _getMethodNames: self._getES5MethodNames
-        });
-    } else {
-        /**
-         * For ES3 (JavaScript 1.5) we offer the method list for
-         * a list of general purpose objects
-         */
-        self.addPrivateMethod(/** @lends sntls.Collection */{
-            _getMethodNames: function (obj) {
-                var result;
-
-                // collecting official, non-enumerable method names
-                switch (obj) {
-                case Array.prototype:
-                    result = self._ARRAY_METHOD_NAMES;
-                    break;
-                case Boolean.prototype:
-                    result = self._BOOLEAN_METHOD_NAMES;
-                    break;
-                case Date.prototype:
-                    result = self._DATE_METHOD_NAMES;
-                    break;
-                case Function.prototype:
-                    result = self._FUNCTION_METHOD_NAMES;
-                    break;
-                case Number.prototype:
-                    result = self._NUMBER_METHOD_NAMES;
-                    break;
-                case RegExp.prototype:
-                    result = self._REGEXP_METHOD_NAMES;
-                    break;
-                case String.prototype:
-                    result = self._STRING_METHOD_NAMES;
-                    break;
-                default:
-                    result = [];
-                    break;
-                }
-
-                // adding any enumerable, user-added method names
-                return result.concat(Object.getOwnPropertyNames(obj));
-            }
-        });
-    }
 });
 
 (function () {

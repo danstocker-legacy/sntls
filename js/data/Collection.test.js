@@ -6,7 +6,7 @@
 
     test("Method names", function () {
         deepEqual(
-            sntls.Collection._getES5MethodNames({foo: function () {}, bar: "hello"}),
+            sntls.Collection._getMethodNames({foo: function () {}, bar: "hello"}),
             ['foo'],
             "Gets method names from object (ES5)"
         );
@@ -15,12 +15,10 @@
         // _getMethodNames should retrieve those AND built-in method names
         Boolean.prototype.sntlsTest = function () {};
 
-        if (troop.Feature.hasPropertyAttributes()) {
-            strictEqual(sntls.Collection._getMethodNames, sntls.Collection._getES5MethodNames, "In ES5 same as Object.getOwnPropertyNames");
-        } else {
+        if (!troop.Feature.hasPropertyAttributes()) {
             deepEqual(
-                sntls.Collection._getMethodNames(Boolean.prototype), // boolean is used b/c of the brevity of its method list
-                ["toString", "valueOf", "sntlsTest"],
+                sntls.Collection._getMethodNames(Boolean.prototype).sort(), // boolean is used b/c of the brevity of its method list
+                ["sntlsTest", "toString", "valueOf"],
                 "ES3 general purpose object proto"
             );
         }
