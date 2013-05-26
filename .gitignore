@@ -3,3 +3,4 @@
 /lib/
 /build*.sh
 /targets.sh
+/*.tgz
