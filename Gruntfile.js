@@ -4,6 +4,7 @@ module.exports = function (grunt) {
 
     var params = {
         files: [
+            'js/license.js',
             'js/namespace.js',
             'js/utils.js',
             'js/data/Hash.js',
