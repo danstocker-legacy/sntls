@@ -113,7 +113,8 @@
         var reg = {
                 init          : 0,
                 nonConflicting: 0,
-                filterByPrefix: 0
+                originalFilter: 0,
+                customFilter  : 0
             },
 
             MyClass = troop.Base.extend()
@@ -129,13 +130,19 @@
                     },
 
                     filterByPrefix: function () {
-                        reg.filterByPrefix++;
+                        reg.customFilter++;
                     }
                 }),
 
             Specified = sntls.Collection.of(MyClass),
 
             specified = Specified.create();
+
+        equal(typeof sntls.Collection.nonConflicting, 'undefined', "Sanity check, non-conflicting method is absent on Collection");
+
+        strictEqual(Specified.init, sntls.Collection.init, "Init not overridden");
+        strictEqual(Specified.filterByPrefix, sntls.Collection.filterByPrefix, "Conflicting method not overridden");
+        equal(typeof Specified.nonConflicting, 'function', "Non-conflicting method applied");
 
         equal(reg.init, 0, "Conflicting .init was not called");
 
@@ -146,11 +153,23 @@
         equal(reg.nonConflicting, 1, "Non conflicting method call counter");
 
         // legitimate filter expression (conflicting method call)
-        var filtered = specified.filterByPrefix('f');
 
-        equal(filtered.isA(sntls.Collection), true, "Filter returns collection");
-        equal(filtered.isA(Specified), false, "Filter returns non-specified collection");
-        equal(reg.filterByPrefix, 1, "Custom filter ran once");
+        sntls.Collection.addMock({
+            filterByPrefix: function () {
+                reg.originalFilter++;
+            }
+        });
+
+        specified.filterByPrefix('f');
+
+        sntls.Collection.removeMocks();
+
+        equal(reg.originalFilter, 1, "Original filter invoked");
+        equal(reg.customFilter, 0, "Custom filter not invoked");
+
+        specified.callOnEachItem('filterByPrefix');
+
+        equal(reg.customFilter, 1, "Custom filter invoked by .callOnEachItem");
     });
 
     test("Specified extended collection", function () {

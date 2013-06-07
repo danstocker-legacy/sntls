@@ -105,7 +105,11 @@ troop.promise(sntls, 'Collection', function () {
                 // adding shortcut methods to temp shortcuts object
                 for (i = 0; i < methodNames.length; i++) {
                     methodName = methodNames[i];
-                    shortcutMethods[methodName] = self._genShortcut(methodName);
+                    // template method mustn't override original Collection properties
+                    // those (shadowing) methods can still be invoked via .callOnEachItem()
+                    if (typeof this[methodName] === 'undefined') {
+                        shortcutMethods[methodName] = self._genShortcut(methodName);
+                    }
                 }
 
                 // adding shortcut methods to extended class
