@@ -1,3 +1,18 @@
+/**
+ * Path Query
+ *
+ * An expression that may match several paths.
+ * Queries may be interpreted as paths themselves. (Wherever
+ * a path is accepted, so is a query.)
+ *
+ * Patterns:
+ *  - '<' for expressing OR relationship between keys
+ *  - '|' for matching any string on a key
+ *  - '\' for skipping keys until next pattern is matched
+ *
+ * Example: 'root>\\>persons>|>name' would match the name field
+ * of all 'person' documents in a tree.
+ */
 /*global dessert, troop, sntls, sntls */
 troop.promise(sntls, 'Query', function () {
     "use strict";
