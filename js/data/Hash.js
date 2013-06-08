@@ -11,6 +11,8 @@
 troop.promise(sntls, 'Hash', function () {
     "use strict";
 
+    var hOP = Object.prototype.hasOwnProperty;
+
     /**
      * @class sntls.Hash
      * @extends troop.Base
@@ -34,6 +36,23 @@ troop.promise(sntls, 'Hash', function () {
             },
 
             /**
+             * Retrieves the first key to be found in the Hash.
+             * Not guaranteed to return the same key on subsequent
+             * calls when the hash has more than 1 items.
+             * @return {string}
+             */
+            getFirstKey: function () {
+                var items = this.items,
+                    key;
+                for (key in items) {
+                    if (hOP.call(items, key)) {
+                        return key;
+                    }
+                }
+                return undefined;
+            },
+
+            /**
              * Retrieves all item keys.
              * @return {string[]}
              */
@@ -47,6 +66,25 @@ troop.promise(sntls, 'Hash', function () {
              */
             getKeysAsHash: function () {
                 return sntls.Hash.create(Object.keys(this.items));
+            },
+
+            /**
+             * Retrieves the first value to be found in the Hash.
+             * Not guaranteed to return the same value on subsequent
+             * calls when the hash has more than 1 items.
+             * Doesn't necessarily correspond to the key returned by
+             * `.getFirstKey`.
+             * @return {*}
+             */
+            getFirstValue: function () {
+                var items = this.items,
+                    key;
+                for (key in items) {
+                    if (hOP.call(items, key)) {
+                        return items[key];
+                    }
+                }
+                return undefined;
             },
 
             /**

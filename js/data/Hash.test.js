@@ -23,6 +23,27 @@
         }, "Predefined items property on hash");
     });
 
+    test("Single key & value extraction", function () {
+        var hash;
+
+        hash = sntls.Hash.create({});
+        equal(typeof hash.getFirstKey(), 'undefined', "First key in empty hash");
+        equal(typeof hash.getFirstValue(), 'undefined', "First value in empty hash");
+
+        hash = sntls.Hash.create({hello: 'world'});
+        equal(hash.getFirstKey(), 'hello', "First key in singular hash");
+        equal(hash.getFirstValue(), 'world', "First value in singular hash");
+
+        hash = sntls.Hash.create({
+            one  : 'hello',
+            two  : 'world!',
+            four : {},
+            five : true
+        });
+        ok(['one', 'two', 'four', 'five'].indexOf(hash.getFirstKey()) > -1, "First key in regular hash");
+        ok(['hello', 'world!', 5, true].indexOf(hash.getFirstValue()) > -1, "First value in regular hash");
+    });
+
     test("Key extraction", function () {
         var hash = sntls.Hash.create({
             one  : 'hello',
@@ -89,7 +110,7 @@
             result;
 
         hash = sntls.Hash.create({
-            foo: 'bar',
+            foo  : 'bar',
             hello: 'world'
         });
 
