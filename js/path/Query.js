@@ -257,16 +257,14 @@ troop.promise(sntls, 'Query', function () {
 (function () {
     "use strict";
 
-    var Query = sntls.Query;
-
     dessert.addTypes(/** @lends dessert */{
         isQuery: function (expr) {
-            return Query.isBaseOf(expr);
+            return sntls.Query.isBaseOf(expr);
         },
 
         isQueryOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   Query.isBaseOf(expr);
+                   sntls.Query.isBaseOf(expr);
         }
     });
 
@@ -274,13 +272,13 @@ troop.promise(sntls, 'Query', function () {
      * @return {sntls.Query}
      */
     String.prototype.toQuery = function () {
-        return Query.create(this);
+        return sntls.Query.create(this);
     };
 
     /**
      * @return {sntls.Query}
      */
     Array.prototype.toQuery = function () {
-        return Query.create(this);
+        return sntls.Query.create(this);
     };
 }());
