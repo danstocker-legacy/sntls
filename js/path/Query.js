@@ -11,12 +11,6 @@ troop.promise(sntls, 'Query', function () {
     sntls.Query = base.extend()
         .addConstant(/** @lends sntls.Query */{
             /**
-             * Query validator regexp
-             * @type {RegExp}
-             */
-            RE_QUERY_VALIDATOR: /^[^><]+(<[^><]+)*(>[^><]+(<[^><]+)*)*$/,
-
-            /**
              * Pattern that matches any key on a single level.
              * @type {object}
              */
@@ -242,11 +236,6 @@ troop.promise(sntls, 'Query', function () {
     var Query = sntls.Query;
 
     dessert.addTypes(/** @lends dessert */{
-        isQueryString: function (expr) {
-            return this.isString(expr) &&
-                   Query.RE_QUERY_VALIDATOR.test(expr);
-        },
-
         isQuery: function (expr) {
             return Query.isBaseOf(expr);
         },
