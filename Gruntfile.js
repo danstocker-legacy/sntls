@@ -8,6 +8,7 @@ module.exports = function (grunt) {
             'js/namespace.js',
             'js/utils.js',
             'js/path/Path.js',
+            'js/path/Query.js',
             'js/data/Hash.js',
             'js/data/Dictionary.js',
             'js/data/StringDictionary.js',
@@ -27,10 +28,10 @@ module.exports = function (grunt) {
         ],
 
         test: [
+            'js/jsTestDriver.conf',
             'js/path/jsTestDriver.conf',
-            'js/behavior/jsTestDriver.conf',
             'js/data/jsTestDriver.conf',
-            'js/jsTestDriver.conf'
+            'js/behavior/jsTestDriver.conf'
         ],
 
         globals: {
