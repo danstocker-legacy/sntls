@@ -7,6 +7,7 @@ module.exports = function (grunt) {
             'js/license.js',
             'js/namespace.js',
             'js/utils.js',
+            'js/path/Path.js',
             'js/data/Hash.js',
             'js/data/Dictionary.js',
             'js/data/StringDictionary.js',
@@ -14,7 +15,6 @@ module.exports = function (grunt) {
             'js/data/JournalingCollection.js',
             'js/data/OrderedList.js',
             'js/data/OrderedStringList.js',
-            'js/data/Path.js',
             'js/data/Tree.js',
             'js/data/collections/ArrayCollection.js',
             'js/data/collections/DateCollection.js',
@@ -27,6 +27,7 @@ module.exports = function (grunt) {
         ],
 
         test: [
+            'js/path/jsTestDriver.conf',
             'js/behavior/jsTestDriver.conf',
             'js/data/jsTestDriver.conf',
             'js/jsTestDriver.conf'
