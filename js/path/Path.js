@@ -18,9 +18,19 @@ troop.promise(sntls, 'Path', function () {
         .addConstant(/** @lends sntls.Path */{
             RE_PATH_SEPARATOR: />/
         })
-        .addSurrogate(sntls, 'Query', function (query) {
-            return validators.isString(query) &&
-                   sntls.Query.RE_QUERY_TESTER.test(query);
+        .addSurrogate(sntls, 'Query', function (path) {
+            var i;
+            if (path instanceof Array) {
+                for (i = 0; i < path.length; i++) {
+                    // any object in the path qualifies for query
+                    if (path[i] instanceof Object) {
+                        return true;
+                    }
+                }
+            } else if (validators.isString(path)) {
+                return sntls.Query.RE_QUERY_TESTER.test(path);
+            }
+            return false;
         })
         .addPrivateMethod(/** @lends sntls.Path */{
             /**
