@@ -8,6 +8,8 @@
 troop.promise(sntls, 'Path', function () {
     "use strict";
 
+    var validators = dessert.validators;
+
     /**
      * @class sntls.Path
      * @extends troop.Base
@@ -15,6 +17,10 @@ troop.promise(sntls, 'Path', function () {
     sntls.Path = troop.Base.extend()
         .addConstant(/** @lends sntls.Path */{
             RE_PATH_SEPARATOR: />/
+        })
+        .addSurrogate(sntls, 'Query', function (query) {
+            return validators.isString(query) &&
+                   sntls.Query.RE_QUERY_TESTER.test(query);
         })
         .addPrivateMethod(/** @lends sntls.Path */{
             /**
@@ -54,6 +60,8 @@ troop.promise(sntls, 'Path', function () {
              */
 
             /**
+             * Initializes Path a string or array. Keys in string representation
+             * are assumed to be URI-encoded.
              * @path {string|string[]} Path in string or array representation
              */
             init: function (path) {
@@ -62,7 +70,7 @@ troop.promise(sntls, 'Path', function () {
                 // array representation is expected to be used more often
                 if (path instanceof Array) {
                     asArray = path;
-                } else if (dessert.validators.isString(path)) {
+                } else if (validators.isString(path)) {
                     asArray = this._decodeURI(path.split(this.RE_PATH_SEPARATOR));
                 } else {
                     dessert.assert(false, "Invalid path");

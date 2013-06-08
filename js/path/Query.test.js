@@ -118,6 +118,16 @@
         );
     });
 
+    test("Instantiation as surrogate", function () {
+        var query;
+
+        query = sntls.Path.create('test>path>it>is');
+        ok(!query.isA(sntls.Query), "Path did not satisfy query conditions");
+
+        query = sntls.Path.create('test>\\>path>it<that>is');
+        ok(query.isA(sntls.Query), "Path created Query instance");
+    });
+
     test("Type conversion", function () {
         var query;
 

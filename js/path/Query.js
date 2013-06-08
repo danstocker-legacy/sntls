@@ -26,6 +26,13 @@ troop.promise(sntls, 'Query', function () {
     sntls.Query = base.extend()
         .addConstant(/** @lends sntls.Query */{
             /**
+             * Regular expression that tests whether string
+             * contains query patterns.
+             * @type {RegExp}
+             */
+            RE_QUERY_TESTER: /(^|>)(\||\\|<)($|>)/,
+
+            /**
              * Pattern that matches any key on a single level.
              * @type {object}
              */
@@ -142,6 +149,8 @@ troop.promise(sntls, 'Query', function () {
              */
 
             /**
+             * Initializes query with a string or array. Keys in the query
+             * (except for patterns) are assumed to be URI-encoded.
              * @param {Array|string} query
              */
             init: function (query) {
