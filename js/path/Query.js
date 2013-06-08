@@ -265,6 +265,25 @@ troop.promise(sntls, 'Query', function () {
         isQueryOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    sntls.Query.isBaseOf(expr);
+        },
+
+        /**
+         * Determines whether specified string or array path qualifies as query.
+         * @path {string|string[]} Path in string or array representation
+         */
+        isQueryExpression: function (path) {
+            var i;
+            if (path instanceof Array) {
+                for (i = 0; i < path.length; i++) {
+                    // any object in the path qualifies for query
+                    if (path[i] instanceof Object) {
+                        return true;
+                    }
+                }
+            } else if (this.isString(path)) {
+                return sntls.Query.RE_QUERY_TESTER.test(path);
+            }
+            return false;
         }
     });
 

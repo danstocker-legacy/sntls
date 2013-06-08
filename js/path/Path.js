@@ -8,30 +8,19 @@
 troop.promise(sntls, 'Path', function () {
     "use strict";
 
-    var validators = dessert.validators;
+    var validators = dessert.validators,
+        base = troop.Base,
+        self = base.extend();
 
     /**
      * @class sntls.Path
      * @extends troop.Base
      */
-    sntls.Path = troop.Base.extend()
+    sntls.Path = self
         .addConstant(/** @lends sntls.Path */{
             RE_PATH_SEPARATOR: />/
         })
-        .addSurrogate(sntls, 'Query', function (path) {
-            var i;
-            if (path instanceof Array) {
-                for (i = 0; i < path.length; i++) {
-                    // any object in the path qualifies for query
-                    if (path[i] instanceof Object) {
-                        return true;
-                    }
-                }
-            } else if (validators.isString(path)) {
-                return sntls.Query.RE_QUERY_TESTER.test(path);
-            }
-            return false;
-        })
+        .addSurrogate(sntls, 'Query', validators.isQueryExpression.bind(validators))
         .addPrivateMethod(/** @lends sntls.Path */{
             /**
              * URI encodes all items of an array.
