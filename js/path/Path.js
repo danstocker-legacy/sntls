@@ -92,20 +92,24 @@ troop.promise(sntls, 'Path', function () {
             },
 
             /**
-             * Trims trailing end of path. (Removes last key)
+             * Trims trailing end of path.
+             * Changes path buffer!
              * @return {sntls.Path}
              */
             trim: function () {
-                return /** @type sntls.Path */ this.getBase().create(this.asArray.slice(0, -1));
+                this.asArray.pop();
+                return this;
             },
 
             /**
              * Prepends path with other path.
+             * Changes path buffer!
              * @param {sntls.Path} path
              * @return {sntls.Path}
              */
             prepend: function (path) {
-                return /** @type sntls.Path */ this.getBase().create(path.asArray.concat(this.asArray));
+                this.asArray = path.asArray.concat(this.asArray);
+                return this;
             },
 
             /**

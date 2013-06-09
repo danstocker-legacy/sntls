@@ -47,7 +47,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             setNode: function (path, value) {
-                var node = path.trim().resolveOrBuild(this.items),
+                var node = path.clone().trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -65,7 +65,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {*}
              */
             getSafeNode: function (path, generator) {
-                var node = path.trim().resolveOrBuild(this.items),
+                var node = path.clone().trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -82,7 +82,7 @@ troop.promise(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             unsetNode: function (path) {
-                var node = path.trim().resolveOrBuild(this.items),
+                var node = path.clone().trim().resolveOrBuild(this.items),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 

@@ -46,7 +46,7 @@ troop.promise(sntls, 'Collection', function () {
                         // delegating method call to item and adding to result collection buffer
                         itemResult = item[methodName].apply(item, arguments);
                         result[itemName] = itemResult;
-                        isChainable = isChainable && (itemResult === item);
+                        isChainable = isChainable && itemResult === item;
                     }
 
                     // chainable collection method for chainable item methods
@@ -540,7 +540,7 @@ troop.promise(sntls, 'Collection', function () {
                     if (typeof itemMethod === 'function') {
                         itemResult = itemMethod.apply(item, args);
                         result[itemName] = itemResult;
-                        isChainable = isChainable && (itemResult === item);
+                        isChainable = isChainable && itemResult === item;
                     }
                 }
 

@@ -1,4 +1,4 @@
-/*global sntls, module, test, expect, ok, equal, notStrictEqual, deepEqual, raises */
+/*global sntls, module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, raises */
 (function () {
     "use strict";
 
@@ -42,13 +42,7 @@
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
             trimmedPath = originalPath.trim();
 
-        notStrictEqual(originalPath, trimmedPath, "Trimming returns new Path");
-
-        deepEqual(
-            originalPath.asArray,
-            ['test', 'originalPath', 'it', 'is'],
-            "Original path intact"
-        );
+        strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
 
         deepEqual(
             trimmedPath.asArray,
@@ -61,13 +55,7 @@
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
             prependedPath = originalPath.prepend('foo>bar'.toPath());
 
-        notStrictEqual(originalPath, prependedPath, "Prepending returns new Path");
-
-        deepEqual(
-            originalPath.asArray,
-            ['test', 'originalPath', 'it', 'is'],
-            "Original path intact"
-        );
+        strictEqual(originalPath, prependedPath, "Prepending returns new Path");
 
         deepEqual(
             prependedPath.asArray,
