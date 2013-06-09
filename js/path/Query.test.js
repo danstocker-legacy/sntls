@@ -118,22 +118,6 @@
         );
     });
 
-    test("Instantiation as surrogate", function () {
-        var query;
-
-        query = sntls.Path.create('test>path>it>is');
-        ok(!query.isA(sntls.Query), "String path did not satisfy query conditions");
-
-        query = sntls.Path.create('test>\\>path>it<that>is');
-        ok(query.isA(sntls.Query), "String path created Query instance");
-
-        query = sntls.Path.create(['test', 'path', 'it', 'is']);
-        ok(!query.isA(sntls.Query), "Array path did not satisfy query conditions");
-
-        query = sntls.Path.create(['test', sntls.Query.PATTERN_ASTERISK, 'it', 'is']);
-        ok(query.isA(sntls.Query), "Array path created Query instance");
-    });
-
     test("Type conversion", function () {
         var query;
 
@@ -150,6 +134,22 @@
             ['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']],
             "Query initialized from string"
         );
+    });
+
+    test("Type conversion with either types", function () {
+        var query;
+
+        query = 'test>path>it>is'.toPathOrQuery();
+        ok(!query.isA(sntls.Query), "String path did not satisfy query conditions");
+
+        query = 'test>\\>path>it<that>is'.toPathOrQuery();
+        ok(query.isA(sntls.Query), "String path created Query instance");
+
+        query = ['test', 'path', 'it', 'is'].toPathOrQuery();
+        ok(!query.isA(sntls.Query), "Array path did not satisfy query conditions");
+
+        query = ['test', sntls.Query.PATTERN_ASTERISK, 'it', 'is'].toPathOrQuery();
+        ok(query.isA(sntls.Query), "Array path created Query instance");
     });
 
     test("Stem extraction", function () {

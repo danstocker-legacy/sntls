@@ -257,6 +257,8 @@ troop.promise(sntls, 'Query', function () {
 (function () {
     "use strict";
 
+    var validators = dessert.validators;
+
     dessert.addTypes(/** @lends dessert */{
         isQuery: function (expr) {
             return sntls.Query.isBaseOf(expr);
@@ -271,17 +273,17 @@ troop.promise(sntls, 'Query', function () {
          * Determines whether specified string or array path qualifies as query.
          * @path {string|string[]} Path in string or array representation
          */
-        isQueryExpression: function (path) {
+        isQueryExpression: function (expr) {
             var i;
-            if (path instanceof Array) {
-                for (i = 0; i < path.length; i++) {
+            if (expr instanceof Array) {
+                for (i = 0; i < expr.length; i++) {
                     // any object in the path qualifies for query
-                    if (path[i] instanceof Object) {
+                    if (expr[i] instanceof Object) {
                         return true;
                     }
                 }
-            } else if (this.isString(path)) {
-                return sntls.Query.RE_QUERY_TESTER.test(path);
+            } else if (this.isString(expr)) {
+                return sntls.Query.RE_QUERY_TESTER.test(expr);
             }
             return false;
         }
@@ -291,13 +293,31 @@ troop.promise(sntls, 'Query', function () {
      * @return {sntls.Query}
      */
     String.prototype.toQuery = function () {
-        return sntls.Query.create(this);
+        return /** @type {sntls.Query} */ sntls.Query.create(this);
+    };
+
+    /**
+     * @return {sntls.Path}
+     */
+    String.prototype.toPathOrQuery = function () {
+        return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
+            sntls.Query.create(this) :
+            sntls.Path.create(this);
     };
 
     /**
      * @return {sntls.Query}
      */
     Array.prototype.toQuery = function () {
-        return sntls.Query.create(this);
+        return /** @type {sntls.Query} */ sntls.Query.create(this);
+    };
+
+    /**
+     * @return {sntls.Path}
+     */
+    Array.prototype.toPathOrQuery = function () {
+        return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
+            sntls.Query.create(this) :
+            sntls.Path.create(this);
     };
 }());

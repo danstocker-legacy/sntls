@@ -20,7 +20,6 @@ troop.promise(sntls, 'Path', function () {
         .addConstant(/** @lends sntls.Path */{
             RE_PATH_SEPARATOR: />/
         })
-        .addSurrogate(sntls, 'Query', validators.isQueryExpression.bind(validators))
         .addPrivateMethod(/** @lends sntls.Path */{
             /**
              * URI encodes all items of an array.
