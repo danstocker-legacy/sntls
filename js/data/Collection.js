@@ -34,18 +34,26 @@ troop.promise(sntls, 'Collection', function () {
                     var items = this.items,
                         result = items instanceof Array ? [] : {},
                         itemNames = Object.keys(items),
-                        i, itemName, item;
+                        i, itemName, item,
+                        itemResult,
+                        isChainable = true;
 
                     // traversing collection items
                     for (i = 0; i < itemNames.length; i++) {
                         itemName = itemNames[i];
                         item = items[itemName];
 
-                        // delegating method call to item and adding
-                        result[itemName] = item[methodName].apply(item, arguments);
+                        // delegating method call to item and adding to result collection buffer
+                        itemResult = item[methodName].apply(item, arguments);
+                        result[itemName] = itemResult;
+                        isChainable = isChainable && (itemResult === item);
                     }
 
-                    return self.create(result);
+                    // chainable collection method for chainable item methods
+                    // otherwise returning results as plain collection
+                    return isChainable ?
+                        this :
+                        self.create(result);
                 };
             },
 
@@ -521,18 +529,26 @@ troop.promise(sntls, 'Collection', function () {
                     items = this.items,
                     keys = Object.keys(items),
                     result = items instanceof Array ? [] : {},
-                    i, itemName, item, method;
+                    i, itemName, item,
+                    itemMethod, itemResult,
+                    isChainable = true;
 
                 for (i = 0; i < keys.length; i++) {
                     itemName = keys[i];
                     item = items[itemName];
-                    method = item[methodName];
-                    if (typeof method === 'function') {
-                        result[itemName] = method.apply(item, args);
+                    itemMethod = item[methodName];
+                    if (typeof itemMethod === 'function') {
+                        itemResult = itemMethod.apply(item, args);
+                        result[itemName] = itemResult;
+                        isChainable = isChainable && (itemResult === item);
                     }
                 }
 
-                return self.create(result);
+                // chainable collection method for chainable item methods
+                // otherwise returning results as plain collection
+                return isChainable ?
+                    this :
+                    self.create(result);
             }
         });
 });

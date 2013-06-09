@@ -61,6 +61,9 @@
                     },
                     foo : function (a) {
                         return this.a + ' ' + a;
+                    },
+                    bar: function () {
+                        return this;
                     }
                 }),
             ClassCollection = sntls.Collection.of(Class),
@@ -80,6 +83,7 @@
         equal(typeof StringCollection.split, 'function', "String method assigned to collection");
         equal(typeof ArrayCollection.join, 'function', "Array method assigned to collection");
         equal(typeof ClassCollection.foo, 'function', "Class method assigned to collection");
+        equal(typeof ClassCollection.bar, 'function', "Class method assigned to collection");
 
         deepEqual(
             StringCollection.create(stringData).split(' ').items,
@@ -106,6 +110,14 @@
                 bar: "howdy world"
             },
             "Calling method over collection of troop instances"
+        );
+
+        var collection = ClassCollection.create(classData);
+
+        strictEqual(
+            collection.bar(),
+            collection,
+            "Generated collection method chainable for chainable item methods"
         );
     });
 
@@ -854,7 +866,7 @@
         );
     });
 
-    test("Call Each", function () {
+    test("Call-each", function () {
         var collection = sntls.Collection.create(),
             i, result;
 
@@ -880,6 +892,29 @@
             3: 1,
             4: 1
         });
+    });
+
+    test("Chainable call-each", function () {
+        var collection = sntls.Collection.create(),
+            i, result;
+
+        expect(6);
+
+        /*jshint validthis:true */
+        function test(customArg) {
+            equal(customArg, 'custom', "Custom argument");
+            return this;
+        }
+
+        for (i = 0; i < 5; i++) {
+            collection.setItem(i, {
+                test: test
+            });
+        }
+
+        result = collection.callOnEachItem('test', 'custom');
+
+        strictEqual(result, collection, "All methods returned item reference");
     });
 
     test("Call each on array buffer", function () {
