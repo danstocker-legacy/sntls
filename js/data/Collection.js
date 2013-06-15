@@ -3,7 +3,7 @@
  * changes on named elements.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Collection', function () {
+troop.postpone(sntls, 'Collection', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
@@ -15,7 +15,7 @@ troop.promise(sntls, 'Collection', function () {
      * @extends sntls.Hash
      */
     sntls.Collection = self
-        .addPrivateMethod(/** @lends sntls.Collection */{
+        .addPrivateMethods(/** @lends sntls.Collection */{
             /**
              * Generates a shortcut method to be applied to the collection.
              * Shortcut methods traverse the collection and call the
@@ -75,7 +75,7 @@ troop.promise(sntls, 'Collection', function () {
                 return methodNames;
             }
         })
-        .addMethod(/** @lends sntls.Collection */{
+        .addMethods(/** @lends sntls.Collection */{
             /**
              * Creates "specified collection".
              * Adds shortcut methods to items. It is assumed that the collection will only contain
@@ -121,7 +121,7 @@ troop.promise(sntls, 'Collection', function () {
                 }
 
                 // adding shortcut methods to extended class
-                specifiedCollection.addMethod(shortcutMethods);
+                specifiedCollection.addMethods(shortcutMethods);
 
                 return specifiedCollection;
             },
@@ -567,7 +567,7 @@ troop.promise(sntls, 'Collection', function () {
         }
     });
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @param {sntls.Collection} [returnType]
          * @return {sntls.Collection}

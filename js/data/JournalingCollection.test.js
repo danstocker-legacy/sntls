@@ -101,7 +101,7 @@
         collection.resetLog();
         deepEqual(collection.log, [], "Log empty after reset");
 
-        sntls.JournalingCollection.addMock({
+        sntls.JournalingCollection.addMocks({
             resetLog: function () {
                 ok("Log re-set during clear");
             }

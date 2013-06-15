@@ -4,7 +4,7 @@
  * Classes that have this trait may define orthogonal state layers.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Stateful', function () {
+troop.postpone(sntls, 'Stateful', function () {
     "use strict";
 
     /**
@@ -12,7 +12,7 @@ troop.promise(sntls, 'Stateful', function () {
      * @extends troop.Base
      */
     sntls.Stateful = troop.Base.extend()
-        .addMethod(/** @lends sntls.Stateful */{
+        .addMethods(/** @lends sntls.Stateful */{
             /**
              * Adds properties required by trait.
              */
@@ -53,7 +53,7 @@ troop.promise(sntls, 'Stateful', function () {
                     .isString(defaultState, "Invalid default state");
 
                 if (!this.hasOwnProperty('stateMatrices')) {
-                    this.addConstant(/** @lends sntls.Stateful */{
+                    this.addConstants(/** @lends sntls.Stateful */{
                         /**
                          * Associates layer names with default state names.
                          * @type {sntls.Collection}

@@ -5,7 +5,7 @@
  * an array, or a '>'-delimited string.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Path', function () {
+troop.postpone(sntls, 'Path', function () {
     "use strict";
 
     var validators = dessert.validators,
@@ -17,10 +17,10 @@ troop.promise(sntls, 'Path', function () {
      * @extends troop.Base
      */
     sntls.Path = self
-        .addConstant(/** @lends sntls.Path */{
+        .addConstants(/** @lends sntls.Path */{
             RE_PATH_SEPARATOR: />/
         })
-        .addPrivateMethod(/** @lends sntls.Path */{
+        .addPrivateMethods(/** @lends sntls.Path */{
             /**
              * URI encodes all items of an array.
              * @param {string[]} asArray Array of plain strings
@@ -51,7 +51,7 @@ troop.promise(sntls, 'Path', function () {
                 return result;
             }
         })
-        .addMethod(/** @lends sntls.Path */{
+        .addMethods(/** @lends sntls.Path */{
             /**
              * @name sntls.Path.create
              * @return {sntls.Path}

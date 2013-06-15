@@ -8,7 +8,7 @@
  * Other `Hash`-based classes may delegate conversion methods to this class.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Hash', function () {
+troop.postpone(sntls, 'Hash', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty;
@@ -18,7 +18,7 @@ troop.promise(sntls, 'Hash', function () {
      * @extends troop.Base
      */
     sntls.Hash = troop.Base.extend()
-        .addMethod(/** @lends sntls.Hash */{
+        .addMethods(/** @lends sntls.Hash */{
             /**
              * @name sntls.Hash.create
              * @return {sntls.Hash}

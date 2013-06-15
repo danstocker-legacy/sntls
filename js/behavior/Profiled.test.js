@@ -7,7 +7,7 @@
     test("Construction", function () {
         var myClass = troop.Base.extend()
                 .addTrait(sntls.Profiled)
-                .addMethod({
+                .addMethods({
                     init: function () {
                         this.initProfiled('foo');
                     }
@@ -24,7 +24,7 @@
     test("Profile getter", function () {
         var myClass = troop.Base.extend()
                 .addTrait(sntls.Profiled)
-                .addMethod({
+                .addMethods({
                     init: function () {
                         this.initProfiled('foo');
                     }

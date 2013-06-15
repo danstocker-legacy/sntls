@@ -6,7 +6,7 @@
  * Use the Dictionary class for managing and combining lookup objects.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Dictionary', function () {
+troop.postpone(sntls, 'Dictionary', function () {
     "use strict";
 
     var base = sntls.Hash;
@@ -16,7 +16,7 @@ troop.promise(sntls, 'Dictionary', function () {
      * @extends sntls.Hash
      */
     sntls.Dictionary = base.extend()
-        .addPrivateMethod(/** @lends sntls.Dictionary */{
+        .addPrivateMethods(/** @lends sntls.Dictionary */{
             /**
              * Counts values in dictionary.
              * Since one item may hold multiple values, value count =/= item count.
@@ -39,7 +39,7 @@ troop.promise(sntls, 'Dictionary', function () {
                 return result;
             }
         })
-        .addMethod(/** @lends sntls.Dictionary */{
+        .addMethods(/** @lends sntls.Dictionary */{
             /**
              * @name sntls.Dictionary.create
              * @return {sntls.Dictionary}
@@ -246,7 +246,7 @@ troop.promise(sntls, 'Dictionary', function () {
         }
     });
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.Dictionary}
          */

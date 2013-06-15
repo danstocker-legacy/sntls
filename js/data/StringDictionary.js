@@ -7,7 +7,7 @@
  * Base class `Dictionary` handles multiplicity.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'StringDictionary', function () {
+troop.postpone(sntls, 'StringDictionary', function () {
     "use strict";
 
     /**
@@ -15,7 +15,7 @@ troop.promise(sntls, 'StringDictionary', function () {
      * @extends sntls.Dictionary
      */
     sntls.StringDictionary = sntls.Dictionary.extend()
-        .addMethod(/** @lends sntls.StringDictionary */{
+        .addMethods(/** @lends sntls.StringDictionary */{
             /**
              * @name sntls.StringDictionary.create
              * @return {sntls.StringDictionary}
@@ -108,7 +108,7 @@ troop.promise(sntls, 'StringDictionary', function () {
         }
     });
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.StringDictionary}
          */

@@ -51,7 +51,7 @@
         var Widget = troop.Base.extend()
                 .addTrait(sntls.Stateful)
                 .addStateLayer('layer', stateMatrix, 'closed')
-                .addMethod({
+                .addMethods({
                     init: function () {
                         this.initStateful();
                     },
@@ -96,7 +96,7 @@
         var Widget = troop.Base.extend()
                 .addTrait(sntls.Stateful)
                 .addStateLayer('layer', stateMatrix, 'closed')
-                .addMethod({
+                .addMethods({
                     init: function () {
                         this.initStateful();
                     },

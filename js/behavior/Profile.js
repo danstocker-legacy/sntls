@@ -5,7 +5,7 @@
  * may be incremented by an object the profile represents.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Profile', function () {
+troop.postpone(sntls, 'Profile', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty;
@@ -15,7 +15,7 @@ troop.promise(sntls, 'Profile', function () {
      * @extends troop.Base
      */
     sntls.Profile = troop.Base.extend()
-        .addMethod(/** @lends sntls.Profile */{
+        .addMethods(/** @lends sntls.Profile */{
             /**
              * @name sntls.Profile.create
              * @return {sntls.Profile}
@@ -103,7 +103,7 @@ troop.promise(sntls, 'Profile', function () {
         });
 });
 
-troop.promise(sntls, 'ProfileCollection', function () {
+troop.postpone(sntls, 'ProfileCollection', function () {
     "use strict";
 
     /**

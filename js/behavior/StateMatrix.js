@@ -4,7 +4,7 @@
  * Stores information about transitions between states.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'StateMatrix', function () {
+troop.postpone(sntls, 'StateMatrix', function () {
     "use strict";
 
     /**
@@ -12,7 +12,7 @@ troop.promise(sntls, 'StateMatrix', function () {
      * @extends troop.Base
      */
     sntls.StateMatrix = troop.Base.extend()
-        .addMethod(/** @lends sntls.StateMatrix */{
+        .addMethods(/** @lends sntls.StateMatrix */{
             /**
              * @name sntls.StateMatrix.create
              * @return {sntls.StateMatrix}
@@ -74,7 +74,7 @@ troop.promise(sntls, 'StateMatrix', function () {
         });
 });
 
-troop.promise(sntls, 'StateMatrixCollection', function () {
+troop.postpone(sntls, 'StateMatrixCollection', function () {
     "use strict";
 
     /**

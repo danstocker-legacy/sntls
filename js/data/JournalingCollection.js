@@ -2,7 +2,7 @@
  * Collection keeping a log of changes.
  */
 /*global troop, sntls */
-troop.promise(sntls, 'JournalingCollection', function () {
+troop.postpone(sntls, 'JournalingCollection', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
@@ -13,7 +13,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
      * @extends sntls.Collection
      */
     sntls.JournalingCollection = base.extend()
-        .addMethod(/** @lends sntls.JournalingCollection */{
+        .addMethods(/** @lends sntls.JournalingCollection */{
             /**
              * @name sntls.JournalingCollection.create
              * @return {sntls.JournalingCollection}
@@ -102,7 +102,7 @@ troop.promise(sntls, 'JournalingCollection', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.JournalingCollection}
          */

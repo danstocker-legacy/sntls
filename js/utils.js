@@ -2,7 +2,7 @@
  * General Utilities
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'utils', function () {
+troop.postpone(sntls, 'utils', function () {
     "use strict";
 
     /**
@@ -10,7 +10,7 @@ troop.promise(sntls, 'utils', function () {
      * @extends troop.Base
      */
     sntls.utils = troop.Base.extend()
-        .addMethod(/** @lends sntls.utils */{
+        .addMethods(/** @lends sntls.utils */{
             /**
              * Creates a shallow copy of an object.
              * Property names will be copied, but property values

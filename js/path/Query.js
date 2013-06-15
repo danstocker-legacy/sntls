@@ -14,7 +14,7 @@
  * of all 'person' documents in a tree.
  */
 /*global dessert, troop, sntls, sntls */
-troop.promise(sntls, 'Query', function () {
+troop.postpone(sntls, 'Query', function () {
     "use strict";
 
     var base = sntls.Path;
@@ -24,7 +24,7 @@ troop.promise(sntls, 'Query', function () {
      * @extends sntls.Path
      */
     sntls.Query = base.extend()
-        .addConstant(/** @lends sntls.Query */{
+        .addConstants(/** @lends sntls.Query */{
             /**
              * Regular expression that tests whether string
              * contains query patterns.
@@ -46,7 +46,7 @@ troop.promise(sntls, 'Query', function () {
              */
             PATTERN_SKIP: {symbol: '\\'}
         })
-        .addPrivateMethod(/** @lends sntls.Query */{
+        .addPrivateMethods(/** @lends sntls.Query */{
             /**
              * URI decodes all items of an array.
              * @param {Array} asArray Array of URI-encoded strings, sub-arrays, or objects
@@ -142,7 +142,7 @@ troop.promise(sntls, 'Query', function () {
                 return false;
             }
         })
-        .addMethod(/** @lends sntls.Query */{
+        .addMethods(/** @lends sntls.Query */{
             /**
              * @name sntls.Query.create
              * @return {sntls.Query}

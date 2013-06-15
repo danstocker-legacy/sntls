@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'StringCollection', function () {
+troop.postpone(sntls, 'StringCollection', function () {
     "use strict";
 
     /**
@@ -18,7 +18,7 @@ troop.promise(sntls, 'StringCollection', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.StringCollection}
          */

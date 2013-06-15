@@ -55,7 +55,7 @@
             FatStringCollection = sntls.Collection.of(String),
             ArrayCollection = sntls.Collection.of(Array.prototype),
             Class = troop.Base.extend()
-                .addMethod({
+                .addMethods({
                     init: function (a) {
                         this.a = a;
                     },
@@ -130,7 +130,7 @@
             },
 
             MyClass = troop.Base.extend()
-                .addMethod({
+                .addMethods({
                     init: function () {
                         this.foo = 'bar';
 
@@ -166,7 +166,7 @@
 
         // legitimate filter expression (conflicting method call)
 
-        sntls.Collection.addMock({
+        sntls.Collection.addMocks({
             filterByPrefix: function () {
                 reg.originalFilter++;
             }
@@ -186,7 +186,7 @@
 
     test("Specified extended collection", function () {
         var ExtendedCollection = sntls.Collection.extend()
-                .addMethod({
+                .addMethods({
                     foo: function () {return "bar";}
                 }),
             ExtendedStringCollection = ExtendedCollection.of(String),
@@ -656,7 +656,7 @@
             "Collection before emptying"
         );
 
-        sntls.Hash.addMock({
+        sntls.Hash.addMocks({
             clear: function () {
                 ok(true, "Base clear called");
             }

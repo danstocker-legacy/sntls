@@ -283,7 +283,7 @@
             hello: ['world', 'all']
         });
 
-        sntls.Hash.addMock({
+        sntls.Hash.addMocks({
             clear: function () {
                 ok(true, "Base clear called");
             }

@@ -5,7 +5,7 @@
  * on the actions of that object.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Profiled', function (sntls) {
+troop.postpone(sntls, 'Profiled', function (sntls) {
     "use strict";
 
     /**
@@ -13,7 +13,7 @@ troop.promise(sntls, 'Profiled', function (sntls) {
      * @extends troop.Base
      */
     sntls.Profiled = troop.Base.extend()
-        .addMethod(/** @lends sntls.Profiled */{
+        .addMethods(/** @lends sntls.Profiled */{
             /**
              * Initializes a profiled instance
              * @param {string} profileId Identifier for profile in profiles

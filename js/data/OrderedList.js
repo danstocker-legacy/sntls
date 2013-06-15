@@ -5,7 +5,7 @@
  * of strings or numbers.
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'OrderedList', function () {
+troop.postpone(sntls, 'OrderedList', function () {
     "use strict";
 
     var base = sntls.Hash;
@@ -15,7 +15,7 @@ troop.promise(sntls, 'OrderedList', function () {
      * @extends sntls.Hash
      */
     sntls.OrderedList = base.extend()
-        .addPrivateMethod(/** @lends sntls.OrderedList */{
+        .addPrivateMethods(/** @lends sntls.OrderedList */{
             /**
              * Compares numbers. To be supplied to Array.sort().
              * @private
@@ -25,7 +25,7 @@ troop.promise(sntls, 'OrderedList', function () {
                 return a > b ? 1 : a < b ? -1 : 0;
             }
         })
-        .addMethod(/** @lends sntls.OrderedList */{
+        .addMethods(/** @lends sntls.OrderedList */{
             /**
              * @name sntls.OrderedList.create
              * @return {sntls.OrderedList}
@@ -211,7 +211,7 @@ troop.promise(sntls, 'OrderedList', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.OrderedList}
          */

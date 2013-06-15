@@ -4,7 +4,7 @@
  * Manages tree data structure
  */
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'Tree', function () {
+troop.postpone(sntls, 'Tree', function () {
     "use strict";
 
     /**
@@ -12,7 +12,7 @@ troop.promise(sntls, 'Tree', function () {
      * @extends sntls.Hash
      */
     sntls.Tree = sntls.Hash.extend()
-        .addMethod(/** @lends sntls.Tree */{
+        .addMethods(/** @lends sntls.Tree */{
             /**
              * @name sntls.Tree.create
              * @return {sntls.Tree}
@@ -107,7 +107,7 @@ troop.promise(sntls, 'Tree', function () {
         }
     });
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.Tree}
          */

@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls */
-troop.promise(sntls, 'OrderedStringList', function () {
+troop.postpone(sntls, 'OrderedStringList', function () {
     "use strict";
 
     /**
@@ -7,7 +7,7 @@ troop.promise(sntls, 'OrderedStringList', function () {
      * @extends sntls.OrderedList
      */
     sntls.OrderedStringList = sntls.OrderedList.extend()
-        .addPrivateMethod(/** @lends sntls.OrderedStringList */{
+        .addPrivateMethods(/** @lends sntls.OrderedStringList */{
             /**
              * Calculates range search end value for prefix search based on start value.
              * Increments char code on the string's last character.
@@ -29,7 +29,7 @@ troop.promise(sntls, 'OrderedStringList', function () {
                 return startValue + String.fromCharCode(0);
             }
         })
-        .addMethod(/** @lends sntls.OrderedStringList */{
+        .addMethods(/** @lends sntls.OrderedStringList */{
             /**
              * @name sntls.OrderedStringList.create
              * @return {sntls.OrderedStringList}
@@ -82,7 +82,7 @@ troop.promise(sntls, 'OrderedStringList', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethod(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @return {sntls.OrderedStringList}
          */
