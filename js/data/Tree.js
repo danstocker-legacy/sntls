@@ -24,7 +24,7 @@ troop.postpone(sntls, 'Tree', function () {
             _getAvailableKeys: function (node, pattern) {
                 var result;
 
-                if (pattern === '*') {
+                if (pattern === sntls.Query.PATTERN_ASTERISK) {
                     // obtaining all keys for node
                     result = Object.keys(node);
                 } else if (typeof pattern === 'string') {
@@ -124,13 +124,13 @@ troop.postpone(sntls, 'Tree', function () {
              * Traverses all enumerable nodes in object.
              * Iterative implementation.
              * Calls handler on leaf nodes by default.
-             * @param {Array}query Query expression guiding traversal.
+             * @param {sntls.Query} query Query expression guiding traversal.
              * ['single key', ['multiple', 'keys'], '*', null]
              * @param {function} handler Called on each (leaf) node.
              */
             traverse: function (query, handler) {
                 var rootNode = this.items,
-                    keysStack = [this._getAvailableKeys(rootNode, query[0])], // stack of keys associated with each node on current path
+                    keysStack = [this._getAvailableKeys(rootNode, query.asArray[0])], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
                     nodeStack = [rootNode], // stack of nodes on current path
 
@@ -193,7 +193,7 @@ troop.postpone(sntls, 'Tree', function () {
                         // burrowing deeper - found a node
                         nodeStack.push(currentNode);
                         indexStack.push(0);
-                        keysStack.push(this._getAvailableKeys(currentNode, query[currentDepth + 1]));
+                        keysStack.push(this._getAvailableKeys(currentNode, query.asArray[currentDepth + 1]));
                     } else {
                         // moving to next node in parent
                         indexStack[currentDepth]++;

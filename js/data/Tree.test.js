@@ -141,7 +141,7 @@
         keys = [];
         paths = [];
 
-        tree.traverse([], function (path, key) {
+        tree.traverse([].toQuery(), function (path, key) {
             paths.push(path.join('.'));
             keys.push(key);
         });
@@ -163,7 +163,7 @@
         paths = [];
 
         // setting up traversal to stop at key '1'
-        tree.traverse([], function (path, key) {
+        tree.traverse([].toQuery(), function (path, key) {
             paths.push(path.join('.'));
             if (key === '1') {
                 return false;
@@ -191,7 +191,7 @@
         obj.hello.all = obj;
 
         paths = [];
-        tree.traverse([], function (path) {
+        tree.traverse([].toQuery(), function (path) {
             paths.push(path.join('.'));
         });
 
@@ -210,7 +210,7 @@
         obj.hello.all = obj.bello;
 
         paths = [];
-        tree.traverse([], function (path) {
+        tree.traverse([].toQuery(), function (path) {
             paths.push(path.join('.'));
         });
 
@@ -228,11 +228,11 @@
                 hello: 'world',
                 test : 1
             },
-            path = ['*', 'blah', ['foo', 'bar']];
+            query = '|>blah>foo<bar'.toQuery();
 
-        deepEqual(sntls.Tree._getAvailableKeys(node, path[0]), Object.keys(node), "Asterisk pattern");
-        equal(sntls.Tree._getAvailableKeys(node, path[1]), ['blah'], "String pattern");
-        equal(sntls.Tree._getAvailableKeys(node, path[2]), ['foo', 'bar'], "Array pattern");
+        deepEqual(sntls.Tree._getAvailableKeys(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
+        equal(sntls.Tree._getAvailableKeys(node, query.asArray[1]), ['blah'], "String pattern");
+        equal(sntls.Tree._getAvailableKeys(node, query.asArray[2]), ['foo', 'bar'], "Array pattern");
     });
 
     test("Restricted traversal", function () {
@@ -255,7 +255,7 @@
             paths;
 
         paths = [];
-        tree.traverse(['foo', '*', '2'], function (path) {
+        tree.traverse('foo>|>2'.toQuery(), function (path) {
             paths.push(path.join('.'));
         });
 
