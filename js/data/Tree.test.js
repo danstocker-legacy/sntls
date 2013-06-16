@@ -141,10 +141,10 @@
         keys = [];
         paths = [];
 
-        tree.traverse({handler: function (path, key) {
+        tree.traverse([], function (path, key) {
             paths.push(path.join('.'));
             keys.push(key);
-        }});
+        });
 
         deepEqual(keys, [
             'hello',
@@ -163,13 +163,13 @@
         paths = [];
 
         // setting up traversal to stop at key '1'
-        tree.traverse({handler: function (path, key) {
+        tree.traverse([], function (path, key) {
             paths.push(path.join('.'));
             if (key === '1') {
                 return false;
             }
             return undefined;
-        }});
+        });
 
         deepEqual(paths, [
             'hello',
@@ -179,12 +179,9 @@
 
         paths = [];
 
-        tree.traverse({
-            allNodes: true,
-            handler : function (path) {
-                paths.push(path.join('.'));
-            }
-        });
+        tree.traverse([], function (path) {
+            paths.push(path.join('.'));
+        }, true);
 
         deepEqual(paths, [
             'hello',
@@ -211,9 +208,9 @@
         obj.hello.all = obj;
 
         paths = [];
-        tree.traverse({handler: function (path) {
+        tree.traverse([], function (path) {
             paths.push(path.join('.'));
-        }});
+        });
 
         deepEqual(paths, [
             'hello.world',
@@ -230,9 +227,9 @@
         obj.hello.all = obj.bello;
 
         paths = [];
-        tree.traverse({handler: function (path) {
+        tree.traverse([], function (path) {
             paths.push(path.join('.'));
-        }});
+        });
 
         deepEqual(paths, [
             'hello.world',
@@ -275,11 +272,8 @@
             paths;
 
         paths = [];
-        tree.traverse({
-            query  : ['foo', '*', '2'],
-            handler: function (path) {
-                paths.push(path.join('.'));
-            }
+        tree.traverse(['foo', '*', '2'], function (path) {
+            paths.push(path.join('.'));
         });
 
         deepEqual(paths, [

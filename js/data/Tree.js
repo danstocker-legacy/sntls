@@ -124,17 +124,13 @@ troop.postpone(sntls, 'Tree', function () {
              * Traverses all enumerable nodes in object.
              * Iterative implementation.
              * Calls handler on leaf nodes by default.
-             * @param options {Object}
-             * @param options.query {Array} Query expression guiding traversal.
+             * @param {Array}query Query expression guiding traversal.
              * ['single key', ['multiple', 'keys'], '*', null]
-             * @param options.handler {function} Called on each (leaf) node.
-             * @param options.allNodes {boolean} Whether to call handler on all nodes (not just leaf nodes).
+             * @param {function} handler Called on each (leaf) node.
+             * @param {boolean} [allNodes] Whether to call handler on all nodes (not just leaf nodes).
              */
-            traverse: function (options) {
-                options = options || {};
-
+            traverse: function (query, handler, allNodes) {
                 var rootNode = this.items,
-                    query = options.query = options.query || [],
                     keysStack = [this._getAvailableKeys(rootNode, query[0])], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
                     nodeStack = [rootNode], // stack of nodes on current path
@@ -187,8 +183,8 @@ troop.postpone(sntls, 'Tree', function () {
 
                     // calling handler for this node
                     // traversal may be terminated by handler by returning false
-                    if ((options.allNodes || !isValidNode) &&
-                        options.handler.call(currentNode, currentPath, currentKey, currentDepth) === false
+                    if ((allNodes || !isValidNode) &&
+                        handler.call(currentNode, currentPath, currentKey, currentDepth) === false
                         ) {
                         break;
                     }
@@ -205,7 +201,6 @@ troop.postpone(sntls, 'Tree', function () {
                     }
                 }
             }
-
         });
 });
 
