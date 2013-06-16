@@ -121,4 +121,170 @@
         strictEqual(result, tree, "Tree.unsetNode is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
     });
+
+    test("Traversal", function () {
+        var obj = {
+                hello: "world",
+                foo  : {
+                    bar: "woohoo",
+                    boo: {
+                        1: "hello again"
+                    }
+                },
+                moo  : {
+                    says: "cow"
+                }
+            },
+            tree = sntls.Tree.create(obj),
+            keys, paths;
+
+        keys = [];
+        paths = [];
+
+        tree.traverse({handler: function (path, key) {
+            paths.push(path.join('.'));
+            keys.push(key);
+        }});
+
+        deepEqual(keys, [
+            'hello',
+            'bar',
+            '1',
+            'says'
+        ], "Keys read during full traversal");
+        deepEqual(paths, [
+            'hello',
+            'foo.bar',
+            'foo.boo.1',
+            'moo.says'
+        ], "Paths traversed during unterminated traversal");
+
+        keys = [];
+        paths = [];
+
+        // setting up traversal to stop at key '1'
+        tree.traverse({handler: function (path, key) {
+            paths.push(path.join('.'));
+            if (key === '1') {
+                return false;
+            }
+            return undefined;
+        }});
+
+        deepEqual(paths, [
+            'hello',
+            'foo.bar',
+            'foo.boo.1'
+        ], "Paths traversed during terminated traversal");
+
+        paths = [];
+
+        tree.traverse({
+            allNodes: true,
+            handler : function (path) {
+                paths.push(path.join('.'));
+            }
+        });
+
+        deepEqual(paths, [
+            'hello',
+            'foo',
+            'foo.bar',
+            'foo.boo',
+            'foo.boo.1',
+            'moo',
+            'moo.says'
+        ], "Paths traversed during full traversal (all nodes)");
+
+    });
+
+    test("Loop detection", function () {
+        var obj = {
+                hello: {
+                    world: "Hello World!"
+                }
+            },
+            tree = sntls.Tree.create(obj),
+            paths;
+
+        // creating direct loop
+        obj.hello.all = obj;
+
+        paths = [];
+        tree.traverse({handler: function (path) {
+            paths.push(path.join('.'));
+        }});
+
+        deepEqual(paths, [
+            'hello.world',
+            'hello.all'
+        ], "Paths traversed in object with direct loop");
+
+        // removing loop
+        delete obj.hello.all;
+
+        // creating indirect (cross) loop
+        obj.bello = {
+            world: obj.hello
+        };
+        obj.hello.all = obj.bello;
+
+        paths = [];
+        tree.traverse({handler: function (path) {
+            paths.push(path.join('.'));
+        }});
+
+        deepEqual(paths, [
+            'hello.world',
+            'hello.all.world',
+            'bello.world.world',
+            'bello.world.all'
+        ], "Paths traversed in object with direct loop");
+    });
+
+    test("Available keys", function () {
+        var node = {
+                foo  : 'bar',
+                hello: 'world',
+                test : 1
+            },
+            path = ['*', 'blah', ['foo', 'bar']];
+
+        deepEqual(sntls.Tree._getAvailableKeys(node, path, 0), Object.keys(node), "Asterisk pattern");
+        equal(sntls.Tree._getAvailableKeys(node, path, 1), ['blah'], "String pattern");
+        equal(sntls.Tree._getAvailableKeys(node, path, 2), ['foo', 'bar'], "Array pattern");
+    });
+
+    test("Restricted traversal", function () {
+        var obj = {
+                hello: "world",
+                foo  : {
+                    bar: {
+                        2: "woohoo"
+                    },
+                    boo: {
+                        1: "hello again",
+                        2: 3
+                    }
+                },
+                moo  : {
+                    says: "cow"
+                }
+            },
+            tree = sntls.Tree.create(obj),
+            paths;
+
+        paths = [];
+        tree.traverse({
+            query  : ['foo', '*', '2'],
+            handler: function (path) {
+                paths.push(path.join('.'));
+            }
+        });
+
+        deepEqual(paths, [
+            'foo.bar.2',
+            'foo.boo.2'
+        ], "Paths traversed with query restriction");
+    });
 }());

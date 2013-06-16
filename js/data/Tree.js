@@ -12,6 +12,37 @@ troop.postpone(sntls, 'Tree', function () {
      * @extends sntls.Hash
      */
     sntls.Tree = sntls.Hash.extend()
+        .addPrivateMethods(/** @lends sntls.Tree */{
+            /**
+             * Retrieves an array of keys from the node passed
+             * according to the given pattern.
+             * @param node {object} Node for which to obtain the keys.
+             * @param query {Array} String, array of strings, or undefined
+             * @param index {number} Index in query to process as pattern
+             * @return {string[]} Array of keys.
+             * @static
+             */
+            _getAvailableKeys: function (node, query, index) {
+                var pattern = query[index],
+                    result;
+
+                if (pattern === '*') {
+                    // obtaining all keys for node
+                    result = Object.keys(node);
+                } else if (typeof pattern === 'string') {
+                    // obtaining single key for node
+                    result = [pattern];
+                } else if (pattern instanceof Array) {
+                    // obtaining specified keys for node
+                    result = pattern;
+                } else {
+                    // obtaining all keys in any other case
+                    result = Object.keys(node);
+                }
+
+                return result;
+            }
+        })
         .addMethods(/** @lends sntls.Tree */{
             /**
              * @name sntls.Tree.create
@@ -89,7 +120,94 @@ troop.postpone(sntls, 'Tree', function () {
                 delete node[lastKey];
 
                 return this;
+            },
+
+            /**
+             * Traverses all enumerable nodes in object.
+             * Iterative implementation.
+             * Calls handler on leaf nodes by default.
+             * @param options {Object}
+             * @param options.query {Array} Query expression guiding traversal.
+             * ['single key', ['multiple', 'keys'], '*', null]
+             * @param options.handler {function} Called on each (leaf) node.
+             * @param options.allNodes {boolean} Whether to call handler on all nodes (not just leaf nodes).
+             */
+            traverse: function (options) {
+                options = options || {};
+
+                var rootNode = this.items,
+                    query = options.query = options.query || [],
+                    keysStack = [this._getAvailableKeys(rootNode, query, 0)], // stack of keys associated with each node on current path
+                    indexStack = [0], // stack of key indexes on current path
+                    nodeStack = [rootNode], // stack of nodes on current path
+
+                    currentPath = [], // key stack, ie. traversal path, calculated
+                    currentDepth, // current traversal depth
+                    currentParent, // the node we're currently IN (current parent node)
+                    currentKeys, // keys in the current parent node
+                    currentIndex, // index of key in current parent node
+                    currentKey, // key of node we're AT
+                    currentNode, // node we're currently AT
+
+                    isValidNode; // whether the current depth and index points to a valid node (object)
+
+                for (; ;) {
+                    // determining where we are
+                    currentDepth = keysStack.length - 1;
+                    currentIndex = indexStack[currentDepth];
+                    currentKeys = keysStack[currentDepth];
+
+                    // testing if current node finished traversal
+                    if (currentIndex >= currentKeys.length) {
+                        // going back a level
+                        keysStack.pop();
+
+                        if (!keysStack.length) {
+                            // object is fully traversed, exiting
+                            break;
+                        }
+
+                        nodeStack.pop();
+                        indexStack.pop();
+                        currentPath.pop();
+
+                        // raising index on parent node
+                        indexStack.push(indexStack.pop() + 1);
+
+                        continue;
+                    }
+
+                    // obtaining current state as local variables
+                    currentKey = currentKeys[currentIndex];
+                    currentParent = nodeStack[currentDepth];
+                    currentNode = currentParent[currentKey];
+                    currentPath[currentDepth] = currentKey;
+
+                    // determining whether current depth & index points to a node
+                    isValidNode = currentNode instanceof Object &&
+                                  nodeStack.indexOf(currentNode) === -1; // loop detection
+
+                    // calling handler for this node
+                    // traversal may be terminated by handler by returning false
+                    if ((options.allNodes || !isValidNode) &&
+                        options.handler.call(currentNode, currentPath, currentKey, currentDepth) === false
+                        ) {
+                        break;
+                    }
+
+                    // next step in traversal
+                    if (isValidNode) {
+                        // burrowing deeper - found a node
+                        nodeStack.push(currentNode);
+                        indexStack.push(0);
+                        keysStack.push(this._getAvailableKeys(currentNode, query, currentDepth + 1));
+                    } else {
+                        // moving to next node in parent
+                        indexStack[currentDepth]++;
+                    }
+                }
             }
+
         });
 });
 
