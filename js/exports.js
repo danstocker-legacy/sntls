@@ -1,7 +1,7 @@
 /**
  * Library exports
  */
-/*global sntls, exports */
-if (typeof exports === 'object') {
-    exports.sntls = sntls;
+/*global sntls, module */
+if (typeof module === 'object') {
+    module.exports = sntls;
 }

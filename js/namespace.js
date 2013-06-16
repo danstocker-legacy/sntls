@@ -4,5 +4,5 @@
 /*global require */
 /** @namespace */
 var sntls = {},
-    dessert = dessert || require('dessert').dessert,
-    troop = troop || require('troop').troop;
+    dessert = dessert || require('dessert'),
+    troop = troop || require('troop');
