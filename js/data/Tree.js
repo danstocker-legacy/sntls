@@ -127,9 +127,8 @@ troop.postpone(sntls, 'Tree', function () {
              * @param {Array}query Query expression guiding traversal.
              * ['single key', ['multiple', 'keys'], '*', null]
              * @param {function} handler Called on each (leaf) node.
-             * @param {boolean} [allNodes] Whether to call handler on all nodes (not just leaf nodes).
              */
-            traverse: function (query, handler, allNodes) {
+            traverse: function (query, handler) {
                 var rootNode = this.items,
                     keysStack = [this._getAvailableKeys(rootNode, query[0])], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
@@ -183,7 +182,7 @@ troop.postpone(sntls, 'Tree', function () {
 
                     // calling handler for this node
                     // traversal may be terminated by handler by returning false
-                    if ((allNodes || !isValidNode) &&
+                    if (!isValidNode &&
                         handler.call(currentNode, currentPath, currentKey, currentDepth) === false
                         ) {
                         break;
@@ -200,6 +199,8 @@ troop.postpone(sntls, 'Tree', function () {
                         indexStack[currentDepth]++;
                     }
                 }
+
+                return this;
             }
         });
 });

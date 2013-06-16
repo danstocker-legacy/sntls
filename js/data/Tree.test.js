@@ -176,23 +176,6 @@
             'foo.bar',
             'foo.boo.1'
         ], "Paths traversed during terminated traversal");
-
-        paths = [];
-
-        tree.traverse([], function (path) {
-            paths.push(path.join('.'));
-        }, true);
-
-        deepEqual(paths, [
-            'hello',
-            'foo',
-            'foo.bar',
-            'foo.boo',
-            'foo.boo.1',
-            'moo',
-            'moo.says'
-        ], "Paths traversed during full traversal (all nodes)");
-
     });
 
     test("Loop detection", function () {
