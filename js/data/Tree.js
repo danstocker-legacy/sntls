@@ -17,14 +17,12 @@ troop.postpone(sntls, 'Tree', function () {
              * Retrieves an array of keys from the node passed
              * according to the given pattern.
              * @param node {object} Node for which to obtain the keys.
-             * @param query {Array} String, array of strings, or undefined
-             * @param index {number} Index in query to process as pattern
+             * @param pattern {Array} String, array of strings, or undefined
              * @return {string[]} Array of keys.
              * @static
              */
-            _getAvailableKeys: function (node, query, index) {
-                var pattern = query[index],
-                    result;
+            _getAvailableKeys: function (node, pattern) {
+                var result;
 
                 if (pattern === '*') {
                     // obtaining all keys for node
@@ -137,7 +135,7 @@ troop.postpone(sntls, 'Tree', function () {
 
                 var rootNode = this.items,
                     query = options.query = options.query || [],
-                    keysStack = [this._getAvailableKeys(rootNode, query, 0)], // stack of keys associated with each node on current path
+                    keysStack = [this._getAvailableKeys(rootNode, query[0])], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
                     nodeStack = [rootNode], // stack of nodes on current path
 
@@ -200,7 +198,7 @@ troop.postpone(sntls, 'Tree', function () {
                         // burrowing deeper - found a node
                         nodeStack.push(currentNode);
                         indexStack.push(0);
-                        keysStack.push(this._getAvailableKeys(currentNode, query, currentDepth + 1));
+                        keysStack.push(this._getAvailableKeys(currentNode, query[currentDepth + 1]));
                     } else {
                         // moving to next node in parent
                         indexStack[currentDepth]++;

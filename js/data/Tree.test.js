@@ -250,9 +250,9 @@
             },
             path = ['*', 'blah', ['foo', 'bar']];
 
-        deepEqual(sntls.Tree._getAvailableKeys(node, path, 0), Object.keys(node), "Asterisk pattern");
-        equal(sntls.Tree._getAvailableKeys(node, path, 1), ['blah'], "String pattern");
-        equal(sntls.Tree._getAvailableKeys(node, path, 2), ['foo', 'bar'], "Array pattern");
+        deepEqual(sntls.Tree._getAvailableKeys(node, path[0]), Object.keys(node), "Asterisk pattern");
+        equal(sntls.Tree._getAvailableKeys(node, path[1]), ['blah'], "String pattern");
+        equal(sntls.Tree._getAvailableKeys(node, path[2]), ['foo', 'bar'], "Array pattern");
     });
 
     test("Restricted traversal", function () {
