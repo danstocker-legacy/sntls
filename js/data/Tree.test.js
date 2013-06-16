@@ -123,7 +123,7 @@
     });
 
     test("Traversal", function () {
-        var obj = {
+        var tree = sntls.Tree.create({
                 hello: "world",
                 foo  : {
                     bar: "woohoo",
@@ -134,8 +134,7 @@
                 moo  : {
                     says: "cow"
                 }
-            },
-            tree = sntls.Tree.create(obj),
+            }),
             keys, paths;
 
         keys = [];
@@ -236,7 +235,7 @@
     });
 
     test("Restricted traversal", function () {
-        var obj = {
+        var tree = sntls.Tree.create({
                 hello: "world",
                 foo  : {
                     bar: {
@@ -250,8 +249,7 @@
                 moo  : {
                     says: "cow"
                 }
-            },
-            tree = sntls.Tree.create(obj),
+            }),
             paths;
 
         paths = [];

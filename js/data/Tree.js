@@ -19,6 +19,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @param node {object} Node for which to obtain the keys.
              * @param pattern {Array} String, array of strings, or undefined
              * @return {string[]} Array of keys.
+             * @private
              * @static
              */
             _getAvailableKeys: function (node, pattern) {
@@ -125,7 +126,6 @@ troop.postpone(sntls, 'Tree', function () {
              * Iterative implementation.
              * Calls handler on leaf nodes by default.
              * @param {sntls.Query} query Query expression guiding traversal.
-             * ['single key', ['multiple', 'keys'], '*', null]
              * @param {function} handler Called on each (leaf) node.
              */
             traverse: function (query, handler) {
@@ -166,37 +166,35 @@ troop.postpone(sntls, 'Tree', function () {
 
                         // raising index on parent node
                         indexStack.push(indexStack.pop() + 1);
-
-                        continue;
-                    }
-
-                    // obtaining current state as local variables
-                    currentKey = currentKeys[currentIndex];
-                    currentParent = nodeStack[currentDepth];
-                    currentNode = currentParent[currentKey];
-                    currentPath[currentDepth] = currentKey;
-
-                    // determining whether current depth & index points to a node
-                    isValidNode = currentNode instanceof Object &&
-                                  nodeStack.indexOf(currentNode) === -1; // loop detection
-
-                    // calling handler for this node
-                    // traversal may be terminated by handler by returning false
-                    if (!isValidNode &&
-                        handler.call(currentNode, currentPath, currentKey, currentDepth) === false
-                        ) {
-                        break;
-                    }
-
-                    // next step in traversal
-                    if (isValidNode) {
-                        // burrowing deeper - found a node
-                        nodeStack.push(currentNode);
-                        indexStack.push(0);
-                        keysStack.push(this._getAvailableKeys(currentNode, query.asArray[currentDepth + 1]));
                     } else {
-                        // moving to next node in parent
-                        indexStack[currentDepth]++;
+                        // obtaining current state as local variables
+                        currentKey = currentKeys[currentIndex];
+                        currentParent = nodeStack[currentDepth];
+                        currentNode = currentParent[currentKey];
+                        currentPath[currentDepth] = currentKey;
+
+                        // determining whether current depth & index points to a node
+                        isValidNode = currentNode instanceof Object &&
+                                      nodeStack.indexOf(currentNode) === -1; // loop detection
+
+                        // calling handler for this node
+                        // traversal may be terminated by handler by returning false
+                        if (!isValidNode &&
+                            handler.call(currentNode, currentPath, currentKey, currentDepth) === false
+                            ) {
+                            break;
+                        }
+
+                        // next step in traversal
+                        if (isValidNode) {
+                            // burrowing deeper - found a node
+                            nodeStack.push(currentNode);
+                            indexStack.push(0);
+                            keysStack.push(this._getAvailableKeys(currentNode, query.asArray[currentDepth + 1]));
+                        } else {
+                            // moving to next node in parent
+                            indexStack[currentDepth]++;
+                        }
                     }
                 }
 
