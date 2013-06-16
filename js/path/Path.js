@@ -101,7 +101,18 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Prepends path with other path.
+             * Appends path with specified path.
+             * Changes path buffer!
+             * @param {sntls.Path} path
+             * @returns {sntls.Path}
+             */
+            append: function (path) {
+                this.asArray = this.asArray.concat(path.asArray);
+                return this;
+            },
+
+            /**
+             * Prepends path with specified path.
              * Changes path buffer!
              * @param {sntls.Path} path
              * @return {sntls.Path}

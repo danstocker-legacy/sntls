@@ -51,6 +51,19 @@
         );
     });
 
+    test("Appending", function () {
+        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+            appendedPath = originalPath.append('foo>bar'.toPath());
+
+        strictEqual(originalPath, appendedPath, "Appending returns new Path");
+
+        deepEqual(
+            appendedPath.asArray,
+            ['test', 'originalPath', 'it', 'is', 'foo', 'bar'],
+            "Appended path"
+        );
+    });
+
     test("Prepending", function () {
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
             prependedPath = originalPath.prepend('foo>bar'.toPath());
