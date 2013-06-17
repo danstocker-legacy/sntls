@@ -177,20 +177,16 @@ troop.postpone(sntls, 'Tree', function () {
                         isValidNode = currentNode instanceof Object &&
                                       nodeStack.indexOf(currentNode) === -1; // loop detection
 
-                        // calling handler for this node
-                        // traversal may be terminated by handler by returning false
-                        if (!isValidNode &&
-                            handler.call(currentNode, currentPath, currentKey, currentDepth) === false
-                            ) {
-                            break;
-                        }
-
                         // next step in traversal
                         if (isValidNode) {
                             // burrowing deeper - found a node
                             nodeStack.push(currentNode);
                             indexStack.push(0);
                             keysStack.push(this._getAvailableKeys(currentNode, query.asArray[currentDepth + 1]));
+                        } else if (handler.call(currentNode, currentPath, currentKey, currentDepth) === false) {
+                            // calling handler for this node
+                            // traversal may be terminated by handler by returning false
+                            break;
                         } else {
                             // moving to next node in parent
                             indexStack[currentDepth]++;
