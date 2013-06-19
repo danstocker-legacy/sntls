@@ -131,13 +131,14 @@ troop.postpone(sntls, 'Tree', function () {
             },
 
             /**
+             * Traverses tree recursively, guided by the specified query array
              * @param {*} node
-             * @param {Array} query
+             * @param {Array} queryAsArray Array representation of a sntls.Query object
              * @param {boolean} inSkipMode
              * @param {function} handler
              */
-            traverseRecursively: function (node, query, inSkipMode, handler) {
-                if (!query.length) {
+            traverseRecursively: function (node, queryAsArray, inSkipMode, handler) {
+                if (!queryAsArray.length) {
                     // end of query reached
                     handler(node);
                     return this;
@@ -145,32 +146,40 @@ troop.postpone(sntls, 'Tree', function () {
                     return this;
                 }
 
-                var currentPattern = query[0],
-                    currentKeys,
-                    i,
-                    nextSkipMode,
-                    nextQuery;
+                var currentPattern = queryAsArray[0], // current query pattern
+                    currentKeys, // keys in node matching pattern
+                    nextSkipMode, // skip mode for next level
+                    nextQuery, // query for next level
+                    i;
 
                 if (currentPattern === Query.PATTERN_SKIP) {
-                    currentKeys = Object.keys(node);
-                    nextSkipMode = true;
-                    nextQuery = query.slice(1);
+                    // pattern indicates skip mode
+                    currentKeys = Object.keys(node); // all keys are considered
+                    nextSkipMode = true; // skip mode is ON for subsequent levels
+                    nextQuery = queryAsArray.slice(1);
                 } else {
+                    // other patterns expressing single or multiple key match
+                    // obtaining keys from node matching pattern
                     currentKeys = this._getMatchingKeys(node, currentPattern);
                     if (inSkipMode) {
-                        nextSkipMode = currentKeys.length === 0;
-                        nextQuery = currentKeys.length === 0 ?
-                            query :
-                            query.slice(1);
-                        currentKeys = currentKeys.length === 0 ?
-                            Object.keys(node) :
-                            currentKeys;
+                        if (!currentKeys.length) {
+                            // no keys matched pattern, must skip to next level
+                            nextSkipMode = inSkipMode; // skip mode remains ON
+                            nextQuery = queryAsArray; // using same query (pattern)
+                            currentKeys = Object.keys(node); // all keys must be considered when skipping
+                        } else {
+                            // at least one key matched pattern, ending skip mode
+                            nextSkipMode = false; // switching skip mode OFF
+                            nextQuery = queryAsArray.slice(1);
+                        }
                     } else {
-                        nextSkipMode = false;
-                        nextQuery = query.slice(1);
+                        // not in skip mode, current
+                        nextSkipMode = inSkipMode; // skip mode remains OFF
+                        nextQuery = queryAsArray.slice(1);
                     }
                 }
 
+                // iterating over node keys and traversing sub-nodes
                 for (i = 0; i < currentKeys.length; i++) {
                     this.traverseRecursively(node[currentKeys[i]], nextQuery, nextSkipMode, handler);
                 }
