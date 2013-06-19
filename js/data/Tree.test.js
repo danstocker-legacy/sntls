@@ -152,10 +152,18 @@
             };
 
         result = [];
-        sntls.Tree.traverseRecursively(node, 'foo>|>2'.toQuery().asArray, handler);
+        sntls.Tree.traverseRecursively(node, 'foo>|>2'.toQuery().asArray, false, handler);
         deepEqual(
             result,
             ["woohoo", 3, {foo: "bar"}],
+            "Nodes collected"
+        );
+
+        result = [];
+        sntls.Tree.traverseRecursively(node, '\\>2'.toQuery().asArray, false, handler);
+        deepEqual(
+            result,
+            ["woohoo", 3, {foo: "bar"}, "what"],
             "Nodes collected"
         );
     });
@@ -267,9 +275,9 @@
             },
             query = '|>blah>foo<bar'.toQuery();
 
-        deepEqual(sntls.Tree._getAvailableKeys(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
-        equal(sntls.Tree._getAvailableKeys(node, query.asArray[1]), ['blah'], "String pattern");
-        equal(sntls.Tree._getAvailableKeys(node, query.asArray[2]), ['foo', 'bar'], "Array pattern");
+        deepEqual(sntls.Tree._getMatchingKeys(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
+        equal(sntls.Tree._getMatchingKeys(node, query.asArray[1]), [], "String pattern");
+        equal(sntls.Tree._getMatchingKeys(node, query.asArray[2]), ['foo'], "Array pattern");
     });
 
     test("Restricted traversal", function () {

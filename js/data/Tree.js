@@ -7,7 +7,8 @@
 troop.postpone(sntls, 'Tree', function () {
     "use strict";
 
-    var Query = sntls.Query,
+    var hOP = Object.prototype.hasOwnProperty,
+        Query = sntls.Query,
         validators = dessert.validators;
 
     /**
@@ -25,20 +26,28 @@ troop.postpone(sntls, 'Tree', function () {
              * @private
              * @static
              */
-            _getAvailableKeys: function (node, pattern) {
-                var result;
-
+            _getMatchingKeys: function (node, pattern) {
+                var result,
+                    i, key;
                 if (validators.isString(pattern)) {
-                    result = [pattern];
+                    if (hOP.call(node, pattern)) {
+                        result = [pattern];
+                    } else {
+                        result = [];
+                    }
                 } else if (pattern instanceof Array) {
-                    result = pattern;
-                } else if (pattern === Query.PATTERN_SKIP ||
-                           pattern === Query.PATTERN_ASTERISK) {
+                    result = [];
+                    for (i = 0; i < pattern.length; i++) {
+                        key = pattern[i];
+                        if (hOP.call(node, key)) {
+                            result.push(key);
+                        }
+                    }
+                } else if (pattern === Query.PATTERN_ASTERISK) {
                     result = Object.keys(node);
                 } else {
-                    dessert.assert(false, "Invalid pattern", pattern);
+                    result = [];
                 }
-
                 return result;
             }
         })
@@ -124,24 +133,46 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * @param {*} node
              * @param {Array} query
+             * @param {boolean} inSkipMode
              * @param {function} handler
              */
-            traverseRecursively: function (node, query, handler) {
+            traverseRecursively: function (node, query, inSkipMode, handler) {
                 if (!query.length) {
                     // end of query reached
                     handler(node);
                     return this;
+                } else if (!(node instanceof Object)) {
+                    return this;
                 }
 
                 var currentPattern = query[0],
-                    currentKeys = this._getAvailableKeys(node, currentPattern),
-                    i, currentKey;
+                    currentKeys,
+                    i,
+                    nextSkipMode,
+                    nextQuery;
+
+                if (currentPattern === Query.PATTERN_SKIP) {
+                    currentKeys = Object.keys(node);
+                    nextSkipMode = true;
+                    nextQuery = query.slice(1);
+                } else {
+                    currentKeys = this._getMatchingKeys(node, currentPattern);
+                    if (inSkipMode) {
+                        nextSkipMode = currentKeys.length === 0;
+                        nextQuery = currentKeys.length === 0 ?
+                            query :
+                            query.slice(1);
+                        currentKeys = currentKeys.length === 0 ?
+                            Object.keys(node) :
+                            currentKeys;
+                    } else {
+                        nextSkipMode = false;
+                        nextQuery = query.slice(1);
+                    }
+                }
 
                 for (i = 0; i < currentKeys.length; i++) {
-                    currentKey = currentKeys[i];
-                    if (node instanceof Object) {
-                        this.traverseRecursively(node[currentKey], query.slice(1), handler);
-                    }
+                    this.traverseRecursively(node[currentKeys[i]], nextQuery, nextSkipMode, handler);
                 }
 
                 return this;
@@ -156,7 +187,7 @@ troop.postpone(sntls, 'Tree', function () {
              */
             traverse: function (query, handler) {
                 var rootNode = this.items,
-                    keysStack = [this._getAvailableKeys(rootNode, query.asArray[0])], // stack of keys associated with each node on current path
+                    keysStack = [this._getMatchingKeys(rootNode, query.asArray[0])], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
                     nodeStack = [rootNode], // stack of nodes on current path
 
@@ -208,7 +239,7 @@ troop.postpone(sntls, 'Tree', function () {
                             // burrowing deeper - found a node
                             nodeStack.push(currentNode);
                             indexStack.push(0);
-                            keysStack.push(this._getAvailableKeys(currentNode, query.asArray[currentDepth + 1]));
+                            keysStack.push(this._getMatchingKeys(currentNode, query.asArray[currentDepth + 1]));
                         } else if (handler.call(currentNode, currentPath, currentKey, currentDepth) === false) {
                             // calling handler for this node
                             // traversal may be terminated by handler by returning false
