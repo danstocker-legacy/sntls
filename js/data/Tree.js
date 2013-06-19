@@ -7,6 +7,9 @@
 troop.postpone(sntls, 'Tree', function () {
     "use strict";
 
+    var Query = sntls.Query,
+        validators = dessert.validators;
+
     /**
      * @class sntls.Tree
      * @extends sntls.Hash
@@ -25,18 +28,15 @@ troop.postpone(sntls, 'Tree', function () {
             _getAvailableKeys: function (node, pattern) {
                 var result;
 
-                if (pattern === sntls.Query.PATTERN_ASTERISK) {
-                    // obtaining all keys for node
-                    result = Object.keys(node);
-                } else if (typeof pattern === 'string') {
-                    // obtaining single key for node
+                if (validators.isString(pattern)) {
                     result = [pattern];
                 } else if (pattern instanceof Array) {
-                    // obtaining specified keys for node
                     result = pattern;
-                } else {
-                    // obtaining all keys in any other case
+                } else if (pattern === Query.PATTERN_SKIP ||
+                           pattern === Query.PATTERN_ASTERISK) {
                     result = Object.keys(node);
+                } else {
+                    dessert.assert(false, "Invalid pattern", pattern);
                 }
 
                 return result;
@@ -117,6 +117,32 @@ troop.postpone(sntls, 'Tree', function () {
                     lastKey = asArray[asArray.length - 1];
 
                 delete node[lastKey];
+
+                return this;
+            },
+
+            /**
+             * @param {*} node
+             * @param {Array} query
+             * @param {function} handler
+             */
+            traverseRecursively: function (node, query, handler) {
+                if (!query.length) {
+                    // end of query reached
+                    handler(node);
+                    return this;
+                }
+
+                var currentPattern = query[0],
+                    currentKeys = this._getAvailableKeys(node, currentPattern),
+                    i, currentKey;
+
+                for (i = 0; i < currentKeys.length; i++) {
+                    currentKey = currentKeys[i];
+                    if (node instanceof Object) {
+                        this.traverseRecursively(node[currentKey], query.slice(1), handler);
+                    }
+                }
 
                 return this;
             },

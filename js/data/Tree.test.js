@@ -122,6 +122,44 @@
         deepEqual(tree.items, {foo: {}}, "Node removed");
     });
 
+    test("Recursive traversal", function () {
+        var node = {
+                hello: "world",
+                foo  : {
+                    bar: {
+                        2: "woohoo"
+                    },
+                    boo: {
+                        1: "hello again",
+                        2: 3
+                    },
+                    baz: {
+                        1: 1,
+                        2: {
+                            foo: "bar"
+                        },
+                        3: 3
+                    }
+                },
+                moo  : {
+                    2   : "what",
+                    says: "cow"
+                }
+            },
+            result = [],
+            handler = function (node) {
+                result.push(node);
+            };
+
+        result = [];
+        sntls.Tree.traverseRecursively(node, 'foo>|>2'.toQuery().asArray, handler);
+        deepEqual(
+            result,
+            ["woohoo", 3, {foo: "bar"}],
+            "Nodes collected"
+        );
+    });
+
     test("Traversal", function () {
         var tree = sntls.Tree.create({
                 hello: "world",
