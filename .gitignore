@@ -1,6 +1,6 @@
 /.idea/
 /node_modules/
 /out/
+/sntls.js
 /doc/
-/targets.json
 /*.tgz

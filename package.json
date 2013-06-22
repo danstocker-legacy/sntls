@@ -1,6 +1,6 @@
 {
     "name"           : "sntls",
-    "version"        : "0.9.0",
+    "version"        : "0.9.1",
     "description"    : "Essential data structures and behaviors",
     "keywords"       : [
         "tools",
@@ -16,16 +16,18 @@
         "behaviors"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
+    "copyright"      : "Copyright (c) 2012-2013 Dan Stocker",
+    "license"        : "MIT",
     "repository"     : {
         "type": "git",
         "url" : "git://github.com/danstocker/sntls.git"
     },
     "dependencies"   : {
-        "dessert": "~0.3.0",
-        "troop"  : "~0.5.0"
+        "dessert": "~0.3.2",
+        "troop"  : "~0.5.1"
     },
     "devDependencies": {
-        "phil"                : "~0.2.0",
+        "phil"                : "~0.2.2",
         "grunt"               : "~0.4.1",
         "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
         "grunt-contrib-concat": "~0.3.0",
@@ -36,6 +38,6 @@
         "common-gruntfile"    : "git://github.com/danstocker/common-gruntfile.git",
         "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz"
     },
-    "files"          : ["out/sntls.js"],
-    "main"           : "out/sntls.js"
+    "files"          : ["sntls.js"],
+    "main"           : "sntls.js"
 }
