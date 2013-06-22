@@ -7,50 +7,11 @@
 troop.postpone(sntls, 'Tree', function () {
     "use strict";
 
-    var hOP = Object.prototype.hasOwnProperty,
-        Query = sntls.Query,
-        validators = dessert.validators;
-
     /**
      * @class sntls.Tree
      * @extends sntls.Hash
      */
     sntls.Tree = sntls.Hash.extend()
-        .addPrivateMethods(/** @lends sntls.Tree */{
-            /**
-             * Retrieves an array of keys from the node passed
-             * according to the given pattern.
-             * @param node {object} Node for which to obtain the keys.
-             * @param pattern {Array} String, array of strings, or undefined
-             * @return {string[]} Array of keys.
-             * @private
-             * @static
-             */
-            _getMatchingKeys: function (node, pattern) {
-                var result,
-                    i, key;
-                if (validators.isString(pattern)) {
-                    if (hOP.call(node, pattern)) {
-                        result = [pattern];
-                    } else {
-                        result = [];
-                    }
-                } else if (pattern instanceof Array) {
-                    result = [];
-                    for (i = 0; i < pattern.length; i++) {
-                        key = pattern[i];
-                        if (hOP.call(node, key)) {
-                            result.push(key);
-                        }
-                    }
-                } else if (pattern === Query.PATTERN_ASTERISK) {
-                    result = Object.keys(node);
-                } else {
-                    result = [];
-                }
-                return result;
-            }
-        })
         .addMethods(/** @lends sntls.Tree */{
             /**
              * @name sntls.Tree.create
@@ -132,147 +93,13 @@ troop.postpone(sntls, 'Tree', function () {
 
             /**
              * Traverses tree recursively, guided by the specified query array
-             * @param {*} node
-             * @param {Array} queryAsArray Array representation of a sntls.Query object
-             * @param {number} queryPos
-             * @param {boolean} inSkipMode
+             * @param {sntls.Query} query
              * @param {function} handler
              */
-            traverseRecursively: function (node, queryAsArray, queryPos, inSkipMode, handler) {
-                var atLeafNode = typeof node !== 'object', // we're at a leaf node
-                    queryProcessed = queryPos >= queryAsArray.length, // no patterns left in query to process
-                    currentPattern = queryAsArray[queryPos], // current query pattern
-                    currentKeys, // keys in node matching pattern
-                    nextSkipMode, // skip mode for next level
-                    nextQueryPos, // position of next pattern
-                    i;
-
-                if (queryProcessed) {
-                    // end of query reached
-                    if (!inSkipMode || atLeafNode) {
-                        // not in skip mode (any node will be returned), or,
-                        // in skip mode and leaf node reached (last pattern in query was skip)
-                        // calling handler
-                        handler(node);
-                        return this;
-                    } else {
-                        // in skip mode and not at leaf node
-                        // keeping (pseudo-) pattern
-                        currentPattern = Query.PATTERN_SKIP;
-                    }
-                } else if (atLeafNode) {
-                    // leaf node reached but query not done
-                    // ignoring such leaf nodes
-                    return this;
-                }
-
-                if (currentPattern === Query.PATTERN_SKIP) {
-                    // pattern indicates skip mode
-                    currentKeys = Object.keys(node); // all keys are considered
-                    nextSkipMode = true; // skip mode is ON for subsequent levels
-                    nextQueryPos = queryPos + 1;
-                } else {
-                    // other patterns expressing single or multiple key match
-                    // obtaining keys from node matching pattern
-                    currentKeys = this._getMatchingKeys(node, currentPattern);
-                    if (inSkipMode) {
-                        if (!currentKeys.length) {
-                            // no keys matched pattern, must skip to next level
-                            nextSkipMode = inSkipMode; // skip mode remains ON
-                            nextQueryPos = queryPos; // same pattern will be used on next level
-                            currentKeys = Object.keys(node); // all keys must be considered when skipping
-                        } else {
-                            // at least one key matched pattern, ending skip mode
-                            nextSkipMode = false; // switching skip mode OFF
-                            nextQueryPos = queryPos + 1;
-                        }
-                    } else {
-                        // not in skip mode, current
-                        nextSkipMode = inSkipMode; // skip mode remains OFF
-                        nextQueryPos = queryPos + 1;
-                    }
-                }
-
-                // iterating over node keys and traversing sub-nodes
-                for (i = 0; i < currentKeys.length; i++) {
-                    this.traverseRecursively(node[currentKeys[i]], queryAsArray, nextQueryPos, nextSkipMode, handler);
-                }
-
-                return this;
-            },
-
-            /**
-             * Traverses all enumerable nodes in object.
-             * Iterative implementation.
-             * Calls handler on leaf nodes by default.
-             * @param {sntls.Query} query Query expression guiding traversal.
-             * @param {function} handler Called on each (leaf) node.
-             */
-            traverse: function (query, handler) {
-                var rootNode = this.items,
-                    keysStack = [this._getMatchingKeys(rootNode, query.asArray[0])], // stack of keys associated with each node on current path
-                    indexStack = [0], // stack of key indexes on current path
-                    nodeStack = [rootNode], // stack of nodes on current path
-
-                    currentPath = [], // key stack, ie. traversal path, calculated
-                    currentDepth, // current traversal depth
-                    currentParent, // the node we're currently IN (current parent node)
-                    currentKeys, // keys in the current parent node
-                    currentIndex, // index of key in current parent node
-                    currentKey, // key of node we're AT
-                    currentNode, // node we're currently AT
-
-                    isValidNode; // whether the current depth and index points to a valid node (object)
-
-                for (; ;) {
-                    // determining where we are
-                    currentDepth = keysStack.length - 1;
-                    currentIndex = indexStack[currentDepth];
-                    currentKeys = keysStack[currentDepth];
-
-                    // testing if current node finished traversal
-                    if (currentIndex >= currentKeys.length) {
-                        // going back a level
-                        keysStack.pop();
-
-                        if (!keysStack.length) {
-                            // object is fully traversed, exiting
-                            break;
-                        }
-
-                        nodeStack.pop();
-                        indexStack.pop();
-                        currentPath.pop();
-
-                        // raising index on parent node
-                        indexStack.push(indexStack.pop() + 1);
-                    } else {
-                        // obtaining current state as local variables
-                        currentKey = currentKeys[currentIndex];
-                        currentParent = nodeStack[currentDepth];
-                        currentNode = currentParent[currentKey];
-                        currentPath[currentDepth] = currentKey;
-
-                        // determining whether current depth & index points to a node
-                        isValidNode = currentNode instanceof Object &&
-                                      nodeStack.indexOf(currentNode) === -1; // loop detection
-
-                        // next step in traversal
-                        if (isValidNode) {
-                            // burrowing deeper - found a node
-                            nodeStack.push(currentNode);
-                            indexStack.push(0);
-                            keysStack.push(this._getMatchingKeys(currentNode, query.asArray[currentDepth + 1]));
-                        } else if (handler.call(currentNode, currentPath, currentKey, currentDepth) === false) {
-                            // calling handler for this node
-                            // traversal may be terminated by handler by returning false
-                            break;
-                        } else {
-                            // moving to next node in parent
-                            indexStack[currentDepth]++;
-                        }
-                    }
-                }
+            traverseByQuery: function (query, handler) {
+                // creating tree walker and walking tree buffer
+                sntls.RecursiveTreeWalker.create(query, handler)
+                    .walk(this.items);
 
                 return this;
             }
