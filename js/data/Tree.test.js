@@ -164,7 +164,31 @@
         deepEqual(
             result,
             ["woohoo", 3, {foo: "bar"}, "what"],
-            "Nodes collected"
+            "Nodes collected w/ skip"
+        );
+
+        result = [];
+        sntls.Tree.traverseRecursively(node, 'foo>\\>foo'.toQuery().asArray, false, handler);
+        deepEqual(
+            result,
+            ["bar"],
+            "Nodes collected w/ skip"
+        );
+
+        result = [];
+        sntls.Tree.traverseRecursively(node, 'foo>baz>\\'.toQuery().asArray, false, handler);
+        deepEqual(
+            result,
+            [1, "bar", 3],
+            "Leaf nodes collected under path"
+        );
+
+        result = [];
+        sntls.Tree.traverseRecursively(node, '\\'.toQuery().asArray, false, handler);
+        deepEqual(
+            result,
+            ["world", "woohoo", "hello again", 3, 1, "bar", 3, "what", "cow"],
+            "All leaf nodes collected"
         );
     });
 

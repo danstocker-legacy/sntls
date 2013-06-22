@@ -138,11 +138,12 @@ troop.postpone(sntls, 'Tree', function () {
              * @param {function} handler
              */
             traverseRecursively: function (node, queryAsArray, inSkipMode, handler) {
-                if (!queryAsArray.length) {
+                if (!queryAsArray.length && (!inSkipMode || !(node instanceof Object))) {
                     // end of query reached
                     handler(node);
                     return this;
                 } else if (!(node instanceof Object)) {
+                    // leaf node reached
                     return this;
                 }
 
