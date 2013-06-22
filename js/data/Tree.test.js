@@ -123,72 +123,24 @@
     });
 
     test("Recursive traversal", function () {
-        var tree = sntls.Tree.create({
-                hello: "world",
-                foo  : {
-                    bar: {
-                        2: "woohoo"
-                    },
-                    boo: {
-                        1: "hello again",
-                        2: 3
-                    },
-                    baz: {
-                        1: 1,
-                        2: {
-                            foo: "bar"
-                        },
-                        3: 3
-                    }
-                },
-                moo  : {
-                    2   : "what",
-                    says: "cow"
-                }
-            }),
-            result = [],
-            handler = function (node) {
-                result.push(node);
-            };
+        expect(3);
 
-        result = [];
+        var tree = sntls.Tree.create({}),
+            handler = function () {};
+
+        sntls.RecursiveTreeWalker.addMocks({
+            init: function (query, h) {
+                equal(query.toString(), 'foo>|>2', "Query being traversed");
+                strictEqual(h, handler, "Handler to be called");
+            },
+
+            walk: function (node) {
+                strictEqual(node, tree.items, "Walker called");
+            }
+        });
+
         tree.traverseByQuery('foo>|>2'.toQuery(), handler);
-        deepEqual(
-            result,
-            ["woohoo", 3, {foo: "bar"}],
-            "Nodes collected"
-        );
 
-        result = [];
-        tree.traverseByQuery('\\>2'.toQuery(), handler);
-        deepEqual(
-            result,
-            ["woohoo", 3, {foo: "bar"}, "what"],
-            "Nodes collected w/ skip"
-        );
-
-        result = [];
-        tree.traverseByQuery('foo>\\>foo'.toQuery(), handler);
-        deepEqual(
-            result,
-            ["bar"],
-            "Nodes collected w/ skip"
-        );
-
-        result = [];
-        tree.traverseByQuery('foo>baz>\\'.toQuery(), handler);
-        deepEqual(
-            result,
-            [1, "bar", 3],
-            "Leaf nodes collected under path"
-        );
-
-        result = [];
-        tree.traverseByQuery('\\'.toQuery(), handler);
-        deepEqual(
-            result,
-            ["world", "woohoo", "hello again", 3, 1, "bar", 3, "what", "cow"],
-            "All leaf nodes collected"
-        );
+        sntls.RecursiveTreeWalker.removeMocks();
     });
 }());
