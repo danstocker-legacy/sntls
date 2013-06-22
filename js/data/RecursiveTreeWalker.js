@@ -34,8 +34,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         // not in skip mode (any node will be returned), or,
                         // in skip mode and leaf node reached (last pattern in query was skip)
                         // calling handler
-                        this.handler(node);
-                        return this;
+                        return this.handler(node);
                     } else {
                         // in skip mode and not at leaf node
                         // keeping (pseudo-) pattern
@@ -44,7 +43,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 } else if (atLeafNode) {
                     // leaf node reached but query not done
                     // ignoring such leaf nodes
-                    return this;
+                    return true;
                 }
 
                 if (currentPattern === Query.PATTERN_SKIP) {
@@ -76,10 +75,12 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
                 // iterating over node keys and traversing sub-nodes
                 for (i = 0; i < currentKeys.length; i++) {
-                    this._walk(node[currentKeys[i]], nextQueryPos, nextSkipMode);
+                    if (this._walk(node[currentKeys[i]], nextQueryPos, nextSkipMode) === false) {
+                        return false;
+                    }
                 }
 
-                return this;
+                return true;
             }
         })
         .addMethods(/** @lends sntls.RecursiveTreeWalker */{
@@ -101,6 +102,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
                 /**
                  * Handler to be called on each leaf node.
+                 * Returning false interrupts traversal.
                  * @type {Function}
                  */
                 this.handler = handler;

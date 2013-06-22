@@ -27,7 +27,7 @@
         equal(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[2]), ['foo'], "Array pattern");
     });
 
-    test("Recursive traversal", function () {
+    test("Walking", function () {
         var node = {
                 hello: "world",
                 foo  : {
@@ -98,6 +98,49 @@
         deepEqual(
             result,
             ["world", "woohoo", "hello again", 3, 1, "bar", 3, "what", "cow"],
+            "All leaf nodes collected"
+        );
+    });
+
+    test("Walking with interrupt", function () {
+        var node = {
+                hello: "world",
+                foo  : {
+                    bar: {
+                        2: "woohoo"
+                    },
+                    boo: {
+                        1: "hello again",
+                        2: 3
+                    },
+                    baz: {
+                        1: 1,
+                        2: {
+                            foo: "bar"
+                        },
+                        3: 3
+                    }
+                },
+                moo  : {
+                    2   : "what",
+                    says: "cow"
+                }
+            },
+            result = [],
+            handler = function (node) {
+                result.push(node);
+
+                if (node === 3) {
+                    return false;
+                }
+            };
+
+        result = [];
+        sntls.RecursiveTreeWalker.create('\\'.toQuery(), handler)
+            .walk(node);
+        deepEqual(
+            result,
+            ["world", "woohoo", "hello again", 3],
             "All leaf nodes collected"
         );
     });
