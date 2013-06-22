@@ -435,8 +435,8 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Calls a function on each item.
              * @param {function} handler Function to call on each item.
-             * Handler receives the current item as this, and the item name as
-             * first argument. Forwards all other arguments to handler.
+             * Handler receives the current item and item name as arguments,
+             * and the collection as `this`.
              * Iteration breaks when handler returns false.
              * @return {sntls.Collection}
              */
@@ -461,8 +461,8 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Calls function on each item in a specific order.
              * @param {function} handler Function to call on each item.
-             * Handler receives the current item as this, and the item name as
-             * first argument. Forwards all other arguments to handler.
+             * Handler receives the current item and item name as arguments,
+             * and the collection as `this`.
              * Iteration breaks when handler returns false.
              * @param {function} [comparator] Comparator for sorting keys.
              * Receives collection instance as context for accessing item values.
@@ -492,6 +492,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Maps the collection's contents to a new collection.
              * @param {function} handler Transform function. Called on each element,
              * its return value will be placed in the mapped collection.
+             * Receives current item and item name as arguments, plus the collection as `this`.
              * @param {sntls.Collection} [returnType] Reference to derived collection class.
              * When specified, the resulting collection will be an instance of this class.
              * @return {sntls.Collection} New collection instance (of the specified type)
