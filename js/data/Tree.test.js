@@ -152,7 +152,7 @@
             };
 
         result = [];
-        sntls.Tree.traverseRecursively(node, 'foo>|>2'.toQuery().asArray, false, handler);
+        sntls.Tree.traverseRecursively(node, 'foo>|>2'.toQuery().asArray, 0, false, handler);
         deepEqual(
             result,
             ["woohoo", 3, {foo: "bar"}],
@@ -160,7 +160,7 @@
         );
 
         result = [];
-        sntls.Tree.traverseRecursively(node, '\\>2'.toQuery().asArray, false, handler);
+        sntls.Tree.traverseRecursively(node, '\\>2'.toQuery().asArray, 0, false, handler);
         deepEqual(
             result,
             ["woohoo", 3, {foo: "bar"}, "what"],
@@ -168,7 +168,7 @@
         );
 
         result = [];
-        sntls.Tree.traverseRecursively(node, 'foo>\\>foo'.toQuery().asArray, false, handler);
+        sntls.Tree.traverseRecursively(node, 'foo>\\>foo'.toQuery().asArray, 0, false, handler);
         deepEqual(
             result,
             ["bar"],
@@ -176,7 +176,7 @@
         );
 
         result = [];
-        sntls.Tree.traverseRecursively(node, 'foo>baz>\\'.toQuery().asArray, false, handler);
+        sntls.Tree.traverseRecursively(node, 'foo>baz>\\'.toQuery().asArray, 0, false, handler);
         deepEqual(
             result,
             [1, "bar", 3],
@@ -184,7 +184,7 @@
         );
 
         result = [];
-        sntls.Tree.traverseRecursively(node, '\\'.toQuery().asArray, false, handler);
+        sntls.Tree.traverseRecursively(node, '\\'.toQuery().asArray, 0, false, handler);
         deepEqual(
             result,
             ["world", "woohoo", "hello again", 3, 1, "bar", 3, "what", "cow"],
