@@ -138,20 +138,32 @@ troop.postpone(sntls, 'Tree', function () {
              * @param {function} handler
              */
             traverseRecursively: function (node, queryAsArray, inSkipMode, handler) {
-                if (!queryAsArray.length && (!inSkipMode || !(node instanceof Object))) {
-                    // end of query reached
-                    handler(node);
-                    return this;
-                } else if (!(node instanceof Object)) {
-                    // leaf node reached
-                    return this;
-                }
-
-                var currentPattern = queryAsArray[0], // current query pattern
+                var atLeafNode = typeof node !== 'object', // we're at a leaf node
+                    queryProcessed = !queryAsArray.length, // no patterns left in query to process
+                    currentPattern = queryAsArray[0], // current query pattern
                     currentKeys, // keys in node matching pattern
                     nextSkipMode, // skip mode for next level
                     nextQuery, // query for next level
                     i;
+
+                if (queryProcessed) {
+                    // end of query reached
+                    if (!inSkipMode || atLeafNode) {
+                        // not in skip mode (any node will be returned), or,
+                        // in skip mode and leaf node reached (last pattern in query was skip)
+                        // calling handler
+                        handler(node);
+                        return this;
+                    } else {
+                        // in skip mode and not at leaf node
+                        // keeping (pseudo-) pattern
+                        currentPattern = Query.PATTERN_SKIP;
+                    }
+                } else if (atLeafNode) {
+                    // leaf node reached but query not done
+                    // ignoring such leaf nodes
+                    return this;
+                }
 
                 if (currentPattern === Query.PATTERN_SKIP) {
                     // pattern indicates skip mode
