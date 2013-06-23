@@ -60,7 +60,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Initializes Path a string or array. Keys in string representation
              * are assumed to be URI-encoded.
-             * @path {string|string[]} Path in string or array representation
+             * @param {string|string[]} path Path in string or array representation
              */
             init: function (path) {
                 var asArray;
