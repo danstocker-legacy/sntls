@@ -13,20 +13,30 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     sntls.RecursiveTreeWalker = troop.Base.extend()
         .addPrivateMethods(/** @lends sntls.RecursiveTreeWalker */{
             /**
-             * Traverses tree recursively, guided by the specified query array
-             * @param {*} node
-             * @param {number} queryPos
-             * @param {boolean} inSkipMode
+             * Resets walker state
+             * @private
              */
-            _walk: function (node, queryPos, inSkipMode) {
+            _reset: function () {
+                this.currentKey = undefined;
+                this.currentNode = undefined;
+                this.currentPath = undefined;
+            },
+
+            /**
+             * Traverses tree recursively, guided by the query assigned to the walker.
+             * @param {*} currentNode Node currently being traversed.
+             * @param {number} queryPos Position of current pattern in query.
+             * @param {boolean} inSkipMode Whether traversal is in skip mode.
+             */
+            _walk: function (currentNode, queryPos, inSkipMode) {
                 var queryAsArray = this.query.asArray,
-                    atLeafNode = typeof node !== 'object', // we're at a leaf node
+                    atLeafNode = typeof currentNode !== 'object', // we're at a leaf node
                     queryProcessed = queryPos >= queryAsArray.length, // no patterns left in query to process
                     currentPattern = queryAsArray[queryPos], // current query pattern
                     currentKeys, // keys in node matching pattern
                     nextSkipMode, // skip mode for next level
                     nextQueryPos, // position of next pattern
-                    i;
+                    i, currentKey;
 
                 if (queryProcessed) {
                     // end of query reached
@@ -34,7 +44,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         // not in skip mode (any node will be returned), or,
                         // in skip mode and leaf node reached (last pattern in query was skip)
                         // calling handler
-                        return this.handler(node);
+                        return this.handler.call(this, currentNode);
                     } else {
                         // in skip mode and not at leaf node
                         // keeping (pseudo-) pattern
@@ -48,19 +58,19 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
                 if (currentPattern === Query.PATTERN_SKIP) {
                     // pattern indicates skip mode
-                    currentKeys = Object.keys(node); // all keys are considered
+                    currentKeys = Object.keys(currentNode); // all keys are considered
                     nextSkipMode = true; // skip mode is ON for subsequent levels
                     nextQueryPos = queryPos + 1;
                 } else {
                     // other patterns expressing single or multiple key match
                     // obtaining keys from node matching pattern
-                    currentKeys = this.getKeysByPattern(node, currentPattern);
+                    currentKeys = this.getKeysByPattern(currentNode, currentPattern);
                     if (inSkipMode) {
                         if (!currentKeys.length) {
                             // no keys matched pattern, must skip to next level
                             nextSkipMode = inSkipMode; // skip mode remains ON
                             nextQueryPos = queryPos; // same pattern will be used on next level
-                            currentKeys = Object.keys(node); // all keys must be considered when skipping
+                            currentKeys = Object.keys(currentNode); // all keys must be considered when skipping
                         } else {
                             // at least one key matched pattern, ending skip mode
                             nextSkipMode = false; // switching skip mode OFF
@@ -75,9 +85,22 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
                 // iterating over node keys and traversing sub-nodes
                 for (i = 0; i < currentKeys.length; i++) {
-                    if (this._walk(node[currentKeys[i]], nextQueryPos, nextSkipMode) === false) {
+                    currentKey = currentKeys[i];
+
+                    // preparing traversal state for next level
+                    this.currentKey = currentKey;
+                    this.currentNode = currentNode[currentKey];
+                    this.currentPath.asArray.push(currentKey);
+
+                    // walking next level
+                    if (this._walk(this.currentNode, nextQueryPos, nextSkipMode) === false) {
                         return false;
                     }
+
+                    // reverting traversal state for this level
+                    this.currentKey = currentKey;
+                    this.currentNode = currentNode;
+                    this.currentPath.asArray.pop();
                 }
 
                 return true;
@@ -106,6 +129,24 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                  * @type {Function}
                  */
                 this.handler = handler;
+
+                /**
+                 * Key currently being traversed
+                 * @type {string}
+                 */
+                this.currentKey = undefined;
+
+                /**
+                 * Node currently being traversed
+                 * @type {*}
+                 */
+                this.currentNode = undefined;
+
+                /**
+                 * Path currently being traversed
+                 * @type {sntls.Path}
+                 */
+                this.currentPath = undefined;
             },
 
             /**
@@ -147,7 +188,15 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @returns {sntls.RecursiveTreeWalker}
              */
             walk: function (node) {
+                // initializing traversal path state
+                this.currentPath = sntls.Path.create([]);
+
+                // walking node
                 this._walk(node, 0, false);
+
+                // traversal finished, resetting traversal state
+                this._reset();
+
                 return this;
             }
         });

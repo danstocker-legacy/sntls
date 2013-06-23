@@ -144,4 +144,67 @@
             "All leaf nodes collected"
         );
     });
+
+    test("Walking state", function () {
+        var node = {
+                hello: "world",
+                foo  : {
+                    bar: {
+                        2: "woohoo"
+                    },
+                    boo: {
+                        1: "hello again",
+                        2: 3
+                    },
+                    baz: {
+                        1: 1,
+                        2: {
+                            foo: "bar"
+                        },
+                        3: 3
+                    }
+                },
+                moo  : {
+                    2   : "what",
+                    says: "cow"
+                }
+            },
+            result,
+            handler = function () {
+                result.push([this.currentKey, this.currentNode, this.currentPath.clone().asArray]);
+            };
+
+        result = [];
+        sntls.RecursiveTreeWalker.create('\\>2'.toQuery(), handler)
+            .walk(node);
+        deepEqual(
+            result,
+            [
+                ["2", "woohoo", ["foo", "bar", "2"]],
+                ["2", 3, ["foo", "boo", "2"]],
+                ["2", {"foo": "bar"}, ["foo", "baz", "2"]],
+                ["2", "what", ["moo", "2"]]
+            ],
+            "Traversed keys, nodes, paths"
+        );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create('\\'.toQuery(), handler)
+            .walk(node);
+        deepEqual(
+            result,
+            [
+                ["hello", "world", ["hello"]],
+                ["2", "woohoo", ["foo", "bar", "2"]],
+                ["1", "hello again", ["foo", "boo", "1"]],
+                ["2", 3, ["foo", "boo", "2"]],
+                ["1", 1, ["foo", "baz", "1"]],
+                ["foo", "bar", ["foo", "baz", "2", "foo"]],
+                ["3", 3, ["foo", "baz", "3"]],
+                ["2", "what", ["moo", "2"]],
+                ["says", "cow", ["moo", "says"]]
+            ],
+            "Traversed keys, nodes, paths"
+        );
+    });
 }());
