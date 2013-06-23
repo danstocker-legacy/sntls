@@ -15,6 +15,8 @@ module.exports = function (grunt) {
             'js/data/JournalingCollection.js',
             'js/data/OrderedList.js',
             'js/data/OrderedStringList.js',
+            'js/data/TreeWalker.js',
+            'js/data/IterativeTreeWalker.js',
             'js/data/RecursiveTreeWalker.js',
             'js/data/Tree.js',
             'js/data/collections/ArrayCollection.js',
