@@ -9,16 +9,31 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
     sntls.IterativeTreeWalker = troop.Base.extend()
         .addMethods(/** @lends sntls.IterativeTreeWalker */{
             /**
+             * @name sntls.IterativeTreeWalker.create
+             * @return {sntls.IterativeTreeWalker}
+             */
+
+            /**
+             * @param {function} handler
+             */
+            init: function (handler) {
+                /**
+                 * Handler to be called on each node.
+                 * Returning false interrupts traversal.
+                 * @type {Function}
+                 */
+                this.handler = handler;
+            },
+
+            /**
              * Traverses all enumerable nodes in object.
              * Iterative implementation.
-             * @param obj {object} Object to be traversed.
-             * @param handler {function} Called on each node.
-             * @static
+             * @param node {object} Object to be traversed.
              */
-            walk: function (obj, handler) {
-                var keysStack = [Object.keys(obj)], // stack of keys associated with each node on current path
+            walk: function (node) {
+                var keysStack = [Object.keys(node)], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
-                    nodeStack = [obj], // stack of nodes on current path
+                    nodeStack = [node], // stack of nodes on current path
 
                     path = [], // key stack, ie. traversal path, calculated
 
@@ -63,7 +78,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
 
                     // calling handler for this node
                     // traversal may be terminated by handler by returning false
-                    if (handler.call(currentNode, path, currentKey, currentDepth) === false) {
+                    if (this.handler.call(this, currentNode, path, currentKey, currentDepth) === false) {
                         break;
                     }
 
