@@ -33,7 +33,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                     currentNode; // node we're currently AT
 
                 // reference to path
-                this.currentPath = currentPath;
+                this.currentPath = sntls.Path.create(currentPath);
 
                 for (; ;) {
                     // determining where we are

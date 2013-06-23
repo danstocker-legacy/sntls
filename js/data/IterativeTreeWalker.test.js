@@ -26,7 +26,7 @@
 
         walker = sntls.IterativeTreeWalker
             .create(function () {
-                paths.push(this.currentPath.join('.'));
+                paths.push(this.currentPath.asArray.join('.'));
                 keys.push(this.currentKey);
             })
             .walk(obj);
@@ -56,7 +56,7 @@
         // setting up traversal to stop at key '1'
         sntls.IterativeTreeWalker
             .create(function () {
-                paths.push(this.currentPath.join('.'));
+                paths.push(this.currentPath.asArray.join('.'));
                 if (this.currentKey === '1') {
                     return false;
                 }
