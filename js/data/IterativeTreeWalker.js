@@ -4,44 +4,14 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
 
     /**
      * @class sntls.IterativeTreeWalker
-     * @extends troop.Base
+     * @extends sntls.TreeWalker
      */
-    sntls.IterativeTreeWalker = troop.Base.extend()
+    sntls.IterativeTreeWalker = sntls.TreeWalker.extend()
         .addMethods(/** @lends sntls.IterativeTreeWalker */{
             /**
              * @name sntls.IterativeTreeWalker.create
              * @return {sntls.IterativeTreeWalker}
              */
-
-            /**
-             * @param {function} handler
-             */
-            init: function (handler) {
-                /**
-                 * Handler to be called on each node.
-                 * Returning false interrupts traversal.
-                 * @type {Function}
-                 */
-                this.handler = handler;
-
-                /**
-                 * Key currently being traversed
-                 * @type {string}
-                 */
-                this.currentKey = undefined;
-
-                /**
-                 * Node currently being traversed
-                 * @type {*}
-                 */
-                this.currentNode = undefined;
-
-                /**
-                 * Path currently being traversed
-                 * @type {sntls.Path}
-                 */
-                this.currentPath = undefined;
-            },
 
             /**
              * Traverses all enumerable nodes in object.
@@ -116,9 +86,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                 }
 
                 // re-setting traversal state
-                this.currentKey = undefined;
-                this.currentNode = undefined;
-                this.currentPath = undefined;
+                this.reset();
 
                 return this;
             }

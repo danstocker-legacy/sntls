@@ -4,14 +4,6 @@
 
     module("Iterative Tree Walker");
 
-    test("Instantiation", function () {
-        function handler() {}
-
-        var walker = /** @type {sntls.IterativeTreeWalker} */ sntls.IterativeTreeWalker.create(handler);
-
-        strictEqual(walker.handler, handler, "Handler assigned");
-    });
-
     test("Walking all nodes", function () {
         var obj = {
                 hello: "world",
