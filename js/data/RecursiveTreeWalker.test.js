@@ -10,6 +10,10 @@
         var query = 'foo>\\>bar'.toQuery(),
             walker;
 
+        raises(function () {
+            sntls.RecursiveTreeWalker.create(handler, 'foo');
+        }, "Invalid query");
+
         walker = /** @type {sntls.RecursiveTreeWalker} */ sntls.RecursiveTreeWalker.create(handler, query);
         strictEqual(walker.query, query, "Query added to instance");
         strictEqual(walker.handler, handler, "Handler added to instance");

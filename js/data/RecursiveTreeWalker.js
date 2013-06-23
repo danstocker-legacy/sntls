@@ -2,26 +2,17 @@
 troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     "use strict";
 
-    var hOP = Object.prototype.hasOwnProperty,
+    var base = sntls.TreeWalker,
+        hOP = Object.prototype.hasOwnProperty,
         Query = sntls.Query,
         validators = dessert.validators;
 
     /**
      * @class sntls.RecursiveTreeWalker
-     * @extends troop.Base
+     * @extends sntls.TreeWalker
      */
-    sntls.RecursiveTreeWalker = troop.Base.extend()
+    sntls.RecursiveTreeWalker = base.extend()
         .addPrivateMethods(/** @lends sntls.RecursiveTreeWalker */{
-            /**
-             * Resets walker state
-             * @private
-             */
-            _reset: function () {
-                this.currentKey = undefined;
-                this.currentNode = undefined;
-                this.currentPath = undefined;
-            },
-
             /**
              * Traverses tree recursively, guided by the query assigned to the walker.
              * @param {*} currentNode Node currently being traversed.
@@ -117,36 +108,15 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {sntls.Query} [query]
              */
             init: function (handler, query) {
-                /**
-                 * Handler to be called on each leaf node.
-                 * Returning false interrupts traversal.
-                 * @type {Function}
-                 */
-                this.handler = handler;
+                dessert.isQueryOptional(query, "Invalid query");
+
+                base.init.call(this, handler);
 
                 /**
                  * Query guiding the traversal.
                  * @type {sntls.Query}
                  */
                 this.query = query || Query.create([Query.PATTERN_SKIP]);
-
-                /**
-                 * Key currently being traversed
-                 * @type {string}
-                 */
-                this.currentKey = undefined;
-
-                /**
-                 * Node currently being traversed
-                 * @type {*}
-                 */
-                this.currentNode = undefined;
-
-                /**
-                 * Path currently being traversed
-                 * @type {sntls.Path}
-                 */
-                this.currentPath = undefined;
             },
 
             /**
@@ -195,7 +165,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 this._walk(node, 0, false);
 
                 // traversal finished, resetting traversal state
-                this._reset();
+                this.reset();
 
                 return this;
             }
