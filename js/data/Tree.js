@@ -134,10 +134,26 @@ troop.postpone(sntls, 'Tree', function () {
              * Traverses tree recursively, guided by the specified query array
              * @param {sntls.Query} query
              * @param {function} handler
+             * @return {sntls.Tree}
              */
             traverseByQuery: function (query, handler) {
-                // creating tree walker and walking tree buffer
+                // recursive tree walker may be guided by query expression
                 sntls.RecursiveTreeWalker.create(handler, query)
+                    .walk(this.items);
+
+                return this;
+            },
+
+            /**
+             * Traverses tree iteratively, calling handler on every node
+             * unless interrupted by returning false from handler.
+             * @param {function} handler
+             * @returns {sntls.Tree}
+             */
+            traverseAllNodes: function (handler) {
+                // iterative walker operates unguided,
+                // touching all nodes along traversal
+                sntls.IterativeTreeWalker.create(handler)
                     .walk(this.items);
 
                 return this;

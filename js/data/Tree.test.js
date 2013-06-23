@@ -173,6 +173,27 @@
         sntls.RecursiveTreeWalker.removeMocks();
     });
 
+    test("Iterative traversal", function () {
+        expect(2);
+
+        var tree = sntls.Tree.create({}),
+            handler = function () {};
+
+        sntls.IterativeTreeWalker.addMocks({
+            init: function (h) {
+                strictEqual(h, handler, "Handler to be called");
+            },
+
+            walk: function (node) {
+                strictEqual(node, tree.items, "Walker called");
+            }
+        });
+
+        tree.traverseAllNodes(handler);
+
+        sntls.IterativeTreeWalker.removeMocks();
+    });
+
     test("Querying", function () {
         var tree = sntls.Tree.create({
             hello: "world",
