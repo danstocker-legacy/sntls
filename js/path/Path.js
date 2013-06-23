@@ -123,53 +123,6 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Resolves a path relative to the supplied context.
-             * @param {object} context
-             * @return {object}
-             */
-            resolve: function (context) {
-                dessert.isObject(context, "Invalid path context");
-
-                var asArray = this.asArray,
-                    result = context,
-                    i;
-
-                for (i = 0; i < asArray.length; i++) {
-                    result = result[asArray[i]];
-                    if (typeof result === 'undefined') {
-                        break;
-                    }
-                }
-
-                return result;
-            },
-
-            /**
-             * Same as .resolve(), but builds the path if it does not exist
-             * and returns the object found at the end.
-             * @see {sntls.Path.resolve}
-             * @param {object} context Object on which the path is resolved
-             * @return {object}
-             */
-            resolveOrBuild: function (context) {
-                dessert.isObject(context, "Invalid path context");
-
-                var asArray = this.asArray,
-                    result = context,
-                    i, key;
-
-                for (i = 0; i < asArray.length; i++) {
-                    key = asArray[i];
-                    if (typeof result[key] !== 'object') {
-                        result[key] = {};
-                    }
-                    result = result[key];
-                }
-
-                return result;
-            },
-
-            /**
              * Matches remote path to current path.
              * @param {sntls.Path} remotePath Remote path
              * @return {boolean}

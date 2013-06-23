@@ -100,63 +100,6 @@
         ok(!root.isRelativeTo(path), "Root is not relative to path");
     });
 
-    test("Path resolution", function () {
-        var path = sntls.Path.create('hello>world');
-
-        raises(function () {
-            path.resolve();
-        }, "Resolution requires a context");
-
-        raises(function () {
-            path.resolve('foo');
-        }, "Invalid context object");
-
-        equal(typeof path.resolve({}), 'undefined', "Can't resolve on empty object");
-
-        equal(path.resolve({
-            hello: {
-                world: '!!'
-            }
-        }), '!!', "sntls.Path resolved");
-    });
-
-    test("Building path", function () {
-        var path = sntls.Path.create('foo>bar'),
-            context = {
-                hello: "world"
-            };
-
-        raises(function () {
-            path.resolveOrBuild();
-        }, "sntls.Path builder requires a context");
-
-        raises(function () {
-            path.resolveOrBuild('foo');
-        }, "Invalid context object");
-
-        path.resolveOrBuild(context);
-
-        deepEqual(path.asArray, ['foo', 'bar'], "Array representation untouched by build");
-
-        deepEqual(context, {
-            hello: "world",
-            foo  : {
-                bar: {}
-            }
-        }, "sntls.Path built");
-
-        sntls.Path.create('hello>world').resolveOrBuild(context);
-
-        deepEqual(context, {
-            hello: {
-                world: {}
-            },
-            foo  : {
-                bar: {}
-            }
-        }, "Existing path overwritten");
-    });
-
     test("String conversion", function () {
         var path = 'test>path>hello>world'.toPath();
 

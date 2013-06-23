@@ -7,7 +7,8 @@
     test("Instantiation", function () {
         var stateMatrix = sntls.StateMatrix.create();
 
-        deepEqual(stateMatrix.edges, {}, "Edges buffer initially empty");
+        ok(stateMatrix.edges.isA(sntls.Tree), "Edge buffer is a tree");
+        deepEqual(stateMatrix.edges.items, {}, "Edge buffer initially empty");
     });
 
     test("Edge addition", function () {
@@ -18,14 +19,14 @@
         }, "Invalid arguments");
 
         stateMatrix.addEdge('open', 'closed', 'close');
-        deepEqual(stateMatrix.edges, {
+        deepEqual(stateMatrix.edges.items, {
             'open': {
                 'closed': 'close'
             }
         }, "Edge buffer after first addition");
 
         stateMatrix.addEdge('closed', 'open', 'open');
-        deepEqual(stateMatrix.edges, {
+        deepEqual(stateMatrix.edges.items, {
             'open'  : {
                 'closed': 'close'
             },

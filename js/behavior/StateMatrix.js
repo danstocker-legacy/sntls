@@ -25,11 +25,11 @@ troop.postpone(sntls, 'StateMatrix', function () {
                  * Edges in the state matrix.
                  * Each edge defines a start state, an end state, and a load.
                  * Therefore this object is two levels deep.
-                 * @type {object}
+                 * @type {sntls.Tree}
                  * @example
                  * {"enabled":{"disabled":"disable"},"disabled":{"enabled":"enable"}}
                  */
-                this.edges = {};
+                this.edges = sntls.Tree.create();
             },
 
             /**
@@ -45,14 +45,7 @@ troop.postpone(sntls, 'StateMatrix', function () {
                     .isString(endStateName, "Invalid end state name")
                     .isString(load, "Invalid load");
 
-                var startVertices = this.edges,
-                    endVertices = startVertices[startStateName];
-                if (!endVertices) {
-                    endVertices = startVertices[startStateName] = {};
-                }
-                if (!endVertices[endStateName]) {
-                    endVertices[endStateName] = load;
-                }
+                this.edges.setNode([startStateName, endStateName].toPath(), load);
 
                 return this;
             },
@@ -68,8 +61,7 @@ troop.postpone(sntls, 'StateMatrix', function () {
                     .isString(startStateName, "Invalid start state name")
                     .isString(endStateName, "Invalid end state name");
 
-                return sntls.Path.create([startStateName, endStateName])
-                    .resolve(this.edges);
+                return this.edges.getNode([startStateName, endStateName].toPath());
             }
         });
 });

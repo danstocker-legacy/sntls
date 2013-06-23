@@ -56,6 +56,35 @@
         );
     });
 
+    test("Safe node retrieval", function () {
+        var tree = sntls.Tree.create({
+                hello: "world"
+            }),
+            path = 'foo>bar'.toPath(),
+            result;
+
+        result = tree.getSafeNode(path);
+
+        deepEqual(tree.items, {
+            hello: "world",
+            foo  : {
+                bar: {}
+            }
+        }, "Path built in tree");
+        strictEqual(result, tree.getNode(path), "Safe node retrieval returns new object");
+
+        tree.getSafeNode('hello>world'.toPath());
+
+        deepEqual(tree.items, {
+            hello: {
+                world: {}
+            },
+            foo  : {
+                bar: {}
+            }
+        }, "Existing path overwritten");
+    });
+
     test("Node setting", function () {
         var tree = sntls.Tree.create({}),
             result;
@@ -74,7 +103,7 @@
         );
     });
 
-    test("Safe node retrieval", function () {
+    test("Getting or setting node", function () {
         var json = {
                 foo: {
                     bar: "Hello world!"
@@ -83,13 +112,13 @@
             tree = sntls.Tree.create(json),
             result;
 
-        result = tree.getSafeNode('foo>bar'.toPath(), function () {
+        result = tree.getOrSetNode('foo>bar'.toPath(), function () {
             return "Whatever";
         });
 
         equal(result, "Hello world!", "Node retrieved from existing path");
 
-        result = tree.getSafeNode('hello>world'.toPath(), function () {
+        result = tree.getOrSetNode('hello>world'.toPath(), function () {
             return [];
         });
 

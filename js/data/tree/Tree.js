@@ -24,7 +24,18 @@ troop.postpone(sntls, 'Tree', function () {
              * @return {*} Whatever value is found at path
              */
             getNode: function (path) {
-                return path.resolve(this.items);
+                var asArray = path.asArray,
+                    result = this.items,
+                    i;
+
+                for (i = 0; i < asArray.length; i++) {
+                    result = result[asArray[i]];
+                    if (typeof result === 'undefined') {
+                        break;
+                    }
+                }
+
+                return result;
             },
 
             /**
@@ -33,11 +44,39 @@ troop.postpone(sntls, 'Tree', function () {
              * @return {sntls.Hash}
              */
             getNodeAsHash: function (path) {
-                var node = path.resolve(this.items);
-                dessert.isObjectOptional(node, "Node is not object");
-                return node ?
-                    sntls.Hash.create(node) :
-                    node;
+                return sntls.Hash.create(this.getNode(path));
+            },
+
+            /**
+             * Retrieves the value at the specified path, or
+             * when the path does not exist, creates path and
+             * assigns an empty object.
+             * @param {sntls.Path} path
+             * @returns {object}
+             */
+            getSafeNode: function (path) {
+                var asArray = path.asArray,
+                    result = this.items,
+                    i, key;
+
+                for (i = 0; i < asArray.length; i++) {
+                    key = asArray[i];
+                    if (typeof result[key] !== 'object') {
+                        result[key] = {};
+                    }
+                    result = result[key];
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves safe value at path, wrapped in a hash.
+             * @param {sntls.Path} path
+             * @returns {sntls.Hash}
+             */
+            getSafeNodeAsHash: function (path) {
+                return sntls.Hash.create(this.getSafeNode(path));
             },
 
             /**
@@ -47,7 +86,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             setNode: function (path, value) {
-                var node = path.clone().trim().resolveOrBuild(this.items),
+                var node = this.getSafeNode(path.clone().trim()),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -64,8 +103,8 @@ troop.postpone(sntls, 'Tree', function () {
              * @param {function} generator Generator function returning value
              * @return {*}
              */
-            getSafeNode: function (path, generator) {
-                var node = path.clone().trim().resolveOrBuild(this.items),
+            getOrSetNode: function (path, generator) {
+                var node = this.getSafeNode(path.clone().trim()),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
@@ -82,7 +121,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @return {sntls.Tree}
              */
             unsetNode: function (path) {
-                var node = path.clone().trim().resolveOrBuild(this.items),
+                var node = this.getSafeNode(path.clone().trim()),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
