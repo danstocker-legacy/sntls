@@ -8,10 +8,14 @@
         function handler() {}
 
         var query = 'foo>\\>bar'.toQuery(),
-            walker = /** @type {sntls.RecursiveTreeWalker} */ sntls.RecursiveTreeWalker.create(query, handler);
+            walker;
 
+        walker = /** @type {sntls.RecursiveTreeWalker} */ sntls.RecursiveTreeWalker.create(handler, query);
         strictEqual(walker.query, query, "Query added to instance");
         strictEqual(walker.handler, handler, "Handler added to instance");
+
+        walker = /** @type {sntls.RecursiveTreeWalker} */ sntls.RecursiveTreeWalker.create(handler);
+        equal(walker.query.toString(), '\\', "Full traversal query is default");
     });
 
     test("Available keys", function () {
@@ -57,7 +61,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create('foo>|>2'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler, 'foo>|>2'.toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -66,7 +70,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create('\\>2'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler, '\\>2'.toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -75,7 +79,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create('foo>\\>foo'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler, 'foo>\\>foo'.toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -84,7 +88,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create('foo>baz>\\'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler, 'foo>baz>\\'.toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -93,7 +97,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create('\\'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler)
             .walk(node);
         deepEqual(
             result,
@@ -136,7 +140,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create('\\'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler)
             .walk(node);
         deepEqual(
             result,
@@ -175,7 +179,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create('\\>2'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler, '\\>2'.toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -189,7 +193,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create('\\'.toQuery(), handler)
+        sntls.RecursiveTreeWalker.create(handler)
             .walk(node);
         deepEqual(
             result,

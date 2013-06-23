@@ -98,7 +98,7 @@ troop.postpone(sntls, 'Tree', function () {
              */
             traverseByQuery: function (query, handler) {
                 // creating tree walker and walking tree buffer
-                sntls.RecursiveTreeWalker.create(query, handler)
+                sntls.RecursiveTreeWalker.create(handler, query)
                     .walk(this.items);
 
                 return this;
@@ -117,7 +117,7 @@ troop.postpone(sntls, 'Tree', function () {
                 }
 
                 // creating tree walker and walking tree buffer
-                sntls.RecursiveTreeWalker.create(query, handler)
+                sntls.RecursiveTreeWalker.create(handler, query)
                     .walk(this.items);
 
                 return result;
@@ -146,7 +146,7 @@ troop.postpone(sntls, 'Tree', function () {
                 }
 
                 // creating tree walker and walking tree buffer
-                sntls.RecursiveTreeWalker.create(query, handler)
+                sntls.RecursiveTreeWalker.create(handler, query)
                     .walk(this.items);
 
                 return result;
@@ -175,7 +175,7 @@ troop.postpone(sntls, 'Tree', function () {
                 }
 
                 // creating tree walker and walking tree buffer
-                sntls.RecursiveTreeWalker.create(query, handler)
+                sntls.RecursiveTreeWalker.create(handler, query)
                     .walk(this.items);
 
                 return result;

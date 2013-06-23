@@ -113,22 +113,22 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              */
 
             /**
-             * @param {sntls.Query} query
              * @param {function} handler
+             * @param {sntls.Query} [query]
              */
-            init: function (query, handler) {
-                /**
-                 * Query guiding the traversal.
-                 * @type {sntls.Query}
-                 */
-                this.query = query;
-
+            init: function (handler, query) {
                 /**
                  * Handler to be called on each leaf node.
                  * Returning false interrupts traversal.
                  * @type {Function}
                  */
                 this.handler = handler;
+
+                /**
+                 * Query guiding the traversal.
+                 * @type {sntls.Query}
+                 */
+                this.query = query || Query.create([Query.PATTERN_SKIP]);
 
                 /**
                  * Key currently being traversed

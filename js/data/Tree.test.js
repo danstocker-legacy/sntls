@@ -129,7 +129,7 @@
             handler = function () {};
 
         sntls.RecursiveTreeWalker.addMocks({
-            init: function (query, h) {
+            init: function (h, query) {
                 equal(query.toString(), 'foo>|>2', "Query being traversed");
                 strictEqual(h, handler, "Handler to be called");
             },
