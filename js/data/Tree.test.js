@@ -143,4 +143,59 @@
 
         sntls.RecursiveTreeWalker.removeMocks();
     });
+
+    test("Querying", function () {
+        var tree = sntls.Tree.create({
+            hello: "world",
+            foo  : {
+                bar: {
+                    2: "woohoo"
+                },
+                boo: {
+                    1: "hello again",
+                    2: 3
+                },
+                baz: {
+                    1: 1,
+                    2: {
+                        foo: "bar"
+                    },
+                    3: 3
+                }
+            },
+            moo  : {
+                2   : "what",
+                says: "cow"
+            }
+        });
+
+        deepEqual(
+            tree.queryValuesAsHash('foo>|>2'.toQuery()).items,
+            ["woohoo", 3, {foo: "bar"}],
+            "Values queried"
+        );
+
+        deepEqual(
+            tree.queryKeysAsHash('foo>|>2'.toQuery()).items,
+            ["2", "2", "2"],
+            "Keys queried w/ literal as last pattern"
+        );
+
+        deepEqual(
+            tree.queryKeysAsHash('foo>baz>\\'.toQuery()).items,
+            ["1", "foo", "3"],
+            "Keys queried w/ skipper as last pattern"
+        );
+
+        deepEqual(
+            tree.queryPathsAsHash('foo>baz>\\'.toQuery())
+                .toCollection()
+                .mapContents(function (item) {
+                    return item.toString();
+                })
+                .getValues(),
+            ["foo>baz>1", "foo>baz>2>foo", "foo>baz>3"],
+            "Paths queried"
+        );
+    });
 }());

@@ -102,6 +102,92 @@ troop.postpone(sntls, 'Tree', function () {
                     .walk(this.items);
 
                 return this;
+            },
+
+            /**
+             * Queries node values from tree
+             * @param {sntls.Query} query
+             * @returns {Array}
+             */
+            queryValues: function (query) {
+                var result = [];
+
+                function handler(node) {
+                    result.push(node);
+                }
+
+                // creating tree walker and walking tree buffer
+                sntls.RecursiveTreeWalker.create(query, handler)
+                    .walk(this.items);
+
+                return result;
+            },
+
+            /**
+             * Queries node values from tree wrapped in a hash
+             * @param {sntls.Query} query
+             * @returns {sntls.Hash}
+             */
+            queryValuesAsHash: function (query) {
+                return sntls.Hash.create(this.queryValues(query));
+            },
+
+            /**
+             * Queries node keys from tree
+             * @param {sntls.Query} query
+             * @returns {Array}
+             */
+            queryKeys: function (query) {
+                /*jshint validthis:true */
+                var result = [];
+
+                function handler() {
+                    result.push(this.currentKey);
+                }
+
+                // creating tree walker and walking tree buffer
+                sntls.RecursiveTreeWalker.create(query, handler)
+                    .walk(this.items);
+
+                return result;
+            },
+
+            /**
+             * Queries node keys from tree wrapped in a hash
+             * @param {sntls.Query} query
+             * @returns {sntls.Hash}
+             */
+            queryKeysAsHash: function (query) {
+                return sntls.Hash.create(this.queryKeys(query));
+            },
+
+            /**
+             * Queries paths from tree
+             * @param {sntls.Query} query
+             * @returns {Array}
+             */
+            queryPaths: function (query) {
+                /*jshint validthis:true */
+                var result = [];
+
+                function handler() {
+                    result.push(this.currentPath.clone());
+                }
+
+                // creating tree walker and walking tree buffer
+                sntls.RecursiveTreeWalker.create(query, handler)
+                    .walk(this.items);
+
+                return result;
+            },
+
+            /**
+             * Queries paths from tree wrapped in a hash
+             * @param {sntls.Query} query
+             * @returns {sntls.Hash}
+             */
+            queryPathsAsHash: function (query) {
+                return sntls.Hash.create(this.queryPaths(query));
             }
         });
 });
