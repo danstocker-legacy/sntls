@@ -247,5 +247,25 @@
             ["foo>baz>1", "foo>baz>2>foo", "foo>baz>3"],
             "Paths queried"
         );
+
+        deepEqual(
+            tree.queryKeyValuePairsAsHash('foo>baz>\\'.toQuery()).items,
+            {
+                1  : 1,
+                foo: "bar",
+                3  : 3
+            },
+            "Key-value pairs queried"
+        );
+
+        deepEqual(
+            tree.queryPathValuePairsAsHash('foo>baz>\\'.toQuery()).items,
+            {
+                "foo>baz>1"    : 1,
+                "foo>baz>2>foo": "bar",
+                "foo>baz>3"    : 3
+            },
+            "Path-value pairs queried"
+        );
     });
 }());

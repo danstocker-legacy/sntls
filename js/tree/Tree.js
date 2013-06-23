@@ -243,6 +243,64 @@ troop.postpone(sntls, 'Tree', function () {
              */
             queryPathsAsHash: function (query) {
                 return sntls.Hash.create(this.queryPaths(query));
+            },
+
+            /**
+             * Queries key-value associations from tree as an object
+             * @param {sntls.Query} query
+             * @returns {object}
+             */
+            queryKeyValuePairs: function (query) {
+                /*jshint validthis:true */
+                var result = {};
+
+                function handler(node) {
+                    result[this.currentKey] = node;
+                }
+
+                // creating tree walker and walking tree buffer
+                sntls.RecursiveTreeWalker.create(handler, query)
+                    .walk(this.items);
+
+                return result;
+            },
+
+            /**
+             * Queries key-value associations from tree as an object wrapped in a hash
+             * @param {sntls.Query} query
+             * @returns {sntls.Hash}
+             */
+            queryKeyValuePairsAsHash: function (query) {
+                return sntls.Hash.create(this.queryKeyValuePairs(query));
+            },
+
+            /**
+             * Queries pat-value associations from tree as object
+             * @param {sntls.Query} query
+             * @return {object}
+             */
+            queryPathValuePairs: function (query) {
+                /*jshint validthis:true */
+                var result = {};
+
+                function handler(node) {
+                    result[this.currentPath.toString()] = node;
+                }
+
+                // creating tree walker and walking tree buffer
+                sntls.RecursiveTreeWalker.create(handler, query)
+                    .walk(this.items);
+
+                return result;
+            },
+
+            /**
+             * Queries pat-value associations from tree as object wrapped in a hash
+             * @param {sntls.Query} query
+             * @returns {sntls.Hash}
+             */
+            queryPathValuePairsAsHash: function (query) {
+                return sntls.Hash.create(this.queryPathValuePairs(query));
             }
         });
 });
