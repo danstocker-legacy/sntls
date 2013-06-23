@@ -20,7 +20,7 @@ troop.postpone(sntls, 'TreeWalker', function () {
                 dessert.isFunction(handler, "Invalid walker handler");
 
                 /**
-                 * Handler to be called on each node.
+                 * Handler to be called on each relevant node.
                  * Returning false interrupts traversal.
                  * @type {Function}
                  */
