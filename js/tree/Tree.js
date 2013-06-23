@@ -7,11 +7,13 @@
 troop.postpone(sntls, 'Tree', function () {
     "use strict";
 
+    var Hash = sntls.Hash;
+
     /**
      * @class sntls.Tree
      * @extends sntls.Hash
      */
-    sntls.Tree = sntls.Hash.extend()
+    sntls.Tree = Hash.extend()
         .addMethods(/** @lends sntls.Tree */{
             /**
              * @name sntls.Tree.create
@@ -44,7 +46,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @return {sntls.Hash}
              */
             getNodeAsHash: function (path) {
-                return sntls.Hash.create(this.getNode(path));
+                return Hash.create(this.getNode(path));
             },
 
             /**
@@ -76,7 +78,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Hash}
              */
             getSafeNodeAsHash: function (path) {
-                return sntls.Hash.create(this.getSafeNode(path));
+                return Hash.create(this.getSafeNode(path));
             },
 
             /**
@@ -184,7 +186,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Hash}
              */
             queryValuesAsHash: function (query) {
-                return sntls.Hash.create(this.queryValues(query));
+                return Hash.create(this.queryValues(query));
             },
 
             /**
@@ -213,7 +215,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Hash}
              */
             queryKeysAsHash: function (query) {
-                return sntls.Hash.create(this.queryKeys(query));
+                return Hash.create(this.queryKeys(query));
             },
 
             /**
@@ -242,7 +244,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Hash}
              */
             queryPathsAsHash: function (query) {
-                return sntls.Hash.create(this.queryPaths(query));
+                return Hash.create(this.queryPaths(query));
             },
 
             /**
@@ -271,7 +273,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Hash}
              */
             queryKeyValuePairsAsHash: function (query) {
-                return sntls.Hash.create(this.queryKeyValuePairs(query));
+                return Hash.create(this.queryKeyValuePairs(query));
             },
 
             /**
@@ -300,7 +302,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Hash}
              */
             queryPathValuePairsAsHash: function (query) {
-                return sntls.Hash.create(this.queryPathValuePairs(query));
+                return Hash.create(this.queryPathValuePairs(query));
             }
         });
 });
