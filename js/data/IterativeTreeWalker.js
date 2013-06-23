@@ -23,6 +23,24 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                  * @type {Function}
                  */
                 this.handler = handler;
+
+                /**
+                 * Key currently being traversed
+                 * @type {string}
+                 */
+                this.currentKey = undefined;
+
+                /**
+                 * Node currently being traversed
+                 * @type {*}
+                 */
+                this.currentNode = undefined;
+
+                /**
+                 * Path currently being traversed
+                 * @type {sntls.Path}
+                 */
+                this.currentPath = undefined;
             },
 
             /**
@@ -35,7 +53,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                     indexStack = [0], // stack of key indexes on current path
                     nodeStack = [node], // stack of nodes on current path
 
-                    path = [], // key stack, ie. traversal path, calculated
+                    currentPath = [], // key stack, ie. traversal path, calculated
 
                     currentDepth, // current traversal depth
                     currentParent, // the node we're currently IN (current parent node)
@@ -43,6 +61,9 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                     currentIndex, // index of key in current parent node
                     currentKey, // key of node we're AT
                     currentNode; // node we're currently AT
+
+                // reference to path
+                this.currentPath = currentPath;
 
                 for (; ;) {
                     // determining where we are
@@ -61,7 +82,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
 
                         nodeStack.pop();
                         indexStack.pop();
-                        path.pop();
+                        currentPath.pop();
 
                         // raising index on parent node
                         indexStack.push(indexStack.pop() + 1);
@@ -71,14 +92,14 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
 
                     // obtaining current state as local variables
                     currentKeys = keysStack[currentDepth];
-                    currentKey = currentKeys[currentIndex];
+                    this.currentKey = currentKey = currentKeys[currentIndex];
                     currentParent = nodeStack[currentDepth];
-                    currentNode = currentParent[currentKey];
-                    path[currentDepth] = currentKey;
+                    this.currentNode = currentNode = currentParent[currentKey];
+                    currentPath[currentDepth] = currentKey;
 
                     // calling handler for this node
                     // traversal may be terminated by handler by returning false
-                    if (this.handler.call(this, currentNode, path, currentKey, currentDepth) === false) {
+                    if (this.handler.call(this, currentNode) === false) {
                         break;
                     }
 
@@ -93,6 +114,13 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                         indexStack[currentDepth]++;
                     }
                 }
+
+                // re-setting traversal state
+                this.currentKey = undefined;
+                this.currentNode = undefined;
+                this.currentPath = undefined;
+
+                return this;
             }
         });
 });

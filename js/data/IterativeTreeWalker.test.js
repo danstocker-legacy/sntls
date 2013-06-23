@@ -26,35 +26,62 @@
                 }
             },
             keys,
-            paths;
+            paths,
+            walker;
 
         keys = [];
         paths = [];
 
-        sntls.IterativeTreeWalker.create(function (node, path, key) {
-            paths.push(path.join('.'));
-            keys.push(key);
-        })
+        walker = sntls.IterativeTreeWalker
+            .create(function () {
+                paths.push(this.currentPath.join('.'));
+                keys.push(this.currentKey);
+            })
             .walk(obj);
 
+        equal(typeof walker.currentKey, 'undefined', "Key reset after traversal");
+        equal(typeof walker.currentNode, 'undefined', "Node reset after traversal");
+        equal(typeof walker.currentPath, 'undefined', "Path reset after traversal");
+
         deepEqual(keys, ['hello', 'foo', 'bar', 'boo', '1', 'moo', 'says'], "Keys read during full traversal");
-        deepEqual(paths, ['hello', 'foo', 'foo.bar', 'foo.boo', 'foo.boo.1', 'moo', 'moo.says'
-        ], "Paths traversed during full traversal");
+        deepEqual(
+            paths,
+            [
+                'hello',
+                'foo',
+                'foo.bar',
+                'foo.boo',
+                'foo.boo.1',
+                'moo',
+                'moo.says'
+            ],
+            "Paths traversed during full traversal"
+        );
 
         keys = [];
         paths = [];
 
         // setting up traversal to stop at key '1'
-        sntls.IterativeTreeWalker.create(function (node, path, key) {
-            paths.push(path.join('.'));
-            if (key === '1') {
-                return false;
-            }
-            return undefined;
-        })
+        sntls.IterativeTreeWalker
+            .create(function () {
+                paths.push(this.currentPath.join('.'));
+                if (this.currentKey === '1') {
+                    return false;
+                }
+                return undefined;
+            })
             .walk(obj);
 
-        deepEqual(paths, ['hello', 'foo', 'foo.bar', 'foo.boo', 'foo.boo.1'
-        ], "Paths traversed during terminated traversal");
+        deepEqual(
+            paths,
+            [
+                'hello',
+                'foo',
+                'foo.bar',
+                'foo.boo',
+                'foo.boo.1'
+            ],
+            "Paths traversed during terminated traversal"
+        );
     });
 }());
