@@ -5,10 +5,8 @@ Sntls
 
 A collection of general purpose classes and behaviors (class traits) such as collections, sets, profiling, stateful objects, etc.
 
-Currently available
--------------------
-
-Data manipulation:
+Data manipulation
+-----------------
 
 - `sntls.Hash`: Base for all data-manipulating classes.
 - `sntls.OrderedList`: For manipulating order-retaining lists of numbers and strings.
@@ -24,12 +22,14 @@ Data manipulation:
 - `sntls.Query`: Describes query expressions for paths.
 - `sntls.Tree`: Accesses, traverses, and modifies tree-like object structures.
 
-Class behavior:
+Class behavior
+--------------
 
 - `sntls.Profiled`: *Behavior*, lets classes keep a profile.
 - `sntls.Stateful`: *Behavior*, adds state matrices to class, triggering specified methods on transitions.
 
-Utility classes:
+Utility classes
+---------------
 
 - `sntls.Profile`: Offers a way of gathering statistics in a multi-level fashion.
 - `sntls.StateMatrix`: Associates transitions between named states with arbitrary values.
