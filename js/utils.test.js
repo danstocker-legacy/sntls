@@ -4,6 +4,15 @@
 
     module("utils");
 
+    test("Object property count", function () {
+        ok(sntls.utils.isEmptyObject({}), "Empty object");
+        ok(!sntls.utils.isEmptyObject({foo: "bar"}), "Non-empty object");
+
+        ok(sntls.utils.isSingularObject({foo: "bar"}), "Singular object");
+        ok(!sntls.utils.isSingularObject({}), "Non-singular object (too few)");
+        ok(!sntls.utils.isSingularObject({foo: "bar", hello: "world"}), "Non-singular object (too many)");
+    });
+
     test("Shallow copy", function () {
         var referenceObject = {},
             originalObject = {
