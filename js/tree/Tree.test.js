@@ -137,7 +137,7 @@
         );
     });
 
-    test("Node deletion", function () {
+    test("Node annulment", function () {
         var tree = sntls.Tree.create({
                 foo: {
                     bar: "Hello world!"
@@ -148,7 +148,96 @@
         result = tree.unsetNode('foo>bar'.toPath());
 
         strictEqual(result, tree, "Tree.unsetNode is chainable");
+        deepEqual(tree.items, {foo: {bar: undefined}}, "Node annulled");
+    });
+
+    test("Key deletion", function () {
+        var tree = sntls.Tree.create({
+                foo: {
+                    bar: "Hello world!"
+                }
+            }),
+            result;
+
+        result = tree.unsetKey('foo>bar'.toPath());
+
+        strictEqual(result, tree, "Tree.unsetKey is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
+    });
+
+    test("Path deletion", function () {
+        var tree = sntls.Tree.create({
+                a: {d: {}, e: {}, f: {
+                    g: {}, h: {
+                        i: {j: {k: {l: {
+                            n: {o: "p"}
+                        }, m         : {}}}}
+                    }
+                }},
+                b: {},
+                c: {}
+            }),
+            result;
+
+        result = tree.unsetPath('a>f>h>i>j>k>l>n>o'.toPath());
+        strictEqual(result, tree, "Tree.unsetPath is chainable");
+        deepEqual(
+            tree.items,
+            {
+                a: {d: {}, e: {}, f: {
+                    g: {}, h: {
+                        i: {j: {k: {m: {}}}}
+                    }
+                }},
+                b: {},
+                c: {}
+            },
+            "First path removed"
+        );
+
+        tree.unsetPath('a>f>h>i>j>k>m'.toPath());
+        deepEqual(
+            tree.items,
+            {
+                a: {d: {}, e: {}, f: {
+                    g: {}
+                }},
+                b: {},
+                c: {}
+            },
+            "Second path removed"
+        );
+
+        tree.unsetPath('a>f>g'.toPath());
+        deepEqual(
+            tree.items,
+            {
+                a: {d: {}, e: {}},
+                b: {},
+                c: {}
+            },
+            "Third path removed"
+        );
+
+        tree.unsetPath('b'.toPath());
+        deepEqual(
+            tree.items,
+            {
+                a: {d: {}, e: {}},
+                c: {}
+            },
+            "Path ending in non-singular node removed"
+        );
+
+        tree.unsetPath('a>e>foo'.toPath());
+        deepEqual(
+            tree.items,
+            {
+                a: {d: {}, e: {}},
+                c: {}
+            },
+            "Overreaching path not removed"
+        );
     });
 
     test("Recursive traversal", function () {

@@ -118,16 +118,83 @@ troop.postpone(sntls, 'Tree', function () {
             },
 
             /**
-             * Removes node at the specified path.
-             * @param {sntls.Path} path Path to node
-             * @return {sntls.Tree}
+             * Removes node from the specified path, ie.
+             * the node will be overwritten with an undefined value.
+             * @param {sntls.Path} path
+             * @returns {sntls.Tree}
              */
             unsetNode: function (path) {
                 var node = this.getSafeNode(path.clone().trim()),
                     asArray = path.asArray,
                     lastKey = asArray[asArray.length - 1];
 
+                node[lastKey] = undefined;
+
+                return this;
+            },
+
+            /**
+             * Removes key from the specified path.
+             * @param {sntls.Path} path Path to node
+             * @return {sntls.Tree}
+             */
+            unsetKey: function (path) {
+                var node = this.getSafeNode(path.clone().trim()),
+                    asArray = path.asArray,
+                    lastKey = asArray[asArray.length - 1];
+
                 delete node[lastKey];
+
+                return this;
+            },
+
+            /**
+             * Removes nodes from tree that have no children
+             * other than the one specified by the path.
+             * @param {sntls.Path} path
+             * @returns {sntls.Tree}
+             */
+            unsetPath: function (path) {
+                var asArray = path.asArray,
+                    parentNode, // parent node of current node
+                    parentNodeSingle, // whether parent node has one child
+                    currentKey, // key associated with current node in parent node
+                    currentNode = this.items, // node currently processed
+                    currentNodeSingle, // whether current node has one child
+                    i, nextKey, // next key to be processed within current node
+
+                    targetParent, // parent node in which to delete
+                    targetKey; // key in parent node to be deleted
+
+                // determining deletion target
+                for (i = 0; i < asArray.length; i++) {
+                    nextKey = asArray[i];
+
+                    currentNodeSingle = sntls.utils.isSingularObject(currentNode);
+                    if (currentNodeSingle) {
+                        // current node has exactly one child
+                        if (!parentNodeSingle) {
+                            // ...but parent had more
+                            // marking current node for deletion
+                            targetKey = currentKey;
+                            targetParent = parentNode;
+                        }
+                    } else {
+                        // current node has more than one child
+                        // marking next node for deletion
+                        targetKey = nextKey;
+                        targetParent = currentNode;
+                    }
+
+                    // changing state for next iteration
+                    currentKey = nextKey;
+                    parentNode = currentNode;
+                    currentNode = parentNode[nextKey];
+                    parentNodeSingle = currentNodeSingle;
+                }
+
+                // deleting marked node
+                delete targetParent[targetKey];
 
                 return this;
             },
