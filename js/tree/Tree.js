@@ -156,9 +156,9 @@ troop.postpone(sntls, 'Tree', function () {
              */
             unsetPath: function (path) {
                 var asArray = path.asArray,
-                    parentNode, // parent node of current node
+                    parentNode = null, // parent node of current node
                     parentNodeSingle, // whether parent node has one child
-                    currentKey, // key associated with current node in parent node
+                    currentKey = null, // key associated with current node in parent node
                     currentNode = this.items, // node currently processed
                     currentNodeSingle, // whether current node has one child
                     i, nextKey, // next key to be processed within current node
