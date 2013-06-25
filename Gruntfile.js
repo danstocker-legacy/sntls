@@ -13,9 +13,6 @@ module.exports = function (grunt) {
             'js/data/JournalingCollection.js',
             'js/data/OrderedList.js',
             'js/data/OrderedStringList.js',
-            'js/data/collections/ArrayCollection.js',
-            'js/data/collections/DateCollection.js',
-            'js/data/collections/StringCollection.js',
             'js/tree/Path.js',
             'js/tree/Query.js',
             'js/tree/TreeWalker.js',
@@ -26,6 +23,9 @@ module.exports = function (grunt) {
             'js/behavior/Profiled.js',
             'js/behavior/StateMatrix.js',
             'js/behavior/Stateful.js',
+            'js/data/collections/ArrayCollection.js',
+            'js/data/collections/DateCollection.js',
+            'js/data/collections/StringCollection.js',
             'js/exports.js'
         ],
 
