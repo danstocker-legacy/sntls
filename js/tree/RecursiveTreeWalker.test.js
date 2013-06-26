@@ -166,6 +166,15 @@
             ["world", "woohoo", "hello again", 3, 1, "bar", 3, "what", "cow"],
             "All leaf nodes collected"
         );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, [sntls.Query.PATTERN_SKIP, {symbol: '|', value: 3}].toQuery())
+            .walk(node);
+        deepEqual(
+            result,
+            [3, 3],
+            "Leaf nodes matching value"
+        );
     });
 
     test("Walking with interrupt", function () {
@@ -250,6 +259,18 @@
                 ["2", 3, ["foo", "boo", "2"]],
                 ["2", {"foo": "bar"}, ["foo", "baz", "2"]],
                 ["2", "what", ["moo", "2"]]
+            ],
+            "Traversed keys, nodes, paths"
+        );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, [sntls.Query.PATTERN_SKIP, {symbol: '|', value: 3}].toQuery())
+            .walk(node);
+        deepEqual(
+            result,
+            [
+                ["2", 3, ["foo", "boo", "2"]],
+                ["3", 3, ["foo", "baz", "3"]]
             ],
             "Traversed keys, nodes, paths"
         );
