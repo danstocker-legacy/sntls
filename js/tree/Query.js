@@ -112,7 +112,14 @@ troop.postpone(sntls, 'Query', function () {
                         break;
                     default:
                         if (key.indexOf('<') > -1) {
+                            // optional values (either/or)
                             result[i] = key.split('<');
+                        } else if (key.indexOf('|%') === 0) {
+                            // value matching
+                            result[i] = {
+                                symbol: '|',
+                                value : key.slice(2)
+                            };
                         }
                         break;
                     }

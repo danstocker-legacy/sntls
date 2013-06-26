@@ -56,11 +56,21 @@
 
     test("Parsing", function () {
         var Query = sntls.Query,
-            query = 'foo>\\>bar>hello<world>|';
+            query = 'foo>\\>bar>hello<world>|>|%baz';
 
         deepEqual(
             sntls.Query._parseString(query),
-            ['foo', Query.PATTERN_SKIP, 'bar', ['hello', 'world'], Query.PATTERN_ASTERISK],
+            [
+                'foo',
+                Query.PATTERN_SKIP,
+                'bar',
+                ['hello', 'world'],
+                Query.PATTERN_ASTERISK,
+                {
+                    symbol: '|',
+                    value : 'baz'
+                }
+            ],
             "Query parsed"
         );
     });
