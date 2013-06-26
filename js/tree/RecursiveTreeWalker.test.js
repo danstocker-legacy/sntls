@@ -22,17 +22,75 @@
         equal(walker.query.toString(), '\\', "Full traversal query is default");
     });
 
+    test("Index gathering from array", function () {
+        deepEqual(
+            sntls.RecursiveTreeWalker._allIndicesOf(['foo', 'bar', 1, 2, 'foo', 3], 'baz'),
+            [],
+            "0 hits"
+        );
+
+        deepEqual(
+            sntls.RecursiveTreeWalker._allIndicesOf(['foo'], 'foo'),
+            [0],
+            "1 hit"
+        );
+
+        deepEqual(
+            sntls.RecursiveTreeWalker._allIndicesOf(['foo', 'bar', 1, 2, 'foo', 3], 'foo'),
+            [0, 4],
+            "> 1 multiplicity"
+        );
+    });
+
+    test("Key gathering from object", function () {
+        deepEqual(
+            sntls.RecursiveTreeWalker._getKeysByValue({
+                foo: 1,
+                bar: 2,
+                baz: 3
+            }, 4),
+            [],
+            "0 hits"
+        );
+
+        deepEqual(
+            sntls.RecursiveTreeWalker._getKeysByValue({
+                foo: 1}, 1),
+            ['foo'],
+            "1 hit"
+        );
+
+        deepEqual(
+            sntls.RecursiveTreeWalker._getKeysByValue({
+                foo  : 1,
+                bar  : 2,
+                baz  : 3,
+                hello: 1,
+                world: 2
+            }, 1),
+            ['foo', 'hello'],
+            "> 1 multiplicity"
+        );
+    });
+
     test("Available keys", function () {
         var node = {
                 foo  : 'bar',
                 hello: 'world',
                 test : 1
             },
-            query = '|>blah>foo<bar'.toQuery();
+            query = '|>blah>foo<bar>|%world'.toQuery();
 
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
-        equal(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[1]), [], "String pattern");
-        equal(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[2]), ['foo'], "Array pattern");
+        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[1]), [], "String pattern");
+        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[2]), ['foo'], "Array pattern");
+        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[3]), ['hello'], "Value pattern w/ object");
+        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(
+            ['foo', 'hello', 'world', 'baz', 'world'],
+            query.asArray[3]),
+            [2, 4],
+            "Value pattern w/ array"
+        );
     });
 
     test("Walking", function () {

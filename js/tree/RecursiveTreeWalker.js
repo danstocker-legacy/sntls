@@ -14,10 +14,49 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     sntls.RecursiveTreeWalker = base.extend()
         .addPrivateMethods(/** @lends sntls.RecursiveTreeWalker */{
             /**
+             * Gathers all indices of specified value from specified array.
+             * @param {Array} array
+             * @param {*} value
+             * @returns {number[]}
+             * @static
+             * @private
+             */
+            _allIndicesOf: function (array, value) {
+                var result = [],
+                    nextIndex = -1;
+                while ((nextIndex = array.indexOf(value, nextIndex + 1)) > -1) {
+                    result.push(nextIndex);
+                }
+                return result;
+            },
+
+            /**
+             * Gathers all keys associated with specified value from specified object
+             * @param {object} object
+             * @param {*} value
+             * @returns {string[]}
+             * @static
+             * @private
+             */
+            _getKeysByValue: function (object, value) {
+                var result = [],
+                    keys = Object.keys(object),
+                    i, key;
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    if (object[key] === value) {
+                        result.push(key);
+                    }
+                }
+                return result;
+            },
+
+            /**
              * Traverses tree recursively, guided by the query assigned to the walker.
              * @param {*} currentNode Node currently being traversed.
              * @param {number} queryPos Position of current pattern in query.
              * @param {boolean} inSkipMode Whether traversal is in skip mode.
+             * @private
              */
             _walk: function (currentNode, queryPos, inSkipMode) {
                 var queryAsArray = this.query.asArray,
@@ -130,13 +169,16 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             getKeysByPattern: function (node, pattern) {
                 var result,
                     i, key;
+
                 if (validators.isString(pattern)) {
+                    // obtaining single key when present in node
                     if (hOP.call(node, pattern)) {
                         result = [pattern];
                     } else {
                         result = [];
                     }
                 } else if (pattern instanceof Array) {
+                    // obtaining enumerated keys that are actually present in node
                     result = [];
                     for (i = 0; i < pattern.length; i++) {
                         key = pattern[i];
@@ -145,10 +187,21 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         }
                     }
                 } else if (pattern === Query.PATTERN_ASTERISK) {
+                    // quick asterisk pattern
                     result = Object.keys(node);
+                } else if (pattern instanceof Object && hOP.call(pattern, 'value')) {
+                    // there's a value specified within pattern
+                    if (node instanceof Array) {
+                        // obtaining all matching indices from array
+                        result = this._allIndicesOf(node, pattern.value);
+                    } else {
+                        // obtaining all matching keys from object
+                        result = this._getKeysByValue(node, pattern.value);
+                    }
                 } else {
                     result = [];
                 }
+
                 return result;
             },
 
