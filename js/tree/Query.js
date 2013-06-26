@@ -132,6 +132,7 @@ troop.postpone(sntls, 'Query', function () {
              * Matches a path key to a query pattern
              * @param {string} key
              * @param {string|object|string[]} pattern
+             * @param {string} [pattern.symbol]
              * @return {Boolean}
              * @private
              */
@@ -144,7 +145,7 @@ troop.postpone(sntls, 'Query', function () {
                     return pattern === key;
                 } else if (pattern instanceof Object) {
                     // expression is wildcard object
-                    return pattern === this.PATTERN_ASTERISK;
+                    return pattern.symbol === this.PATTERN_ASTERISK.symbol;
                 }
                 return false;
             }

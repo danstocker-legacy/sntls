@@ -82,6 +82,8 @@
         ok(sntls.Query._matchKeyToPattern('hello', sntls.Query.PATTERN_ASTERISK), "Key matches wildcard");
         ok(!sntls.Query._matchKeyToPattern('hello', {}), "Key doesn't match unknown wildcard");
 
+        ok(sntls.Query._matchKeyToPattern('hello', {symbol: '|', value: 'foo'}), "Key matches value pattern");
+
         ok(sntls.Query._matchKeyToPattern('hello', ['hello', 'world']), "Key matches choices");
         ok(!sntls.Query._matchKeyToPattern('hello', ['foo', 'bar']), "Key doesn't match choices it's not in");
     });
@@ -98,6 +100,12 @@
         ok(!query.matchesPath('foo>path>foo'.toPath()), "Query w/ wildcard not matched by path");
         ok(!query.matchesPath('test>path>foo>bar'.toPath()), "Query w/ wildcard not matched by path");
         ok(!query.matchesPath('test>path'.toPath()), "Query w/ wildcard not matched by path");
+
+        query = 'test>|%bar'.toQuery();
+        ok(query.matchesPath('test>path'.toPath()), "Query w/ value pattern matched by path");
+        ok(!query.matchesPath('foo>path'.toPath()), "Query w/ value pattern not matched by path");
+        ok(!query.matchesPath('test>path>foo'.toPath()), "Query w/ value pattern not matched by path");
+        ok(!query.matchesPath('test'.toPath()), "Query w/ value pattern not matched by path");
 
         query = 'test>\\>foo'.toQuery();
         ok(query.matchesPath('test>path>foo'.toPath()), "Query w/ skipping matched by path");
