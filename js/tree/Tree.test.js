@@ -356,5 +356,13 @@
             },
             "Path-value pairs queried"
         );
+
+        deepEqual(
+            tree.queryPathValuePairsAsHash('\\>|%bar'.toQuery()).items,
+            {
+                "foo>baz>2>foo": "bar"
+            },
+            "Path-value pairs queried by value"
+        );
     });
 }());
