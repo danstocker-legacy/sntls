@@ -4,6 +4,24 @@
 
     module("Query");
 
+    test("Query detection", function () {
+        ok(sntls.Query.RE_QUERY_TESTER.test('|>foo>bar'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>bar>|>baz'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>bar>|'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('\\>foo>bar'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>bar>\\>baz'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>bar>\\'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>foo<baz>bar'));
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>foo<baz<boo>bar'));
+        ok(!sntls.Query.RE_QUERY_TESTER.test('foo>moo>bar'), "Not Query b/c no pattern");
+        ok(!sntls.Query.RE_QUERY_TESTER.test('foo>bar>foo%hello'), "Not query b/c no pattern in value-key");
+        ok(!sntls.Query.RE_QUERY_TESTER.test('foo>bar>%hello'), "Not query b/c no key to match value to");
+        ok(sntls.Query.RE_QUERY_TESTER.test('foo>bar>|%hello'));
+        ok(!sntls.Query.RE_QUERY_TESTER.test('foo>bar>|%hello>baz'), "Not query b/c value pattern is not last");
+        ok(!sntls.Query.RE_QUERY_TESTER.test('foo%bar'), "Not query b/c no pattern in value-key");
+        ok(sntls.Query.RE_QUERY_TESTER.test('|%bar'));
+    });
+
     test("URI encode", function () {
         deepEqual(
             sntls.Query._encodeURI([

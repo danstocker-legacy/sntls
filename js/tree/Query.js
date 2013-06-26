@@ -30,7 +30,7 @@ troop.postpone(sntls, 'Query', function () {
              * contains query patterns.
              * @type {RegExp}
              */
-            RE_QUERY_TESTER: /(^|>)(\||\\|<)($|>)/,
+            RE_QUERY_TESTER: /(^|>)((\||\\|[^><\|\\%]+(<[^><\|\\%]+)+)(?=$|>)|(\|%[^><\|\\%]+$))/,
 
             /**
              * Pattern that matches any key on a single level.
