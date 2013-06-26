@@ -202,9 +202,17 @@
     test("Serialization", function () {
         var Query = sntls.Query,
             query = Query.create([
-                'foo', Query.PATTERN_SKIP, 'bar', ['hello', 'world'], Query.PATTERN_ASTERISK
+                'foo',
+                Query.PATTERN_SKIP,
+                'bar',
+                ['hello', 'world'],
+                Query.PATTERN_ASTERISK,
+                {
+                    symbol: '|',
+                    value : 'baz'
+                }
             ]);
 
-        equal(query.toString(), 'foo>\\>bar>hello<world>|', "Query in string form");
+        equal(query.toString(), 'foo>\\>bar>hello<world>|>|%baz', "Query in string form");
     });
 }());

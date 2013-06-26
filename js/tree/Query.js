@@ -250,8 +250,13 @@ troop.postpone(sntls, 'Query', function () {
                         // optional keys
                         result.push(key.join('<'));
                     } else if (key instanceof Object) {
-                        // wildcard key
-                        result.push(key.symbol);
+                        if (key.hasOwnProperty('value')) {
+                            // value pattern
+                            result.push(key.symbol + '%' + key.value);
+                        } else {
+                            // wildcard pattern
+                            result.push(key.symbol);
+                        }
                     } else {
                         result.push(key);
                     }
