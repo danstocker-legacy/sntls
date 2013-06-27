@@ -22,56 +22,6 @@
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('|^bar'));
     });
 
-    test("URI encode", function () {
-        deepEqual(
-            sntls.Query._encodeURI([
-                ['f|o', 'b<r'],
-                {},
-                'baz\\'
-            ]),
-            [
-                ['f%7Co', 'b%3Cr'],
-                {},
-                'baz%5C'
-            ],
-            "Query structure encoded"
-        );
-    });
-
-    test("Parsing", function () {
-        var Query = sntls.Query,
-            query = 'foo>\\>bar>hello<world>|>|^baz';
-
-        deepEqual(
-            sntls.Query._parseString(query),
-            [
-                'foo',
-                Query.PATTERN_SKIP,
-                'bar',
-                ['hello', 'world'],
-                Query.PATTERN_ASTERISK,
-                {
-                    symbol: '|',
-                    value : 'baz'
-                }
-            ],
-            "Query parsed"
-        );
-    });
-
-    test("Matching key to pattern", function () {
-        ok(sntls.Query._matchKeyToPattern('hello', 'hello'), "Key matches string");
-        ok(!sntls.Query._matchKeyToPattern('hello', 'foo'), "Key doesn't match different string");
-
-        ok(sntls.Query._matchKeyToPattern('hello', sntls.Query.PATTERN_ASTERISK), "Key matches wildcard");
-        ok(!sntls.Query._matchKeyToPattern('hello', {}), "Key doesn't match unknown wildcard");
-
-        ok(sntls.Query._matchKeyToPattern('hello', {symbol: '|', value: 'foo'}), "Key matches value pattern");
-
-        ok(sntls.Query._matchKeyToPattern('hello', ['hello', 'world']), "Key matches choices");
-        ok(!sntls.Query._matchKeyToPattern('hello', ['foo', 'bar']), "Key doesn't match choices it's not in");
-    });
-
     test("Matching query to path", function () {
         var query;
 
@@ -123,37 +73,29 @@
             sntls.Query.create(5);
         }, "Invalid query");
 
-        query = sntls.Query.create(['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']]);
-        deepEqual(
-            query.asArray,
-            ['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']],
-            "Query initialized w/ array"
-        );
+        query = sntls.Query.create(['hello', {symbol: '|'}, 'you<all']);
+        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[1].descriptor.symbol, '|');
+        deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
 
         query = sntls.Query.create('hello>|>you<all');
-        deepEqual(
-            query.asArray,
-            ['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']],
-            "Query initialized w/ string"
-        );
+        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[1].descriptor.symbol, '|');
+        deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
     });
 
     test("Type conversion", function () {
         var query;
 
-        query = ['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']].toQuery();
-        deepEqual(
-            query.asArray,
-            ['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']],
-            "Query initialized from array"
-        );
+        query = ['hello', '|', 'you<all'].toQuery();
+        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[1].descriptor.symbol, '|');
+        deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
 
         query = 'hello>|>you<all'.toQuery();
-        deepEqual(
-            query.asArray,
-            ['hello', sntls.Query.PATTERN_ASTERISK, ['you', 'all']],
-            "Query initialized from string"
-        );
+        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[1].descriptor.symbol, '|');
+        deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
     });
 
     test("Type conversion with either types", function () {
@@ -168,13 +110,13 @@
         query = ['test', 'path', 'it', 'is'].toPathOrQuery();
         ok(!query.isA(sntls.Query), "Array path did not satisfy query conditions");
 
-        query = ['test', sntls.Query.PATTERN_ASTERISK, 'it', 'is'].toPathOrQuery();
+        query = ['test', sntls.QueryPattern.create('|'), 'it', 'is'].toPathOrQuery();
         ok(query.isA(sntls.Query), "Array path created Query instance");
     });
 
     test("Stem extraction", function () {
         var Query = sntls.Query,
-            query = Query.create(['foo', 'bar', ['hello', 'world'], Query.PATTERN_ASTERISK]),
+            query = Query.create('foo>bar>hello<world>|'),
             result;
 
         result = query.getStemPath();
@@ -184,18 +126,9 @@
     });
 
     test("Serialization", function () {
-        var Query = sntls.Query,
-            query = Query.create([
-                'foo',
-                Query.PATTERN_SKIP,
-                'bar',
-                ['hello', 'world'],
-                Query.PATTERN_ASTERISK,
-                {
-                    symbol: '|',
-                    value : 'baz'
-                }
-            ]);
+        var query = sntls.Query.create(['foo', '\\', 'bar', {options: ['hello', 'world']}, '|',
+            { symbol: '|', value: 'baz' }
+        ]);
 
         equal(query.toString(), 'foo>\\>bar>hello<world>|>|^baz', "Query in string form");
     });

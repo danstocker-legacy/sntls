@@ -17,7 +17,8 @@
 troop.postpone(sntls, 'Query', function () {
     "use strict";
 
-    var base = sntls.Path;
+    var validators = dessert.validators,
+        base = sntls.Path;
 
     /**
      * @class sntls.Query
@@ -39,100 +40,12 @@ troop.postpone(sntls, 'Query', function () {
             RE_QUERY_VALIDATOR: /^(>?(\||\\|[^<>\^\|\\]*|(<?[^<>\^\|\\]*)+)(\^[^<>\^\|\\]*$)?)+$/,
 
             /**
-             * Pattern that matches any key on a single level.
-             * @type {object}
-             */
-            PATTERN_ASTERISK: {symbol: '|'},
-
-            /**
              * Pattern indicating skip mode. In skip mode, keys are skipped
              * in the path between the previous key and the nearest key matched
              * by the next pattern in the query.
-             * @type {object}
+             * @type {sntls.QueryPattern}
              */
-            PATTERN_SKIP: {symbol: '\\'}
-        })
-        .addPrivateMethods(/** @lends sntls.Query */{
-            /**
-             * URI decodes all items of an array.
-             * @param {Array} asArray Array of URI-encoded strings, sub-arrays, or objects
-             * @return {Array} Array w/ all strings within URI-encoded
-             * @private
-             */
-            _encodeURI: function (asArray) {
-                var result = [],
-                    i, key;
-                for (i = 0; i < asArray.length; i++) {
-                    key = asArray[i];
-                    if (key instanceof Array) {
-                        result.push(this._encodeURI(key));
-                    } else if (typeof key === 'string') {
-                        result.push(encodeURI(key));
-                    } else {
-                        result.push(key);
-                    }
-                }
-                return result;
-            },
-
-            /**
-             * Parses string representation of query and returns an array.
-             * @param {string} query
-             * @return {Array}
-             * @private
-             */
-            _parseString: function (query) {
-                var result = query.split(this.PATH_SEPARATOR),
-                    i, key;
-
-                for (i = 0; i < result.length; i++) {
-                    key = result[i];
-                    switch (key) {
-                    case '|':
-                        result[i] = this.PATTERN_ASTERISK;
-                        break;
-                    case '\\':
-                        result[i] = this.PATTERN_SKIP;
-                        break;
-                    default:
-                        if (key.indexOf('<') > -1) {
-                            // optional values (either/or)
-                            result[i] = key.split('<');
-                        } else if (key.indexOf('|^') === 0) {
-                            // value matching
-                            result[i] = {
-                                symbol: '|',
-                                value : key.slice(2)
-                            };
-                        }
-                        break;
-                    }
-                }
-
-                return result;
-            },
-
-            /**
-             * Matches a path key to a query pattern
-             * @param {string} key
-             * @param {string|object|string[]} pattern
-             * @param {string} [pattern.symbol]
-             * @return {Boolean}
-             * @private
-             */
-            _matchKeyToPattern: function (key, pattern) {
-                if (pattern instanceof Array) {
-                    // expression is list of choices
-                    return pattern.indexOf(key) > -1;
-                } else if (dessert.validators.isString(pattern)) {
-                    // expression is string, must match by value
-                    return pattern === key;
-                } else if (pattern instanceof Object) {
-                    // expression is wildcard object
-                    return pattern.symbol === this.PATTERN_ASTERISK.symbol;
-                }
-                return false;
-            }
+            PATTERN_SKIP: sntls.QueryPattern.create('\\')
         })
         .addMethods(/** @lends sntls.Query */{
             /**
@@ -146,9 +59,30 @@ troop.postpone(sntls, 'Query', function () {
              * @param {Array|string} query
              */
             init: function (query) {
-                var asArray = dessert.validators.isString(query) ?
-                    this._parseString(query) :
-                    query;
+                /**
+                 * @memberOf sntls.Query
+                 * @type {sntls.QueryPattern[]}
+                 */
+                var asArray,
+                    QueryPattern = sntls.QueryPattern;
+
+                if (validators.isString(query)) {
+                    // splitting string input
+                    query = query.split(this.PATH_SEPARATOR);
+                }
+
+                if (query instanceof Array) {
+                    asArray = sntls.Collection.create(query)
+                        .mapContents(function (item) {
+                            // making sure buffer items are QueryPattern instances
+                            if (QueryPattern.isBaseOf(item)) {
+                                return item;
+                            } else {
+                                return QueryPattern.create(item);
+                            }
+                        })
+                        .items;
+                }
 
                 // calling base w/ array only
                 // base class handles assertions
@@ -169,14 +103,14 @@ troop.postpone(sntls, 'Query', function () {
                 // stopping at first non-string key
                 for (i = 0; i < asArray.length; i++) {
                     key = asArray[i];
-                    if (typeof key === 'string') {
-                        result.push(key);
+                    if (typeof key.descriptor === 'string') {
+                        result.push(key.descriptor);
                     } else {
                         break;
                     }
                 }
 
-                return base.create(result);
+                return sntls.Path.create(result);
             },
 
             /**
@@ -185,8 +119,7 @@ troop.postpone(sntls, 'Query', function () {
              * @return {boolean}
              */
             matchesPath: function (path) {
-                var PATTERN_SKIP = this.PATTERN_SKIP,
-                    queryAsArray = this.asArray,
+                var queryAsArray = this.asArray,
                     pathAsArray = path.asArray,
                     i = 0, currentKey,
                     j = 0, currentPattern,
@@ -196,12 +129,12 @@ troop.postpone(sntls, 'Query', function () {
                     currentKey = pathAsArray[i];
                     currentPattern = queryAsArray[j];
 
-                    if (currentPattern === PATTERN_SKIP) {
+                    if (currentPattern.isSkipper()) {
                         // current pattern indicates skip mode 'on'
                         inSkipMode = true;
                         j++;
                     } else {
-                        if (this._matchKeyToPattern(currentKey, currentPattern)) {
+                        if (currentPattern.matchesKey(currentKey)) {
                             // current key matches current pattern
                             // turning skip mode off
                             inSkipMode = false;
@@ -220,30 +153,16 @@ troop.postpone(sntls, 'Query', function () {
                 // matching was successful when query was fully processed
                 // and path was either fully processed or last pattern was continuation
                 return j === queryAsArray.length &&
-                       (i === pathAsArray.length || currentPattern === PATTERN_SKIP);
+                       (i === pathAsArray.length || currentPattern.isSkipper());
             },
 
             toString: function () {
-                var asArray = this._encodeURI(this.asArray),
+                var asArray = this.asArray,
                     result = [],
-                    i, key;
+                    i;
 
                 for (i = 0; i < asArray.length; i++) {
-                    key = asArray[i];
-                    if (key instanceof Array) {
-                        // optional keys
-                        result.push(key.join('<'));
-                    } else if (key instanceof Object) {
-                        if (key.hasOwnProperty('value')) {
-                            // value pattern
-                            result.push(key.symbol + '^' + key.value);
-                        } else {
-                            // wildcard pattern
-                            result.push(key.symbol);
-                        }
-                    } else {
-                        result.push(key);
-                    }
+                    result.push(asArray[i].toString());
                 }
 
                 return result.join(this.PATH_SEPARATOR);

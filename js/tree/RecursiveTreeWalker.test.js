@@ -84,7 +84,8 @@
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[1]), [], "String pattern");
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[2]), ['foo'], "Array pattern");
-        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[3]), ['hello'], "Value pattern w/ object");
+        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[3]), ['hello'
+        ], "Value pattern w/ object");
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(
             ['foo', 'hello', 'world', 'baz', 'world'],
             query.asArray[3]),
@@ -168,7 +169,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, [sntls.Query.PATTERN_SKIP, {symbol: '|', value: 3}].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\', {symbol: '|', value: 3}].toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -264,7 +265,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, [sntls.Query.PATTERN_SKIP, {symbol: '|', value: 3}].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\', {symbol: '|', value: 3}].toQuery())
             .walk(node);
         deepEqual(
             result,

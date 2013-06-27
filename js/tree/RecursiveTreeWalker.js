@@ -3,9 +3,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     "use strict";
 
     var base = sntls.TreeWalker,
-        hOP = Object.prototype.hasOwnProperty,
-        Query = sntls.Query,
-        validators = dessert.validators;
+        hOP = Object.prototype.hasOwnProperty;
 
     /**
      * @class sntls.RecursiveTreeWalker
@@ -78,7 +76,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     } else {
                         // in skip mode and not at leaf node
                         // keeping (pseudo-) pattern
-                        currentPattern = Query.PATTERN_SKIP;
+                        currentPattern = sntls.Query.PATTERN_SKIP;
                     }
                 } else if (atLeafNode) {
                     // leaf node reached but query not done
@@ -86,7 +84,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     return true;
                 }
 
-                if (currentPattern === Query.PATTERN_SKIP) {
+                if (currentPattern.isSkipper()) {
                     // pattern indicates skip mode
                     currentKeys = Object.keys(currentNode); // all keys are considered
                     nextSkipMode = true; // skip mode is ON for subsequent levels
@@ -155,48 +153,54 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                  * Query guiding the traversal.
                  * @type {sntls.Query}
                  */
-                this.query = query || Query.create([Query.PATTERN_SKIP]);
+                this.query = query || '\\'.toQuery();
             },
 
             /**
              * Retrieves an array of keys from the node passed
              * according to the given pattern.
-             * @param node {object} Node for which to obtain the keys.
-             * @param pattern {Array} String, array of strings, or undefined
+             * @param {object} node Node for which to obtain the keys.
+             * @param {sntls.QueryPattern} pattern
              * @return {string[]} Array of keys.
              * @static
+             * TODO: implement options + value
              */
             getKeysByPattern: function (node, pattern) {
-                var result,
+                var descriptor = pattern.descriptor,
+                    result,
                     i, key;
 
-                if (validators.isString(pattern)) {
+                if (typeof descriptor === 'string') {
                     // obtaining single key when present in node
-                    if (hOP.call(node, pattern)) {
-                        result = [pattern];
+                    if (hOP.call(node, descriptor)) {
+                        result = [descriptor];
                     } else {
                         result = [];
                     }
-                } else if (pattern instanceof Array) {
-                    // obtaining enumerated keys that are actually present in node
-                    result = [];
-                    for (i = 0; i < pattern.length; i++) {
-                        key = pattern[i];
-                        if (hOP.call(node, key)) {
-                            result.push(key);
+                } else if (descriptor instanceof Object) {
+                    if (descriptor.options instanceof Array) {
+                        // obtaining enumerated keys that are actually present in node
+                        result = [];
+                        for (i = 0; i < descriptor.options.length; i++) {
+                            key = descriptor.options[i];
+                            if (hOP.call(node, key)) {
+                                result.push(key);
+                            }
                         }
-                    }
-                } else if (pattern === Query.PATTERN_ASTERISK) {
-                    // quick asterisk pattern
-                    result = Object.keys(node);
-                } else if (pattern instanceof Object && hOP.call(pattern, 'value')) {
-                    // there's a value specified within pattern
-                    if (node instanceof Array) {
-                        // obtaining all matching indices from array
-                        result = this._allIndicesOf(node, pattern.value);
-                    } else {
-                        // obtaining all matching keys from object
-                        result = this._getKeysByValue(node, pattern.value);
+                    } else if (descriptor.symbol === sntls.QueryPattern.WILDCARD_SYMBOL) {
+                        if (hOP.call(descriptor, 'value')) {
+                            // there's a value specified within pattern
+                            if (node instanceof Array) {
+                                // obtaining all matching indices from array
+                                result = this._allIndicesOf(node, descriptor.value);
+                            } else {
+                                // obtaining all matching keys from object
+                                result = this._getKeysByValue(node, descriptor.value);
+                            }
+                        } else {
+                            // wildcard pattern
+                            result = Object.keys(node);
+                        }
                     }
                 } else {
                     result = [];
