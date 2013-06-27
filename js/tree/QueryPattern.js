@@ -2,6 +2,8 @@
 troop.postpone(sntls, 'QueryPattern', function () {
     "use strict";
 
+    var hOP = Object.prototype.hasOwnProperty;
+
     /**
      * @class sntls.QueryPattern
      * @extends troop.Base
@@ -21,8 +23,25 @@ troop.postpone(sntls, 'QueryPattern', function () {
         .addPrivateMethods(/** @lends sntls.QueryPattern */{
             /**
              * URI decodes all items of an array.
+             * @param {string[]} strings Array of strings
+             * @return {string[]} Array w/ all strings within URI-encoded
+             * @static
+             * @private
+             */
+            _encodeURI: function (strings) {
+                var result = [],
+                    i;
+                for (i = 0; i < strings.length; i++) {
+                    result.push(encodeURI(strings[i]));
+                }
+                return result;
+            },
+
+            /**
+             * URI decodes all items of an array.
              * @param {string[]} strings Array of URI-encoded strings
              * @return {string[]} Array w/ all strings URI-decoded
+             * @static
              * @private
              */
             _decodeURI: function (strings) {
@@ -91,6 +110,39 @@ troop.postpone(sntls, 'QueryPattern', function () {
                 } else if (typeof pattern === 'string') {
                     this.descriptor = this._parseString(pattern);
                 }
+            },
+
+            /**
+             * Creates string representation of pattern
+             * @returns {string}
+             */
+            toString: function () {
+                var descriptor = this.descriptor,
+                    result;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is string literal (key only)
+                    result = encodeURI(descriptor);
+                } else if (descriptor instanceof Object) {
+                    // adding key
+                    if (hOP.call(descriptor, 'symbol')) {
+                        // descriptor contains symbol
+                        result = descriptor.symbol;
+                    } else if (hOP.call(descriptor, 'options')) {
+                        // descriptor contains key options
+                        result = this._encodeURI(descriptor.options).join(this.OPTION_SEPARATOR);
+                    } else if (hOP.call(descriptor, 'key')) {
+                        // descriptor contains single key
+                        result = encodeURI(descriptor.key);
+                    }
+
+                    // adding value
+                    if (hOP.call(descriptor, 'value')) {
+                        result += this.KEY_VALUE_SEPARATOR + encodeURI(descriptor.value);
+                    }
+                }
+
+                return result;
             }
         });
 });

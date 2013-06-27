@@ -6,6 +6,14 @@
 
     test("URI decode", function () {
         deepEqual(
+            sntls.QueryPattern._encodeURI(['f|o', 'b<r']),
+            ['f%7Co', 'b%3Cr'],
+            "Query pattern encoded"
+        );
+    });
+
+    test("URI decode", function () {
+        deepEqual(
             sntls.QueryPattern._decodeURI(['f%7Co', 'b%3Cr']),
             ['f|o', 'b<r'],
             "Query pattern decoded"
@@ -101,6 +109,32 @@
             pattern.descriptor,
             descriptor,
             "Descriptor supplied as object"
+        );
+    });
+
+    test("String representation", function () {
+        equal(
+            sntls.QueryPattern.create({symbol: '|', value: 'foo^'}).toString(),
+            '|^foo%5E',
+            "Wildcard with value"
+        );
+
+        equal(
+            sntls.QueryPattern.create({symbol: '\\'}).toString(),
+            '\\',
+            "Skipper"
+        );
+
+        equal(
+            sntls.QueryPattern.create({options: ['foo^', 'bar^']}).toString(),
+            'foo%5E<bar%5E',
+            "Options"
+        );
+
+        equal(
+            sntls.QueryPattern.create({options: ['foo^', 'bar^'], value: 'baz^'}).toString(),
+            'foo%5E<bar%5E^baz%5E',
+            "Options with value"
         );
     });
 }());
