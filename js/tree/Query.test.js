@@ -38,22 +38,6 @@
         );
     });
 
-    test("URI decode", function () {
-        deepEqual(
-            sntls.Query._decodeURI([
-                ['f%7Co', 'b%3Cr'],
-                {},
-                'baz%5C'
-            ]),
-            [
-                ['f|o', 'b<r'],
-                {},
-                'baz\\'
-            ],
-            "Query structure decoded"
-        );
-    });
-
     test("Parsing", function () {
         var Query = sntls.Query,
             query = 'foo>\\>bar>hello<world>|>|%baz';

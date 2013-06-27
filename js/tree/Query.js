@@ -76,28 +76,6 @@ troop.postpone(sntls, 'Query', function () {
             },
 
             /**
-             * URI decodes all items of an array.
-             * @param {Array} asArray Array of URI-encoded strings, sub-arrays, or objects
-             * @return {Array} Array w/ all strings within URI-decoded
-             * @private
-             */
-            _decodeURI: function (asArray) {
-                var result = [],
-                    i, key;
-                for (i = 0; i < asArray.length; i++) {
-                    key = asArray[i];
-                    if (key instanceof Array) {
-                        result.push(this._decodeURI(key));
-                    } else if (typeof key === 'string') {
-                        result.push(decodeURI(key));
-                    } else {
-                        result.push(key);
-                    }
-                }
-                return result;
-            },
-
-            /**
              * Parses string representation of query and returns an array.
              * @param {string} query
              * @return {Array}
