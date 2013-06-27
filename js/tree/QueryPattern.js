@@ -2,7 +2,8 @@
 troop.postpone(sntls, 'QueryPattern', function () {
     "use strict";
 
-    var hOP = Object.prototype.hasOwnProperty;
+    var hOP = Object.prototype.hasOwnProperty,
+        validators = dessert.validators;
 
     /**
      * @class sntls.QueryPattern
@@ -127,9 +128,17 @@ troop.postpone(sntls, 'QueryPattern', function () {
             init: function (pattern) {
                 if (pattern instanceof Object) {
                     this.descriptor = pattern;
-                } else if (typeof pattern === 'string') {
+                } else if (validators.isString(pattern)) {
                     this.descriptor = this._parseString(pattern);
                 }
+            },
+
+            /**
+             * Tells whether the current pattern is a skipper
+             * @returns {boolean}
+             */
+            isSkipper: function () {
+                return this.descriptor.symbol === this.SKIP_SYMBOL;
             },
 
             /**
@@ -205,3 +214,18 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
      */
     sntls.QueryPatternCollection = sntls.Collection.of(sntls.QueryPattern);
 });
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isQueryPattern: function (expr) {
+            return sntls.QueryPattern.isBaseOf(expr);
+        },
+
+        isQueryPatternOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.QueryPattern.isBaseOf(expr);
+        }
+    });
+}());

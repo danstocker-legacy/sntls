@@ -112,6 +112,11 @@
         );
     });
 
+    test("Skipper detection", function () {
+        ok(!sntls.QueryPattern.create('hello').isSkipper(), "Literal not skipper");
+        ok(sntls.QueryPattern.create('\\').isSkipper(), "Skipper");
+    });
+
     test("Key match", function () {
         ok(sntls.QueryPattern.create('hello').matchesKey('hello'), "Key matches string");
         ok(!sntls.QueryPattern.create('foo').matchesKey('hello'), "Key doesn't match different string");
