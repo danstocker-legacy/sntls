@@ -133,6 +133,33 @@ troop.postpone(sntls, 'QueryPattern', function () {
             },
 
             /**
+             * Determines whether pattern matches specified key
+             * @param {string} key
+             * @returns {boolean}
+             */
+            matchesKey: function (key) {
+                var descriptor = this.descriptor;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is string, must match by value
+                    return descriptor === key;
+                } else if (descriptor instanceof Object) {
+                    // descriptor is object, properties tell about match
+                    if (hOP.call(descriptor, 'symbol')) {
+                        // descriptor is wildcard object
+                        return descriptor.symbol === this.WILDCARD_SYMBOL;
+                    } else if (hOP.call(descriptor, 'options')) {
+                        // descriptor is list of options
+                        return descriptor.options.indexOf(key) > -1;
+                    } else if (hOP.call(descriptor, 'key')) {
+                        return descriptor.key === key;
+                    }
+                }
+
+                return false;
+            },
+
+            /**
              * Creates string representation of pattern
              * @returns {string}
              */
@@ -150,7 +177,8 @@ troop.postpone(sntls, 'QueryPattern', function () {
                         result = descriptor.symbol;
                     } else if (hOP.call(descriptor, 'options')) {
                         // descriptor contains key options
-                        result = this._encodeURI(descriptor.options).join(this.OPTION_SEPARATOR);
+                        result = this._encodeURI(descriptor.options)
+                            .join(this.OPTION_SEPARATOR);
                     } else if (hOP.call(descriptor, 'key')) {
                         // descriptor contains single key
                         result = encodeURI(descriptor.key);

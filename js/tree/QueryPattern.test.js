@@ -112,6 +112,19 @@
         );
     });
 
+    test("Key match", function () {
+        ok(sntls.QueryPattern.create('hello').matchesKey('hello'), "Key matches string");
+        ok(!sntls.QueryPattern.create('foo').matchesKey('hello'), "Key doesn't match different string");
+
+        ok(sntls.QueryPattern.create('|').matchesKey('hello'), "Key matches wildcard");
+        ok(!sntls.QueryPattern.create({}).matchesKey('hello'), "Key doesn't match unknown wildcard");
+
+        ok(sntls.QueryPattern.create('|^foo').matchesKey('hello'), "Key matches value pattern");
+
+        ok(sntls.QueryPattern.create('hello<world').matchesKey('hello'), "Key matches choices");
+        ok(!sntls.QueryPattern.create('foo<bar').matchesKey('hello'), "Key doesn't match choices it's not in");
+    });
+
     test("String representation", function () {
         equal(
             sntls.QueryPattern.create({symbol: '|', value: 'foo^'}).toString(),
