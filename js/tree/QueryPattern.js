@@ -166,3 +166,14 @@ troop.postpone(sntls, 'QueryPattern', function () {
             }
         });
 });
+
+troop.postpone(sntls, 'QueryPatternCollection', function () {
+    "use strict";
+
+    /**
+     * @class sntls.QueryPatternCollection
+     * @extends sntls.Collection
+     * @extends sntls.QueryPattern
+     */
+    sntls.QueryPatternCollection = sntls.Collection.of(sntls.QueryPattern);
+});
