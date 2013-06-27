@@ -82,7 +82,7 @@ troop.postpone(sntls, 'Query', function () {
              * @private
              */
             _parseString: function (query) {
-                var result = query.split('>'),
+                var result = query.split(this.PATH_SEPARATOR),
                     i, key;
 
                 for (i = 0; i < result.length; i++) {
@@ -246,7 +246,7 @@ troop.postpone(sntls, 'Query', function () {
                     }
                 }
 
-                return result.join('>');
+                return result.join(this.PATH_SEPARATOR);
             }
         });
 });

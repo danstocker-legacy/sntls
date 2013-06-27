@@ -18,7 +18,7 @@ troop.postpone(sntls, 'Path', function () {
      */
     sntls.Path = self
         .addConstants(/** @lends sntls.Path */{
-            RE_PATH_SEPARATOR: />/
+            PATH_SEPARATOR: '>'
         })
         .addPrivateMethods(/** @lends sntls.Path */{
             /**
@@ -69,7 +69,7 @@ troop.postpone(sntls, 'Path', function () {
                 if (path instanceof Array) {
                     asArray = path;
                 } else if (validators.isString(path)) {
-                    asArray = this._decodeURI(path.split(this.RE_PATH_SEPARATOR));
+                    asArray = this._decodeURI(path.split(this.PATH_SEPARATOR));
                 } else {
                     dessert.assert(false, "Invalid path");
                 }
@@ -177,7 +177,7 @@ troop.postpone(sntls, 'Path', function () {
              * @return {string}
              */
             toString: function () {
-                return this._encodeURI(this.asArray).join('>');
+                return this._encodeURI(this.asArray).join(this.PATH_SEPARATOR);
             }
         });
 });
