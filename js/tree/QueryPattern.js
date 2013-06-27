@@ -10,14 +10,34 @@ troop.postpone(sntls, 'QueryPattern', function () {
      */
     sntls.QueryPattern = troop.Base.extend()
         .addConstants(/** @lends sntls.QueryPattern */{
+            /**
+             * Separates keys from values in string pattern
+             * @type {string}
+             */
             KEY_VALUE_SEPARATOR: '^',
 
+            /**
+             * Separates options within the key part of a string pattern
+             * @type {string}
+             */
             OPTION_SEPARATOR: '<',
 
+            /**
+             * Symbol matching all keys
+             * @type {string}
+             */
             WILDCARD_SYMBOL: '|',
 
+            /**
+             * Symbol indication skip mode during traversal
+             * @type {string}
+             */
             SKIP_SYMBOL: '\\',
 
+            /**
+             * Validates a symbol
+             * @type {RegExp}
+             */
             RE_SYMBOL_VALIDATOR: /\||\\/
         })
         .addPrivateMethods(/** @lends sntls.QueryPattern */{
