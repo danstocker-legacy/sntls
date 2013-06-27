@@ -14,12 +14,12 @@
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>foo<baz>bar'));
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>foo<baz<boo>bar'));
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>moo>bar'), "Specific node where key is 'bar'");
-        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>foo%hello'), "Specific node where key is 'foo' and value is 'hello'");
-        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>%hello'), "Specific node where key is empty and value is 'hello'");
-        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>|%hello'));
-        ok(!sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>|%hello>baz'), "Not query b/c value pattern is not last");
-        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo%bar'), "Specific key/value pair under root");
-        ok(sntls.Query.RE_QUERY_VALIDATOR.test('|%bar'));
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>foo^hello'), "Specific node where key is 'foo' and value is 'hello'");
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>^hello'), "Specific node where key is empty and value is 'hello'");
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>|^hello'));
+        ok(!sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>|^hello>baz'), "Not query b/c value pattern is not last");
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo^bar'), "Specific key/value pair under root");
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('|^bar'));
     });
 
     test("URI encode", function () {
@@ -40,7 +40,7 @@
 
     test("Parsing", function () {
         var Query = sntls.Query,
-            query = 'foo>\\>bar>hello<world>|>|%baz';
+            query = 'foo>\\>bar>hello<world>|>|^baz';
 
         deepEqual(
             sntls.Query._parseString(query),
@@ -85,7 +85,7 @@
         ok(!query.matchesPath('test>path>foo>bar'.toPath()), "Query w/ wildcard not matched by path");
         ok(!query.matchesPath('test>path'.toPath()), "Query w/ wildcard not matched by path");
 
-        query = 'test>|%bar'.toQuery();
+        query = 'test>|^bar'.toQuery();
         ok(query.matchesPath('test>path'.toPath()), "Query w/ value pattern matched by path");
         ok(!query.matchesPath('foo>path'.toPath()), "Query w/ value pattern not matched by path");
         ok(!query.matchesPath('test>path>foo'.toPath()), "Query w/ value pattern not matched by path");
@@ -197,6 +197,6 @@
                 }
             ]);
 
-        equal(query.toString(), 'foo>\\>bar>hello<world>|>|%baz', "Query in string form");
+        equal(query.toString(), 'foo>\\>bar>hello<world>|>|^baz', "Query in string form");
     });
 }());

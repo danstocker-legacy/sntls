@@ -358,7 +358,7 @@
         );
 
         deepEqual(
-            tree.queryPathValuePairsAsHash('\\>|%bar'.toQuery()).items,
+            tree.queryPathValuePairsAsHash('\\>|^bar'.toQuery()).items,
             {
                 "foo>baz>2>foo": "bar"
             },

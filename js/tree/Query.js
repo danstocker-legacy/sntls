@@ -30,13 +30,13 @@ troop.postpone(sntls, 'Query', function () {
              * contains query patterns.
              * @type {RegExp}
              */
-            RE_QUERY_TESTER: /<|%|\||\\/,
+            RE_QUERY_TESTER: /<|\^|\||\\/,
 
             /**
              * Regular expression validating a query expression
              * @type {RegExp}
              */
-            RE_QUERY_VALIDATOR: /^(>?(\||\\|[^<>%\|\\]*|(<?[^<>%\|\\]*)+)(%[^<>%\|\\]*$)?)+$/,
+            RE_QUERY_VALIDATOR: /^(>?(\||\\|[^<>\^\|\\]*|(<?[^<>\^\|\\]*)+)(\^[^<>\^\|\\]*$)?)+$/,
 
             /**
              * Pattern that matches any key on a single level.
@@ -98,7 +98,7 @@ troop.postpone(sntls, 'Query', function () {
                         if (key.indexOf('<') > -1) {
                             // optional values (either/or)
                             result[i] = key.split('<');
-                        } else if (key.indexOf('|%') === 0) {
+                        } else if (key.indexOf('|^') === 0) {
                             // value matching
                             result[i] = {
                                 symbol: '|',
@@ -236,7 +236,7 @@ troop.postpone(sntls, 'Query', function () {
                     } else if (key instanceof Object) {
                         if (key.hasOwnProperty('value')) {
                             // value pattern
-                            result.push(key.symbol + '%' + key.value);
+                            result.push(key.symbol + '^' + key.value);
                         } else {
                             // wildcard pattern
                             result.push(key.symbol);

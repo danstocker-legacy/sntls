@@ -79,7 +79,7 @@
                 hello: 'world',
                 test : 1
             },
-            query = '|>blah>foo<bar>|%world'.toQuery();
+            query = '|>blah>foo<bar>|^world'.toQuery();
 
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
         deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[1]), [], "String pattern");
