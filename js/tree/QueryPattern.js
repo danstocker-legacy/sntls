@@ -142,6 +142,29 @@ troop.postpone(sntls, 'QueryPattern', function () {
             },
 
             /**
+             * Sets value on query pattern. Pattern with a value will only
+             * match nodes with the specified value.
+             * @param {*} value
+             * @returns {sntls.QueryPattern}
+             */
+            setValue: function (value) {
+                var descriptor = this.descriptor;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is simple string
+                    // transforming descriptor to object with key wrapped inside
+                    descriptor = this.descriptor = {
+                        key: descriptor
+                    };
+                }
+
+                // adding value to descriptor
+                descriptor.value = value;
+
+                return this;
+            },
+
+            /**
              * Tells whether the current pattern is a skipper
              * @returns {boolean}
              */

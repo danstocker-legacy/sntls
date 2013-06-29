@@ -123,6 +123,31 @@
         );
     });
 
+    test("Setting value", function () {
+        var pattern;
+
+        pattern = '|'.toQueryPattern().setValue('foo');
+        deepEqual(
+            pattern.descriptor,
+            {symbol: '|', value: 'foo'},
+            "Value set on wildcard pattern"
+        );
+
+        pattern = 'a<b'.toQueryPattern().setValue('foo');
+        deepEqual(
+            pattern.descriptor,
+            {options: ['a', 'b'], value: 'foo'},
+            "Value set on options pattern"
+        );
+
+        pattern = 'a'.toQueryPattern().setValue('foo');
+        deepEqual(
+            pattern.descriptor,
+            {key: 'a', value: 'foo'},
+            "Value set on key/value pattern"
+        );
+    });
+
     test("Skipper detection", function () {
         ok(!sntls.QueryPattern.create('hello').isSkipper(), "Literal not skipper");
         ok(sntls.QueryPattern.create('\\').isSkipper(), "Skipper");
