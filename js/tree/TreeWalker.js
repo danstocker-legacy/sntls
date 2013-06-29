@@ -11,14 +11,8 @@ troop.postpone(sntls, 'TreeWalker', function () {
     sntls.TreeWalker = troop.Base.extend()
         .addMethods(/** @lends sntls.TreeWalker# */{
             /**
-             * @name sntls.TreeWalker.create
-             * @function
              * @param {function} handler
-             * @return {sntls.TreeWalker}
-             */
-
-            /**
-             * @param {function} handler
+             * @ignore
              */
             init: function (handler) {
                 dessert.isFunction(handler, "Invalid walker handler");

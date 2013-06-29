@@ -2,6 +2,15 @@
 troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     "use strict";
 
+    /**
+     * Instantiates class
+     * @name sntls.RecursiveTreeWalker.create
+     * @function
+     * @param {function} handler
+     * @param {sntls.Query} [query]
+     * @return {sntls.RecursiveTreeWalker}
+     */
+
     var base = sntls.TreeWalker,
         hOP = Object.prototype.hasOwnProperty;
 
@@ -231,16 +240,9 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
         })
         .addMethods(/** @lends sntls.RecursiveTreeWalker# */{
             /**
-             * @name sntls.RecursiveTreeWalker.create
-             * @function
              * @param {function} handler
              * @param {sntls.Query} [query]
-             * @return {sntls.RecursiveTreeWalker}
-             */
-
-            /**
-             * @param {function} handler
-             * @param {sntls.Query} [query]
+             * @ignore
              */
             init: function (handler, query) {
                 dessert.isQueryOptional(query, "Invalid query");

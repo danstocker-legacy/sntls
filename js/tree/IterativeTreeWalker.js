@@ -3,20 +3,25 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
     "use strict";
 
     /**
+     * Instantiates class
+     * @name sntls.IterativeTreeWalker.create
+     * @function
+     * @param {function} handler
+     * @return {sntls.IterativeTreeWalker}
+     */
+
+    /**
+     * Traverses tree iteratively, touching all nodes within.
      * @class sntls.IterativeTreeWalker
      * @extends sntls.TreeWalker
      */
     sntls.IterativeTreeWalker = sntls.TreeWalker.extend()
-        .addMethods(/** @lends sntls.IterativeTreeWalker */{
-            /**
-             * @name sntls.IterativeTreeWalker.create
-             * @return {sntls.IterativeTreeWalker}
-             */
-
+        .addMethods(/** @lends sntls.IterativeTreeWalker# */{
             /**
              * Traverses all enumerable nodes in object.
              * Iterative implementation.
              * @param node {object} Object to be traversed.
+             * @return {sntls.IterativeTreeWalker}
              */
             walk: function (node) {
                 var keysStack = [Object.keys(node)], // stack of keys associated with each node on current path
