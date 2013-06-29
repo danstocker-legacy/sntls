@@ -192,14 +192,17 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     i, key;
 
                 if (typeof descriptor === 'string') {
-                    // obtaining single key when present in node
+                    // descriptor contains a single key
                     if (hOP.call(node, descriptor)) {
+                        // key is present in node
                         result = [descriptor];
                     } else {
+                        // key is not present in node
                         result = [];
                     }
                 } else if (descriptor instanceof Object) {
                     if (typeof descriptor.key === 'string') {
+                        // descriptor has a single key specified
                         key = descriptor.key;
                         if (hOP.call(descriptor, 'value')) {
                             // descriptor has both key and value specified
@@ -212,16 +215,20 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         // obtaining enumerated keys that are actually present in node
                         result = [];
                         if (hOP.call(descriptor, 'value')) {
+                            // value also expected to be matched
                             for (i = 0; i < descriptor.options.length; i++) {
                                 key = descriptor.options[i];
                                 if (node[key] === descriptor.value) {
+                                    // key present in node with specified value assigned
                                     result.push(key);
                                 }
                             }
                         } else {
+                            // only key is expected to be matched
                             for (i = 0; i < descriptor.options.length; i++) {
                                 key = descriptor.options[i];
                                 if (hOP.call(node, key)) {
+                                    // key present in node
                                     result.push(key);
                                 }
                             }
@@ -242,6 +249,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         }
                     }
                 } else {
+                    // descriptor is unrecognizable
                     result = [];
                 }
 
