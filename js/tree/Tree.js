@@ -1,8 +1,3 @@
-/**
- * Tree
- *
- * Manages tree data structure
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Tree', function () {
     "use strict";
@@ -10,16 +5,20 @@ troop.postpone(sntls, 'Tree', function () {
     var Hash = sntls.Hash;
 
     /**
+     * Instantiates class
+     * @name sntls.Tree.create
+     * @function
+     * @param {object} items
+     * @returns {sntls.Tree}
+     */
+
+    /**
+     * Accesses, traverses, and modifies tree-like object structures.
      * @class sntls.Tree
      * @extends sntls.Hash
      */
     sntls.Tree = Hash.extend()
-        .addMethods(/** @lends sntls.Tree */{
-            /**
-             * @name sntls.Tree.create
-             * @returns {sntls.Tree}
-             */
-
+        .addMethods(/** @lends sntls.Tree# */{
             /**
              * Retrieves the value at the specified path.
              * @param {sntls.Path} path Path to node

@@ -1,18 +1,3 @@
-/**
- * Path Query
- *
- * An expression that may match several paths.
- * Queries may be interpreted as paths themselves. (Wherever
- * a path is accepted, so is a query.)
- *
- * Patterns:
- *  - '<' for expressing OR relationship between keys
- *  - '|' for matching any string on a key
- *  - '\' for skipping keys until next pattern is matched
- *
- * Example: 'root>\\>persons>|>name' would match the name field
- * of all 'person' documents in a tree.
- */
 /*global dessert, troop, sntls, sntls */
 troop.postpone(sntls, 'Query', function () {
     "use strict";
@@ -21,6 +6,20 @@ troop.postpone(sntls, 'Query', function () {
         base = sntls.Path;
 
     /**
+     * Instantiates class.
+     * Initializes query with a string or array. Keys in the query
+     * (except for patterns) are assumed to be URI-encoded.
+     * @name sntls.Query.create
+     * @function
+     * @param {Array|string} query
+     * @returns {sntls.Query}
+     * @example 'root>\\>persons>|>name'
+     */
+
+    /**
+     * An expression that matches several paths.
+     * Technically, queries can be interpreted as paths, ie. wherever a path is accepted,
+     * so is a query.
      * @class sntls.Query
      * @extends sntls.Path
      */
@@ -47,22 +46,12 @@ troop.postpone(sntls, 'Query', function () {
              */
             PATTERN_SKIP: sntls.QueryPattern.create('\\')
         })
-        .addMethods(/** @lends sntls.Query */{
+        .addMethods(/** @lends sntls.Query# */{
             /**
-             * @name sntls.Query.create
-             * @returns {sntls.Query}
-             */
-
-            /**
-             * Initializes query with a string or array. Keys in the query
-             * (except for patterns) are assumed to be URI-encoded.
              * @param {Array|string} query
+             * @ignore
              */
             init: function (query) {
-                /**
-                 * @memberOf sntls.Query
-                 * @type {sntls.QueryPattern[]}
-                 */
                 var asArray,
                     QueryPattern = sntls.QueryPattern;
 
@@ -156,6 +145,10 @@ troop.postpone(sntls, 'Query', function () {
                        (i === pathAsArray.length || currentPattern.isSkipper());
             },
 
+            /**
+             * Generates string representation of query.
+             * @returns {string}
+             */
             toString: function () {
                 var asArray = this.asArray,
                     result = [],

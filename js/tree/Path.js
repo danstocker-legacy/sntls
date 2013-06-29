@@ -1,9 +1,3 @@
-/**
- * General Path
- *
- * Represents a composite linear key, essentially
- * an array, or a '>'-delimited string.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Path', function () {
     "use strict";
@@ -13,6 +7,17 @@ troop.postpone(sntls, 'Path', function () {
         self = base.extend();
 
     /**
+     * Instantiates class.
+     * Initializes Path with a string or array. Keys are assumed to be URI-encoded.
+     * @name sntls.Path.create
+     * @function
+     * @param {string|string[]} path Path in string or array representation
+     * @returns {sntls.Path}
+     */
+
+    /**
+     * Represents a composite linear key, essentially
+     * an array, or a '>'-delimited string.
      * @class sntls.Path
      * @extends troop.Base
      */
@@ -51,16 +56,10 @@ troop.postpone(sntls, 'Path', function () {
                 return result;
             }
         })
-        .addMethods(/** @lends sntls.Path */{
+        .addMethods(/** @lends sntls.Path# */{
             /**
-             * @name sntls.Path.create
-             * @returns {sntls.Path}
-             */
-
-            /**
-             * Initializes Path a string or array. Keys in string representation
-             * are assumed to be URI-encoded.
              * @param {string|string[]} path Path in string or array representation
+             * @ignore
              */
             init: function (path) {
                 var asArray;
