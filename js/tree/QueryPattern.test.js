@@ -112,6 +112,17 @@
         );
     });
 
+    test("Type conversion", function () {
+        var pattern = '|'.toQueryPattern();
+
+        ok(pattern.isA(sntls.QueryPattern), "Type of converted value");
+        deepEqual(
+            pattern.descriptor,
+            sntls.QueryPattern.create('|').descriptor,
+            "Pattern contents"
+        );
+    });
+
     test("Skipper detection", function () {
         ok(!sntls.QueryPattern.create('hello').isSkipper(), "Literal not skipper");
         ok(sntls.QueryPattern.create('\\').isSkipper(), "Skipper");

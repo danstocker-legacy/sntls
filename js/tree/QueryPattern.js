@@ -126,10 +126,10 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * @param {string|object} pattern
              */
             init: function (pattern) {
-                if (pattern instanceof Object) {
-                    this.descriptor = pattern;
-                } else if (validators.isString(pattern)) {
+                if (validators.isString(pattern)) {
                     this.descriptor = this._parseString(pattern);
+                } else if (pattern instanceof Object) {
+                    this.descriptor = pattern;
                 }
             },
 
@@ -228,4 +228,11 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
                    sntls.QueryPattern.isBaseOf(expr);
         }
     });
+
+    /**
+     * @return {sntls.QueryPattern}
+     */
+    String.prototype.toQueryPattern = function () {
+        return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+    };
 }());
