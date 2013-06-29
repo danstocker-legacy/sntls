@@ -307,6 +307,40 @@
         );
     });
 
+    test("Walking query with complex value in query", function () {
+        var value = {
+                foo: "bar"
+            },
+            node = {
+                foo: { hello: "world", bar: value },
+                baz: [ 'one', value, 'two' ],
+                bar: value
+            },
+            result,
+            handler = function () {
+                result.push(this.currentPath.toString());
+            };
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, [
+                '\\'.toQueryPattern(),
+                sntls.QueryPattern.create({
+                    symbol: '|',
+                    value : value
+                })
+            ].toQuery())
+            .walk(node);
+
+        deepEqual(
+            result,
+            [
+                'foo>bar',
+                'baz>1'
+            ],
+            "Paths with value 'bar'"
+        );
+    });
+
     test("Walking with interrupt", function () {
         var node = {
                 hello: "world",
