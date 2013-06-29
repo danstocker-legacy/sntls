@@ -176,7 +176,7 @@
         );
 
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(arrayNode, sntls.QueryPattern.create({symbol: '|', value: 1})),
+            RecursiveTreeWalker._getKeysByPattern(arrayNode, '|'.toQueryPattern().setValue(1)),
             [2],
             "Value pattern w/ array"
         );
@@ -262,7 +262,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\', {symbol: '|', value: 3}].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\', '|'.toQueryPattern().setValue(3)].toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -332,13 +332,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, [
-                '\\'.toQueryPattern(),
-                sntls.QueryPattern.create({
-                    symbol: '|',
-                    value : value
-                })
-            ].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\', '|'.toQueryPattern().setValue(value)].toQuery())
             .walk(node);
 
         deepEqual(
@@ -438,7 +432,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\', {symbol: '|', value: 3}].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\', '|'.toQueryPattern().setValue(3)].toQuery())
             .walk(node);
         deepEqual(
             result,

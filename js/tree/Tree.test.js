@@ -364,5 +364,13 @@
             },
             "Path-value pairs queried by value"
         );
+
+        deepEqual(
+            tree.queryPathValuePairsAsHash(['\\', '1<2'.toQueryPattern().setValue(3)].toQuery()).items,
+            {
+                "foo>boo>2": 3
+            },
+            "Path-value pairs queried by value"
+        );
     });
 }());
