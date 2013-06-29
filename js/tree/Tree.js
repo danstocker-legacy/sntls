@@ -123,11 +123,11 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetNode: function (path) {
-                var node = this.getSafeNode(path.clone().trim()),
-                    asArray = path.asArray,
-                    lastKey = asArray[asArray.length - 1];
+                var asArray = path.asArray,
+                    targetParent = this.getSafeNode(path.clone().trim()),
+                    targetKey = asArray[asArray.length - 1];
 
-                node[lastKey] = undefined;
+                targetParent[targetKey] = undefined;
 
                 return this;
             },
@@ -135,14 +135,21 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Removes key from the specified path.
              * @param {sntls.Path} path Path to node
+             * @param {boolean} [splice=false] Whether to use splice when removing key from array.
              * @returns {sntls.Tree}
              */
-            unsetKey: function (path) {
-                var node = this.getSafeNode(path.clone().trim()),
-                    asArray = path.asArray,
-                    lastKey = asArray[asArray.length - 1];
+            unsetKey: function (path, splice) {
+                var asArray = path.asArray,
+                    targetParent = this.getSafeNode(path.clone().trim()),
+                    targetKey = asArray[asArray.length - 1];
 
-                delete node[lastKey];
+                if (splice && targetParent instanceof Array) {
+                    // removing marked node by splicing it out of array
+                    targetParent.splice(targetKey, 1);
+                } else {
+                    // deleting marked node
+                    delete targetParent[targetKey];
+                }
 
                 return this;
             },
@@ -150,10 +157,11 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Removes nodes from tree that have no children
              * other than the one specified by the path.
-             * @param {sntls.Path} path
+             * @param {sntls.Path} path Datastore path
+             * @param {boolean} [splice=false] Whether to use splice when removing key from array.
              * @returns {sntls.Tree}
              */
-            unsetPath: function (path) {
+            unsetPath: function (path, splice) {
                 var asArray = path.asArray,
                     parentNode = null, // parent node of current node
                     parentNodeSingle, // whether parent node has one child
@@ -192,8 +200,13 @@ troop.postpone(sntls, 'Tree', function () {
                     parentNodeSingle = currentNodeSingle;
                 }
 
-                // deleting marked node
-                delete targetParent[targetKey];
+                if (splice && targetParent instanceof Array) {
+                    // removing marked node by splicing it out of array
+                    targetParent.splice(targetKey, 1);
+                } else {
+                    // deleting marked node
+                    delete targetParent[targetKey];
+                }
 
                 return this;
             },

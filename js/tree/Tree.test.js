@@ -151,7 +151,7 @@
         deepEqual(tree.items, {foo: {bar: undefined}}, "Node annulled");
     });
 
-    test("Key deletion", function () {
+    test("Key deletion from object", function () {
         var tree = sntls.Tree.create({
                 foo: {
                     bar: "Hello world!"
@@ -165,7 +165,24 @@
         deepEqual(tree.items, {foo: {}}, "Node removed");
     });
 
-    test("Path deletion", function () {
+    test("Key deletion from array", function () {
+        var tree = sntls.Tree.create({
+            foo: {
+                bar: ['hello', 'all', 'the', 'world']
+            }
+        });
+
+        tree.unsetKey('foo>bar>2'.toPath());
+        deepEqual(tree.items, {foo: {bar: ['hello', 'all', undefined, 'world']}}, "Node deleted");
+
+        tree.unsetKey('foo>bar>2'.toPath(), true);
+        deepEqual(tree.items, {foo: {bar: ['hello', 'all', 'world']}}, "Node spliced out");
+
+        tree.unsetKey('foo>bar>2'.toPath(), true);
+        deepEqual(tree.items, {foo: {bar: ['hello', 'all']}}, "Node spliced out");
+    });
+
+    test("Path deletion in objects", function () {
         var tree = sntls.Tree.create({
                 a: {d: {}, e: {}, f: {
                     g: {}, h: {
@@ -237,6 +254,67 @@
                 c: {}
             },
             "Overreaching path not removed"
+        );
+    });
+
+    test("Path deletion in arrays", function () {
+        var tree = sntls.Tree.create([
+            [1, 2, 3],
+            [4, 5],
+            [
+                [6, 7],
+                8
+            ]
+        ]);
+
+        tree.unsetPath([1, 1].toPath());
+        deepEqual(
+            tree.items,
+            [
+                [1, 2, 3],
+                [4, undefined],
+                [
+                    [6, 7],
+                    8
+                ]
+            ],
+            "Path deleted from array"
+        );
+
+        tree.unsetPath([1, 0].toPath(), true);
+        deepEqual(
+            tree.items,
+            [
+                [1, 2, 3],
+                [
+                    [6, 7],
+                    8
+                ]
+            ],
+            "Path spliced out from array"
+        );
+
+        tree.unsetPath([1, 0, 0].toPath(), true);
+        deepEqual(
+            tree.items,
+            [
+                [1, 2, 3],
+                [
+                    [7],
+                    8
+                ]
+            ],
+            "Path spliced out from array"
+        );
+
+        tree.unsetPath([1, 0, 0].toPath(), true);
+        deepEqual(
+            tree.items,
+            [
+                [1, 2, 3],
+                [8]
+            ],
+            "Path spliced out from array"
         );
     });
 
