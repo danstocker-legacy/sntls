@@ -3,7 +3,8 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     "use strict";
 
     var base = sntls.TreeWalker,
-        hOP = Object.prototype.hasOwnProperty;
+        hOP = Object.prototype.hasOwnProperty,
+        validators = dessert.validators;
 
     /**
      * Traverses tree recursively, according to a query expression.
@@ -184,7 +185,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {sntls.QueryPattern} pattern
              * @return {string[]} Array of keys.
              * @static
-             * TODO: implement options + value
              */
             getKeysByPattern: function (node, pattern) {
                 var descriptor = pattern.descriptor,
@@ -199,13 +199,31 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         result = [];
                     }
                 } else if (descriptor instanceof Object) {
-                    if (descriptor.options instanceof Array) {
+                    if (typeof descriptor.key === 'string') {
+                        key = descriptor.key;
+                        if (hOP.call(descriptor, 'value')) {
+                            // descriptor has both key and value specified
+                            result = descriptor.value === node[key] ? [key] : [];
+                        } else {
+                            // descriptor has only key specified
+                            result = [key];
+                        }
+                    } else if (descriptor.options instanceof Array) {
                         // obtaining enumerated keys that are actually present in node
                         result = [];
-                        for (i = 0; i < descriptor.options.length; i++) {
-                            key = descriptor.options[i];
-                            if (hOP.call(node, key)) {
-                                result.push(key);
+                        if (hOP.call(descriptor, 'value')) {
+                            for (i = 0; i < descriptor.options.length; i++) {
+                                key = descriptor.options[i];
+                                if (node[key] === descriptor.value) {
+                                    result.push(key);
+                                }
+                            }
+                        } else {
+                            for (i = 0; i < descriptor.options.length; i++) {
+                                key = descriptor.options[i];
+                                if (hOP.call(node, key)) {
+                                    result.push(key);
+                                }
                             }
                         }
                     } else if (descriptor.symbol === sntls.QueryPattern.WILDCARD_SYMBOL) {

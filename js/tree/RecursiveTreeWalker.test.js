@@ -164,6 +164,16 @@
             ['hello'],
             "Value pattern w/ object"
         );
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(hashNode, 'hello^world'.toQueryPattern()),
+            ['hello'],
+            "Value pattern w/ object"
+        );
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(hashNode, 'hello<foo^world'.toQueryPattern()),
+            ['hello'],
+            "Value pattern w/ object"
+        );
 
         deepEqual(
             RecursiveTreeWalker.getKeysByPattern(arrayNode, sntls.QueryPattern.create({symbol: '|', value: 1})),
