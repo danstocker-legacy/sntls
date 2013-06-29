@@ -4,8 +4,7 @@ troop.postpone(sntls, 'Query', function () {
 
     var validators = dessert.validators,
         QueryPattern = sntls.QueryPattern,
-        base = sntls.Path,
-        self = base.extend();
+        base = sntls.Path;
 
     /**
      * Instantiates class.
@@ -25,7 +24,7 @@ troop.postpone(sntls, 'Query', function () {
      * @class sntls.Query
      * @extends sntls.Path
      */
-    sntls.Query = self
+    sntls.Query = base.extend()
         .addConstants(/** @lends sntls.Query */{
             /**
              * Regular expression that tests whether string
@@ -50,7 +49,9 @@ troop.postpone(sntls, 'Query', function () {
         })
         .addPrivateMethods(/** @lends sntls.Query */{
             /**
-             * Normalizes query buffer.
+             * Normalizes query buffer. Leaves key literals as they are,
+             * converts any pattern expressions to actual pattern objects.
+             * Makes sure skipper patterns all reference the same instance.
              * @param {string[]|sntls.QueryPattern[]} asArray
              * @returns {string[]|sntls.QueryPattern[]}
              * @private
@@ -65,7 +66,7 @@ troop.postpone(sntls, 'Query', function () {
                         if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
                             // special skipper case
                             result.push(this.PATTERN_SKIP);
-                        } else if (self.RE_QUERY_TESTER.test(pattern)) {
+                        } else if (this.RE_QUERY_TESTER.test(pattern)) {
                             // pattern is query expression (as in not key literal)
                             // creating pattern instance
                             result.push(QueryPattern.create(pattern));
@@ -76,7 +77,7 @@ troop.postpone(sntls, 'Query', function () {
                     } else if (QueryPattern.isBaseOf(pattern)) {
                         if (pattern.isSkipper()) {
                             // skipper patterns are substituted with constant
-                            result.push(QueryPattern.SKIP_SYMBOL);
+                            result.push(this.PATTERN_SKIP);
                         } else {
                             // other patterns are copied 1:1
                             result.push(pattern);

@@ -67,13 +67,19 @@
     });
 
     test("Buffer normalization", function () {
-        var normalize = sntls.Query._normalizeBuffer,
+        var Query = sntls.Query,
             buffer;
 
-        buffer = normalize(['hello', '|', 'you<all']);
+        buffer = Query._normalizeBuffer(['hello', '|', 'you<all']);
         equal(buffer[0], 'hello');
         equal(buffer[1].descriptor.symbol, '|');
         deepEqual(buffer[2].descriptor.options, ['you', 'all']);
+
+        buffer = Query._normalizeBuffer(['hello', '\\']);
+        strictEqual(buffer[1], sntls.Query.PATTERN_SKIP, "Skipper expression converted to common skipper instance");
+
+        buffer = Query._normalizeBuffer(['hello', sntls.QueryPattern.create('\\')]);
+        strictEqual(buffer[1], sntls.Query.PATTERN_SKIP, "Skipper pattern converted to common skipper instance");
     });
 
     test("Instantiation", function () {
