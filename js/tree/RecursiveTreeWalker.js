@@ -148,8 +148,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     }
 
                     // reverting traversal state for this level
-                    this.currentKey = currentKey;
-                    this.currentNode = currentNode;
                     this.currentPath.asArray.pop();
                 }
 
