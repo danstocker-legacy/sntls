@@ -2,6 +2,9 @@
 troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     "use strict";
 
+    var base = sntls.TreeWalker,
+        hOP = Object.prototype.hasOwnProperty;
+
     /**
      * Instantiates class
      * @name sntls.RecursiveTreeWalker.create
@@ -10,9 +13,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
      * @param {sntls.Query} [query]
      * @returns {sntls.RecursiveTreeWalker}
      */
-
-    var base = sntls.TreeWalker,
-        hOP = Object.prototype.hasOwnProperty;
 
     /**
      * Traverses tree recursively, according to a query expression.

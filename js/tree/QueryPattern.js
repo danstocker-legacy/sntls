@@ -6,6 +6,16 @@ troop.postpone(sntls, 'QueryPattern', function () {
         validators = dessert.validators;
 
     /**
+     * Instantiates class
+     * @name sntls.QueryPattern.create
+     * @function
+     * @param {string|object} pattern
+     * @returns {sntls.QueryPattern}
+     */
+
+    /**
+     * Single element in a query expression. A series of query patterns make
+     * up a query, which then can be used to traverse tree structures with.
      * @class sntls.QueryPattern
      * @extends troop.Base
      */
@@ -46,7 +56,6 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * URI decodes all items of an array.
              * @param {string[]} strings Array of strings
              * @returns {string[]} Array w/ all strings within URI-encoded
-             * @static
              * @private
              */
             _encodeURI: function (strings) {
@@ -62,7 +71,6 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * URI decodes all items of an array.
              * @param {string[]} strings Array of URI-encoded strings
              * @returns {string[]} Array w/ all strings URI-decoded
-             * @static
              * @private
              */
             _decodeURI: function (strings) {
@@ -79,7 +87,6 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * @param {string} pattern
              * @returns {string|object}
              * @private
-             * @static
              */
             _parseString: function (pattern) {
                 var keyValue = pattern.split(this.KEY_VALUE_SEPARATOR),
@@ -121,9 +128,10 @@ troop.postpone(sntls, 'QueryPattern', function () {
                 return result;
             }
         })
-        .addMethods(/** @lends sntls.QueryPattern */{
+        .addMethods(/** @lends sntls.QueryPattern# */{
             /**
              * @param {string|object} pattern
+             * @ignore
              */
             init: function (pattern) {
                 if (validators.isString(pattern)) {
@@ -206,6 +214,13 @@ troop.postpone(sntls, 'QueryPattern', function () {
 
 troop.postpone(sntls, 'QueryPatternCollection', function () {
     "use strict";
+
+    /**
+     * Instantiates class
+     * @name sntls.QueryPatternCollection.create
+     * @function
+     * @returns {sntls.QueryPatternCollection}
+     */
 
     /**
      * @class sntls.QueryPatternCollection
