@@ -120,7 +120,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                             // no keys matched pattern, must skip to next level
                             nextSkipMode = inSkipMode; // skip mode remains ON
                             nextQueryPos = queryPos; // same pattern will be used on next level
-                            currentKeys = Object.keys(currentNode); // all keys must be considered when skipping
+                            currentKeys = this._getKeysForObjectProperties(currentNode); // keys to all object type properties
                         } else {
                             // at least one key matched pattern, ending skip mode
                             nextSkipMode = false; // switching skip mode OFF
