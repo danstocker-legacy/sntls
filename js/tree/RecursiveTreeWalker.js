@@ -51,6 +51,26 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             },
 
             /**
+             * Retrieves keys that are associated with traversable values (objects).
+             * @param {object} object
+             * @returns {string[]}
+             * @static
+             * @private
+             */
+            _getKeysForObjectProperties: function (object) {
+                var result = [],
+                    keys = Object.keys(object),
+                    i, key;
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    if (object[key] instanceof Object) {
+                        result.push(key);
+                    }
+                }
+                return result;
+            },
+
+            /**
              * Traverses tree recursively, according to the query assigned to the walker.
              * @param {*} currentNode Node currently being traversed.
              * @param {number} queryPos Position of current pattern in query.

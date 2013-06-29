@@ -83,6 +83,53 @@
         );
     });
 
+    test("Key gathering for object values", function () {
+        var getKeysForObjectProperties = sntls.RecursiveTreeWalker._getKeysForObjectProperties;
+
+        deepEqual(
+            getKeysForObjectProperties({
+                foo: 1,
+                bar: 2,
+                baz: 3
+            }),
+            [],
+            "No objects"
+        );
+
+        deepEqual(
+            getKeysForObjectProperties({
+                foo: {},
+                bar: 2,
+                baz: 3
+            }),
+            ['foo'],
+            "Single hit"
+        );
+
+        deepEqual(
+            getKeysForObjectProperties({
+                foo: {},
+                bar: 2,
+                baz: {}
+            }),
+            ['foo', 'baz'],
+            "Multiple hits"
+        );
+
+        deepEqual(
+            getKeysForObjectProperties([
+                {},
+                'foo',
+                1,
+                2,
+                [],
+                'bar'
+            ]),
+            ['0', '4'],
+            "Multiple hits in array"
+        );
+    });
+
     test("Available keys", function () {
         var RecursiveTreeWalker = sntls.RecursiveTreeWalker,
             hashNode = {
