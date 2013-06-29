@@ -14,6 +14,7 @@ module.exports = function (grunt) {
             'js/data/OrderedList.js',
             'js/data/OrderedStringList.js',
             'js/tree/Path.js',
+            'js/tree/QueryPattern.js',
             'js/tree/Query.js',
             'js/tree/TreeWalker.js',
             'js/tree/IterativeTreeWalker.js',

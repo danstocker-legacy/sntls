@@ -10,6 +10,8 @@
         "collection",
         "list",
         "ordered list",
+        "tree",
+        "traversal",
         "journaling",
         "profile",
         "stateful",
