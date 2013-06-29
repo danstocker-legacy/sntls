@@ -3,7 +3,9 @@ troop.postpone(sntls, 'Query', function () {
     "use strict";
 
     var validators = dessert.validators,
-        base = sntls.Path;
+        QueryPattern = sntls.QueryPattern,
+        base = sntls.Path,
+        self = base.extend();
 
     /**
      * Instantiates class.
@@ -23,7 +25,7 @@ troop.postpone(sntls, 'Query', function () {
      * @class sntls.Query
      * @extends sntls.Path
      */
-    sntls.Query = base.extend()
+    sntls.Query = self
         .addConstants(/** @lends sntls.Query */{
             /**
              * Regular expression that tests whether string
@@ -44,7 +46,7 @@ troop.postpone(sntls, 'Query', function () {
              * by the next pattern in the query.
              * @type {sntls.QueryPattern}
              */
-            PATTERN_SKIP: sntls.QueryPattern.create('\\')
+            PATTERN_SKIP: QueryPattern.create(QueryPattern.SKIP_SYMBOL)
         })
         .addMethods(/** @lends sntls.Query# */{
             /**
@@ -52,25 +54,36 @@ troop.postpone(sntls, 'Query', function () {
              * @ignore
              */
             init: function (query) {
-                var asArray,
-                    QueryPattern = sntls.QueryPattern;
+                var asArray, i, pattern;
 
                 if (validators.isString(query)) {
                     // splitting string input
-                    query = query.split(this.PATH_SEPARATOR);
+                    asArray = query.split(this.PATH_SEPARATOR);
+                } else if (query instanceof Array) {
+                    asArray = query;
+                } else {
+                    dessert.assert(false, "Invalid query", query);
                 }
 
-                if (query instanceof Array) {
-                    asArray = sntls.Collection.create(query)
-                        .mapContents(function (item) {
-                            // making sure buffer items are QueryPattern instances
-                            if (QueryPattern.isBaseOf(item)) {
-                                return item;
-                            } else {
-                                return QueryPattern.create(item);
-                            }
-                        })
-                        .items;
+                for (i = 0; i < asArray.length; i++) {
+                    pattern = asArray[i];
+                    if (typeof pattern === 'string') {
+                        if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
+                            // special skipper case
+                            asArray[i] = this.PATTERN_SKIP;
+                        } else  if (self.RE_QUERY_TESTER.test(pattern)) {
+                            // pattern is query expression (as in not key literal)
+                            // creating pattern instance
+                            asArray[i] = QueryPattern.create(pattern);
+                        }
+                    } else if (QueryPattern.isBaseOf(pattern)) {
+                        if (pattern.isSkipper()) {
+                            // skipper patterns are substituted with constant
+                            asArray[i] = QueryPattern.SKIP_SYMBOL;
+                        }
+                    } else {
+                        dessert.assert(false, "Invalid query pattern", pattern);
+                    }
                 }
 
                 // calling base w/ array only
@@ -92,8 +105,8 @@ troop.postpone(sntls, 'Query', function () {
                 // stopping at first non-string key
                 for (i = 0; i < asArray.length; i++) {
                     key = asArray[i];
-                    if (typeof key.descriptor === 'string') {
-                        result.push(key.descriptor);
+                    if (typeof key === 'string') {
+                        result.push(key);
                     } else {
                         break;
                     }
@@ -118,12 +131,14 @@ troop.postpone(sntls, 'Query', function () {
                     currentKey = pathAsArray[i];
                     currentPattern = queryAsArray[j];
 
-                    if (currentPattern.isSkipper()) {
+                    if (currentPattern === this.PATTERN_SKIP) {
                         // current pattern indicates skip mode 'on'
                         inSkipMode = true;
                         j++;
                     } else {
-                        if (currentPattern.matchesKey(currentKey)) {
+                        if (QueryPattern.isBaseOf(currentPattern) && currentPattern.matchesKey(currentKey) ||
+                            currentPattern === currentKey
+                            ) {
                             // current key matches current pattern
                             // turning skip mode off
                             inSkipMode = false;
@@ -142,7 +157,7 @@ troop.postpone(sntls, 'Query', function () {
                 // matching was successful when query was fully processed
                 // and path was either fully processed or last pattern was continuation
                 return j === queryAsArray.length &&
-                       (i === pathAsArray.length || currentPattern.isSkipper());
+                       (i === pathAsArray.length || currentPattern === this.PATTERN_SKIP);
             },
 
             /**

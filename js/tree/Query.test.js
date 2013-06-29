@@ -73,13 +73,13 @@
             sntls.Query.create(5);
         }, "Invalid query");
 
-        query = sntls.Query.create(['hello', {symbol: '|'}, 'you<all']);
-        equal(query.asArray[0].descriptor, 'hello');
+        query = sntls.Query.create(['hello', '|', 'you<all']);
+        equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
 
         query = sntls.Query.create('hello>|>you<all');
-        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
     });
@@ -88,14 +88,21 @@
         var query;
 
         query = ['hello', '|', 'you<all'].toQuery();
-        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
 
         query = 'hello>|>you<all'.toQuery();
-        equal(query.asArray[0].descriptor, 'hello');
+        equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
+    });
+
+    test("Relative paths", function () {
+        var query = 'foo>bar>|>1'.toQuery(),
+            path = 'foo>bar'.toPath();
+
+        ok(query.isRelativeTo(path), "Query relative to path");
     });
 
     test("Type conversion with either types", function () {
@@ -126,10 +133,8 @@
     });
 
     test("Serialization", function () {
-        var query = sntls.Query.create(['foo', '\\', 'bar', {options: ['hello', 'world']}, '|',
-            { symbol: '|', value: 'baz' }
-        ]);
+        var query = sntls.Query.create(['foo%5E', '\\', 'bar', 'hello%5E<world', '|', '|^baz']);
 
-        equal(query.toString(), 'foo>\\>bar>hello<world>|>|^baz', "Query in string form");
+        equal(query.toString(), 'foo%5E>\\>bar>hello%5E<world>|>|^baz', "Query in string form");
     });
 }());

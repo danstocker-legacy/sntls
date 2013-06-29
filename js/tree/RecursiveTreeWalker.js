@@ -80,7 +80,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * Retrieves an array of keys from the node passed
              * according to the given pattern.
              * @param {object} node Node for which to obtain the keys.
-             * @param {sntls.QueryPattern} pattern
+             * @param {string|sntls.QueryPattern} pattern
              * @returns {string[]} Array of keys.
              * @private
              */
@@ -89,11 +89,11 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     result,
                     i, key;
 
-                if (typeof descriptor === 'string') {
-                    // descriptor contains a single key
-                    if (hOP.call(node, descriptor)) {
+                if (typeof pattern === 'string') {
+                    // pattern is key literal
+                    if (hOP.call(node, pattern)) {
                         // key is present in node
-                        result = [descriptor];
+                        result = [pattern];
                     } else {
                         // key is not present in node
                         result = [];
@@ -163,7 +163,8 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @private
              */
             _walk: function (currentNode, queryPos, inSkipMode) {
-                var queryAsArray = this.query.asArray,
+                var PATTERN_SKIP = sntls.Query.PATTERN_SKIP,
+                    queryAsArray = this.query.asArray,
                     atLeafNode = typeof currentNode !== 'object', // we're at a leaf node
                     queryProcessed = queryPos >= queryAsArray.length, // no patterns left in query to process
                     currentPattern = queryAsArray[queryPos], // current query pattern
@@ -182,7 +183,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     } else {
                         // in skip mode and not at leaf node
                         // keeping (pseudo-) pattern
-                        currentPattern = sntls.Query.PATTERN_SKIP;
+                        currentPattern = PATTERN_SKIP;
                     }
                 } else if (atLeafNode) {
                     // leaf node reached but query not done
@@ -190,7 +191,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     return true;
                 }
 
-                if (currentPattern.isSkipper()) {
+                if (currentPattern === PATTERN_SKIP) {
                     // pattern indicates skip mode
                     currentKeys = Object.keys(currentNode); // all keys are considered
                     nextSkipMode = true; // skip mode is ON for subsequent levels
