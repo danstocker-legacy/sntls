@@ -3,13 +3,17 @@ troop.postpone(sntls, 'TreeWalker', function () {
     "use strict";
 
     /**
+     * Base class for tree walker classes.
+     * Holds basic properties and state of the tree walker.
      * @class sntls.TreeWalker
      * @extends troop.Base
      */
     sntls.TreeWalker = troop.Base.extend()
-        .addMethods(/** @lends sntls.TreeWalker */{
+        .addMethods(/** @lends sntls.TreeWalker# */{
             /**
              * @name sntls.TreeWalker.create
+             * @function
+             * @param {function} handler
              * @return {sntls.TreeWalker}
              */
 
@@ -47,6 +51,7 @@ troop.postpone(sntls, 'TreeWalker', function () {
 
             /**
              * Resets walker state
+             * @returns {sntls.TreeWalker}
              */
             reset: function () {
                 this.currentKey = undefined;

@@ -3,8 +3,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
     "use strict";
 
     var base = sntls.TreeWalker,
-        hOP = Object.prototype.hasOwnProperty,
-        validators = dessert.validators;
+        hOP = Object.prototype.hasOwnProperty;
 
     /**
      * Traverses tree recursively, according to a query expression.
@@ -18,7 +17,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {Array} array
              * @param {*} value
              * @returns {number[]}
-             * @static
              * @private
              */
             _allIndicesOf: function (array, value) {
@@ -35,7 +33,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {object} object
              * @param {*} value
              * @returns {string[]}
-             * @static
              * @private
              */
             _getKeysByValue: function (object, value) {
@@ -55,7 +52,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * Retrieves keys that are associated with traversable values (objects).
              * @param {object} object
              * @returns {string[]}
-             * @static
              * @private
              */
             _getKeysForObjectProperties: function (object) {
@@ -72,10 +68,11 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             },
 
             /**
-             * Traverses tree recursively, according to the query assigned to the walker.
+             * Traverses specified node recursively, according to the query assigned to the walker.
              * @param {*} currentNode Node currently being traversed.
              * @param {number} queryPos Position of current pattern in query.
              * @param {boolean} inSkipMode Whether traversal is in skip mode.
+             * @memberOf sntls.RecursiveTreeWalker#
              * @private
              */
             _walk: function (currentNode, queryPos, inSkipMode) {
@@ -154,9 +151,12 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 return true;
             }
         })
-        .addMethods(/** @lends sntls.RecursiveTreeWalker */{
+        .addMethods(/** @lends sntls.RecursiveTreeWalker# */{
             /**
              * @name sntls.RecursiveTreeWalker.create
+             * @function
+             * @param {function} handler
+             * @param {sntls.Query} [query]
              * @return {sntls.RecursiveTreeWalker}
              */
 
@@ -182,7 +182,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {object} node Node for which to obtain the keys.
              * @param {sntls.QueryPattern} pattern
              * @return {string[]} Array of keys.
-             * @static
              */
             getKeysByPattern: function (node, pattern) {
                 var descriptor = pattern.descriptor,
