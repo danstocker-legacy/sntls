@@ -50,7 +50,7 @@ troop.postpone(sntls, 'utils', function () {
              * Creates a shallow copy of an object.
              * Property names will be copied, but property values
              * will point to the original references.
-             * @param {object|*[]} original
+             * @param {object|Array} original
              * @return {object} shallow copy of original
              */
             shallowCopy: function (original) {

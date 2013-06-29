@@ -18,8 +18,7 @@ troop.postpone(sntls, 'StateMatrix', function () {
              * @return {sntls.StateMatrix}
              */
 
-            /**
-             */
+            /**/
             init: function () {
                 /**
                  * Edges in the state matrix.

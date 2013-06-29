@@ -21,8 +21,7 @@ troop.postpone(sntls, 'Profile', function () {
              * @return {sntls.Profile}
              */
 
-            /**
-             */
+            /**/
             init: function () {
                 /**
                  * Lookup of numeric values assigned to named counter bins

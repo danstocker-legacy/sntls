@@ -392,7 +392,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Retrieves collection items as array in order of their names
              * or according to the supplied comparator.
              * @param {function} [comparator] Comparator for sorting keys.
-             * @returns {*[]} Item values in order of names.
+             * @returns {Array} Item values in order of names.
              */
             getSortedValues: function (comparator) {
                 dessert.isFunctionOptional(comparator, "Invalid comparator function");

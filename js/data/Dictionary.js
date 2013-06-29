@@ -67,7 +67,7 @@ troop.postpone(sntls, 'Dictionary', function () {
             /**
              * Adds item to dictionary
              * @param {string} key
-             * @param {*|*[]} value
+             * @param {*|Array} value
              * @return {sntls.Dictionary}
              */
             addItem: function (key, value) {
@@ -112,7 +112,7 @@ troop.postpone(sntls, 'Dictionary', function () {
              * Adds items to dictionary by assigning the same value(s) to
              * a set of keys
              * @param {string[]} keys
-             * @param {*|*[]} value
+             * @param {*|Array} value
              * @return {sntls.Dictionary}
              */
             addItems: function (keys, value) {
@@ -185,8 +185,8 @@ troop.postpone(sntls, 'Dictionary', function () {
 
             /**
              * Retrieves item(s) from the dictionary
-             * @param {*|*[]} key
-             * @return {*|*[]} Dictionary item
+             * @param {*|Array} key
+             * @return {*|Array} Dictionary item
              */
             getItem: function (key) {
                 var result,
