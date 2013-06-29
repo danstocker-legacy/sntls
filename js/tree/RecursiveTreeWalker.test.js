@@ -145,43 +145,43 @@
             ];
 
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(hashNode, '|'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, '|'.toQueryPattern()),
             Object.keys(hashNode),
             "Wildcard pattern"
         );
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(hashNode, 'blah'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'blah'.toQueryPattern()),
             [],
             "String pattern"
         );
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(hashNode, 'foo<bar'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'foo<bar'.toQueryPattern()),
             ['foo'],
             "Array pattern"
         );
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(hashNode, '|^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, '|^world'.toQueryPattern()),
             ['hello'],
             "Value pattern w/ object"
         );
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(hashNode, 'hello^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'hello^world'.toQueryPattern()),
             ['hello'],
             "Value pattern w/ object"
         );
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(hashNode, 'hello<foo^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'hello<foo^world'.toQueryPattern()),
             ['hello'],
             "Value pattern w/ object"
         );
 
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(arrayNode, sntls.QueryPattern.create({symbol: '|', value: 1})),
+            RecursiveTreeWalker._getKeysByPattern(arrayNode, sntls.QueryPattern.create({symbol: '|', value: 1})),
             [2],
             "Value pattern w/ array"
         );
         deepEqual(
-            RecursiveTreeWalker.getKeysByPattern(arrayNode, '|^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(arrayNode, '|^world'.toQueryPattern()),
             [0, 3],
             "Value pattern w/ array"
         );
