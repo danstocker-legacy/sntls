@@ -6,6 +6,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
         hOP = Object.prototype.hasOwnProperty;
 
     /**
+     * Traverses tree recursively, according to a query expression.
      * @class sntls.RecursiveTreeWalker
      * @extends sntls.TreeWalker
      */
@@ -50,7 +51,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             },
 
             /**
-             * Traverses tree recursively, guided by the query assigned to the walker.
+             * Traverses tree recursively, according to the query assigned to the walker.
              * @param {*} currentNode Node currently being traversed.
              * @param {number} queryPos Position of current pattern in query.
              * @param {boolean} inSkipMode Whether traversal is in skip mode.
