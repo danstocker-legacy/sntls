@@ -40,6 +40,12 @@
             [0, 4],
             "> 1 multiplicity"
         );
+
+        deepEqual(
+            sntls.RecursiveTreeWalker._allIndicesOf(['foo', 'bar', 'foo', 'baz', 'foo'], 'foo'),
+            [0, 2, 4],
+            "> 1 multiplicity"
+        );
     });
 
     test("Key gathering from object", function () {
@@ -74,22 +80,48 @@
     });
 
     test("Available keys", function () {
-        var node = {
+        var RecursiveTreeWalker = sntls.RecursiveTreeWalker,
+            hashNode = {
                 foo  : 'bar',
                 hello: 'world',
                 test : 1
             },
-            query = '|>blah>foo<bar>|^world'.toQuery();
+            arrayNode = [
+                'world',
+                'bar',
+                1,
+                'world'
+            ];
 
-        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[0]), Object.keys(node), "Asterisk pattern");
-        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[1]), [], "String pattern");
-        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[2]), ['foo'], "Array pattern");
-        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(node, query.asArray[3]), ['hello'
-        ], "Value pattern w/ object");
-        deepEqual(sntls.RecursiveTreeWalker.getKeysByPattern(
-            ['foo', 'hello', 'world', 'baz', 'world'],
-            query.asArray[3]),
-            [2, 4],
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(hashNode, '|'.toQueryPattern()),
+            Object.keys(hashNode),
+            "Wildcard pattern"
+        );
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(hashNode, 'blah'.toQueryPattern()),
+            [],
+            "String pattern"
+        );
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(hashNode, 'foo<bar'.toQueryPattern()),
+            ['foo'],
+            "Array pattern"
+        );
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(hashNode, '|^world'.toQueryPattern()),
+            ['hello'],
+            "Value pattern w/ object"
+        );
+
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(arrayNode, sntls.QueryPattern.create({symbol: '|', value: 1})),
+            [2],
+            "Value pattern w/ array"
+        );
+        deepEqual(
+            RecursiveTreeWalker.getKeysByPattern(arrayNode, '|^world'.toQueryPattern()),
+            [0, 3],
             "Value pattern w/ array"
         );
     });
@@ -175,6 +207,52 @@
             result,
             [3, 3],
             "Leaf nodes matching value"
+        );
+    });
+
+    test("Walking w/ value match", function () {
+        var node = {
+                foo  : "bar",
+                hello: [
+                    "world",
+                    "all",
+                    "bar"
+                ],
+                its  : {
+                    not: "all",
+                    baz: ["bar", "foo", "bar"],
+                    foo: ["bar"]
+                }
+            },
+            result = [],
+            handler = function () {
+                result.push(this.currentPath.toString());
+            };
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '\\>|^all'.toQuery())
+            .walk(node);
+        deepEqual(
+            result,
+            [
+                'hello>1',
+                'its>not'
+            ],
+            "Paths with value 'all'"
+        );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '\\>|^bar'.toQuery())
+            .walk(node);
+        deepEqual(
+            result,
+            [
+                'hello>2',
+                'its>baz>0',
+                'its>baz>2',
+                'its>foo>0'
+            ],
+            "Paths with value 'bar'"
         );
     });
 
