@@ -22,7 +22,7 @@ troop.postpone(sntls, 'Collection', function () {
              * invoked method on all items, collecting the return values
              * and returning them as a collection.
              * @param {string} methodName Name of method to make shortcut for.
-             * @return {function}
+             * @returns {function}
              */
             _genShortcut: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
@@ -60,7 +60,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves property names from object and returns an array for those that are functions.
              * @param {object} obj
-             * @return {string[]}
+             * @returns {string[]}
              */
             _getMethodNames: function (obj) {
                 var propertyNames = Object.getOwnPropertyNames(obj),
@@ -86,7 +86,7 @@ troop.postpone(sntls, 'Collection', function () {
              * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
              *
              * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             of: function (template) {
                 // in case methodNames is a fat constructor
@@ -128,7 +128,7 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * @name sntls.Collection.create
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
 
             /**
@@ -160,7 +160,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Sets an item in the collection.
              * @param {string} itemName Item name.
              * @param item Item variable / object.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             setItem: function (itemName, item) {
                 var isNew = !hOP.call(this.items, itemName);
@@ -179,7 +179,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Deletes item from collection.
              * @param {string} itemName Item name.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             deleteItem: function (itemName) {
                 if (hOP.call(this.items, itemName)) {
@@ -195,7 +195,7 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Clones collection
-             * @return {sntls.Collection} New collection with same contents as this.
+             * @returns {sntls.Collection} New collection with same contents as this.
              */
             clone: function () {
                 var result = /** @type sntls.Collection */ this.getBase().create();
@@ -217,7 +217,7 @@ troop.postpone(sntls, 'Collection', function () {
              * WARNING: shares item buffer with old collection,
              * therefore changes in one will be reflected in the other.
              * @param {sntls.Collection} returnType Collection class
-             * @return {sntls.Collection} New instance of the specified
+             * @returns {sntls.Collection} New instance of the specified
              * (collection-based) type initialized w/ with same contents.
              */
             asType: function (returnType) {
@@ -240,7 +240,7 @@ troop.postpone(sntls, 'Collection', function () {
              * @param {function} [conflictResolver] Callback for resolving merge conflicts.
              * Callback receives as arguments: current collection, remote collection, and key of
              * the conflicting item.
-             * @return {sntls.Collection} New collection with items from both collections in it.
+             * @returns {sntls.Collection} New collection with items from both collections in it.
              * Return type will be that of the current collection.
              */
             mergeWith: function (collection, conflictResolver) {
@@ -267,7 +267,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves collection keys matching the specified prefix
              * @param {string} prefix
-             * @return {string[]}
+             * @returns {string[]}
              */
             getKeysByPrefix: function (prefix) {
                 dessert.isString(prefix, "Invalid prefix");
@@ -290,7 +290,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves collection keys matching the specified prefix, wrapped in a hash.
              * @param {string} prefix
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
             getKeysByPrefixAsHash: function (prefix) {
                 return sntls.Hash.create(this.getKeysByPrefix(prefix));
@@ -299,7 +299,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves collection keys matching the specified regular expression.
              * @param {RegExp} regExp
-             * @return {Array}
+             * @returns {Array}
              */
             getKeysByRegExp: function (regExp) {
                 var result = [],
@@ -320,7 +320,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves collection keys matching the specified regular expression, wrapped in a hash.
              * @param {RegExp} regExp
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
             getKeysByRegExpAsHash: function (regExp) {
                 return sntls.Hash.create(this.getKeysByRegExp(regExp));
@@ -330,7 +330,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Selects specified collection items and returns them in a
              * new collection of the same type.
              * @param {string[]} itemNames Names of items to include in result
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             filterByKeys: function (itemNames) {
                 dessert.isArray(itemNames, "Invalid item names");
@@ -350,7 +350,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Filters collection by key prefix.
              * @param {string} prefix
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             filterByPrefix: function (prefix) {
                 return this.filterByKeys(this.getKeysByPrefix(prefix));
@@ -359,7 +359,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Filters collection by matching keys to the specified regular expression.
              * @param {RegExp} regExp
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             filterByRegExp: function (regExp) {
                 return this.filterByKeys(this.getKeysByRegExp(regExp));
@@ -370,7 +370,7 @@ troop.postpone(sntls, 'Collection', function () {
              * @param {function} selector Selector function. Receives `item` and `itemName`
              * as arguments, and the collection as `this`, and should return true when
              * item should be included in results.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             filterBySelector: function (selector) {
                 var items = this.items,
@@ -411,7 +411,7 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves sorted item values array wrapped in a hash.
              * @param {function} [comparator] Comparator for sorting keys.
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              * @see sntls.Collection.getSortedValues
              */
             getSortedValuesAsHash: function (comparator) {
@@ -420,7 +420,7 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Empties collection.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             clear: function () {
                 // clearing items buffer
@@ -438,7 +438,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Handler receives the current item and item name as arguments,
              * and the collection as `this`.
              * Iteration breaks when handler returns false.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             forEachItem: function (handler) {
                 dessert.isFunction(handler, "Invalid callback function");
@@ -466,7 +466,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Iteration breaks when handler returns false.
              * @param {function} [comparator] Comparator for sorting keys.
              * Receives collection instance as context for accessing item values.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             forEachItemSorted: function (handler, comparator) {
                 dessert
@@ -495,7 +495,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Receives current item and item name as arguments, plus the collection as `this`.
              * @param {sntls.Collection} [returnType] Reference to derived collection class.
              * When specified, the resulting collection will be an instance of this class.
-             * @return {sntls.Collection} New collection instance (of the specified type)
+             * @returns {sntls.Collection} New collection instance (of the specified type)
              * containing mapped items.
              */
             mapContents: function (handler, returnType) {
@@ -521,7 +521,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Invokes a method on each item, identified by name.
              * Method results are collected and returned in a new collection.
              * @param {string} methodName Method name on each item.
-             * @return {sntls.Collection}
+             * @returns {sntls.Collection}
              */
             callOnEachItem: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
@@ -571,7 +571,7 @@ troop.postpone(sntls, 'Collection', function () {
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
          * @param {sntls.Collection} [returnType]
-         * @return {sntls.Collection}
+         * @returns {sntls.Collection}
          */
         toCollection: function (returnType) {
             dessert.isCollectionOptional(returnType);

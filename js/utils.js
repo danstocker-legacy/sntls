@@ -33,7 +33,7 @@ troop.postpone(sntls, 'utils', function () {
              * Determines whether an object has exactly one
              * enumerable property.
              * @param {object} obj
-             * @return {boolean}
+             * @returns {boolean}
              */
             isSingularObject: function (obj) {
                 var count = 0,
@@ -51,7 +51,7 @@ troop.postpone(sntls, 'utils', function () {
              * Property names will be copied, but property values
              * will point to the original references.
              * @param {object|Array} original
-             * @return {object} shallow copy of original
+             * @returns {object} shallow copy of original
              */
             shallowCopy: function (original) {
                 if (dessert.validators.isArray(original)) {

@@ -45,7 +45,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
             /**
              * URI decodes all items of an array.
              * @param {string[]} strings Array of strings
-             * @return {string[]} Array w/ all strings within URI-encoded
+             * @returns {string[]} Array w/ all strings within URI-encoded
              * @static
              * @private
              */
@@ -61,7 +61,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
             /**
              * URI decodes all items of an array.
              * @param {string[]} strings Array of URI-encoded strings
-             * @return {string[]} Array w/ all strings URI-decoded
+             * @returns {string[]} Array w/ all strings URI-decoded
              * @static
              * @private
              */
@@ -230,7 +230,7 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
     });
 
     /**
-     * @return {sntls.QueryPattern}
+     * @returns {sntls.QueryPattern}
      */
     String.prototype.toQueryPattern = function () {
         return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);

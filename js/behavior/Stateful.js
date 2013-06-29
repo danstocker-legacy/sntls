@@ -30,7 +30,7 @@ troop.postpone(sntls, 'Stateful', function () {
             /**
              * Retrieves current state name for the specified layer.
              * @param {string} layerName
-             * @return {string}
+             * @returns {string}
              */
             currentState: function (layerName) {
                 return this.currentStates.getItem(layerName);
@@ -43,7 +43,7 @@ troop.postpone(sntls, 'Stateful', function () {
              * @param {string} layerName Name of new state layer.
              * @param {sntls.StateMatrix} stateMatrix State matrix describing transitions.
              * @param {string} defaultState Default state for this layer.
-             * @return {sntls.Stateful}
+             * @returns {sntls.Stateful}
              * @static
              */
             addStateLayer: function (layerName, stateMatrix, defaultState) {
@@ -81,7 +81,7 @@ troop.postpone(sntls, 'Stateful', function () {
              * Changes state on specified state layer.
              * @param {string} stateName Destination state
              * @param {string} layerName Layer name
-             * @return {sntls.Stateful}
+             * @returns {sntls.Stateful}
              */
             changeStateTo: function (stateName, layerName) {
                 dessert.isString(layerName, "Invalid layer name");

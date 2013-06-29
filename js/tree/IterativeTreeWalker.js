@@ -7,7 +7,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
      * @name sntls.IterativeTreeWalker.create
      * @function
      * @param {function} handler
-     * @return {sntls.IterativeTreeWalker}
+     * @returns {sntls.IterativeTreeWalker}
      */
 
     /**
@@ -21,7 +21,7 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
              * Traverses all enumerable nodes in object.
              * Iterative implementation.
              * @param node {object} Object to be traversed.
-             * @return {sntls.IterativeTreeWalker}
+             * @returns {sntls.IterativeTreeWalker}
              */
             walk: function (node) {
                 var keysStack = [Object.keys(node)], // stack of keys associated with each node on current path

@@ -50,7 +50,7 @@ troop.postpone(sntls, 'Query', function () {
         .addMethods(/** @lends sntls.Query */{
             /**
              * @name sntls.Query.create
-             * @return {sntls.Query}
+             * @returns {sntls.Query}
              */
 
             /**
@@ -93,7 +93,7 @@ troop.postpone(sntls, 'Query', function () {
              * Extracts the longest fixed stem path from the query.
              * The stem may not contain any wildcards, or other
              * query expressions, only specific keys.
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
             getStemPath: function () {
                 var asArray = this.asArray,
@@ -116,7 +116,7 @@ troop.postpone(sntls, 'Query', function () {
             /**
              * Determines whether query matches specified path
              * @param {sntls.Path} path
-             * @return {boolean}
+             * @returns {boolean}
              */
             matchesPath: function (path) {
                 var queryAsArray = this.asArray,
@@ -206,14 +206,14 @@ troop.postpone(sntls, 'Query', function () {
     });
 
     /**
-     * @return {sntls.Query}
+     * @returns {sntls.Query}
      */
     String.prototype.toQuery = function () {
         return /** @type {sntls.Query} */ sntls.Query.create(this);
     };
 
     /**
-     * @return {sntls.Path}
+     * @returns {sntls.Path}
      */
     String.prototype.toPathOrQuery = function () {
         return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
@@ -222,14 +222,14 @@ troop.postpone(sntls, 'Query', function () {
     };
 
     /**
-     * @return {sntls.Query}
+     * @returns {sntls.Query}
      */
     Array.prototype.toQuery = function () {
         return /** @type {sntls.Query} */ sntls.Query.create(this);
     };
 
     /**
-     * @return {sntls.Path}
+     * @returns {sntls.Path}
      */
     Array.prototype.toPathOrQuery = function () {
         return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?

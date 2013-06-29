@@ -11,7 +11,7 @@ troop.postpone(sntls, 'DateCollection', function () {
 
     /**
      * @name sntls.DateCollection.create
-     * @return {sntls.DateCollection}
+     * @returns {sntls.DateCollection}
      */
 });
 
@@ -20,7 +20,7 @@ troop.postpone(sntls, 'DateCollection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.DateCollection}
+         * @returns {sntls.DateCollection}
          */
         toDateCollection: function () {
             return sntls.DateCollection.create(this.items);

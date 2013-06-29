@@ -21,7 +21,7 @@ troop.postpone(sntls, 'Dictionary', function () {
              * Counts values in dictionary.
              * Since one item may hold multiple values, value count =/= item count.
              * @param {object} dictionaryItems Dictionary item buffer
-             * @return {number}
+             * @returns {number}
              * @private
              */
             _countValues: function (dictionaryItems) {
@@ -42,7 +42,7 @@ troop.postpone(sntls, 'Dictionary', function () {
         .addMethods(/** @lends sntls.Dictionary */{
             /**
              * @name sntls.Dictionary.create
-             * @return {sntls.Dictionary}
+             * @returns {sntls.Dictionary}
              */
 
             /**
@@ -68,7 +68,7 @@ troop.postpone(sntls, 'Dictionary', function () {
              * Adds item to dictionary
              * @param {string} key
              * @param {*|Array} value
-             * @return {sntls.Dictionary}
+             * @returns {sntls.Dictionary}
              */
             addItem: function (key, value) {
                 var items = this.items,
@@ -113,7 +113,7 @@ troop.postpone(sntls, 'Dictionary', function () {
              * a set of keys
              * @param {string[]} keys
              * @param {*|Array} value
-             * @return {sntls.Dictionary}
+             * @returns {sntls.Dictionary}
              */
             addItems: function (keys, value) {
                 dessert.isArray(keys, "Invalid keys");
@@ -130,7 +130,7 @@ troop.postpone(sntls, 'Dictionary', function () {
              * all values associated with `key` are removed.
              * @param {string} key Key from which to remove value
              * @param {*} [value] Item value.
-             * @return {sntls.Dictionary}
+             * @returns {sntls.Dictionary}
              */
             removeItem: function (key, value) {
                 var items = this.items,
@@ -171,7 +171,7 @@ troop.postpone(sntls, 'Dictionary', function () {
              * Removes items from dictionary.
              * @param {string[]} keys
              * @param {*} [value]
-             * @return {sntls.Dictionary}
+             * @returns {sntls.Dictionary}
              */
             removeItems: function (keys, value) {
                 dessert.isArray(keys, "Invalid keys");
@@ -186,7 +186,7 @@ troop.postpone(sntls, 'Dictionary', function () {
             /**
              * Retrieves item(s) from the dictionary
              * @param {*|Array} key
-             * @return {*|Array} Dictionary item
+             * @returns {*|Array} Dictionary item
              */
             getItem: function (key) {
                 var result,
@@ -217,7 +217,7 @@ troop.postpone(sntls, 'Dictionary', function () {
 
             /**
              * Clears dictionary
-             * @return {sntls.Dictionary}
+             * @returns {sntls.Dictionary}
              */
             clear: function () {
                 // clearing items buffer
@@ -248,7 +248,7 @@ troop.postpone(sntls, 'Dictionary', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.Dictionary}
+         * @returns {sntls.Dictionary}
          */
         toDictionary: function () {
             return sntls.Dictionary.create(this.items);

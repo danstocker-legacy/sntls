@@ -17,13 +17,13 @@ troop.postpone(sntls, 'Tree', function () {
         .addMethods(/** @lends sntls.Tree */{
             /**
              * @name sntls.Tree.create
-             * @return {sntls.Tree}
+             * @returns {sntls.Tree}
              */
 
             /**
              * Retrieves the value at the specified path.
              * @param {sntls.Path} path Path to node
-             * @return {*} Whatever value is found at path
+             * @returns {*} Whatever value is found at path
              */
             getNode: function (path) {
                 var asArray = path.asArray,
@@ -43,7 +43,7 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Retrieves object at the specified path wrapped in a Hash object.
              * @param {sntls.Path} path Path to node
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
             getNodeAsHash: function (path) {
                 return Hash.create(this.getNode(path));
@@ -85,7 +85,7 @@ troop.postpone(sntls, 'Tree', function () {
              * Sets the node at the specified path to the given value.
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
-             * @return {sntls.Tree}
+             * @returns {sntls.Tree}
              */
             setNode: function (path, value) {
                 var node = this.getSafeNode(path.clone().trim()),
@@ -103,7 +103,7 @@ troop.postpone(sntls, 'Tree', function () {
              * assigns the return value of the generator.
              * @param {sntls.Path} path Path to node
              * @param {function} generator Generator function returning value
-             * @return {*}
+             * @returns {*}
              */
             getOrSetNode: function (path, generator) {
                 var node = this.getSafeNode(path.clone().trim()),
@@ -136,7 +136,7 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Removes key from the specified path.
              * @param {sntls.Path} path Path to node
-             * @return {sntls.Tree}
+             * @returns {sntls.Tree}
              */
             unsetKey: function (path) {
                 var node = this.getSafeNode(path.clone().trim()),
@@ -203,7 +203,7 @@ troop.postpone(sntls, 'Tree', function () {
              * Traverses tree recursively, guided by the specified query array
              * @param {sntls.Query} query
              * @param {function} handler
-             * @return {sntls.Tree}
+             * @returns {sntls.Tree}
              */
             traverseByQuery: function (query, handler) {
                 // recursive tree walker may be guided by query expression
@@ -346,7 +346,7 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Queries pat-value associations from tree as object
              * @param {sntls.Query} query
-             * @return {object}
+             * @returns {object}
              */
             queryPathValuePairs: function (query) {
                 /*jshint validthis:true */
@@ -390,7 +390,7 @@ troop.postpone(sntls, 'Tree', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.Tree}
+         * @returns {sntls.Tree}
          */
         toTree: function () {
             return sntls.Tree.create(this.items);

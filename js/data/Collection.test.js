@@ -785,7 +785,7 @@
          * Compares two strings by their second char
          * @param a
          * @param b
-         * @return {number}
+         * @returns {number}
          */
         function comparator(a, b) {
             /*jshint validthis: true */

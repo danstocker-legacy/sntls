@@ -24,7 +24,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * URI encodes all items of an array.
              * @param {string[]} asArray Array of plain strings
-             * @return {string[]} Array of URI-encoded strings
+             * @returns {string[]} Array of URI-encoded strings
              * @private
              */
             _encodeURI: function (asArray) {
@@ -39,7 +39,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * URI decodes all items of an array.
              * @param {string[]} asArray Array of URI-encoded strings
-             * @return {string[]} Array of plain strings
+             * @returns {string[]} Array of plain strings
              * @private
              */
             _decodeURI: function (asArray) {
@@ -54,7 +54,7 @@ troop.postpone(sntls, 'Path', function () {
         .addMethods(/** @lends sntls.Path */{
             /**
              * @name sntls.Path.create
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
 
             /**
@@ -84,7 +84,7 @@ troop.postpone(sntls, 'Path', function () {
 
             /**
              * Clones path
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
             clone: function () {
                 return /** @type sntls.Path */ this.getBase().create(this.asArray.concat());
@@ -93,7 +93,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Trims trailing end of path.
              * Changes path buffer!
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
             trim: function () {
                 this.asArray.pop();
@@ -115,7 +115,7 @@ troop.postpone(sntls, 'Path', function () {
              * Prepends path with specified path.
              * Changes path buffer!
              * @param {sntls.Path} path
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
             prepend: function (path) {
                 this.asArray = path.asArray.concat(this.asArray);
@@ -125,7 +125,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Matches remote path to current path.
              * @param {sntls.Path} remotePath Remote path
-             * @return {boolean}
+             * @returns {boolean}
              */
             equals: function (remotePath) {
                 var currentArray = this.asArray,
@@ -150,7 +150,7 @@ troop.postpone(sntls, 'Path', function () {
              * the root path, ie. it matches the beginning of
              * the current path entirely.
              * @param {sntls.Path} rootPath
-             * @return {boolean}
+             * @returns {boolean}
              */
             isRelativeTo: function (rootPath) {
                 dessert.isPath(rootPath, "Invalid path");
@@ -174,7 +174,7 @@ troop.postpone(sntls, 'Path', function () {
 
             /**
              * String representation
-             * @return {string}
+             * @returns {string}
              */
             toString: function () {
                 return this._encodeURI(this.asArray).join(this.PATH_SEPARATOR);
@@ -200,7 +200,7 @@ troop.postpone(sntls, 'Path', function () {
         String.prototype,
         /** @lends String.prototype */{
             /**
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
             toPath: function () {
                 return sntls.Path.create(this);
@@ -213,7 +213,7 @@ troop.postpone(sntls, 'Path', function () {
         Array.prototype,
         /** @lends Array.prototype */{
             /**
-             * @return {sntls.Path}
+             * @returns {sntls.Path}
              */
             toPath: function () {
                 return sntls.Path.create(this);

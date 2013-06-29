@@ -18,7 +18,7 @@ troop.postpone(sntls, 'Profile', function () {
         .addMethods(/** @lends sntls.Profile */{
             /**
              * @name sntls.Profile.create
-             * @return {sntls.Profile}
+             * @returns {sntls.Profile}
              */
 
             /**/
@@ -34,7 +34,7 @@ troop.postpone(sntls, 'Profile', function () {
              * Increases counter
              * @param {string} counterName Counter identifier
              * @param {number} [amount] Amount to add to counter
-             * @return {sntls.Profile}
+             * @returns {sntls.Profile}
              */
             inc: function (counterName, amount) {
                 amount = amount || 1;
@@ -54,7 +54,7 @@ troop.postpone(sntls, 'Profile', function () {
              * Decreases counter
              * @param {string} counterName Counter identifier
              * @param {number} [amount] Amount to add to counter
-             * @return {sntls.Profile}
+             * @returns {sntls.Profile}
              */
             dec: function (counterName, amount) {
                 amount = amount || 1;
@@ -72,7 +72,7 @@ troop.postpone(sntls, 'Profile', function () {
 
             /**
              * Retrieves counter value
-             * @return {Number}
+             * @returns {Number}
              */
             getCount: function (key) {
                 return this.counters[key] || 0;
@@ -80,7 +80,7 @@ troop.postpone(sntls, 'Profile', function () {
 
             /**
              * Simple getter for counter object.
-             * @return {object}
+             * @returns {object}
              */
             getCounters: function () {
                 return this.counters;
@@ -89,7 +89,7 @@ troop.postpone(sntls, 'Profile', function () {
             /**
              * Resets one or all counters
              * @param {string} [key]
-             * @return {sntls.Profile}
+             * @returns {sntls.Profile}
              */
             reset: function (key) {
                 if (dessert.validators.isString(key)) {

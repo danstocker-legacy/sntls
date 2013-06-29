@@ -21,7 +21,7 @@ troop.postpone(sntls, 'Hash', function () {
         .addMethods(/** @lends sntls.Hash */{
             /**
              * @name sntls.Hash.create
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
 
             /**
@@ -39,7 +39,7 @@ troop.postpone(sntls, 'Hash', function () {
              * Retrieves the first key to be found in the Hash.
              * Not guaranteed to return the same key on subsequent
              * calls when the hash has more than 1 items.
-             * @return {string}
+             * @returns {string}
              */
             getFirstKey: function () {
                 var items = this.items,
@@ -54,7 +54,7 @@ troop.postpone(sntls, 'Hash', function () {
 
             /**
              * Retrieves all item keys.
-             * @return {string[]}
+             * @returns {string[]}
              */
             getKeys: function () {
                 return Object.keys(this.items);
@@ -62,7 +62,7 @@ troop.postpone(sntls, 'Hash', function () {
 
             /**
              * Retrieves item keys wrapped ina hash.
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
             getKeysAsHash: function () {
                 return sntls.Hash.create(Object.keys(this.items));
@@ -74,7 +74,7 @@ troop.postpone(sntls, 'Hash', function () {
              * calls when the hash has more than 1 items.
              * Doesn't necessarily correspond to the key returned by
              * `.getFirstKey`.
-             * @return {*}
+             * @returns {*}
              */
             getFirstValue: function () {
                 var items = this.items,
@@ -89,7 +89,7 @@ troop.postpone(sntls, 'Hash', function () {
 
             /**
              * Retrieves item values as an array.
-             * @return {Array}
+             * @returns {Array}
              */
             getValues: function () {
                 var items = this.items,
@@ -106,7 +106,7 @@ troop.postpone(sntls, 'Hash', function () {
 
             /**
              * Retrieves item values wrapped in a hash.
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
             getValuesAsHash: function () {
                 return sntls.Hash.create(this.getValues());
@@ -114,7 +114,7 @@ troop.postpone(sntls, 'Hash', function () {
 
             /**
              * Clears items buffer.
-             * @return {sntls.Hash}
+             * @returns {sntls.Hash}
              */
             clear: function () {
                 this.items = this.items instanceof Array ? [] : {};

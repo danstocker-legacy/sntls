@@ -16,7 +16,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
         .addMethods(/** @lends sntls.JournalingCollection */{
             /**
              * @name sntls.JournalingCollection.create
-             * @return {sntls.JournalingCollection}
+             * @returns {sntls.JournalingCollection}
              */
 
             /**
@@ -37,7 +37,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
              * Sets an item in the collection.
              * @param {string} name Item name.
              * @param item Item variable / object.
-             * @return {sntls.JournalingCollection}
+             * @returns {sntls.JournalingCollection}
              */
             setItem: function (name, item) {
                 var isInCollection = hOP.call(this.items, name);
@@ -57,7 +57,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
             /**
              * Removes item from sntls.LOOKUP.
              * @param {string} name Item name.
-             * @return {sntls.JournalingCollection}
+             * @returns {sntls.JournalingCollection}
              */
             deleteItem: function (name) {
                 var isInCollection = hOP.call(this.items, name),
@@ -79,7 +79,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
             /**
              * Empties collection.
-             * @return {sntls.JournalingCollection}
+             * @returns {sntls.JournalingCollection}
              */
             clear: function () {
                 base.clear.apply(this, arguments);
@@ -89,7 +89,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
             /**
              * Resets collection log.
-             * @return {sntls.JournalingCollection}
+             * @returns {sntls.JournalingCollection}
              */
             resetLog: function () {
                 var log = this.log;
@@ -104,7 +104,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.JournalingCollection}
+         * @returns {sntls.JournalingCollection}
          */
         toJournalingCollection: function () {
             return sntls.JournalingCollection.create(this.items);

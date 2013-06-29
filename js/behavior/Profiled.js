@@ -39,7 +39,7 @@ troop.postpone(sntls, 'Profiled', function (sntls) {
             /**
              * Simple getter for the instance profile.
              * For gathering profiles from a collection of Profiled instances.
-             * @return {sntls.ProfileCollection}
+             * @returns {sntls.ProfileCollection}
              */
             getProfile: function () {
                 return this.profile;

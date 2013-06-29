@@ -28,7 +28,7 @@ troop.postpone(sntls, 'OrderedList', function () {
         .addMethods(/** @lends sntls.OrderedList */{
             /**
              * @name sntls.OrderedList.create
-             * @return {sntls.OrderedList}
+             * @returns {sntls.OrderedList}
              */
 
             /**
@@ -66,7 +66,7 @@ troop.postpone(sntls, 'OrderedList', function () {
              * @param {string|number} value List item value.
              * @param {number} [start=0] Start position of search range. Default: 0.
              * @param {number} [end] Ending position of search range. Default: this.length - 1.
-             * @return {number}
+             * @returns {number}
              */
             spliceIndexOf: function (value, start, end) {
                 var items = this.items,
@@ -101,7 +101,7 @@ troop.postpone(sntls, 'OrderedList', function () {
              * Returns list items starting from startValue up to but not including endValue.
              * @param {string|number} startValue
              * @param {string|number} endValue
-             * @return {Array} Shallow copy of the array's affected segment.
+             * @returns {Array} Shallow copy of the array's affected segment.
              */
             getRange: function (startValue, endValue) {
                 var startIndex = this.spliceIndexOf(startValue),
@@ -114,7 +114,7 @@ troop.postpone(sntls, 'OrderedList', function () {
              * Retrieves a range of values and wraps it in a Hash object.
              * @param {string|number} startValue
              * @param {string|number} endValue
-             * @return {sntls.Hash} Hash with a shallow copy of the array's affected segment.
+             * @returns {sntls.Hash} Hash with a shallow copy of the array's affected segment.
              * @see sntls.OrderedList.getRange
              */
             getRangeAsHash: function (startValue, endValue) {
@@ -128,7 +128,7 @@ troop.postpone(sntls, 'OrderedList', function () {
             /**
              * Inserts a single value into list while retaining order.
              * @param {string|number} value
-             * @return {number} The index at which the item was spliced in.
+             * @returns {number} The index at which the item was spliced in.
              */
             addItem: function (value) {
                 var spliceIndex = this.spliceIndexOf(value);
@@ -139,7 +139,7 @@ troop.postpone(sntls, 'OrderedList', function () {
             /**
              * Adds multiple items to list.
              * @param {string[]|number[]} values
-             * @return {sntls.OrderedList}
+             * @returns {sntls.OrderedList}
              */
             addItems: function (values) {
                 dessert.isArray(values, "Invalid item values");
@@ -153,7 +153,7 @@ troop.postpone(sntls, 'OrderedList', function () {
             /**
              * Deletes single value from list while retaining order.
              * @param {string|number} value
-             * @return {number} The index from which the item was removed. -1 if item was not present.
+             * @returns {number} The index from which the item was removed. -1 if item was not present.
              */
             removeItem: function (value) {
                 var items = this.items,
@@ -172,7 +172,7 @@ troop.postpone(sntls, 'OrderedList', function () {
             /**
              * Removes multiple items from list.
              * @param {string[]|number[]} values
-             * @return {sntls.OrderedList}
+             * @returns {sntls.OrderedList}
              */
             removeItems: function (values) {
                 dessert.isArray(values, "Invalid item values");
@@ -187,7 +187,7 @@ troop.postpone(sntls, 'OrderedList', function () {
              * Removes a range from the list starting from startValue up to but not including endValue.
              * @param {string|number} startValue
              * @param {string|number} endValue
-             * @return {number} The starting position of removal.
+             * @returns {number} The starting position of removal.
              */
             removeRange: function (startValue, endValue) {
                 var startIndex = this.spliceIndexOf(startValue),
@@ -203,7 +203,7 @@ troop.postpone(sntls, 'OrderedList', function () {
 
             /**
              * @name sntls.OrderedList.clear
-             * @return {sntls.OrderedList}
+             * @returns {sntls.OrderedList}
              */
         });
 });
@@ -213,7 +213,7 @@ troop.postpone(sntls, 'OrderedList', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.OrderedList}
+         * @returns {sntls.OrderedList}
          */
         toOrderedList: function () {
             return sntls.OrderedList.create(this.items);

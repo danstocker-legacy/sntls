@@ -15,7 +15,7 @@ troop.postpone(sntls, 'StateMatrix', function () {
         .addMethods(/** @lends sntls.StateMatrix */{
             /**
              * @name sntls.StateMatrix.create
-             * @return {sntls.StateMatrix}
+             * @returns {sntls.StateMatrix}
              */
 
             /**/
@@ -36,7 +36,7 @@ troop.postpone(sntls, 'StateMatrix', function () {
              * @param {string} startStateName
              * @param {string} endStateName
              * @param {string} load
-             * @return {sntls.StateMatrix}
+             * @returns {sntls.StateMatrix}
              */
             addEdge: function (startStateName, endStateName, load) {
                 dessert
@@ -53,7 +53,7 @@ troop.postpone(sntls, 'StateMatrix', function () {
              * Retrieves load for the edge specified by its start and end.
              * @param {string} startStateName
              * @param {string} endStateName
-             * @return {*}
+             * @returns {*}
              */
             getLoad: function (startStateName, endStateName) {
                 dessert

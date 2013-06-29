@@ -18,18 +18,18 @@ troop.postpone(sntls, 'StringDictionary', function () {
         .addMethods(/** @lends sntls.StringDictionary */{
             /**
              * @name sntls.StringDictionary.create
-             * @return {sntls.StringDictionary}
+             * @returns {sntls.StringDictionary}
              */
 
             /**
              * @name sntls.StringDictionary.clear
-             * @return {sntls.StringDictionary}
+             * @returns {sntls.StringDictionary}
              */
 
             /**
              * Combines current dictionary with remote dictionary
              * @param {sntls.Dictionary} remoteDict Remote dictionary (doesn't have to be string dictionary)
-             * @return {sntls.Dictionary} New dictionary instance with combined items
+             * @returns {sntls.Dictionary} New dictionary instance with combined items
              */
             combineWith: function (remoteDict) {
                 dessert.isDictionary(remoteDict, "Invalid dictionary");
@@ -55,7 +55,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
 
             /**
              * Performs combine with current dictionary as remote dictionary too.
-             * @return {sntls.StringDictionary} New dictionary instance with combined items
+             * @returns {sntls.StringDictionary} New dictionary instance with combined items
              */
             combineWithSelf: function () {
                 return /** @type sntls.StringDictionary */ this.combineWith(this);
@@ -67,7 +67,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
              * and keys associated with the same values stack up in arrays.
              * @param {function} [bufferType=Object] Constructor function specifying buffer type
              * for result dictionary (Array or Object)
-             * @return {sntls.StringDictionary} New dictionary instance with reversed key-value pairs.
+             * @returns {sntls.StringDictionary} New dictionary instance with reversed key-value pairs.
              */
             reverse: function (bufferType) {
                 dessert.isFunctionOptional(bufferType, "Invalid buffer type");
@@ -110,7 +110,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.StringDictionary}
+         * @returns {sntls.StringDictionary}
          */
         toStringDictionary: function () {
             return sntls.StringDictionary.create(this.items);

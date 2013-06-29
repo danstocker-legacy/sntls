@@ -11,7 +11,7 @@ troop.postpone(sntls, 'StringCollection', function () {
 
     /**
      * @name sntls.StringCollection.create
-     * @return {sntls.StringCollection}
+     * @returns {sntls.StringCollection}
      */
 });
 
@@ -20,7 +20,7 @@ troop.postpone(sntls, 'StringCollection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash */{
         /**
-         * @return {sntls.StringCollection}
+         * @returns {sntls.StringCollection}
          */
         toStringCollection: function () {
             return sntls.StringCollection.create(this.items);

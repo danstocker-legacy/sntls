@@ -8,7 +8,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
      * @function
      * @param {function} handler
      * @param {sntls.Query} [query]
-     * @return {sntls.RecursiveTreeWalker}
+     * @returns {sntls.RecursiveTreeWalker}
      */
 
     var base = sntls.TreeWalker,
@@ -81,7 +81,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * according to the given pattern.
              * @param {object} node Node for which to obtain the keys.
              * @param {sntls.QueryPattern} pattern
-             * @return {string[]} Array of keys.
+             * @returns {string[]} Array of keys.
              * @private
              */
             _getKeysByPattern: function (node, pattern) {
