@@ -48,47 +48,66 @@ troop.postpone(sntls, 'Query', function () {
              */
             PATTERN_SKIP: QueryPattern.create(QueryPattern.SKIP_SYMBOL)
         })
-        .addMethods(/** @lends sntls.Query# */{
+        .addPrivateMethods(/** @lends sntls.Query */{
             /**
-             * @param {Array|string} query
-             * @ignore
+             * Normalizes query buffer.
+             * @param {string[]|sntls.QueryPattern[]} asArray
+             * @returns {string[]|sntls.QueryPattern[]}
+             * @private
              */
-            init: function (query) {
-                var asArray, i, pattern;
-
-                if (validators.isString(query)) {
-                    // splitting string input
-                    asArray = query.split(this.PATH_SEPARATOR);
-                } else if (query instanceof Array) {
-                    asArray = query;
-                } else {
-                    dessert.assert(false, "Invalid query", query);
-                }
+            _normalizeBuffer: function (asArray) {
+                var result = [],
+                    i, pattern;
 
                 for (i = 0; i < asArray.length; i++) {
                     pattern = asArray[i];
                     if (typeof pattern === 'string') {
                         if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
                             // special skipper case
-                            asArray[i] = this.PATTERN_SKIP;
-                        } else  if (self.RE_QUERY_TESTER.test(pattern)) {
+                            result.push(this.PATTERN_SKIP);
+                        } else if (self.RE_QUERY_TESTER.test(pattern)) {
                             // pattern is query expression (as in not key literal)
                             // creating pattern instance
-                            asArray[i] = QueryPattern.create(pattern);
+                            result.push(QueryPattern.create(pattern));
+                        } else {
+                            // pattern is key literal
+                            result.push(pattern);
                         }
                     } else if (QueryPattern.isBaseOf(pattern)) {
                         if (pattern.isSkipper()) {
                             // skipper patterns are substituted with constant
-                            asArray[i] = QueryPattern.SKIP_SYMBOL;
+                            result.push(QueryPattern.SKIP_SYMBOL);
+                        } else {
+                            // other patterns are copied 1:1
+                            result.push(pattern);
                         }
                     } else {
                         dessert.assert(false, "Invalid query pattern", pattern);
                     }
                 }
 
-                // calling base w/ array only
-                // base class handles assertions
-                base.init.call(this, asArray);
+                return result;
+            }
+        })
+        .addMethods(/** @lends sntls.Query# */{
+            /**
+             * @param {Array|string} patterns
+             * @ignore
+             */
+            init: function (patterns) {
+                var asArray;
+
+                if (validators.isString(patterns)) {
+                    // splitting string input
+                    asArray = patterns.split(this.PATH_SEPARATOR);
+                } else if (patterns instanceof Array) {
+                    asArray = patterns;
+                } else {
+                    dessert.assert(false, "Invalid query", patterns);
+                }
+
+                // calling base w/ normalized array buffer
+                base.init.call(this, this._normalizeBuffer(asArray));
             },
 
             /**

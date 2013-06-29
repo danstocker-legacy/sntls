@@ -66,6 +66,16 @@
         ok(query.matchesPath('hello>world>test>path>foo>bar'.toPath()), "Query matched");
     });
 
+    test("Buffer normalization", function () {
+        var normalize = sntls.Query._normalizeBuffer,
+            buffer;
+
+        buffer = normalize(['hello', '|', 'you<all']);
+        equal(buffer[0], 'hello');
+        equal(buffer[1].descriptor.symbol, '|');
+        deepEqual(buffer[2].descriptor.options, ['you', 'all']);
+    });
+
     test("Instantiation", function () {
         var query;
 
