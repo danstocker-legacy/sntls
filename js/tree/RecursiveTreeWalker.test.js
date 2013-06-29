@@ -23,34 +23,38 @@
     });
 
     test("Index gathering from array", function () {
+        var allIndicesOf = sntls.RecursiveTreeWalker._allIndicesOf;
+
         deepEqual(
-            sntls.RecursiveTreeWalker._allIndicesOf(['foo', 'bar', 1, 2, 'foo', 3], 'baz'),
+            allIndicesOf(['foo', 'bar', 1, 2, 'foo', 3], 'baz'),
             [],
             "0 hits"
         );
 
         deepEqual(
-            sntls.RecursiveTreeWalker._allIndicesOf(['foo'], 'foo'),
+            allIndicesOf(['foo'], 'foo'),
             [0],
             "1 hit"
         );
 
         deepEqual(
-            sntls.RecursiveTreeWalker._allIndicesOf(['foo', 'bar', 1, 2, 'foo', 3], 'foo'),
+            allIndicesOf(['foo', 'bar', 1, 2, 'foo', 3], 'foo'),
             [0, 4],
             "> 1 multiplicity"
         );
 
         deepEqual(
-            sntls.RecursiveTreeWalker._allIndicesOf(['foo', 'bar', 'foo', 'baz', 'foo'], 'foo'),
+            allIndicesOf(['foo', 'bar', 'foo', 'baz', 'foo'], 'foo'),
             [0, 2, 4],
             "> 1 multiplicity"
         );
     });
 
     test("Key gathering from object", function () {
+        var getKeysByValue = sntls.RecursiveTreeWalker._getKeysByValue;
+
         deepEqual(
-            sntls.RecursiveTreeWalker._getKeysByValue({
+            getKeysByValue({
                 foo: 1,
                 bar: 2,
                 baz: 3
@@ -60,14 +64,14 @@
         );
 
         deepEqual(
-            sntls.RecursiveTreeWalker._getKeysByValue({
+            getKeysByValue({
                 foo: 1}, 1),
             ['foo'],
             "1 hit"
         );
 
         deepEqual(
-            sntls.RecursiveTreeWalker._getKeysByValue({
+            getKeysByValue({
                 foo  : 1,
                 bar  : 2,
                 baz  : 3,
