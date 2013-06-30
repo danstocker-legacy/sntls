@@ -86,7 +86,7 @@ troop.postpone(sntls, 'Collection', function () {
                 return methodNames;
             }
         })
-        .addMethods(/** @lends sntls.Collection */{
+        .addMethods(/** @lends sntls.Collection# */{
             /**
              * Creates "specified collection".
              * Adds shortcut methods to items. It is assumed that the collection will only contain
@@ -98,6 +98,7 @@ troop.postpone(sntls, 'Collection', function () {
              *
              * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
              * @returns {sntls.Collection}
+             * @memberOf sntls.Collection
              */
             of: function (template) {
                 // in case methodNames is a fat constructor
@@ -110,7 +111,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var methodNames;
                 if (dessert.validators.isObject(template)) {
-                    methodNames = self._getMethodNames(template);
+                    methodNames = this._getMethodNames(template);
                 } else {
                     dessert.isArray(template, "Invalid collection template");
                     methodNames = template;
@@ -135,9 +136,8 @@ troop.postpone(sntls, 'Collection', function () {
                 specifiedCollection.addMethods(shortcutMethods);
 
                 return specifiedCollection;
-            }
-        })
-        .addMethods(/** @lends sntls.Collection# */{
+            },
+
             /**
              * @param {object} [items] Initial contents.
              * @ignore
