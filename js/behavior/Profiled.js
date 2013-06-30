@@ -1,19 +1,16 @@
-/**
- * Profiled Trait
- *
- * Profiled objects expose a profile (collection) object to keep score
- * on the actions of that object.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Profiled', function (sntls) {
     "use strict";
 
     /**
+     * Trait.
+     * Profiled objects expose a profile (collection) object to keep score
+     * on the actions of that object.
      * @class sntls.Profiled
      * @extends troop.Base
      */
     sntls.Profiled = troop.Base.extend()
-        .addMethods(/** @lends sntls.Profiled */{
+        .addMethods(/** @lends sntls.Profiled# */{
             /**
              * Initializes a profiled instance
              * @param {string} profileId Identifier for profile in profiles

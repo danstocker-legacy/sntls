@@ -1,9 +1,3 @@
-/**
- * Profile
- *
- * A profile is a collection of named numeric values that
- * may be incremented by an object the profile represents.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Profile', function () {
     "use strict";
@@ -11,17 +5,23 @@ troop.postpone(sntls, 'Profile', function () {
     var hOP = Object.prototype.hasOwnProperty;
 
     /**
+     * Instantiates class.
+     * @name sntls.Profile.create
+     * @function
+     * @returns {sntls.Profile}
+     */
+
+    /**
+     * A profile is a collection of named numeric values that
+     * may be incremented by an object the profile represents.
      * @class sntls.Profile
      * @extends troop.Base
      */
     sntls.Profile = troop.Base.extend()
-        .addMethods(/** @lends sntls.Profile */{
+        .addMethods(/** @lends sntls.Profile# */{
             /**
-             * @name sntls.Profile.create
-             * @returns {sntls.Profile}
+             * @ignore
              */
-
-            /**/
             init: function () {
                 /**
                  * Lookup of numeric values assigned to named counter bins
@@ -104,6 +104,13 @@ troop.postpone(sntls, 'Profile', function () {
 
 troop.postpone(sntls, 'ProfileCollection', function () {
     "use strict";
+
+    /**
+     * @name sntls.ProfileCollection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.ProfileCollection}
+     */
 
     /**
      * @class sntls.ProfileCollection

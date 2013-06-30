@@ -1,18 +1,15 @@
-/**
- * Stateful Trait
- *
- * Classes that have this trait may define orthogonal state layers.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Stateful', function () {
     "use strict";
 
     /**
+     * Trait.
+     * Classes that have this trait may define orthogonal state layers.
      * @class sntls.Stateful
      * @extends troop.Base
      */
     sntls.Stateful = troop.Base.extend()
-        .addMethods(/** @lends sntls.Stateful */{
+        .addMethods(/** @lends sntls.Stateful# */{
             /**
              * Adds properties required by trait.
              */

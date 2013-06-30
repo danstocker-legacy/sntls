@@ -1,24 +1,23 @@
-/**
- * State Matrix
- *
- * Stores information about transitions between states.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'StateMatrix', function () {
     "use strict";
 
     /**
+     * @name sntls.StateMatrix.create
+     * @function
+     * @returns {sntls.StateMatrix}
+     */
+
+    /**
+     * Stores information about transitions between states.
      * @class sntls.StateMatrix
      * @extends troop.Base
      */
     sntls.StateMatrix = troop.Base.extend()
-        .addMethods(/** @lends sntls.StateMatrix */{
+        .addMethods(/** @lends sntls.StateMatrix# */{
             /**
-             * @name sntls.StateMatrix.create
-             * @returns {sntls.StateMatrix}
+             * @ignore
              */
-
-            /**/
             init: function () {
                 /**
                  * Edges in the state matrix.
@@ -67,6 +66,13 @@ troop.postpone(sntls, 'StateMatrix', function () {
 
 troop.postpone(sntls, 'StateMatrixCollection', function () {
     "use strict";
+
+    /**
+     * @name sntls.StateMatrixCollection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.StateMatrixCollection}
+     */
 
     /**
      * @class sntls.StateMatrixCollection
