@@ -74,6 +74,9 @@ troop.postpone(sntls, 'Query', function () {
                             // pattern is key literal
                             result.push(pattern);
                         }
+                    } else if (pattern instanceof Array) {
+                        // array is turned into pattern instance
+                        result.push(QueryPattern.create(pattern));
                     } else if (QueryPattern.isBaseOf(pattern)) {
                         if (pattern.isSkipper()) {
                             // skipper patterns are substituted with constant

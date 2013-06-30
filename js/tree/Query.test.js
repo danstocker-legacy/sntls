@@ -70,10 +70,11 @@
         var Query = sntls.Query,
             buffer;
 
-        buffer = Query._normalizeBuffer(['hello', '|', 'you<all']);
+        buffer = Query._normalizeBuffer(['hello', '|', 'you<all', ['foo', 'bar']]);
         equal(buffer[0], 'hello');
         equal(buffer[1].descriptor.symbol, '|');
         deepEqual(buffer[2].descriptor.options, ['you', 'all']);
+        deepEqual(buffer[3].descriptor.options, ['foo', 'bar']);
 
         buffer = Query._normalizeBuffer(['hello', '\\']);
         strictEqual(buffer[1], sntls.Query.PATTERN_SKIP, "Skipper expression converted to common skipper instance");
