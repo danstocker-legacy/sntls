@@ -142,8 +142,14 @@ troop.postpone(sntls, 'QueryPattern', function () {
 
                 if (validators.isString(pattern)) {
                     this.descriptor = this._parseString(pattern);
+                } else if (pattern instanceof Array) {
+                    this.descriptor = {
+                        options: pattern
+                    };
                 } else if (pattern instanceof Object) {
                     this.descriptor = pattern;
+                } else {
+                    dessert.assert(false, "Invalid pattern");
                 }
             },
 

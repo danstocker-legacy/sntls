@@ -91,6 +91,10 @@
         var descriptor,
             pattern;
 
+        raises(function () {
+            sntls.QueryPattern.create(4);
+        }, "Query pattern initialized w/ other than string, array, or object");
+
         pattern = sntls.QueryPattern.create('|^foo');
         deepEqual(
             pattern.descriptor,
@@ -109,6 +113,13 @@
             pattern.descriptor,
             descriptor,
             "Descriptor supplied as object"
+        );
+
+        pattern = sntls.QueryPattern.create(['foo', 'bar']);
+        deepEqual(
+            pattern.descriptor,
+            sntls.QueryPattern._parseString('foo<bar'),
+            "Descriptor created from array"
         );
     });
 
