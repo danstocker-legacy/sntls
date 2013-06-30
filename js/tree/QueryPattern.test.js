@@ -124,12 +124,21 @@
     });
 
     test("Type conversion", function () {
-        var pattern = '|'.toQueryPattern();
+        var pattern;
 
+        pattern = '|'.toQueryPattern();
         ok(pattern.isA(sntls.QueryPattern), "Type of converted value");
         deepEqual(
             pattern.descriptor,
             sntls.QueryPattern.create('|').descriptor,
+            "Pattern contents"
+        );
+
+        pattern = ['foo', 'bar'].toQueryPattern();
+        ok(pattern.isA(sntls.QueryPattern), "Type of converted value");
+        deepEqual(
+            pattern.descriptor,
+            sntls.QueryPattern.create('foo<bar').descriptor,
             "Pattern contents"
         );
     });

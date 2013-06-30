@@ -290,4 +290,11 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
     String.prototype.toQueryPattern = function () {
         return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
     };
+
+    /**
+     * @returns {sntls.QueryPattern}
+     */
+    Array.prototype.toQueryPattern = function () {
+        return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+    };
 }());
