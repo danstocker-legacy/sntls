@@ -113,6 +113,11 @@ troop.postpone(sntls, 'ProfileCollection', function () {
      */
 
     /**
+     * @name sntls.ProfileCollection#counters
+     * @ignore
+     */
+
+    /**
      * @class sntls.ProfileCollection
      * @extends sntls.Collection
      * @extends sntls.Profile

@@ -134,6 +134,12 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * @ignore
              */
             init: function (pattern) {
+                /**
+                 * Pattern descriptor
+                 * @type {string|Object}
+                 */
+                this.descriptor = undefined;
+
                 if (validators.isString(pattern)) {
                     this.descriptor = this._parseString(pattern);
                 } else if (pattern instanceof Object) {
@@ -243,6 +249,11 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
      * @name sntls.QueryPatternCollection.create
      * @function
      * @returns {sntls.QueryPatternCollection}
+     */
+
+    /**
+     * @name sntls.QueryPatternCollection#descriptor
+     * @ignore
      */
 
     /**

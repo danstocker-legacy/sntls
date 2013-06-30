@@ -75,6 +75,11 @@ troop.postpone(sntls, 'StateMatrixCollection', function () {
      */
 
     /**
+     * @name sntls.StateMatrixCollection#edges
+     * @ignore
+     */
+
+    /**
      * @class sntls.StateMatrixCollection
      * @extends sntls.Collection
      * @extends sntls.StateMatrix
