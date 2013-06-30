@@ -3,22 +3,26 @@ troop.postpone(sntls, 'StringCollection', function () {
     "use strict";
 
     /**
+     * @name sntls.StringCollection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.StringCollection}
+     */
+
+    /**
+     * General collection for managing multiple strings.
      * @class sntls.StringCollection
      * @extends sntls.Collection
      * @extends String
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String
      */
     sntls.StringCollection = sntls.Collection.of(String);
-
-    /**
-     * @name sntls.StringCollection.create
-     * @returns {sntls.StringCollection}
-     */
 });
 
 (function () {
     "use strict";
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.StringCollection}
          */

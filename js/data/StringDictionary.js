@@ -1,31 +1,26 @@
-/**
- * String Dictionary
- *
- * Specific data structure that is essentially an object
- * with properties that are either strings or arrays of strings.
- * Example:  {foo: 'bar', 'hello': ['all', 'the', 'world']}
- * Base class `Dictionary` handles multiplicity.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'StringDictionary', function () {
     "use strict";
 
     /**
+     * Instantiates class.
+     * @name sntls.StringDictionary.create
+     * @function
+     * @param {object} items
+     * @returns {sntls.StringDictionary}
+     */
+
+    /**
+     * Specific data structure that is essentially an object
+     * with properties that are either strings or arrays of strings.
+     * Base class `Dictionary` handles multiplicity.
+     * @example
+     * {foo: 'bar', 'hello': ['all', 'the', 'world']}
      * @class sntls.StringDictionary
      * @extends sntls.Dictionary
      */
     sntls.StringDictionary = sntls.Dictionary.extend()
-        .addMethods(/** @lends sntls.StringDictionary */{
-            /**
-             * @name sntls.StringDictionary.create
-             * @returns {sntls.StringDictionary}
-             */
-
-            /**
-             * @name sntls.StringDictionary.clear
-             * @returns {sntls.StringDictionary}
-             */
-
+        .addMethods(/** @lends sntls.StringDictionary# */{
             /**
              * Combines current dictionary with remote dictionary
              * @param {sntls.Dictionary} remoteDict Remote dictionary (doesn't have to be string dictionary)
@@ -91,6 +86,12 @@ troop.postpone(sntls, 'StringDictionary', function () {
 
                 return result;
             }
+
+            /**
+             * @name sntls.StringDictionary.clear
+             * @function
+             * @returns {sntls.StringDictionary}
+             */
         });
 });
 
@@ -108,7 +109,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
         }
     });
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.StringDictionary}
          */

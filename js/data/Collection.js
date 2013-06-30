@@ -11,6 +11,14 @@ troop.postpone(sntls, 'Collection', function () {
         self = base.extend();
 
     /**
+     * Instantiates class.
+     * @name sntls.Collection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.Collection}
+     */
+
+    /**
      * @class sntls.Collection
      * @extends sntls.Hash
      */
@@ -23,6 +31,8 @@ troop.postpone(sntls, 'Collection', function () {
              * and returning them as a collection.
              * @param {string} methodName Name of method to make shortcut for.
              * @returns {function}
+             * @private
+             * @memberOf sntls.Collection#
              */
             _genShortcut: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
@@ -61,6 +71,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Retrieves property names from object and returns an array for those that are functions.
              * @param {object} obj
              * @returns {string[]}
+             * @private
              */
             _getMethodNames: function (obj) {
                 var propertyNames = Object.getOwnPropertyNames(obj),
@@ -124,15 +135,12 @@ troop.postpone(sntls, 'Collection', function () {
                 specifiedCollection.addMethods(shortcutMethods);
 
                 return specifiedCollection;
-            },
-
-            /**
-             * @name sntls.Collection.create
-             * @returns {sntls.Collection}
-             */
-
+            }
+        })
+        .addMethods(/** @lends sntls.Collection# */{
             /**
              * @param {object} [items] Initial contents.
+             * @ignore
              */
             init: function (items) {
                 base.init.apply(this, arguments);
@@ -568,7 +576,7 @@ troop.postpone(sntls, 'Collection', function () {
         }
     });
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @param {sntls.Collection} [returnType]
          * @returns {sntls.Collection}

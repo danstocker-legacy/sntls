@@ -1,10 +1,3 @@
-/**
- * Dictionary
- *
- * Associates values to keys.
- *
- * Use the Dictionary class for managing and combining lookup objects.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Dictionary', function () {
     "use strict";
@@ -12,6 +5,16 @@ troop.postpone(sntls, 'Dictionary', function () {
     var base = sntls.Hash;
 
     /**
+     * Instantiates class.
+     * @name sntls.Dictionary.create
+     * @function
+     * @param {object} items
+     * @returns {sntls.Dictionary}
+     */
+
+    /**
+     * Associates values to keys.
+     * Use the Dictionary class for managing and combining lookup objects.
      * @class sntls.Dictionary
      * @extends sntls.Hash
      */
@@ -39,14 +42,10 @@ troop.postpone(sntls, 'Dictionary', function () {
                 return result;
             }
         })
-        .addMethods(/** @lends sntls.Dictionary */{
-            /**
-             * @name sntls.Dictionary.create
-             * @returns {sntls.Dictionary}
-             */
-
+        .addMethods(/** @lends sntls.Dictionary# */{
             /**
              * @param {object} items
+             * @ignore
              */
             init: function (items) {
                 base.init.call(this, items);
@@ -246,7 +245,7 @@ troop.postpone(sntls, 'Dictionary', function () {
         }
     });
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.Dictionary}
          */

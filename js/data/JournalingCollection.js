@@ -1,6 +1,3 @@
-/**
- * Collection keeping a log of changes.
- */
 /*global troop, sntls */
 troop.postpone(sntls, 'JournalingCollection', function () {
     "use strict";
@@ -9,19 +6,22 @@ troop.postpone(sntls, 'JournalingCollection', function () {
         base = sntls.Collection;
 
     /**
+     * @name sntls.JournalingCollection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.JournalingCollection}
+     */
+
+    /**
+     * Collection that keeps a log of changes.
      * @class sntls.JournalingCollection
      * @extends sntls.Collection
      */
     sntls.JournalingCollection = base.extend()
-        .addMethods(/** @lends sntls.JournalingCollection */{
+        .addMethods(/** @lends sntls.JournalingCollection# */{
             /**
-             * @name sntls.JournalingCollection.create
-             * @returns {sntls.JournalingCollection}
-             */
-
-            /**
-             * @constructor
              * @param {object} [items] Initial contents.
+             * @ignore
              */
             init: function (items) {
                 base.init.apply(this, arguments);
@@ -102,7 +102,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.JournalingCollection}
          */

@@ -400,7 +400,7 @@ troop.postpone(sntls, 'Tree', function () {
         }
     });
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.Tree}
          */

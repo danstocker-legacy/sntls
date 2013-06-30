@@ -1,9 +1,3 @@
-/**
- * Ordered List
- *
- * Inserts, deletes, searches in an ordered list
- * of strings or numbers.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'OrderedList', function () {
     "use strict";
@@ -11,6 +5,16 @@ troop.postpone(sntls, 'OrderedList', function () {
     var base = sntls.Hash;
 
     /**
+     * Instantiates class
+     * @name sntls.OrderedList.create
+     * @function
+     * @param {string[]|number[]} [items] Initial values
+     * @returns {sntls.OrderedList}
+     */
+
+    /**
+     * Inserts, deletes, searches in an ordered list
+     * of strings or numbers.
      * @class sntls.OrderedList
      * @extends sntls.Hash
      */
@@ -19,21 +23,15 @@ troop.postpone(sntls, 'OrderedList', function () {
             /**
              * Compares numbers. To be supplied to Array.sort().
              * @private
-             * @static
              */
             _compareNumbers: function (a, b) {
                 return a > b ? 1 : a < b ? -1 : 0;
             }
         })
-        .addMethods(/** @lends sntls.OrderedList */{
-            /**
-             * @name sntls.OrderedList.create
-             * @returns {sntls.OrderedList}
-             */
-
+        .addMethods(/** @lends sntls.OrderedList# */{
             /**
              * @param {string[]|number[]} [items] Initial values
-             * @see sntls.Hash.init
+             * @ignore
              */
             init: function (items) {
                 dessert.isArrayOptional(items, "Invalid items");
@@ -49,7 +47,7 @@ troop.postpone(sntls, 'OrderedList', function () {
                 }
 
                 /**
-                 * @name sntls.OrderedList.items
+                 * @name sntls.OrderedList#items
                  * @type {string[]|number[]}
                  */
 
@@ -202,7 +200,8 @@ troop.postpone(sntls, 'OrderedList', function () {
             }
 
             /**
-             * @name sntls.OrderedList.clear
+             * @name sntls.OrderedList#clear
+             * @function
              * @returns {sntls.OrderedList}
              */
         });
@@ -211,7 +210,7 @@ troop.postpone(sntls, 'OrderedList', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.OrderedList}
          */

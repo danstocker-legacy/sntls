@@ -1,12 +1,3 @@
-/**
- * Hash Object
- *
- * General wrapper around objects to treat them as hash.
- * No `Object`-delegated methods on `.items` should be called as they may break code.
- * All methods that operate *on* `.items` should be implemented on `Hash`.
- *
- * Other `Hash`-based classes may delegate conversion methods to this class.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Hash', function () {
     "use strict";
@@ -14,20 +5,26 @@ troop.postpone(sntls, 'Hash', function () {
     var hOP = Object.prototype.hasOwnProperty;
 
     /**
+     * Instantiates class.
+     * @name sntls.Hash.create
+     * @function
+     * @param {object} items Container for hash items.
+     * @returns {sntls.Hash}
+     */
+
+    /**
+     * General wrapper around objects to treat them as hash.
+     * No `Object`-delegated methods on `.items` should be called as they may break code.
+     * All methods that operate *on* `.items` should be implemented on `Hash`.
+     * Other `Hash`-based classes may delegate conversion methods to this class.
      * @class sntls.Hash
      * @extends troop.Base
      */
     sntls.Hash = troop.Base.extend()
-        .addMethods(/** @lends sntls.Hash */{
-            /**
-             * @name sntls.Hash.create
-             * @returns {sntls.Hash}
-             */
-
+        .addMethods(/** @lends sntls.Hash# */{
             /**
              * @param {object} items Container for hash items.
-             * Setter methods in derived classes should refer to this flag when
-             * allowing write operations.
+             * @ignore
              */
             init: function (items) {
                 dessert.isObjectOptional(items, "Invalid items");

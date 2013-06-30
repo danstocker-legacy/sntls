@@ -3,6 +3,15 @@ troop.postpone(sntls, 'OrderedStringList', function () {
     "use strict";
 
     /**
+     * Instantiates class.
+     * @name sntls.OrderedStringList.create
+     * @function
+     * @param {string[]} [items] Initial values
+     * @returns {sntls.OrderedStringList}
+     */
+
+    /**
+     * Ordered list of strings. Allows prefix-based search.
      * @class sntls.OrderedStringList
      * @extends sntls.OrderedList
      */
@@ -29,12 +38,7 @@ troop.postpone(sntls, 'OrderedStringList', function () {
                 return startValue + String.fromCharCode(0);
             }
         })
-        .addMethods(/** @lends sntls.OrderedStringList */{
-            /**
-             * @name sntls.OrderedStringList.create
-             * @returns {sntls.OrderedStringList}
-             */
-
+        .addMethods(/** @lends sntls.OrderedStringList# */{
             /**
              * Retrieves a range of items that match the specified prefix.
              * @param {string} prefix
@@ -82,7 +86,7 @@ troop.postpone(sntls, 'OrderedStringList', function () {
 (function () {
     "use strict";
 
-    sntls.Hash.addMethods(/** @lends sntls.Hash */{
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
          * @returns {sntls.OrderedStringList}
          */
