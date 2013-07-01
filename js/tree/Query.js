@@ -49,31 +49,51 @@ troop.postpone(sntls, 'Query', function () {
         })
         .addPrivateMethods(/** @lends sntls.Query */{
             /**
+             * Prepares string query buffer for normalization.
+             * @param {string} asString Array of strings
+             * @returns {string[]|sntls.QueryPattern[]}
+             * @private
+             */
+            _fromString: function (asString) {
+                var asArray = asString.split(this.PATH_SEPARATOR),
+                    result = [],
+                    i, pattern;
+
+                for (i = 0; i < asArray.length; i++) {
+                    pattern = asArray[i];
+                    if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
+                        // special skipper case
+                        result.push(this.PATTERN_SKIP);
+                    } else if (this.RE_QUERY_TESTER.test(pattern)) {
+                        // pattern is query expression (as in not key literal)
+                        // creating pattern instance
+                        result.push(QueryPattern.create(pattern));
+                    } else {
+                        // pattern is key literal
+                        result.push(decodeURI(pattern));
+                    }
+                }
+
+                return result;
+            },
+
+            /**
              * Normalizes query buffer. Leaves key literals as they are,
-             * converts any pattern expressions to actual pattern objects.
+             * converts array pattern expressions to actual pattern objects.
              * Makes sure skipper patterns all reference the same instance.
              * @param {string[]|sntls.QueryPattern[]} asArray
              * @returns {string[]|sntls.QueryPattern[]}
              * @private
              */
-            _normalizeBuffer: function (asArray) {
+            _fromArray: function (asArray) {
                 var result = [],
                     i, pattern;
 
                 for (i = 0; i < asArray.length; i++) {
                     pattern = asArray[i];
                     if (typeof pattern === 'string') {
-                        if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
-                            // special skipper case
-                            result.push(this.PATTERN_SKIP);
-                        } else if (this.RE_QUERY_TESTER.test(pattern)) {
-                            // pattern is query expression (as in not key literal)
-                            // creating pattern instance
-                            result.push(QueryPattern.create(pattern));
-                        } else {
-                            // pattern is key literal
-                            result.push(pattern);
-                        }
+                        // pattern is key literal
+                        result.push(pattern);
                     } else if (pattern instanceof Array) {
                         // array is turned into pattern instance
                         result.push(QueryPattern.create(pattern));
@@ -103,15 +123,15 @@ troop.postpone(sntls, 'Query', function () {
 
                 if (validators.isString(patterns)) {
                     // splitting string input
-                    asArray = patterns.split(this.PATH_SEPARATOR);
+                    asArray = this._fromString(patterns);
                 } else if (patterns instanceof Array) {
-                    asArray = patterns;
+                    asArray = this._fromArray(patterns);
                 } else {
                     dessert.assert(false, "Invalid query", patterns);
                 }
 
                 // calling base w/ normalized array buffer
-                base.init.call(this, this._normalizeBuffer(asArray));
+                base.init.call(this, asArray);
             },
 
             /**

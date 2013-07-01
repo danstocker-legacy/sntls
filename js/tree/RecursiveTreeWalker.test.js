@@ -262,7 +262,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\', '|'.toQueryPattern().setValue(3)].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\'.toQueryPattern(), '|'.toQueryPattern().setValue(3)].toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -332,7 +332,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\', '|'.toQueryPattern().setValue(value)].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\'.toQueryPattern(), '|'.toQueryPattern().setValue(value)].toQuery())
             .walk(node);
 
         deepEqual(
@@ -432,7 +432,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\', '|'.toQueryPattern().setValue(3)].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\'.toQueryPattern(), '|'.toQueryPattern().setValue(3)].toQuery())
             .walk(node);
         deepEqual(
             result,

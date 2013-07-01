@@ -66,21 +66,34 @@
         ok(query.matchesPath('hello>world>test>path>foo>bar'.toPath()), "Query matched");
     });
 
-    test("Buffer normalization", function () {
+    test("Initialization from string", function () {
         var Query = sntls.Query,
             buffer;
 
-        buffer = Query._normalizeBuffer(['hello', '|', 'you<all', ['foo', 'bar']]);
-        equal(buffer[0], 'hello');
-        equal(buffer[1].descriptor.symbol, '|');
-        deepEqual(buffer[2].descriptor.options, ['you', 'all']);
-        deepEqual(buffer[3].descriptor.options, ['foo', 'bar']);
+        buffer = Query._fromString('hello%3E>|>you<all');
+        equal(buffer[0], 'hello>', "URI decoded literal");
+        equal(buffer[1].descriptor.symbol, '|', "Wildcard converted to pattern");
+        deepEqual(buffer[2].descriptor.options, ['you', 'all'], "Options converted to pattern");
 
-        buffer = Query._normalizeBuffer(['hello', '\\']);
-        strictEqual(buffer[1], sntls.Query.PATTERN_SKIP, "Skipper expression converted to common skipper instance");
+        buffer = Query._fromString('\\');
+        strictEqual(buffer[0], Query.PATTERN_SKIP, "Skipper expression converted to common skipper instance");
+    });
 
-        buffer = Query._normalizeBuffer(['hello', sntls.QueryPattern.create('\\')]);
-        strictEqual(buffer[1], sntls.Query.PATTERN_SKIP, "Skipper pattern converted to common skipper instance");
+    test("Initialization from array", function () {
+        var Query = sntls.Query,
+            buffer;
+
+        buffer = Query._fromArray(['hello>', '|', ['foo', 'bar']]);
+        equal(buffer[0], 'hello>', "Key literal");
+        equal(buffer[1], '|', "Expression as string treated as literal");
+        deepEqual(buffer[2].descriptor.options, ['foo', 'bar'], "Array converted to options pattern");
+
+        buffer = Query._fromArray(['|'.toQueryPattern(), 'you<all'.toQueryPattern()]);
+        equal(buffer[0].descriptor.symbol, '|', "Wildcard already query pattern");
+        deepEqual(buffer[1].descriptor.options, ['you', 'all'], "Options already query pattern");
+
+        buffer = Query._fromArray(['\\'.toQueryPattern()]);
+        strictEqual(buffer[0], Query.PATTERN_SKIP, "Skipper pattern converted to common skipper instance");
     });
 
     test("Instantiation", function () {
@@ -90,7 +103,7 @@
             sntls.Query.create(5);
         }, "Invalid query");
 
-        query = sntls.Query.create(['hello', '|', 'you<all']);
+        query = sntls.Query.create(['hello', '|'.toQueryPattern(), 'you<all'.toQueryPattern()]);
         equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
@@ -104,7 +117,7 @@
     test("Type conversion", function () {
         var query;
 
-        query = ['hello', '|', 'you<all'].toQuery();
+        query = ['hello', '|'.toQueryPattern(), 'you<all'.toQueryPattern()].toQuery();
         equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
