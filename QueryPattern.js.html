@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tree/QueryPattern.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: tree/QueryPattern.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
+troop.postpone(sntls, 'QueryPattern', function () {
+    "use strict";
+
+    var hOP = Object.prototype.hasOwnProperty,
+        validators = dessert.validators;
+
+    /**
+     * Instantiates class
+     * @name sntls.QueryPattern.create
+     * @function
+     * @param {string|object} pattern
+     * @returns {sntls.QueryPattern}
+     */
+
+    /**
+     * Single element in a query expression. A series of query patterns make
+     * up a query, which then can be used to traverse tree structures with.
+     * @class sntls.QueryPattern
+     * @extends troop.Base
+     */
+    sntls.QueryPattern = troop.Base.extend()
+        .addConstants(/** @lends sntls.QueryPattern */{
+            /**
+             * Separates keys from values in string pattern
+             * @type {string}
+             */
+            KEY_VALUE_SEPARATOR: '^',
+
+            /**
+             * Separates options within the key part of a string pattern
+             * @type {string}
+             */
+            OPTION_SEPARATOR: '&lt;',
+
+            /**
+             * Symbol matching all keys
+             * @type {string}
+             */
+            WILDCARD_SYMBOL: '|',
+
+            /**
+             * Symbol indication skip mode during traversal
+             * @type {string}
+             */
+            SKIP_SYMBOL: '\\',
+
+            /**
+             * Validates a symbol
+             * @type {RegExp}
+             */
+            RE_SYMBOL_VALIDATOR: /\||\\/
+        })
+        .addPrivateMethods(/** @lends sntls.QueryPattern */{
+            /**
+             * URI decodes all items of an array.
+             * @param {string[]} strings Array of strings
+             * @returns {string[]} Array w/ all strings within URI-encoded
+             * @private
+             */
+            _encodeURI: function (strings) {
+                var result = [],
+                    i;
+                for (i = 0; i &lt; strings.length; i++) {
+                    result.push(encodeURI(strings[i]));
+                }
+                return result;
+            },
+
+            /**
+             * URI decodes all items of an array.
+             * @param {string[]} strings Array of URI-encoded strings
+             * @returns {string[]} Array w/ all strings URI-decoded
+             * @private
+             */
+            _decodeURI: function (strings) {
+                var result = [],
+                    i;
+                for (i = 0; i &lt; strings.length; i++) {
+                    result.push(decodeURI(strings[i]));
+                }
+                return result;
+            },
+
+            /**
+             * Parses string representation of pattern
+             * @param {string} pattern
+             * @returns {string|object}
+             * @private
+             */
+            _parseString: function (pattern) {
+                var keyValue = pattern.split(this.KEY_VALUE_SEPARATOR),
+                    key = keyValue[0],
+                    result;
+
+                // processing key part of pattern
+                if (key === this.SKIP_SYMBOL) {
+                    // skip pattern can't have other attributes
+                    return {
+                        symbol: key
+                    };
+                } else if (key === this.WILDCARD_SYMBOL) {
+                    // key is a wildcard symbol, matching any key
+                    result = {
+                        symbol: key
+                    };
+                } else if (key.indexOf(this.OPTION_SEPARATOR) > -1) {
+                    // optional keys matching those keys only
+                    result = {
+                        options: this._decodeURI(key.split(this.OPTION_SEPARATOR))
+                    };
+                } else if (keyValue.length === 1) {
+                    // string literal key, no value
+                    return decodeURI(key);
+                } else {
+                    // string literal key, has value
+                    result = {
+                        key: decodeURI(key)
+                    };
+                }
+
+                // processing value part of pattern
+                if (keyValue.length > 1) {
+                    // pattern has value bundled
+                    result.value = decodeURI(keyValue[1]);
+                }
+
+                return result;
+            }
+        })
+        .addMethods(/** @lends sntls.QueryPattern# */{
+            /**
+             * @param {string|object} pattern
+             * @ignore
+             */
+            init: function (pattern) {
+                /**
+                 * Pattern descriptor
+                 * @type {string|Object}
+                 */
+                this.descriptor = undefined;
+
+                if (validators.isString(pattern)) {
+                    this.descriptor = this._parseString(pattern);
+                } else if (pattern instanceof Array) {
+                    this.descriptor = {
+                        options: pattern
+                    };
+                } else if (pattern instanceof Object) {
+                    this.descriptor = pattern;
+                } else {
+                    dessert.assert(false, "Invalid pattern");
+                }
+            },
+
+            /**
+             * Sets value on query pattern. Pattern with a value will only
+             * match nodes with the specified value.
+             * @param {*} value
+             * @returns {sntls.QueryPattern}
+             */
+            setValue: function (value) {
+                var descriptor = this.descriptor;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is simple string
+                    // transforming descriptor to object with key wrapped inside
+                    descriptor = this.descriptor = {
+                        key: descriptor
+                    };
+                }
+
+                // adding value to descriptor
+                descriptor.value = value;
+
+                return this;
+            },
+
+            /**
+             * Tells whether the current pattern is a skipper
+             * @returns {boolean}
+             */
+            isSkipper: function () {
+                return this.descriptor.symbol === this.SKIP_SYMBOL;
+            },
+
+            /**
+             * Determines whether pattern matches specified key
+             * @param {string} key
+             * @returns {boolean}
+             */
+            matchesKey: function (key) {
+                var descriptor = this.descriptor;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is string, must match by value
+                    return descriptor === key;
+                } else if (descriptor instanceof Object) {
+                    // descriptor is object, properties tell about match
+                    if (hOP.call(descriptor, 'symbol')) {
+                        // descriptor is wildcard object
+                        return descriptor.symbol === this.WILDCARD_SYMBOL;
+                    } else if (hOP.call(descriptor, 'options')) {
+                        // descriptor is list of options
+                        return descriptor.options.indexOf(key) > -1;
+                    } else if (hOP.call(descriptor, 'key')) {
+                        return descriptor.key === key;
+                    }
+                }
+
+                return false;
+            },
+
+            /**
+             * Creates string representation of pattern
+             * @returns {string}
+             */
+            toString: function () {
+                var descriptor = this.descriptor,
+                    result;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is string literal (key only)
+                    result = encodeURI(descriptor);
+                } else if (descriptor instanceof Object) {
+                    // adding key
+                    if (hOP.call(descriptor, 'symbol')) {
+                        // descriptor contains symbol
+                        result = descriptor.symbol;
+                    } else if (hOP.call(descriptor, 'options')) {
+                        // descriptor contains key options
+                        result = this._encodeURI(descriptor.options)
+                            .join(this.OPTION_SEPARATOR);
+                    } else if (hOP.call(descriptor, 'key')) {
+                        // descriptor contains single key
+                        result = encodeURI(descriptor.key);
+                    }
+
+                    // adding value
+                    if (hOP.call(descriptor, 'value')) {
+                        result += this.KEY_VALUE_SEPARATOR + encodeURI(descriptor.value);
+                    }
+                }
+
+                return result;
+            }
+        });
+});
+
+troop.postpone(sntls, 'QueryPatternCollection', function () {
+    "use strict";
+
+    /**
+     * Instantiates class
+     * @name sntls.QueryPatternCollection.create
+     * @function
+     * @returns {sntls.QueryPatternCollection}
+     */
+
+    /**
+     * @name sntls.QueryPatternCollection#descriptor
+     * @ignore
+     */
+
+    /**
+     * @class sntls.QueryPatternCollection
+     * @extends sntls.Collection
+     * @extends sntls.QueryPattern
+     */
+    sntls.QueryPatternCollection = sntls.Collection.of(sntls.QueryPattern);
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isQueryPattern: function (expr) {
+            return sntls.QueryPattern.isBaseOf(expr);
+        },
+
+        isQueryPatternOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.QueryPattern.isBaseOf(expr);
+        }
+    });
+
+    /**
+     * @returns {sntls.QueryPattern}
+     */
+    String.prototype.toQueryPattern = function () {
+        return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+    };
+
+    /**
+     * @returns {sntls.QueryPattern}
+     */
+    Array.prototype.toQueryPattern = function () {
+        return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+    };
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: data/StringDictionary.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: data/StringDictionary.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
+troop.postpone(sntls, 'StringDictionary', function () {
+    "use strict";
+
+    /**
+     * Instantiates class.
+     * @name sntls.StringDictionary.create
+     * @function
+     * @param {object} items
+     * @returns {sntls.StringDictionary}
+     */
+
+    /**
+     * Specific data structure that is essentially an object
+     * with properties that are either strings or arrays of strings.
+     * Base class `Dictionary` handles multiplicity.
+     * @example
+     * {foo: 'bar', 'hello': ['all', 'the', 'world']}
+     * @class sntls.StringDictionary
+     * @extends sntls.Dictionary
+     */
+    sntls.StringDictionary = sntls.Dictionary.extend()
+        .addMethods(/** @lends sntls.StringDictionary# */{
+            /**
+             * Combines current dictionary with remote dictionary
+             * @param {sntls.Dictionary} remoteDict Remote dictionary (doesn't have to be string dictionary)
+             * @returns {sntls.Dictionary} New dictionary instance with combined items
+             */
+            combineWith: function (remoteDict) {
+                dessert.isDictionary(remoteDict, "Invalid dictionary");
+
+                var items = this.items,
+                    resultBuffer = items instanceof Array ? [] : {},
+                    result = /** @type {sntls.Dictionary} */ remoteDict.getBase().create(resultBuffer),
+                    currentKeys = Object.keys(items),
+                    i, currentKey, currentValue, remoteValue;
+
+                for (i = 0; i &lt; currentKeys.length; i++) {
+                    currentKey = currentKeys[i];
+                    currentValue = this.getItem(currentKey);
+                    remoteValue = remoteDict.getItem(currentValue);
+
+                    if (typeof remoteValue !== 'undefined') {
+                        result.addItem(currentKey, remoteValue);
+                    }
+                }
+
+                return result;
+            },
+
+            /**
+             * Performs combine with current dictionary as remote dictionary too.
+             * @returns {sntls.StringDictionary} New dictionary instance with combined items
+             */
+            combineWithSelf: function () {
+                return /** @type sntls.StringDictionary */ this.combineWith(this);
+            },
+
+            /**
+             * Reverses keys and values.
+             * Values from array items end up as separate keys on the new dictionary,
+             * and keys associated with the same values stack up in arrays.
+             * @param {function} [bufferType=Object] Constructor function specifying buffer type
+             * for result dictionary (Array or Object)
+             * @returns {sntls.StringDictionary} New dictionary instance with reversed key-value pairs.
+             */
+            reverse: function (bufferType) {
+                dessert.isFunctionOptional(bufferType, "Invalid buffer type");
+
+                var resultBuffer = bufferType === Array ? [] : {},
+                    result = this.getBase().create(resultBuffer),
+                    keys = Object.keys(this.items),
+                    i, key, value;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    key = keys[i];
+                    value = this.items[key];
+
+                    // flipping value and key in new dictionary
+                    if (value instanceof Array) {
+                        result.addItems(value, key);
+                    } else {
+                        result.addItem(value, key);
+                    }
+                }
+
+                return result;
+            }
+
+            /**
+             * @name sntls.StringDictionary.clear
+             * @function
+             * @returns {sntls.StringDictionary}
+             */
+        });
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isStringDictionary: function (expr) {
+            return sntls.StringDictionary.isBaseOf(expr);
+        },
+
+        isStringDictionaryOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.StringDictionary.isBaseOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * @returns {sntls.StringDictionary}
+         */
+        toStringDictionary: function () {
+            return sntls.StringDictionary.create(this.items);
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

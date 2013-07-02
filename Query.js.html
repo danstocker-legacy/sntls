@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tree/Query.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: tree/Query.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, sntls */
+troop.postpone(sntls, 'Query', function () {
+    "use strict";
+
+    var validators = dessert.validators,
+        QueryPattern = sntls.QueryPattern,
+        base = sntls.Path;
+
+    /**
+     * Instantiates class.
+     * Initializes query with a string or array. Keys in the query
+     * (except for patterns) are assumed to be URI-encoded.
+     * @name sntls.Query.create
+     * @function
+     * @param {Array|string} query
+     * @returns {sntls.Query}
+     * @example 'root>\\>persons>|>name'
+     */
+
+    /**
+     * An expression that matches several paths.
+     * Technically, queries can be interpreted as paths, ie. wherever a path is accepted,
+     * so is a query.
+     * @class sntls.Query
+     * @extends sntls.Path
+     */
+    sntls.Query = base.extend()
+        .addConstants(/** @lends sntls.Query */{
+            /**
+             * Regular expression that tests whether string
+             * contains query patterns.
+             * @type {RegExp}
+             */
+            RE_QUERY_TESTER: /&lt;|\^|\||\\/,
+
+            /**
+             * Regular expression validating a query expression
+             * @type {RegExp}
+             */
+            RE_QUERY_VALIDATOR: /^(>?(\||\\|[^&lt;>\^\|\\]*|(&lt;?[^&lt;>\^\|\\]*)+)(\^[^&lt;>\^\|\\]*$)?)+$/,
+
+            /**
+             * Pattern indicating skip mode. In skip mode, keys are skipped
+             * in the path between the previous key and the nearest key matched
+             * by the next pattern in the query.
+             * @type {sntls.QueryPattern}
+             */
+            PATTERN_SKIP: QueryPattern.create(QueryPattern.SKIP_SYMBOL)
+        })
+        .addPrivateMethods(/** @lends sntls.Query */{
+            /**
+             * Prepares string query buffer for normalization.
+             * @param {string} asString Array of strings
+             * @returns {string[]|sntls.QueryPattern[]}
+             * @private
+             */
+            _fromString: function (asString) {
+                var asArray = asString.split(this.PATH_SEPARATOR),
+                    result = [],
+                    i, pattern;
+
+                for (i = 0; i &lt; asArray.length; i++) {
+                    pattern = asArray[i];
+                    if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
+                        // special skipper case
+                        result.push(this.PATTERN_SKIP);
+                    } else if (this.RE_QUERY_TESTER.test(pattern)) {
+                        // pattern is query expression (as in not key literal)
+                        // creating pattern instance
+                        result.push(QueryPattern.create(pattern));
+                    } else {
+                        // pattern is key literal
+                        result.push(decodeURI(pattern));
+                    }
+                }
+
+                return result;
+            },
+
+            /**
+             * Normalizes query buffer. Leaves key literals as they are,
+             * converts array pattern expressions to actual pattern objects.
+             * Makes sure skipper patterns all reference the same instance.
+             * @param {string[]|sntls.QueryPattern[]} asArray
+             * @returns {string[]|sntls.QueryPattern[]}
+             * @private
+             */
+            _fromArray: function (asArray) {
+                var result = [],
+                    i, pattern;
+
+                for (i = 0; i &lt; asArray.length; i++) {
+                    pattern = asArray[i];
+                    if (typeof pattern === 'string') {
+                        // pattern is key literal
+                        result.push(pattern);
+                    } else if (pattern instanceof Array) {
+                        // array is turned into pattern instance
+                        result.push(QueryPattern.create(pattern));
+                    } else if (QueryPattern.isBaseOf(pattern)) {
+                        if (pattern.isSkipper()) {
+                            // skipper patterns are substituted with constant
+                            result.push(this.PATTERN_SKIP);
+                        } else {
+                            // other patterns are copied 1:1
+                            result.push(pattern);
+                        }
+                    } else {
+                        dessert.assert(false, "Invalid query pattern", pattern);
+                    }
+                }
+
+                return result;
+            }
+        })
+        .addMethods(/** @lends sntls.Query# */{
+            /**
+             * @param {Array|string} patterns
+             * @ignore
+             */
+            init: function (patterns) {
+                var asArray;
+
+                if (validators.isString(patterns)) {
+                    // splitting string input
+                    asArray = this._fromString(patterns);
+                } else if (patterns instanceof Array) {
+                    asArray = this._fromArray(patterns);
+                } else {
+                    dessert.assert(false, "Invalid query", patterns);
+                }
+
+                // calling base w/ normalized array buffer
+                base.init.call(this, asArray);
+            },
+
+            /**
+             * Extracts the longest fixed stem path from the query.
+             * The stem may not contain any wildcards, or other
+             * query expressions, only specific keys.
+             * @returns {sntls.Path}
+             */
+            getStemPath: function () {
+                var asArray = this.asArray,
+                    result = [],
+                    i, key;
+
+                // stopping at first non-string key
+                for (i = 0; i &lt; asArray.length; i++) {
+                    key = asArray[i];
+                    if (typeof key === 'string') {
+                        result.push(key);
+                    } else {
+                        break;
+                    }
+                }
+
+                return sntls.Path.create(result);
+            },
+
+            /**
+             * Determines whether query matches specified path
+             * @param {sntls.Path} path
+             * @returns {boolean}
+             */
+            matchesPath: function (path) {
+                var queryAsArray = this.asArray,
+                    pathAsArray = path.asArray,
+                    i = 0, currentKey,
+                    j = 0, currentPattern,
+                    inSkipMode = false;
+
+                while (i &lt; pathAsArray.length && j &lt; queryAsArray.length) {
+                    currentKey = pathAsArray[i];
+                    currentPattern = queryAsArray[j];
+
+                    if (currentPattern === this.PATTERN_SKIP) {
+                        // current pattern indicates skip mode 'on'
+                        inSkipMode = true;
+                        j++;
+                    } else {
+                        if (QueryPattern.isBaseOf(currentPattern) && currentPattern.matchesKey(currentKey) ||
+                            currentPattern === currentKey
+                            ) {
+                            // current key matches current pattern
+                            // turning skip mode off
+                            inSkipMode = false;
+                            j++;
+                        } else if (!inSkipMode) {
+                            // current key does not match current pattern and not in skip mode
+                            // matching failed
+                            return false;
+                        }
+
+                        // proceeding to next key in path
+                        i++;
+                    }
+                }
+
+                // matching was successful when query was fully processed
+                // and path was either fully processed or last pattern was continuation
+                return j === queryAsArray.length &&
+                       (i === pathAsArray.length || currentPattern === this.PATTERN_SKIP);
+            },
+
+            /**
+             * Generates string representation of query.
+             * @returns {string}
+             */
+            toString: function () {
+                var asArray = this.asArray,
+                    result = [],
+                    i;
+
+                for (i = 0; i &lt; asArray.length; i++) {
+                    result.push(asArray[i].toString());
+                }
+
+                return result.join(this.PATH_SEPARATOR);
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    var validators = dessert.validators;
+
+    dessert.addTypes(/** @lends dessert */{
+        isQuery: function (expr) {
+            return sntls.Query.isBaseOf(expr);
+        },
+
+        isQueryOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Query.isBaseOf(expr);
+        },
+
+        /**
+         * Determines whether specified string or array path qualifies as query.
+         * @path {string|string[]} Path in string or array representation
+         */
+        isQueryExpression: function (expr) {
+            var i;
+            if (expr instanceof Array) {
+                for (i = 0; i &lt; expr.length; i++) {
+                    // any object in the path qualifies for query
+                    if (expr[i] instanceof Object) {
+                        return true;
+                    }
+                }
+            } else if (this.isString(expr)) {
+                return sntls.Query.RE_QUERY_TESTER.test(expr);
+            }
+            return false;
+        }
+    });
+
+    /**
+     * @returns {sntls.Query}
+     */
+    String.prototype.toQuery = function () {
+        return /** @type {sntls.Query} */ sntls.Query.create(this);
+    };
+
+    /**
+     * @returns {sntls.Path}
+     */
+    String.prototype.toPathOrQuery = function () {
+        return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
+            sntls.Query.create(this) :
+            sntls.Path.create(this);
+    };
+
+    /**
+     * @returns {sntls.Query}
+     */
+    Array.prototype.toQuery = function () {
+        return /** @type {sntls.Query} */ sntls.Query.create(this);
+    };
+
+    /**
+     * @returns {sntls.Path}
+     */
+    Array.prototype.toPathOrQuery = function () {
+        return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
+            sntls.Query.create(this) :
+            sntls.Path.create(this);
+    };
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

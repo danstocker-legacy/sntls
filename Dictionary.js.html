@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: data/Dictionary.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: data/Dictionary.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
+troop.postpone(sntls, 'Dictionary', function () {
+    "use strict";
+
+    var base = sntls.Hash;
+
+    /**
+     * Instantiates class.
+     * @name sntls.Dictionary.create
+     * @function
+     * @param {object} items
+     * @returns {sntls.Dictionary}
+     */
+
+    /**
+     * Associates values to keys.
+     * Use the Dictionary class for managing and combining lookup objects.
+     * @class sntls.Dictionary
+     * @extends sntls.Hash
+     */
+    sntls.Dictionary = base.extend()
+        .addPrivateMethods(/** @lends sntls.Dictionary */{
+            /**
+             * Counts values in dictionary.
+             * Since one item may hold multiple values, value count =/= item count.
+             * @param {object} dictionaryItems Dictionary item buffer
+             * @returns {number}
+             * @private
+             */
+            _countValues: function (dictionaryItems) {
+                var keys = Object.keys(dictionaryItems),
+                    result = 0,
+                    i, item;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    item = dictionaryItems[keys[i]];
+                    result += item instanceof Array ?
+                        item.length :
+                        1;
+                }
+
+                return result;
+            }
+        })
+        .addMethods(/** @lends sntls.Dictionary# */{
+            /**
+             * @param {object} items
+             * @ignore
+             */
+            init: function (items) {
+                base.init.call(this, items);
+
+                /**
+                 * Item count.
+                 * @type {number}
+                 */
+                this.itemCount = items ? Object.keys(items).length : 0;
+
+                /**
+                 * Value count.
+                 * @type {number}
+                 */
+                this.valueCount = items ? this._countValues(items) : 0;
+            },
+
+            /**
+             * Adds item to dictionary
+             * @param {string} key
+             * @param {*|Array} value
+             * @returns {sntls.Dictionary}
+             */
+            addItem: function (key, value) {
+                var items = this.items,
+                    currentValue = items[key],
+                    currentValueType = typeof currentValue,
+                    valueIsArray = value instanceof Array;
+
+                if (currentValue instanceof Array) {
+                    // current item is array
+                    if (valueIsArray) {
+                        items[key] = currentValue.concat(value);
+                    } else {
+                        currentValue.push(value);
+                    }
+                } else if (currentValueType === 'undefined') {
+                    // current item does not exist
+                    items[key] = valueIsArray ?
+                        value.length === 1 ?
+                            value[0] :
+                            value :
+                        value;
+
+                    // updating item count (new key was added)
+                    this.itemCount++;
+                } else {
+                    // current item is single value
+                    items[key] = valueIsArray ?
+                        [currentValue].concat(value) :
+                        [currentValue, value];
+                }
+
+                // updating value count
+                this.valueCount += valueIsArray ?
+                    value.length :
+                    1;
+
+                return this;
+            },
+
+            /**
+             * Adds items to dictionary by assigning the same value(s) to
+             * a set of keys
+             * @param {string[]} keys
+             * @param {*|Array} value
+             * @returns {sntls.Dictionary}
+             */
+            addItems: function (keys, value) {
+                dessert.isArray(keys, "Invalid keys");
+
+                var i;
+                for (i = 0; i &lt; keys.length; i++) {
+                    this.addItem(keys[i], value);
+                }
+                return this;
+            },
+
+            /**
+             * Removes key - value pair from dictionary. When item value is omitted,
+             * all values associated with `key` are removed.
+             * @param {string} key Key from which to remove value
+             * @param {*} [value] Item value.
+             * @returns {sntls.Dictionary}
+             */
+            removeItem: function (key, value) {
+                var items = this.items,
+                    currentValue = items[key],
+                    currentValueIsArray = currentValue instanceof Array,
+                    valueIndex;
+
+                if (currentValueIsArray && typeof value !== 'undefined') {
+                    valueIndex = currentValue.indexOf(value);
+                    if (valueIndex > -1) {
+                        // value is present at specified key
+                        if (currentValue.length > 2) {
+                            // splicing out value from array
+                            currentValue.splice(valueIndex, 1);
+                        } else {
+                            // replacing array with remaining value
+                            items[key] = currentValue[1 - valueIndex];
+                        }
+
+                        // updating value counter
+                        this.valueCount--;
+                    }
+                } else {
+                    // removing full item
+                    delete items[key];
+
+                    // updating counters
+                    this.itemCount--;
+                    this.valueCount -= currentValueIsArray ?
+                        currentValue.length :
+                        1;
+                }
+
+                return this;
+            },
+
+            /**
+             * Removes items from dictionary.
+             * @param {string[]} keys
+             * @param {*} [value]
+             * @returns {sntls.Dictionary}
+             */
+            removeItems: function (keys, value) {
+                dessert.isArray(keys, "Invalid keys");
+
+                var i;
+                for (i = 0; i &lt; keys.length; i++) {
+                    this.removeItem(keys[i], value);
+                }
+                return this;
+            },
+
+            /**
+             * Retrieves item(s) from the dictionary
+             * @param {*|Array} key
+             * @returns {*|Array} Dictionary item
+             */
+            getItem: function (key) {
+                var result,
+                    i, item;
+
+                if (typeof key === 'string' ||
+                    typeof key === 'number'
+                    ) {
+                    result = this.items[key];
+                } else if (key instanceof Array) {
+                    // key may be an array of keys
+                    result = [];
+                    for (i = 0; i &lt; key.length; i++) {
+                        item = this.items[key[i]];
+                        if (item) {
+                            result = result.concat(item);
+                        }
+                    }
+                    if (!result.length) {
+                        result = undefined;
+                    }
+                } else {
+                    dessert.assert(false, "Invalid key");
+                }
+
+                return result;
+            },
+
+            /**
+             * Clears dictionary
+             * @returns {sntls.Dictionary}
+             */
+            clear: function () {
+                // clearing items buffer
+                base.clear.call(this);
+
+                // resetting counters
+                this.itemCount = 0;
+                this.valueCount = 0;
+
+                return this;
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isDictionary: function (expr) {
+            return sntls.Dictionary.isBaseOf(expr);
+        },
+
+        isDictionaryOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Dictionary.isBaseOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * @returns {sntls.Dictionary}
+         */
+        toDictionary: function () {
+            return sntls.Dictionary.create(this.items);
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

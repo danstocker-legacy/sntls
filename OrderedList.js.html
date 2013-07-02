@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: data/OrderedList.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: data/OrderedList.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
+troop.postpone(sntls, 'OrderedList', function () {
+    "use strict";
+
+    var base = sntls.Hash;
+
+    /**
+     * Instantiates class
+     * @name sntls.OrderedList.create
+     * @function
+     * @param {string[]|number[]} [items] Initial values
+     * @returns {sntls.OrderedList}
+     */
+
+    /**
+     * Inserts, deletes, searches in an ordered list
+     * of strings or numbers.
+     * @class sntls.OrderedList
+     * @extends sntls.Hash
+     */
+    sntls.OrderedList = base.extend()
+        .addPrivateMethods(/** @lends sntls.OrderedList */{
+            /**
+             * Compares numbers. To be supplied to Array.sort().
+             * @private
+             */
+            _compareNumbers: function (a, b) {
+                return a > b ? 1 : a &lt; b ? -1 : 0;
+            }
+        })
+        .addMethods(/** @lends sntls.OrderedList# */{
+            /**
+             * @param {string[]|number[]} [items] Initial values
+             * @ignore
+             */
+            init: function (items) {
+                dessert.isArrayOptional(items, "Invalid items");
+
+                // preparing items buffer
+                items = items || [];
+                if (items.length) {
+                    // sorting items
+                    items.sort(typeof items[0] === 'number' ?
+                        this._compareNumbers :
+                        undefined
+                    );
+                }
+
+                /**
+                 * @name sntls.OrderedList#items
+                 * @type {string[]|number[]}
+                 */
+
+                base.init.call(this, items);
+            },
+
+            //////////////////////////////
+            // Querying
+
+            /**
+             * Performs binary search on items and returns the lowest index where a given value
+             * would be spliced into the list. For exact hits, this is the actual position,
+             * but no information is given whether the value is present in the list.
+             * @param {string|number} value List item value.
+             * @param {number} [start=0] Start position of search range. Default: 0.
+             * @param {number} [end] Ending position of search range. Default: this.length - 1.
+             * @returns {number}
+             */
+            spliceIndexOf: function (value, start, end) {
+                var items = this.items,
+                    medianPos, // position of the median within range
+                    medianValue; // median value within range
+
+                start = start || 0;
+                end = end || items.length;
+
+                medianPos = Math.floor((start + end) / 2);
+                medianValue = items[medianPos];
+
+                if (items[start] >= value) {
+                    // out of range hit
+                    return start;
+                } else if (end - start &lt;= 1) {
+                    // between two adjacent values
+                    return end;
+                } else if (medianValue >= value) {
+                    // narrowing range to lower half
+                    return this.spliceIndexOf(value, start, medianPos);
+                } else if (medianValue &lt; value) {
+                    // narrowing range to upper half
+                    return this.spliceIndexOf(value, medianPos, end);
+                }
+
+                // default index, should never be reached
+                return -1;
+            },
+
+            /**
+             * Returns list items starting from startValue up to but not including endValue.
+             * @param {string|number} startValue
+             * @param {string|number} endValue
+             * @returns {Array} Shallow copy of the array's affected segment.
+             */
+            getRange: function (startValue, endValue) {
+                var startIndex = this.spliceIndexOf(startValue),
+                    endIndex = this.spliceIndexOf(endValue);
+
+                return this.items.slice(startIndex, endIndex);
+            },
+
+            /**
+             * Retrieves a range of values and wraps it in a Hash object.
+             * @param {string|number} startValue
+             * @param {string|number} endValue
+             * @returns {sntls.Hash} Hash with a shallow copy of the array's affected segment.
+             * @see sntls.OrderedList.getRange
+             */
+            getRangeAsHash: function (startValue, endValue) {
+                var range = this.getRange.apply(this, arguments);
+                return sntls.Hash.create(range);
+            },
+
+            //////////////////////////////
+            // Content manipulation
+
+            /**
+             * Inserts a single value into list while retaining order.
+             * @param {string|number} value
+             * @returns {number} The index at which the item was spliced in.
+             */
+            addItem: function (value) {
+                var spliceIndex = this.spliceIndexOf(value);
+                this.items.splice(spliceIndex, 0, value);
+                return spliceIndex;
+            },
+
+            /**
+             * Adds multiple items to list.
+             * @param {string[]|number[]} values
+             * @returns {sntls.OrderedList}
+             */
+            addItems: function (values) {
+                dessert.isArray(values, "Invalid item values");
+                var i;
+                for (i = 0; i &lt; values.length; i++) {
+                    this.addItem(values[i]);
+                }
+                return this;
+            },
+
+            /**
+             * Deletes single value from list while retaining order.
+             * @param {string|number} value
+             * @returns {number} The index from which the item was removed. -1 if item was not present.
+             */
+            removeItem: function (value) {
+                var items = this.items,
+                    spliceIndex = this.spliceIndexOf(value);
+
+                // must check whether value is present
+                if (items[spliceIndex] === value) {
+                    items.splice(spliceIndex, 1);
+                } else {
+                    spliceIndex = -1;
+                }
+
+                return spliceIndex;
+            },
+
+            /**
+             * Removes multiple items from list.
+             * @param {string[]|number[]} values
+             * @returns {sntls.OrderedList}
+             */
+            removeItems: function (values) {
+                dessert.isArray(values, "Invalid item values");
+                var i;
+                for (i = 0; i &lt; values.length; i++) {
+                    this.removeItem(values[i]);
+                }
+                return this;
+            },
+
+            /**
+             * Removes a range from the list starting from startValue up to but not including endValue.
+             * @param {string|number} startValue
+             * @param {string|number} endValue
+             * @returns {number} The starting position of removal.
+             */
+            removeRange: function (startValue, endValue) {
+                var startIndex = this.spliceIndexOf(startValue),
+                    endIndex = this.spliceIndexOf(endValue),
+                    length = endIndex - startIndex;
+
+                if (length > 0) {
+                    this.items.splice(startIndex, length);
+                }
+
+                return startIndex;
+            }
+
+            /**
+             * @name sntls.OrderedList#clear
+             * @function
+             * @returns {sntls.OrderedList}
+             */
+        });
+});
+
+(function () {
+    "use strict";
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * @returns {sntls.OrderedList}
+         */
+        toOrderedList: function () {
+            return sntls.OrderedList.create(this.items);
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

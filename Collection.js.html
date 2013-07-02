@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: data/Collection.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: data/Collection.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
+ * General purpose collection for storing, counting, and performing
+ * changes on named elements.
+ */
+/*global dessert, troop, sntls */
+troop.postpone(sntls, 'Collection', function () {
+    "use strict";
+
+    var hOP = Object.prototype.hasOwnProperty,
+        base = sntls.Hash,
+        self = base.extend();
+
+    /**
+     * Instantiates class.
+     * @name sntls.Collection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.Collection}
+     */
+
+    /**
+     * @class sntls.Collection
+     * @extends sntls.Hash
+     */
+    sntls.Collection = self
+        .addPrivateMethods(/** @lends sntls.Collection */{
+            /**
+             * Generates a shortcut method to be applied to the collection.
+             * Shortcut methods traverse the collection and call the
+             * invoked method on all items, collecting the return values
+             * and returning them as a collection.
+             * @param {string} methodName Name of method to make shortcut for.
+             * @returns {function}
+             * @private
+             * @memberOf sntls.Collection#
+             */
+            _genShortcut: function (methodName) {
+                dessert.isString(methodName, "Invalid method name");
+
+                /**
+                 * @this {sntls.Collection} Collection instance.
+                 */
+                return function () {
+                    var items = this.items,
+                        result = items instanceof Array ? [] : {},
+                        itemNames = Object.keys(items),
+                        i, itemName, item,
+                        itemResult,
+                        isChainable = true;
+
+                    // traversing collection items
+                    for (i = 0; i &lt; itemNames.length; i++) {
+                        itemName = itemNames[i];
+                        item = items[itemName];
+
+                        // delegating method call to item and adding to result collection buffer
+                        itemResult = item[methodName].apply(item, arguments);
+                        result[itemName] = itemResult;
+                        isChainable = isChainable && itemResult === item;
+                    }
+
+                    // chainable collection method for chainable item methods
+                    // otherwise returning results as plain collection
+                    return isChainable ?
+                        this :
+                        self.create(result);
+                };
+            },
+
+            /**
+             * Retrieves property names from object and returns an array for those that are functions.
+             * @param {object} obj
+             * @returns {string[]}
+             * @private
+             */
+            _getMethodNames: function (obj) {
+                var propertyNames = Object.getOwnPropertyNames(obj),
+                    methodNames = [],
+                    i, propertyName;
+                for (i = 0; i &lt; propertyNames.length; i++) {
+                    propertyName = propertyNames[i];
+                    if (typeof obj[propertyName] === 'function') {
+                        methodNames.push(propertyName);
+                    }
+                }
+                return methodNames;
+            }
+        })
+        .addMethods(/** @lends sntls.Collection# */{
+            /**
+             * Creates "specified collection".
+             * Adds shortcut methods to items. It is assumed that the collection will only contain
+             * elements of the specified type (ie bearing methods by the specified names).
+             *
+             * WARNING: A specified collection may overshadow original collection methods, so
+             * if the specifying class is known to have conflicts, it is better to call
+             * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
+             *
+             * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
+             * @returns {sntls.Collection}
+             * @memberOf sntls.Collection
+             */
+            of: function (template) {
+                // in case methodNames is a fat constructor
+                if (typeof template === 'function') {
+                    template = template.prototype;
+                } else if (dessert.validators.isClass(template)) {
+                    template = sntls.utils.shallowCopy(template.getTarget());
+                    delete template.init;
+                }
+
+                var methodNames;
+                if (dessert.validators.isObject(template)) {
+                    methodNames = this._getMethodNames(template);
+                } else {
+                    dessert.isArray(template, "Invalid collection template");
+                    methodNames = template;
+                }
+
+                // must work on classes derived from Collection, too
+                var specifiedCollection = /** @type {sntls.Collection} */ troop.Base.extend.call(this),
+                    shortcutMethods = {},
+                    i, methodName;
+
+                // adding shortcut methods to temp shortcuts object
+                for (i = 0; i &lt; methodNames.length; i++) {
+                    methodName = methodNames[i];
+                    // template method mustn't override original Collection properties
+                    // those (shadowing) methods can still be invoked via .callOnEachItem()
+                    if (typeof this[methodName] === 'undefined') {
+                        shortcutMethods[methodName] = self._genShortcut(methodName);
+                    }
+                }
+
+                // adding shortcut methods to extended class
+                specifiedCollection.addMethods(shortcutMethods);
+
+                return specifiedCollection;
+            },
+
+            /**
+             * @param {object} [items] Initial contents.
+             * @ignore
+             */
+            init: function (items) {
+                base.init.apply(this, arguments);
+
+                /**
+                 * Number of items in collection
+                 * @type {Number}
+                 */
+                this.count = items ? Object.keys(items).length : 0;
+            },
+
+            //////////////////////////////
+            // Basic functions
+
+            /**
+             * Retrieves item from the collection.
+             * @param {string} itemName Item name.
+             * @returns {*} Item variable.
+             */
+            getItem: function (itemName) {
+                return this.items[itemName];
+            },
+
+            /**
+             * Sets an item in the collection.
+             * @param {string} itemName Item name.
+             * @param item Item variable / object.
+             * @returns {sntls.Collection}
+             */
+            setItem: function (itemName, item) {
+                var isNew = !hOP.call(this.items, itemName);
+
+                // setting item
+                this.items[itemName] = item;
+
+                // increasing count when new item was added
+                if (isNew) {
+                    this.count++;
+                }
+
+                return this;
+            },
+
+            /**
+             * Deletes item from collection.
+             * @param {string} itemName Item name.
+             * @returns {sntls.Collection}
+             */
+            deleteItem: function (itemName) {
+                if (hOP.call(this.items, itemName)) {
+                    // removing item
+                    delete this.items[itemName];
+
+                    // decreasing count
+                    this.count--;
+                }
+
+                return this;
+            },
+
+            /**
+             * Clones collection
+             * @returns {sntls.Collection} New collection with same contents as this.
+             */
+            clone: function () {
+                var result = /** @type sntls.Collection */ this.getBase().create();
+
+                /**
+                 * Copying items and count
+                 * Other properties added by descendants
+                 * must be cloned in override methods
+                 */
+                result.items = sntls.utils.shallowCopy(this.items);
+                result.count = this.count;
+
+                return result;
+            },
+
+            /**
+             * Creates a collection of specified type initialized with
+             * the contents of the current collection.
+             * WARNING: shares item buffer with old collection,
+             * therefore changes in one will be reflected in the other.
+             * @param {sntls.Collection} returnType Collection class
+             * @returns {sntls.Collection} New instance of the specified
+             * (collection-based) type initialized w/ with same contents.
+             */
+            asType: function (returnType) {
+                dessert.isCollection(returnType, "Type must be Collection-based");
+
+                var result = /** @type sntls.Collection */ returnType.create();
+
+                result.items = this.items;
+                result.count = this.count;
+
+                return result;
+            },
+
+            /**
+             * Merges collection with current collection.
+             * Conflicts are resolved through the optionally supplied callback, or by default,
+             * the value from the current collection will be used.
+             * @param {sntls.Collection} collection Collection to be merged to current. Must share
+             * a common base with the current collection.
+             * @param {function} [conflictResolver] Callback for resolving merge conflicts.
+             * Callback receives as arguments: current collection, remote collection, and key of
+             * the conflicting item.
+             * @returns {sntls.Collection} New collection with items from both collections in it.
+             * Return type will be that of the current collection.
+             */
+            mergeWith: function (collection, conflictResolver) {
+                dessert
+                    .isCollection(collection, "Invalid collection")
+                    .isFunctionOptional(conflictResolver, "Invalid conflict resolver callback")
+                    .assert(collection.isA(this.getBase()), "Collection types do not match");
+
+                var result = this.clone(),
+                    resultItems = result.items;
+
+                collection.forEachItem(function (item, itemName) {
+                    if (!hOP.call(resultItems, itemName)) {
+                        result.setItem(itemName, item);
+                    } else if (conflictResolver) {
+                        // resolving conflict with supplied function
+                        result.setItem(itemName, conflictResolver(this, collection, itemName));
+                    }
+                });
+
+                return result;
+            },
+
+            /**
+             * Retrieves collection keys matching the specified prefix
+             * @param {string} prefix
+             * @returns {string[]}
+             */
+            getKeysByPrefix: function (prefix) {
+                dessert.isString(prefix, "Invalid prefix");
+
+                var result = [],
+                    itemNames = Object.keys(this.items),
+                    i, itemName;
+
+                for (i = 0; i &lt; itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    if (itemName.indexOf(prefix) === 0) {
+                        // prefix matches item name
+                        result.push(itemName);
+                    }
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves collection keys matching the specified prefix, wrapped in a hash.
+             * @param {string} prefix
+             * @returns {sntls.Hash}
+             */
+            getKeysByPrefixAsHash: function (prefix) {
+                return sntls.Hash.create(this.getKeysByPrefix(prefix));
+            },
+
+            /**
+             * Retrieves collection keys matching the specified regular expression.
+             * @param {RegExp} regExp
+             * @returns {Array}
+             */
+            getKeysByRegExp: function (regExp) {
+                var result = [],
+                    itemNames = Object.keys(this.items),
+                    i, itemName;
+
+                for (i = 0; i &lt; itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    if (regExp.test(itemName)) {
+                        // filter matches item name
+                        result.push(itemName);
+                    }
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves collection keys matching the specified regular expression, wrapped in a hash.
+             * @param {RegExp} regExp
+             * @returns {sntls.Hash}
+             */
+            getKeysByRegExpAsHash: function (regExp) {
+                return sntls.Hash.create(this.getKeysByRegExp(regExp));
+            },
+
+            /**
+             * Selects specified collection items and returns them in a
+             * new collection of the same type.
+             * @param {string[]} itemNames Names of items to include in result
+             * @returns {sntls.Collection}
+             */
+            filterByKeys: function (itemNames) {
+                dessert.isArray(itemNames, "Invalid item names");
+
+                var items = this.items,
+                    result = items instanceof Array ? [] : {},
+                    i, itemName;
+
+                for (i = 0; i &lt; itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    result[itemName] = items[itemName];
+                }
+
+                return this.getBase().create(result);
+            },
+
+            /**
+             * Filters collection by key prefix.
+             * @param {string} prefix
+             * @returns {sntls.Collection}
+             */
+            filterByPrefix: function (prefix) {
+                return this.filterByKeys(this.getKeysByPrefix(prefix));
+            },
+
+            /**
+             * Filters collection by matching keys to the specified regular expression.
+             * @param {RegExp} regExp
+             * @returns {sntls.Collection}
+             */
+            filterByRegExp: function (regExp) {
+                return this.filterByKeys(this.getKeysByRegExp(regExp));
+            },
+
+            /**
+             * Filters collection by a selector function.
+             * @param {function} selector Selector function. Receives `item` and `itemName`
+             * as arguments, and the collection as `this`, and should return true when
+             * item should be included in results.
+             * @returns {sntls.Collection}
+             */
+            filterBySelector: function (selector) {
+                var items = this.items,
+                    result = items instanceof Array ? [] : {},
+                    itemNames = Object.keys(items),
+                    i, itemName;
+
+                for (i = 0; i &lt; itemNames.length; i++) {
+                    itemName = itemNames[i];
+                    if (selector.call(this, items[itemName], itemName)) {
+                        result[itemName] = items[itemName];
+                    }
+                }
+
+                return this.getBase().create(result);
+            },
+
+            /**
+             * Retrieves collection items as array in order of their names
+             * or according to the supplied comparator.
+             * @param {function} [comparator] Comparator for sorting keys.
+             * @returns {Array} Item values in order of names.
+             */
+            getSortedValues: function (comparator) {
+                dessert.isFunctionOptional(comparator, "Invalid comparator function");
+
+                var keys = Object.keys(this.items).sort(comparator ? comparator.bind(this) : undefined),
+                    result = [],
+                    i;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    result.push(this.items[keys[i]]);
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves sorted item values array wrapped in a hash.
+             * @param {function} [comparator] Comparator for sorting keys.
+             * @returns {sntls.Hash}
+             * @see sntls.Collection.getSortedValues
+             */
+            getSortedValuesAsHash: function (comparator) {
+                return sntls.Hash.create(this.getSortedValues(comparator));
+            },
+
+            /**
+             * Empties collection.
+             * @returns {sntls.Collection}
+             */
+            clear: function () {
+                // clearing items buffer
+                base.clear.call(this);
+
+                // resetting counter
+                this.count = 0;
+
+                return this;
+            },
+
+            /**
+             * Calls a function on each item.
+             * @param {function} handler Function to call on each item.
+             * Handler receives the current item and item name as arguments,
+             * and the collection as `this`.
+             * Iteration breaks when handler returns false.
+             * @returns {sntls.Collection}
+             */
+            forEachItem: function (handler) {
+                dessert.isFunction(handler, "Invalid callback function");
+
+                var items = this.items,
+                    keys = Object.keys(items),
+                    i, itemName, item;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    if (handler.call(this, item, itemName) === false) {
+                        break;
+                    }
+                }
+
+                return this;
+            },
+
+            /**
+             * Calls function on each item in a specific order.
+             * @param {function} handler Function to call on each item.
+             * Handler receives the current item and item name as arguments,
+             * and the collection as `this`.
+             * Iteration breaks when handler returns false.
+             * @param {function} [comparator] Comparator for sorting keys.
+             * Receives collection instance as context for accessing item values.
+             * @returns {sntls.Collection}
+             */
+            forEachItemSorted: function (handler, comparator) {
+                dessert
+                    .isFunction(handler, "Invalid callback function")
+                    .isFunctionOptional(comparator, "Invalid comparator function");
+
+                var items = this.items,
+                    keys = Object.keys(items).sort(comparator ? comparator.bind(this) : undefined),
+                    i, itemName, item;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    if (handler.call(this, item, itemName) === false) {
+                        break;
+                    }
+                }
+
+                return this;
+            },
+
+            /**
+             * Maps the collection's contents to a new collection.
+             * @param {function} handler Transform function. Called on each element,
+             * its return value will be placed in the mapped collection.
+             * Receives current item and item name as arguments, plus the collection as `this`.
+             * @param {sntls.Collection} [returnType] Reference to derived collection class.
+             * When specified, the resulting collection will be an instance of this class.
+             * @returns {sntls.Collection} New collection instance (of the specified type)
+             * containing mapped items.
+             */
+            mapContents: function (handler, returnType) {
+                dessert
+                    .isFunction(handler, "Invalid callback function")
+                    .isCollectionOptional(returnType);
+
+                var items = this.items,
+                    keys = Object.keys(items),
+                    result = items instanceof Array ? [] : {},
+                    i, itemName, item;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    result[itemName] = handler.call(this, item, itemName);
+                }
+
+                return (returnType || self).create(result);
+            },
+
+            /**
+             * Invokes a method on each item, identified by name.
+             * Method results are collected and returned in a new collection.
+             * @param {string} methodName Method name on each item.
+             * @returns {sntls.Collection}
+             */
+            callOnEachItem: function (methodName) {
+                dessert.isString(methodName, "Invalid method name");
+
+                var args = Array.prototype.slice.call(arguments, 1),
+                    items = this.items,
+                    keys = Object.keys(items),
+                    result = items instanceof Array ? [] : {},
+                    i, itemName, item,
+                    itemMethod, itemResult,
+                    isChainable = true;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    itemName = keys[i];
+                    item = items[itemName];
+                    itemMethod = item[methodName];
+                    if (typeof itemMethod === 'function') {
+                        itemResult = itemMethod.apply(item, args);
+                        result[itemName] = itemResult;
+                        isChainable = isChainable && itemResult === item;
+                    }
+                }
+
+                // chainable collection method for chainable item methods
+                // otherwise returning results as plain collection
+                return isChainable ?
+                    this :
+                    self.create(result);
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isCollection: function (expr) {
+            return sntls.Collection.isPrototypeOf(expr);
+        },
+
+        isCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Collection.isPrototypeOf(expr);
+        }
+    });
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * @param {sntls.Collection} [returnType]
+         * @returns {sntls.Collection}
+         */
+        toCollection: function (returnType) {
+            dessert.isCollectionOptional(returnType);
+
+            if (returnType) {
+                return returnType.create(this.items);
+            } else {
+                return sntls.Collection.create(this.items);
+            }
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

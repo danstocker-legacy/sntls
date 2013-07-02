@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behavior/Profile.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behavior/Profile.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
+troop.postpone(sntls, 'Profile', function () {
+    "use strict";
+
+    var hOP = Object.prototype.hasOwnProperty;
+
+    /**
+     * Instantiates class.
+     * @name sntls.Profile.create
+     * @function
+     * @returns {sntls.Profile}
+     */
+
+    /**
+     * A profile is a collection of named numeric values that
+     * may be incremented by an object the profile represents.
+     * @class sntls.Profile
+     * @extends troop.Base
+     */
+    sntls.Profile = troop.Base.extend()
+        .addMethods(/** @lends sntls.Profile# */{
+            /**
+             * @ignore
+             */
+            init: function () {
+                /**
+                 * Lookup of numeric values assigned to named counter bins
+                 * @type {object}
+                 */
+                this.counters = {};
+            },
+
+            /**
+             * Increases counter
+             * @param {string} counterName Counter identifier
+             * @param {number} [amount] Amount to add to counter
+             * @returns {sntls.Profile}
+             */
+            inc: function (counterName, amount) {
+                amount = amount || 1;
+
+                var counters = this.counters;
+
+                if (!hOP.call(counters, counterName)) {
+                    counters[counterName] = amount;
+                } else {
+                    counters[counterName] += amount;
+                }
+
+                return this;
+            },
+
+            /**
+             * Decreases counter
+             * @param {string} counterName Counter identifier
+             * @param {number} [amount] Amount to add to counter
+             * @returns {sntls.Profile}
+             */
+            dec: function (counterName, amount) {
+                amount = amount || 1;
+
+                var counters = this.counters;
+
+                if (!hOP.call(counters, counterName)) {
+                    counters[counterName] = 0 - amount;
+                } else {
+                    counters[counterName] -= amount;
+                }
+
+                return this;
+            },
+
+            /**
+             * Retrieves counter value
+             * @returns {Number}
+             */
+            getCount: function (key) {
+                return this.counters[key] || 0;
+            },
+
+            /**
+             * Simple getter for counter object.
+             * @returns {object}
+             */
+            getCounters: function () {
+                return this.counters;
+            },
+
+            /**
+             * Resets one or all counters
+             * @param {string} [key]
+             * @returns {sntls.Profile}
+             */
+            reset: function (key) {
+                if (dessert.validators.isString(key)) {
+                    delete this.counters[key];
+                } else {
+                    this.counters = {};
+                }
+                return this;
+            }
+        });
+});
+
+troop.postpone(sntls, 'ProfileCollection', function () {
+    "use strict";
+
+    /**
+     * @name sntls.ProfileCollection.create
+     * @function
+     * @param {object} [items] Initial contents.
+     * @returns {sntls.ProfileCollection}
+     */
+
+    /**
+     * @name sntls.ProfileCollection#counters
+     * @ignore
+     */
+
+    /**
+     * @class sntls.ProfileCollection
+     * @extends sntls.Collection
+     * @extends sntls.Profile
+     */
+    sntls.ProfileCollection = sntls.Collection.of(sntls.Profile);
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isProfile: function (expr) {
+            return sntls.Profile.isPrototypeOf(expr);
+        },
+
+        isProfileOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Profile.isPrototypeOf(expr);
+        },
+
+        isProfileCollection: function (expr) {
+            return this.isClass(expr) &&
+                   (expr.isA(sntls.Profile) ||
+                    expr.isA(sntls.ProfileCollection));
+        },
+
+        isProfileCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   this.isClass(expr) &&
+                   (expr.isA(sntls.Profile) ||
+                    expr.isA(sntls.ProfileCollection));
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
