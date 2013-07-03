@@ -35,19 +35,19 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
             /**
              * Sets an item in the collection.
-             * @param {string} name Item name.
+             * @param {string} itemKey Item key.
              * @param item Item variable / object.
              * @returns {sntls.JournalingCollection}
              */
-            setItem: function (name, item) {
-                var isInCollection = hOP.call(this.items, name);
+            setItem: function (itemKey, item) {
+                var isInCollection = hOP.call(this.items, itemKey);
 
                 base.setItem.apply(this, arguments);
 
                 // logging change
                 this.log.unshift({
                     method: isInCollection ? 'change': 'add',
-                    name  : name,
+                    name  : itemKey,
                     item  : item // before the change
                 });
 
@@ -56,12 +56,12 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
             /**
              * Removes item from sntls.LOOKUP.
-             * @param {string} name Item name.
+             * @param {string} itemKey Item key.
              * @returns {sntls.JournalingCollection}
              */
-            deleteItem: function (name) {
-                var isInCollection = hOP.call(this.items, name),
-                    oldItem = this.items[name];
+            deleteItem: function (itemKey) {
+                var isInCollection = hOP.call(this.items, itemKey),
+                    oldItem = this.items[itemKey];
 
                 base.deleteItem.apply(this, arguments);
 
@@ -69,7 +69,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
                     // adding to log
                     this.log.unshift({
                         method: 'remove',
-                        name  : name,
+                        name  : itemKey,
                         item  : oldItem
                     });
                 }

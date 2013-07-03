@@ -1,7 +1,3 @@
-/**
- * General purpose collection for storing, counting, and performing
- * changes on named elements.
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Collection', function () {
     "use strict";
@@ -48,19 +44,19 @@ troop.postpone(sntls, 'Collection', function () {
                 return function () {
                     var items = this.items,
                         result = items instanceof Array ? [] : {},
-                        itemNames = Object.keys(items),
-                        i, itemName, item,
+                        itemKeys = Object.keys(items),
+                        i, itemKey, item,
                         itemResult,
                         isChainable = true;
 
                     // traversing collection items
-                    for (i = 0; i < itemNames.length; i++) {
-                        itemName = itemNames[i];
-                        item = items[itemName];
+                    for (i = 0; i < itemKeys.length; i++) {
+                        itemKey = itemKeys[i];
+                        item = items[itemKey];
 
                         // delegating method call to item and adding to result collection buffer
                         itemResult = item[methodName].apply(item, arguments);
-                        result[itemName] = itemResult;
+                        result[itemKey] = itemResult;
                         isChainable = isChainable && itemResult === item;
                     }
 
@@ -179,29 +175,29 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Retrieves item from the collection.
-             * @param {string} itemName Item name.
+             * @param {string} itemKey Item key.
              * @returns {*} Item variable.
              */
-            getItem: function (itemName) {
-                return this.items[itemName];
+            getItem: function (itemKey) {
+                return this.items[itemKey];
             },
 
             /**
-             * Sets an item in the collection. Overwrites item if there is already one by the same item name.
+             * Sets an item in the collection. Overwrites item if there is already one by the same item key.
              * Increments counter for new items.
              * @example
              * var coll = sntls.Collection.create();
              * coll.set('foo', "bar");
              * coll.get('foo'); // "bar"
-             * @param {string} itemName Item name.
+             * @param {string} itemKey Item key.
              * @param item Item variable / object.
              * @returns {sntls.Collection}
              */
-            setItem: function (itemName, item) {
-                var isNew = !hOP.call(this.items, itemName);
+            setItem: function (itemKey, item) {
+                var isNew = !hOP.call(this.items, itemKey);
 
                 // setting item
-                this.items[itemName] = item;
+                this.items[itemKey] = item;
 
                 // increasing count when new item was added
                 if (isNew) {
@@ -213,13 +209,13 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Deletes item from collection. Decrements counter when an item was in fact deleted.
-             * @param {string} itemName Item name.
+             * @param {string} itemKey Item key.
              * @returns {sntls.Collection}
              */
-            deleteItem: function (itemName) {
-                if (hOP.call(this.items, itemName)) {
+            deleteItem: function (itemKey) {
+                if (hOP.call(this.items, itemKey)) {
                     // removing item
-                    delete this.items[itemName];
+                    delete this.items[itemKey];
 
                     // decreasing count
                     this.count--;
@@ -272,7 +268,7 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Merges current collection with another collection. Adds all items from both collections
-             * to a new collection instance. Item name conflicts are resolved by a suitable callback, or,
+             * to a new collection instance. Item key conflicts are resolved by a suitable callback, or,
              * when there is none specified, the value from the current collection will be used.
              * @example
              * var merged = stringCollection
@@ -282,7 +278,7 @@ troop.postpone(sntls, 'Collection', function () {
              * @param {sntls.Collection} collection Collection to be merged to current. Must share
              * a common base with the current collection.
              * @param {function} [conflictResolver] Callback for resolving merge conflicts.
-             * Callback receives as arguments: current collection, remote collection, and name of
+             * Callback receives as arguments: current collection, remote collection, and key of
              * the conflicting item, and is expected to return a collection item.
              * @returns {sntls.Collection} New collection with items from both collections in it.
              * Return type will be that of the current collection.
@@ -296,12 +292,12 @@ troop.postpone(sntls, 'Collection', function () {
                 var result = this.clone(),
                     resultItems = result.items;
 
-                collection.forEachItem(function (item, itemName) {
-                    if (!hOP.call(resultItems, itemName)) {
-                        result.setItem(itemName, item);
+                collection.forEachItem(function (item, itemKey) {
+                    if (!hOP.call(resultItems, itemKey)) {
+                        result.setItem(itemKey, item);
                     } else if (conflictResolver) {
                         // resolving conflict with supplied function
-                        result.setItem(itemName, conflictResolver(this, collection, itemName));
+                        result.setItem(itemKey, conflictResolver(this, collection, itemKey));
                     }
                 });
 
@@ -318,21 +314,21 @@ troop.postpone(sntls, 'Collection', function () {
              *  force: 100
              * });
              * c.getKeysByPrefix('fo'); // ['foo', 'force']
-             * @param {string} prefix Item name prefix that keys must match in order to be included in the result.
+             * @param {string} prefix Item key prefix that keys must match in order to be included in the result.
              * @returns {string[]}
              */
             getKeysByPrefix: function (prefix) {
                 dessert.isString(prefix, "Invalid prefix");
 
                 var result = [],
-                    itemNames = Object.keys(this.items),
-                    i, itemName;
+                    itemKeys = Object.keys(this.items),
+                    i, itemKey;
 
-                for (i = 0; i < itemNames.length; i++) {
-                    itemName = itemNames[i];
-                    if (itemName.indexOf(prefix) === 0) {
-                        // prefix matches item name
-                        result.push(itemName);
+                for (i = 0; i < itemKeys.length; i++) {
+                    itemKey = itemKeys[i];
+                    if (itemKey.indexOf(prefix) === 0) {
+                        // prefix matches item key
+                        result.push(itemKey);
                     }
                 }
 
@@ -364,14 +360,14 @@ troop.postpone(sntls, 'Collection', function () {
              */
             getKeysByRegExp: function (regExp) {
                 var result = [],
-                    itemNames = Object.keys(this.items),
-                    i, itemName;
+                    itemKeys = Object.keys(this.items),
+                    i, itemKey;
 
-                for (i = 0; i < itemNames.length; i++) {
-                    itemName = itemNames[i];
-                    if (regExp.test(itemName)) {
-                        // filter matches item name
-                        result.push(itemName);
+                for (i = 0; i < itemKeys.length; i++) {
+                    itemKey = itemKeys[i];
+                    if (regExp.test(itemKey)) {
+                        // filter matches item key
+                        result.push(itemKey);
                     }
                 }
 
@@ -389,21 +385,21 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Filters the collection by selecting only the items with the specified names. Item names that are not
+             * Filters the collection by selecting only the items with the specified keys. Item keys that are not
              * present in the collection will be included in the results, too, as undefined.
-             * @param {string[]} itemNames Names of items to be included in result.
+             * @param {string[]} itemKeys Keys of items to be included in result.
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
-            filterByKeys: function (itemNames) {
-                dessert.isArray(itemNames, "Invalid item names");
+            filterByKeys: function (itemKeys) {
+                dessert.isArray(itemKeys, "Invalid item keys");
 
                 var items = this.items,
                     result = items instanceof Array ? [] : {},
-                    i, itemName;
+                    i, itemKey;
 
-                for (i = 0; i < itemNames.length; i++) {
-                    itemName = itemNames[i];
-                    result[itemName] = items[itemName];
+                for (i = 0; i < itemKeys.length; i++) {
+                    itemKey = itemKeys[i];
+                    result[itemKey] = items[itemKey];
                 }
 
                 return this.getBase().create(result);
@@ -411,7 +407,7 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Filters collection by matching keys against the specified prefix.
-             * @param {string} prefix Item name prefix that keys must match in order to be included in the result.
+             * @param {string} prefix Item key prefix that keys must match in order to be included in the result.
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterByPrefix: function (prefix) {
@@ -431,11 +427,11 @@ troop.postpone(sntls, 'Collection', function () {
              * Filters collection applying the specified selector function to each item.
              * @example
              * // filters items with value higher than 50
-             * c.filterByExpr(function (item, itemName) {
+             * c.filterByExpr(function (item, itemKey) {
              *  return item > 50;
              * }).items; // {force: 100}
              * @param {function} selector Selector function. Receives the collection instance as `this`,
-             * current item as first argument, and the name of the current item as second argument.
+             * current item as first argument, and the key of the current item as second argument.
              * Expected to return a boolean: true when the item should be included in the result, false if not.
              * (In reality and truthy or falsy value will do.)
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
@@ -443,13 +439,13 @@ troop.postpone(sntls, 'Collection', function () {
             filterBySelector: function (selector) {
                 var items = this.items,
                     result = items instanceof Array ? [] : {},
-                    itemNames = Object.keys(items),
-                    i, itemName;
+                    itemKeys = Object.keys(items),
+                    i, itemKey;
 
-                for (i = 0; i < itemNames.length; i++) {
-                    itemName = itemNames[i];
-                    if (selector.call(this, items[itemName], itemName)) {
-                        result[itemName] = items[itemName];
+                for (i = 0; i < itemKeys.length; i++) {
+                    itemKey = itemKeys[i];
+                    if (selector.call(this, items[itemKey], itemKey)) {
+                        result[itemKey] = items[itemKey];
                     }
                 }
 
@@ -457,11 +453,11 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection items values in an array, without name information, ordered by item names, or,
+             * Retrieves collection items values in an array, without key information, ordered by item keys, or,
              * when a comparator function is specified, in the order defined by that.
-             * @param {function} [comparator] Comparator function for sorting items by item names.
+             * @param {function} [comparator] Comparator function for sorting items by item keys.
              * Same as in `Array.sort`.
-             * @returns {Array} Item values in order of names.
+             * @returns {Array} Item values in order of keys.
              * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
             getSortedValues: function (comparator) {
@@ -507,14 +503,14 @@ troop.postpone(sntls, 'Collection', function () {
              * either the iteration completes of handler returns `false`.
              * Iteration order is non-deterministic.
              * Iteration commences according to the initial state of the collection, with regards to
-             * item names and count. Therefore any handler function changing the collection will not thwart the
+             * item keys and count. Therefore any handler function changing the collection will not thwart the
              * iteration process. However, changing the collection while iterating is strongly discouraged.
              * @example
-             * c.forEachItem(function (item, itemName, extraParam) {
-             *  alert(itemName + item + extraParam);
+             * c.forEachItem(function (item, itemKey, extraParam) {
+             *  alert(itemKey + item + extraParam);
              * }, 'foo'); // outputs: 'foo1foo', 'bar10foo', 'force100foo'
              * @param {function} handler Function to be called on each item. The handler receives current item
-             * as first argument, item name as second argument, and all other arguments passed to `.forEachItem()`
+             * as first argument, item key as second argument, and all other arguments passed to `.forEachItem()`
              * as the rest of its arguments. A reference to the current collection is passed as `this`.
              * @returns {sntls.Collection}
              */
@@ -523,12 +519,12 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var items = this.items,
                     keys = Object.keys(items),
-                    i, itemName, item;
+                    i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
-                    itemName = keys[i];
-                    item = items[itemName];
-                    if (handler.call(this, item, itemName) === false) {
+                    itemKey = keys[i];
+                    item = items[itemKey];
+                    if (handler.call(this, item, itemKey) === false) {
                         break;
                     }
                 }
@@ -554,12 +550,12 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var items = this.items,
                     keys = Object.keys(items).sort(comparator ? comparator.bind(this) : undefined),
-                    i, itemName, item;
+                    i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
-                    itemName = keys[i];
-                    item = items[itemName];
-                    if (handler.call(this, item, itemName) === false) {
+                    itemKey = keys[i];
+                    item = items[itemKey];
+                    if (handler.call(this, item, itemKey) === false) {
                         break;
                     }
                 }
@@ -574,7 +570,7 @@ troop.postpone(sntls, 'Collection', function () {
              * c.mapContents(function (item) {
              *  return 'hello' + item;
              * }, sntls.Collection.of(String));
-             * @param {function} handler Mapper function. Takes `item` and `itemName` as arguments, and is expected
+             * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
              * to return the mapped item for the new collection. Original collection is passed as `this`.
              * @param {sntls.Collection} [returnType] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
@@ -587,12 +583,12 @@ troop.postpone(sntls, 'Collection', function () {
                 var items = this.items,
                     keys = Object.keys(items),
                     result = items instanceof Array ? [] : {},
-                    i, itemName, item;
+                    i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
-                    itemName = keys[i];
-                    item = items[itemName];
-                    result[itemName] = handler.call(this, item, itemName);
+                    itemKey = keys[i];
+                    item = items[itemKey];
+                    result[itemKey] = handler.call(this, item, itemKey);
                 }
 
                 return (returnType || self).create(result);
@@ -619,17 +615,17 @@ troop.postpone(sntls, 'Collection', function () {
                     items = this.items,
                     keys = Object.keys(items),
                     result = items instanceof Array ? [] : {},
-                    i, itemName, item,
+                    i, itemKey, item,
                     itemMethod, itemResult,
                     isChainable = true;
 
                 for (i = 0; i < keys.length; i++) {
-                    itemName = keys[i];
-                    item = items[itemName];
+                    itemKey = keys[i];
+                    item = items[itemKey];
                     itemMethod = item[methodName];
                     if (typeof itemMethod === 'function') {
                         itemResult = itemMethod.apply(item, args);
-                        result[itemName] = itemResult;
+                        result[itemKey] = itemResult;
                         isChainable = isChainable && itemResult === item;
                     }
                 }
