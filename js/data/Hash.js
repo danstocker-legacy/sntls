@@ -14,8 +14,8 @@ troop.postpone(sntls, 'Hash', function () {
 
     /**
      * General wrapper around objects to treat them as hash.
-     * No `Object`-delegated methods on `.items` should be called as they may break code.
-     * All methods that operate *on* `.items` should be implemented on `Hash`.
+     * Calling `Object.prototype` methods on hash objects is not viable as they may be
+     * shadowed by user data, and such cases certainly lead the application to break.
      * Other `Hash`-based classes may delegate conversion methods to this class.
      * @class sntls.Hash
      * @extends troop.Base
@@ -29,14 +29,21 @@ troop.postpone(sntls, 'Hash', function () {
             init: function (items) {
                 dessert.isObjectOptional(items, "Invalid items");
 
+                /**
+                 * Object buffer that stores items. Technically writable and public for performance
+                 * and transparency reasons, but should not be changed externally as may lead to inconsistent state
+                 * especially in `Hash`-based subclasses.
+                 * @type {Object}
+                 */
                 this.items = items || {};
             },
 
             /**
-             * Retrieves the first key to be found in the Hash.
-             * Not guaranteed to return the same key on subsequent
-             * calls when the hash has more than 1 items.
+             * Retrieves the first available key it can find. If hash has more than one items,
+             * any of the hash's keys may be returned. Result does not necessarily match up with the return value
+             * of `.getFirstValue()`.
              * @returns {string}
+             * @see sntls.Hash#getFirstValue
              */
             getFirstKey: function () {
                 var items = this.items,
@@ -50,7 +57,8 @@ troop.postpone(sntls, 'Hash', function () {
             },
 
             /**
-             * Retrieves all item keys.
+             * Retrieves item keys as an array. The order in which keys appear in the resulting array
+             * is not deterministic.
              * @returns {string[]}
              */
             getKeys: function () {
@@ -58,20 +66,20 @@ troop.postpone(sntls, 'Hash', function () {
             },
 
             /**
-             * Retrieves item keys wrapped ina hash.
+             * Retrieves item keys wrapped in a hash.
              * @returns {sntls.Hash}
+             * @see sntls.Hash#getKeys
              */
             getKeysAsHash: function () {
                 return sntls.Hash.create(Object.keys(this.items));
             },
 
             /**
-             * Retrieves the first value to be found in the Hash.
-             * Not guaranteed to return the same value on subsequent
-             * calls when the hash has more than 1 items.
-             * Doesn't necessarily correspond to the key returned by
-             * `.getFirstKey`.
+             * Retrieves the first available value it can find. If hash has more than one items,
+             * any value from the hash may be returned. Result does not necessarily match up with the return value
+             * of `.getFirstKey()`.
              * @returns {*}
+             * @see sntls.Hash#getFirstKey
              */
             getFirstValue: function () {
                 var items = this.items,
@@ -85,7 +93,8 @@ troop.postpone(sntls, 'Hash', function () {
             },
 
             /**
-             * Retrieves item values as an array.
+             * Retrieves collection items in an array, without key information. The order in which keys appear
+             * in the resulting array is not deterministic.
              * @returns {Array}
              */
             getValues: function () {
@@ -104,13 +113,15 @@ troop.postpone(sntls, 'Hash', function () {
             /**
              * Retrieves item values wrapped in a hash.
              * @returns {sntls.Hash}
+             * @see sntls.Hash#getValues
              */
             getValuesAsHash: function () {
                 return sntls.Hash.create(this.getValues());
             },
 
             /**
-             * Clears items buffer.
+             * Clears hash by replacing items buffer with an empty one.
+             * Observes current buffer type, ie. if hash was array based, the new buffer will be also array.
              * @returns {sntls.Hash}
              */
             clear: function () {
