@@ -19,6 +19,11 @@ troop.postpone(sntls, 'Collection', function () {
      */
 
     /**
+     * Collection offers a way to manage multiple objects or primitives at once.
+     * Ordinary collection operations such as content manipulation and filtering may be
+     * performed on collections regardless of item types. So called "specified collections"
+     * allow however to mix the item's API into the collection and treat collections of
+     * objects as if they were a single instance of the same type.
      * @class sntls.Collection
      * @extends sntls.Hash
      */
@@ -88,15 +93,32 @@ troop.postpone(sntls, 'Collection', function () {
         })
         .addMethods(/** @lends sntls.Collection# */{
             /**
-             * Creates "specified collection".
-             * Adds shortcut methods to items. It is assumed that the collection will only contain
-             * elements of the specified type (ie bearing methods by the specified names).
-             *
-             * WARNING: A specified collection may overshadow original collection methods, so
-             * if the specifying class is known to have conflicts, it is better to call
-             * original Collection methods like this: `sntls.Collection.filter.call(yourCollection, expr)`
-             *
-             * @param {string[]|object|troop.Base} template Array of method names, or object with method name keys.
+             * Creates a specified collection that is modeled on a template object.
+             * Specified collections inherit all methods from the template unless there's a conflict
+             * in which case the original `Collection` method wins. Such conflicting methods not available
+             * on the specified collection's API may be invoked indirectly through `.callOnEachItem()`.
+             * Methods 'inherited' from the template call the corresponding function on each collection item
+             * and return a generic collection with the results, except when *all* items return themselves,
+             * in which case the original collection is returned. In other words, chainable methods of the
+             * template remain chainable on the collection.
+             * @example
+             * var specified;
+             * specified = sntls.Collection.of(Array);
+             * specified = sntls.Collection.of(troop.Base);
+             * specified = sntls.Collection.of(['foo', 'bar']);
+             * specified = sntls.Collection.of({
+             *  foo: function () {},
+             *  bar: function () {}
+             * });
+             * sntls.Collection.of(String).create({
+             *  foo: "hello",
+             *  bar: "world"
+             * }).split().items; // {foo: ['h', 'e', 'l', 'l', 'o'], bar: ['w', 'o', 'r', 'l', 'd']}
+             * @param {string[]|object|troop.Base|function} template
+             * Object containing method names either in the form of an array, or as indexes of an object.
+             * From `Troop` classes only those methods will be considered that were added by the topmost extension.
+             * Functions are treated as constructors, and `.of()` works with their `.prototype` the same way as
+             * with any other object passed.
              * @returns {sntls.Collection}
              * @memberOf sntls.Collection
              */
@@ -146,7 +168,7 @@ troop.postpone(sntls, 'Collection', function () {
                 base.init.apply(this, arguments);
 
                 /**
-                 * Number of items in collection
+                 * Number of items in the collection. Writable, but not to be changed externally.
                  * @type {Number}
                  */
                 this.count = items ? Object.keys(items).length : 0;
@@ -165,7 +187,12 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Sets an item in the collection.
+             * Sets an item in the collection. Overwrites item if there is already one by the same item name.
+             * Increments counter for new items.
+             * @example
+             * var coll = sntls.Collection.create();
+             * coll.set('foo', "bar");
+             * coll.get('foo'); // "bar"
              * @param {string} itemName Item name.
              * @param item Item variable / object.
              * @returns {sntls.Collection}
@@ -185,7 +212,7 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Deletes item from collection.
+             * Deletes item from collection. Decrements counter when an item was in fact deleted.
              * @param {string} itemName Item name.
              * @returns {sntls.Collection}
              */
@@ -202,8 +229,9 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Clones collection
-             * @returns {sntls.Collection} New collection with same contents as this.
+             * Clones collection. Creates an instance of the same class (for subclasses of `Collection`)
+             * and initializes it with a shallow copy of the current items buffer and item count.
+             * @returns {sntls.Collection} New collection with identical contents.
              */
             clone: function () {
                 var result = /** @type sntls.Collection */ this.getBase().create();
@@ -220,13 +248,16 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Creates a collection of specified type initialized with
-             * the contents of the current collection.
-             * WARNING: shares item buffer with old collection,
-             * therefore changes in one will be reflected in the other.
-             * @param {sntls.Collection} returnType Collection class
-             * @returns {sntls.Collection} New instance of the specified
-             * (collection-based) type initialized w/ with same contents.
+             * Creates a new collection that is an instance of the specified collection subclass, and is initialized
+             * with the current collection's contents BY REFERENCE. Disposing of the current instance is strongly
+             * encouraged after calling this method.
+             * @example
+             * // converts a collection of strings to a string collection
+             * var stringCollection = sntls.Collection.create(['hello', 'world'])
+             *  .asType(sntls.Collection.of(String));
+             * @param {sntls.Collection} returnType Subclass of `Collection`
+             * @returns {sntls.Collection} Instance of the specified collection subclass, initialized with the
+             * caller's item buffer and item count.
              */
             asType: function (returnType) {
                 dessert.isCollection(returnType, "Type must be Collection-based");
@@ -240,14 +271,19 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Merges collection with current collection.
-             * Conflicts are resolved through the optionally supplied callback, or by default,
-             * the value from the current collection will be used.
+             * Merges current collection with another collection. Adds all items from both collections
+             * to a new collection instance. Item name conflicts are resolved by a suitable callback, or,
+             * when there is none specified, the value from the current collection will be used.
+             * @example
+             * var merged = stringCollection
+             *  .mergeWith(otherStringCollection, function (a, b, conflictingKey) {
+             *      return b.getItem(conflictingKey);
+             *  });
              * @param {sntls.Collection} collection Collection to be merged to current. Must share
              * a common base with the current collection.
              * @param {function} [conflictResolver] Callback for resolving merge conflicts.
-             * Callback receives as arguments: current collection, remote collection, and key of
-             * the conflicting item.
+             * Callback receives as arguments: current collection, remote collection, and name of
+             * the conflicting item, and is expected to return a collection item.
              * @returns {sntls.Collection} New collection with items from both collections in it.
              * Return type will be that of the current collection.
              */
@@ -273,8 +309,16 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection keys matching the specified prefix
-             * @param {string} prefix
+             * Retrieves item keys as an array, filtered by a prefix. The in which keys appear in the resulting
+             * array is not deterministic.
+             * @example
+             * var c = sntls.Collection.create({
+             *  foo: 1,
+             *  bar: 10,
+             *  force: 100
+             * });
+             * c.getKeysByPrefix('fo'); // ['foo', 'force']
+             * @param {string} prefix Item name prefix that keys must match in order to be included in the result.
              * @returns {string[]}
              */
             getKeysByPrefix: function (prefix) {
@@ -296,18 +340,27 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection keys matching the specified prefix, wrapped in a hash.
+             * Retrieves item keys as an array, filtered by a prefix, and wrapped in a hash.
              * @param {string} prefix
              * @returns {sntls.Hash}
+             * @see sntls.Collection#getKeysByPrefix
              */
             getKeysByPrefixAsHash: function (prefix) {
                 return sntls.Hash.create(this.getKeysByPrefix(prefix));
             },
 
             /**
-             * Retrieves collection keys matching the specified regular expression.
-             * @param {RegExp} regExp
-             * @returns {Array}
+             * Retrieves item keys as an array, filtered by a RegExp. The in which keys appear in the resulting
+             * array is not deterministic.
+             * @example
+             * var c = sntls.Collection.create({
+             *  foo: 1,
+             *  bar: 10,
+             *  force: 100
+             * });
+             * c.getKeysByRegExp(/^..r/); // ['bar', 'force']
+             * @param {RegExp} regExp Regular expression that keys must match in order to be included in the result.
+             * @returns {string[]}
              */
             getKeysByRegExp: function (regExp) {
                 var result = [],
@@ -326,19 +379,20 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection keys matching the specified regular expression, wrapped in a hash.
+             * Retrieves item keys as an array, filtered by a RegExp, and wrapped in a hash.
              * @param {RegExp} regExp
              * @returns {sntls.Hash}
+             * @see sntls.Collection#getKeysByRegExp
              */
             getKeysByRegExpAsHash: function (regExp) {
                 return sntls.Hash.create(this.getKeysByRegExp(regExp));
             },
 
             /**
-             * Selects specified collection items and returns them in a
-             * new collection of the same type.
-             * @param {string[]} itemNames Names of items to include in result
-             * @returns {sntls.Collection}
+             * Filters the collection by selecting only the items with the specified names. Item names that are not
+             * present in the collection will be included in the results, too, as undefined.
+             * @param {string[]} itemNames Names of items to be included in result.
+             * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterByKeys: function (itemNames) {
                 dessert.isArray(itemNames, "Invalid item names");
@@ -356,29 +410,35 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Filters collection by key prefix.
-             * @param {string} prefix
-             * @returns {sntls.Collection}
+             * Filters collection by matching keys against the specified prefix.
+             * @param {string} prefix Item name prefix that keys must match in order to be included in the result.
+             * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterByPrefix: function (prefix) {
                 return this.filterByKeys(this.getKeysByPrefix(prefix));
             },
 
             /**
-             * Filters collection by matching keys to the specified regular expression.
-             * @param {RegExp} regExp
-             * @returns {sntls.Collection}
+             * Filters collection by matching keys against the specified regular expression.
+             * @param {RegExp} regExp Regular expression that keys must match in order to be included in the result.
+             * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterByRegExp: function (regExp) {
                 return this.filterByKeys(this.getKeysByRegExp(regExp));
             },
 
             /**
-             * Filters collection by a selector function.
-             * @param {function} selector Selector function. Receives `item` and `itemName`
-             * as arguments, and the collection as `this`, and should return true when
-             * item should be included in results.
-             * @returns {sntls.Collection}
+             * Filters collection applying the specified selector function to each item.
+             * @example
+             * // filters items with value higher than 50
+             * c.filterByExpr(function (item, itemName) {
+             *  return item > 50;
+             * }).items; // {force: 100}
+             * @param {function} selector Selector function. Receives the collection instance as `this`,
+             * current item as first argument, and the name of the current item as second argument.
+             * Expected to return a boolean: true when the item should be included in the result, false if not.
+             * (In reality and truthy or falsy value will do.)
+             * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterBySelector: function (selector) {
                 var items = this.items,
@@ -397,10 +457,12 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection items as array in order of their names
-             * or according to the supplied comparator.
-             * @param {function} [comparator] Comparator for sorting keys.
+             * Retrieves collection items values in an array, without name information, ordered by item names, or,
+             * when a comparator function is specified, in the order defined by that.
+             * @param {function} [comparator] Comparator function for sorting items by item names.
+             * Same as in `Array.sort`.
              * @returns {Array} Item values in order of names.
+             * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
             getSortedValues: function (comparator) {
                 dessert.isFunctionOptional(comparator, "Invalid comparator function");
@@ -420,14 +482,14 @@ troop.postpone(sntls, 'Collection', function () {
              * Retrieves sorted item values array wrapped in a hash.
              * @param {function} [comparator] Comparator for sorting keys.
              * @returns {sntls.Hash}
-             * @see sntls.Collection.getSortedValues
+             * @see sntls.Collection#getSortedValues
              */
             getSortedValuesAsHash: function (comparator) {
                 return sntls.Hash.create(this.getSortedValues(comparator));
             },
 
             /**
-             * Empties collection.
+             * Clears collection by removing all items and re-setting item count to zero.
              * @returns {sntls.Collection}
              */
             clear: function () {
@@ -441,11 +503,19 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Calls a function on each item.
-             * @param {function} handler Function to call on each item.
-             * Handler receives the current item and item name as arguments,
-             * and the collection as `this`.
-             * Iteration breaks when handler returns false.
+             * Iterates over collection items and calls the specified handler function on each, until
+             * either the iteration completes of handler returns `false`.
+             * Iteration order is non-deterministic.
+             * Iteration commences according to the initial state of the collection, with regards to
+             * item names and count. Therefore any handler function changing the collection will not thwart the
+             * iteration process. However, changing the collection while iterating is strongly discouraged.
+             * @example
+             * c.forEachItem(function (item, itemName, extraParam) {
+             *  alert(itemName + item + extraParam);
+             * }, 'foo'); // outputs: 'foo1foo', 'bar10foo', 'force100foo'
+             * @param {function} handler Function to be called on each item. The handler receives current item
+             * as first argument, item name as second argument, and all other arguments passed to `.forEachItem()`
+             * as the rest of its arguments. A reference to the current collection is passed as `this`.
              * @returns {sntls.Collection}
              */
             forEachItem: function (handler) {
@@ -467,14 +537,15 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Calls function on each item in a specific order.
-             * @param {function} handler Function to call on each item.
-             * Handler receives the current item and item name as arguments,
-             * and the collection as `this`.
+             * Iterates over collection items and calls the specified handler function on each in the order of keys.
+             * Other than that, the method behaves the same way as `.forEach()`.
+             * @param {function} handler @see sntls.Collection#forEachItem
              * Iteration breaks when handler returns false.
-             * @param {function} [comparator] Comparator for sorting keys.
-             * Receives collection instance as context for accessing item values.
+             * @param {function} [comparator] Optional callback for comparing keys when sorting. The context (`this`)
+             * will be set to the collection so item values may be compared too via `this.items`. Expected to return
+             * an integer, the same way as in `Array.sort()`
              * @returns {sntls.Collection}
+             * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
             forEachItemSorted: function (handler, comparator) {
                 dessert
@@ -497,14 +568,16 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Maps the collection's contents to a new collection.
-             * @param {function} handler Transform function. Called on each element,
-             * its return value will be placed in the mapped collection.
-             * Receives current item and item name as arguments, plus the collection as `this`.
-             * @param {sntls.Collection} [returnType] Reference to derived collection class.
-             * When specified, the resulting collection will be an instance of this class.
-             * @returns {sntls.Collection} New collection instance (of the specified type)
-             * containing mapped items.
+             * Maps a collection to a new collection instance of subclass `returnType`, using the specified handler
+             * to create each item in the new collection.
+             * @example
+             * c.mapContents(function (item) {
+             *  return 'hello' + item;
+             * }, sntls.Collection.of(String));
+             * @param {function} handler Mapper function. Takes `item` and `itemName` as arguments, and is expected
+             * to return the mapped item for the new collection. Original collection is passed as `this`.
+             * @param {sntls.Collection} [returnType] Optional collection subclass for the output.
+             * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
             mapContents: function (handler, returnType) {
                 dessert
@@ -526,9 +599,17 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Invokes a method on each item, identified by name.
-             * Method results are collected and returned in a new collection.
-             * @param {string} methodName Method name on each item.
+             * Calls the specified method on each item (assuming they're objects and have a method by the given name),
+             * and gathers their results in a collection. When the specified method was chainable on *all* items,
+             * a reference to the original collection is returned, similarly to methods auto-generated by `.of()`.
+             * The rest of the arguments are forwarded to the method calls.
+             * @example
+             * var c = sntls.Collection.create({
+             *  foo: "bar",
+             *  hello: "world"
+             * });
+             * c.callOnEachItem('split').items; // {foo: ['b', 'a', 'r'], hello: ['h', 'e', 'l', 'l', 'o']}
+             * @param {string} methodName Name identifying method on items.
              * @returns {sntls.Collection}
              */
             callOnEachItem: function (methodName) {
@@ -578,7 +659,8 @@ troop.postpone(sntls, 'Collection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
-         * @param {sntls.Collection} [returnType]
+         * Converts hash to collection, optionally to the specified subclass.
+         * @param {sntls.Collection} [returnType] Collection subclass.
          * @returns {sntls.Collection}
          */
         toCollection: function (returnType) {
