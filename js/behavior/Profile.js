@@ -12,8 +12,7 @@ troop.postpone(sntls, 'Profile', function () {
      */
 
     /**
-     * A profile is a collection of named numeric values that
-     * may be incremented by an object the profile represents.
+     * Profiles register a set of counters that may be increased or decreased as a way of gathering statistics.
      * @class sntls.Profile
      * @extends troop.Base
      */
@@ -24,16 +23,16 @@ troop.postpone(sntls, 'Profile', function () {
              */
             init: function () {
                 /**
-                 * Lookup of numeric values assigned to named counter bins
+                 * Registers individual named counters that make up the profile.
                  * @type {object}
                  */
                 this.counters = {};
             },
 
             /**
-             * Increases counter
-             * @param {string} counterName Counter identifier
-             * @param {number} [amount] Amount to add to counter
+             * Increases counter either by 1 or `amount` when specified.
+             * @param {string} counterName Counter name.
+             * @param {number} [amount=1] Amount by which the counter is to be increased.
              * @returns {sntls.Profile}
              */
             inc: function (counterName, amount) {
@@ -51,9 +50,9 @@ troop.postpone(sntls, 'Profile', function () {
             },
 
             /**
-             * Decreases counter
-             * @param {string} counterName Counter identifier
-             * @param {number} [amount] Amount to add to counter
+             * Decreases counter either by 1 or `amount` when specified.
+             * @param {string} counterName Counter name.
+             * @param {number} [amount] Amount by which the counter is to be decreased.
              * @returns {sntls.Profile}
              */
             dec: function (counterName, amount) {
@@ -71,15 +70,18 @@ troop.postpone(sntls, 'Profile', function () {
             },
 
             /**
-             * Retrieves counter value
-             * @returns {Number}
+             * Retrieves the current value of the specified counter.
+             * @param {string} counterName Counter name.
+             * @returns {Number} Counter value.
              */
-            getCount: function (key) {
-                return this.counters[key] || 0;
+            getCount: function (counterName) {
+                return this.counters[counterName] || 0;
             },
 
             /**
+             * TODO: Remove when property accessor is implemented in sntls.Collection
              * Simple getter for counter object.
+             * @deprecated
              * @returns {object}
              */
             getCounters: function () {
@@ -87,13 +89,13 @@ troop.postpone(sntls, 'Profile', function () {
             },
 
             /**
-             * Resets one or all counters
-             * @param {string} [key]
+             * Resets the profile by emptying the entire counters buffer, or just one counter.
+             * @param {string} [counterName] Name of counter to be reset.
              * @returns {sntls.Profile}
              */
-            reset: function (key) {
-                if (dessert.validators.isString(key)) {
-                    delete this.counters[key];
+            reset: function (counterName) {
+                if (dessert.validators.isString(counterName)) {
+                    delete this.counters[counterName];
                 } else {
                     this.counters = {};
                 }
