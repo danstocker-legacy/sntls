@@ -6,15 +6,17 @@ troop.postpone(sntls, 'Dictionary', function () {
 
     /**
      * Instantiates class.
+     * Constructs a dictionary, initialized with the items passed in the optional argument.
      * @name sntls.Dictionary.create
      * @function
-     * @param {object} items
+     * @param {object} [items]
      * @returns {sntls.Dictionary}
      */
 
     /**
-     * Associates values to keys.
-     * Use the Dictionary class for managing and combining lookup objects.
+     * Manages lookups. In a dictionary, one item may be assigned one key and a list of values.
+     * Thus, `Dictionary` handles item multiplicity seamlessly.
+     * Use a dictionary for managing and combining lookup objects.
      * @class sntls.Dictionary
      * @extends sntls.Hash
      */
@@ -44,29 +46,40 @@ troop.postpone(sntls, 'Dictionary', function () {
         })
         .addMethods(/** @lends sntls.Dictionary# */{
             /**
-             * @param {object} items
+             * TODO: Rename "itemCount" to "keyCount" and "valueCount" to "itemCount" in accordance w/ naming conventions.
+             * @param {object} [items]
              * @ignore
              */
             init: function (items) {
                 base.init.call(this, items);
 
                 /**
-                 * Item count.
+                 * Number of items in the dictionary. Equal to the number of keys.
+                 * Should not be modified externally.
+                 * @example
+                 * sntls.Dictionary.create({foo:"bar",baz:[1,2]}).itemCount // 2 (foo, baz)
                  * @type {number}
                  */
                 this.itemCount = items ? Object.keys(items).length : 0;
 
                 /**
-                 * Value count.
+                 * Reflects the number of values (with multiplicity) in the dictionary.
+                 * Should not be modified externally.
+                 * @example
+                 * sntls.Dictionary.create({foo:"bar",baz:[1,2]}).valueCount // 3 ("bar", 1, 2)
                  * @type {number}
                  */
                 this.valueCount = items ? this._countValues(items) : 0;
             },
 
             /**
-             * Adds item to dictionary
-             * @param {string} key
-             * @param {*|Array} value
+             * Adds single item to dictionary. Multiple values may be assigned to the same key in one call.
+             * @example
+             * var d = sntls.Dictionary.create({foo: "bar"});
+             * d.addItem('hello', 'world').items // {foo: "bar", hello: "world"}
+             * d.addItem('foo', 'boo').items // {foo: ["bar", "boo"], hello: "world"}
+             * @param {string} key Key identifying dictionary item.
+             * @param {*|Array} value Value or values to be assigned to the specified key.
              * @returns {sntls.Dictionary}
              */
             addItem: function (key, value) {
@@ -108,10 +121,14 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Adds items to dictionary by assigning the same value(s) to
-             * a set of keys
-             * @param {string[]} keys
-             * @param {*|Array} value
+             * Adds multiple key-value pairs to the dictionary by assigning the same set of values to
+             * the specified keys.
+             * @example
+             * var d = sntls.Dictionary.create();
+             * d.addItems(['hello', 'greetings'], 'world').items // {hello: "world", greetings: "world"}
+             * d.addItem(['foo', 'hello'], 'bar').items // {hello: ["world", "bar"], greetings: "world", foo: "bar"}
+             * @param {string[]} keys Array of keys identifying dictionary items.
+             * @param {*|Array} value Value or values to be assigned to the specified keys.
              * @returns {sntls.Dictionary}
              */
             addItems: function (keys, value) {
@@ -125,10 +142,16 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Removes key - value pair from dictionary. When item value is omitted,
-             * all values associated with `key` are removed.
-             * @param {string} key Key from which to remove value
-             * @param {*} [value] Item value.
+             * Removes key - value pair from dictionary. When `value` is omitted, or it is the only value
+             * associated with `key`, the item is removed altogether.
+             * @example
+             * var d = sntls.Dictionary.create({
+             *     foo: 'bar',
+             *     hello: ['world', 'all', 'bar']
+             * });
+             * d.removeItem('hello', 'bar').items // {foo: 'bar', hello: ['world', 'all']}
+             * @param {string} key Key identifying a dictionary item.
+             * @param {*} [value] Value (by reference if object) to be removed from the item.
              * @returns {sntls.Dictionary}
              */
             removeItem: function (key, value) {
@@ -167,9 +190,10 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Removes items from dictionary.
-             * @param {string[]} keys
-             * @param {*} [value]
+             * Removes specified value from the specified keys. When `value` is omitted, items matching key will be
+             * removed.
+             * @param {string[]} keys Array of keys identifying dictionary items.
+             * @param {*} [value] Value (by reference if object) to be removed from the item.
              * @returns {sntls.Dictionary}
              */
             removeItems: function (keys, value) {
@@ -183,8 +207,9 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Retrieves item(s) from the dictionary
-             * @param {*|Array} key
+             * Retrieves the value or values associated with `key`.
+             * TODO: make sure single key / array value returns a copy of the array
+             * @param {*|Array} key Array of keys identifying dictionary items.
              * @returns {*|Array} Dictionary item
              */
             getItem: function (key) {
@@ -215,7 +240,7 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Clears dictionary
+             * Clears dictionary items and resets counters.
              * @returns {sntls.Dictionary}
              */
             clear: function () {
