@@ -120,6 +120,14 @@ troop.postpone(sntls, 'ProfileCollection', function () {
      */
 
     /**
+     * Shorthand for a (specified) collection of Profile objects.
+     * @example
+     * var pc = sntls.ProfileCollection.create();
+     * pc.setItem('foo', sntls.Profile.create());
+     * pc.inc('hello');
+     * pc.setItem('bar', sntls.Profile.create());
+     * pc.inc('hello');
+     * pc.getCounters().items; // {foo: {hello: 2}, bar: {hello: 1}}
      * @class sntls.ProfileCollection
      * @extends sntls.Collection
      * @extends sntls.Profile
