@@ -11,7 +11,7 @@ troop.postpone(sntls, 'OrderedStringList', function () {
      */
 
     /**
-     * Ordered list of strings. Allows prefix-based search.
+     * Ordered list extended with string-specific fast, prefix-based search.
      * @class sntls.OrderedStringList
      * @extends sntls.OrderedList
      */
@@ -40,10 +40,14 @@ troop.postpone(sntls, 'OrderedStringList', function () {
         })
         .addMethods(/** @lends sntls.OrderedStringList# */{
             /**
-             * Retrieves a range of items that match the specified prefix.
+             * Retrieves items from the list matching the specified prefix.
+             * @example
+             * var osl = sntls.OrderedStringList(['hi', 'hello', 'hire', 'foo']);
+             * osl.getRangeByPrefix('hi') // ['hi', 'hire']
+             * osl.getRangeByPrefix('h') // ['hello', 'hi', 'hire']
              * @param {string} prefix
              * @param {boolean} [excludeOriginal=false] Whether to exclude `prefix` from the results
-             * @returns {string[]}
+             * @returns {string[]} Sorted array of matches.
              */
             getRangeByPrefix: function (prefix, excludeOriginal) {
                 dessert
@@ -59,11 +63,11 @@ troop.postpone(sntls, 'OrderedStringList', function () {
             },
 
             /**
-             * Retrieves a range by prefix and wraps it in a Hash object.
+             * Retrieves items from the list matching the specified prefix, wrapped in a hash.
              * @param {string} prefix
              * @param {boolean} [excludeOriginal=false] Whether to exclude `prefix` from the results
              * @returns {sntls.Hash}
-             * @see sntls.OrderedList.getRange
+             * @see sntls.OrderedList#getRange
              */
             getRangeByPrefixAsHash: function (prefix, excludeOriginal) {
                 var range = this.getRangeByPrefix.apply(this, arguments);
@@ -71,8 +75,11 @@ troop.postpone(sntls, 'OrderedStringList', function () {
             },
 
             /**
-             * Removes all occurrence of a specific string from the list.
-             * @param {string} value
+             * Removes all occurrences of a specific string from the list.
+             * @example
+             * var osl = sntls.OrderedStringList(['hi', 'hello', 'hire', 'hi', 'foo']);
+             * osl.removeAll('hi').items // ['hello', 'hire', 'foo']
+             * @param {string} value String value to be removed from list.
              * @returns {sntls.OrderedStringList}
              */
             removeEvery: function (value) {
