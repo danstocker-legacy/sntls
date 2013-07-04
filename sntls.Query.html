@@ -41,8 +41,17 @@
     
     <div class="description">
         An expression that matches several paths.
-Technically, queries can be interpreted as paths, ie. wherever a path is accepted,
-so is a query.
+Queries are backwards-compatible in the sens that a path instance may be treated as a query
+that matches a single path.
+A series of symbols may be used in specifying a query:
+There are three symbols that match keys:
+- '|' (pipe) matches all values on a key. Eg. 'hello>|>world' would match 'hello>dear>world'
+ as well as 'hello>>world'.
+- '<' separates optional key values. Eg. 'hello>world<all' would match 'hello>world' and 'hello>all'
+ but not 'hello>people'.
+- '\' skips all keys until next pattern in the query is matched. Eg. 'hello>\>world' would match
+'hello>people>of>the>world' as well as 'hello>world', but not 'hello>all'.
+- '^value' is ignored.
     </div>
     
 
@@ -157,7 +166,7 @@ by the next pattern in the query.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 48
+        <a href="Query.js.html">tree/Query.js</a>, line 58
     </li></ul></dd>
     
     
@@ -210,7 +219,7 @@ contains query patterns.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 34
+        <a href="Query.js.html">tree/Query.js</a>, line 44
     </li></ul></dd>
     
     
@@ -262,7 +271,7 @@ contains query patterns.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 40
+        <a href="Query.js.html">tree/Query.js</a>, line 50
     </li></ul></dd>
     
     
@@ -287,8 +296,7 @@ contains query patterns.
 <dd>
     
     <div class="description">
-        Array buffer. Public because grants fast access.
-Should not be changed from the outside.
+        Path in array representation. Keys are unencoded. Not to be modified externally.
     </div>
     
     
@@ -320,7 +328,7 @@ Should not be changed from the outside.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 81
+        <a href="Path.js.html">tree/Path.js</a>, line 82
     </li></ul></dd>
     
     
@@ -438,7 +446,7 @@ Makes sure skipper patterns all reference the same instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 88
+        <a href="Query.js.html">tree/Query.js</a>, line 98
     </li></ul></dd>
     
     
@@ -572,7 +580,7 @@ Makes sure skipper patterns all reference the same instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 57
+        <a href="Query.js.html">tree/Query.js</a>, line 67
     </li></ul></dd>
     
     
@@ -626,8 +634,8 @@ Makes sure skipper patterns all reference the same instance.
     
     <div class="description">
         Instantiates class.
-Initializes query with a string or array. Keys in the query
-(except for patterns) are assumed to be URI-encoded.
+Constructs query instance and populates it with query information. Keys in the query
+(except for pattern objects) are assumed to be URI-encoded.
     </div>
     
 
@@ -680,7 +688,9 @@ Initializes query with a string or array. Keys in the query
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Query in either string representation ('>'-separated, eg. "this>is>|>query")
+or array representation (eg. ['this', 'is', '|'.toQueryPattern(), 'path']). When query is given as string,
+keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.</td>
         </tr>
 	
 	
@@ -748,11 +758,6 @@ Initializes query with a string or array. Keys in the query
         
     
     
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code> 'root>\\>persons>|>name'</code></pre>
-
-    
 </dd>
 
         
@@ -766,8 +771,7 @@ Initializes query with a string or array. Keys in the query
     
     
     <div class="description">
-        Appends path with specified path.
-Changes path buffer!
+        Appends the specified path to the current path. Alters path buffer!
     </div>
     
 
@@ -817,7 +821,7 @@ Changes path buffer!
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Path to be appended to the current path.</td>
         </tr>
 	
 	
@@ -853,7 +857,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 108
+        <a href="Path.js.html">tree/Path.js</a>, line 110
     </li></ul></dd>
     
     
@@ -903,7 +907,7 @@ Changes path buffer!
     
     
     <div class="description">
-        Clones path
+        Creates a new instance of the same path subclass, initialized with identical path information.
     </div>
     
 
@@ -941,7 +945,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 88
+        <a href="Path.js.html">tree/Path.js</a>, line 89
     </li></ul></dd>
     
     
@@ -991,7 +995,7 @@ Changes path buffer!
     
     
     <div class="description">
-        Matches remote path to current path.
+        Checks whether current path and specified path are identical by value.
     </div>
     
 
@@ -1077,7 +1081,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 129
+        <a href="Path.js.html">tree/Path.js</a>, line 137
     </li></ul></dd>
     
     
@@ -1114,6 +1118,13 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
+p.equal('foo.bar') // true
+p.equal('hello.world') // false</code></pre>
+
+    
 </dd>
 
         
@@ -1127,9 +1138,8 @@ Changes path buffer!
     
     
     <div class="description">
-        Extracts the longest fixed stem path from the query.
-The stem may not contain any wildcards, or other
-query expressions, only specific keys.
+        Extracts the longest path from the start of the query.
+Stem may not contain any wildcards, or other query expressions, only key literals.
     </div>
     
 
@@ -1162,7 +1172,7 @@ query expressions, only specific keys.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 143
+        <a href="Query.js.html">tree/Query.js</a>, line 154
     </li></ul></dd>
     
     
@@ -1199,6 +1209,11 @@ query expressions, only specific keys.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>sntls.Query.create('hello>world>|>foo>\>bar').getStemPath(); // path 'hello>world'</code></pre>
+
+    
 </dd>
 
         
@@ -1212,9 +1227,8 @@ query expressions, only specific keys.
     
     
     <div class="description">
-        Tells whether the current path is relative to the
-the root path, ie. it matches the beginning of
-the current path entirely.
+        Checks whether current path is relative to the specified root path. Path A is relative to B
+when A and B have a common base path and that base path is B.
     </div>
     
 
@@ -1300,7 +1314,7 @@ the current path entirely.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 154
+        <a href="Path.js.html">tree/Path.js</a>, line 165
     </li></ul></dd>
     
     
@@ -1337,6 +1351,13 @@ the current path entirely.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
+p.isRelativeTo('foo') // true
+p.isRelativeTo('foo.bar.hello') // false</code></pre>
+
+    
 </dd>
 
         
@@ -1350,7 +1371,7 @@ the current path entirely.
     
     
     <div class="description">
-        Determines whether query matches specified path
+        Determines whether the specified path matches the current query.
     </div>
     
 
@@ -1400,7 +1421,7 @@ the current path entirely.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Path to be tested against the current query.</td>
         </tr>
 	
 	
@@ -1431,7 +1452,7 @@ the current path entirely.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 166
+        <a href="Query.js.html">tree/Query.js</a>, line 177
     </li></ul></dd>
     
     
@@ -1481,8 +1502,7 @@ the current path entirely.
     
     
     <div class="description">
-        Prepends path with specified path.
-Changes path buffer!
+        Prepends the current path with the specified path. Alters path buffer!
     </div>
     
 
@@ -1532,7 +1552,7 @@ Changes path buffer!
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Path to be prepended to the current path.</td>
         </tr>
 	
 	
@@ -1568,7 +1588,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 119
+        <a href="Path.js.html">tree/Path.js</a>, line 123
     </li></ul></dd>
     
     
@@ -1605,6 +1625,12 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path');
+p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
+
+    
 </dd>
 
         
@@ -1618,7 +1644,8 @@ Changes path buffer!
     
     
     <div class="description">
-        Generates string representation of query.
+        Returns the string representation for the query, keys URI encoded and separated by '>',
+patterns converted back to their symbol form ('|', '\', '<', and '^').
     </div>
     
 
@@ -1651,7 +1678,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 210
+        <a href="Query.js.html">tree/Query.js</a>, line 224
     </li></ul></dd>
     
     
@@ -1688,6 +1715,11 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>sntls.Query.create(['test^', '|'.toQueryPattern(), 'path']).toString() // "test%5E>|>path"</code></pre>
+
+    
 </dd>
 
         
@@ -1701,8 +1733,7 @@ Changes path buffer!
     
     
     <div class="description">
-        Trims trailing end of path.
-Changes path buffer!
+        Trims trailing end of path. Alters path buffer!
     </div>
     
 
@@ -1740,7 +1771,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 97
+        <a href="Path.js.html">tree/Path.js</a>, line 100
     </li></ul></dd>
     
     
@@ -1777,6 +1808,12 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path>it>is');
+p.trim().asArray // ['test', 'path', 'it']</code></pre>
+
+    
 </dd>
 
         </dl>
@@ -1801,7 +1838,7 @@ Changes path buffer!
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:10 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:18 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

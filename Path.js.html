@@ -35,16 +35,18 @@ troop.postpone(sntls, 'Path', function () {
 
     /**
      * Instantiates class.
-     * Initializes Path with a string or array. Keys are assumed to be URI-encoded.
+     * Constructs path instance and populates it with path information. Keys are assumed to be URI-encoded.
      * @name sntls.Path.create
      * @function
-     * @param {string|string[]} path Path in string or array representation
+     * @param {string|string[]} path Path in either string representation ('>'-separated, eg. "this>is>a>path")
+     * or array representation (eg. ['this', 'is', 'a', 'path']). When path is given as string,
+     * keys are URI decoded before adding them to the internal buffer.
      * @returns {sntls.Path}
      */
 
     /**
-     * Represents a composite linear key, essentially
-     * an array, or a '>'-delimited string.
+     * Unambiguously identifies a node in a tree-like structure. Paths break down to a series of keys, each
+     * subsequent key corresponding to a property in the next child node.
      * @class sntls.Path
      * @extends troop.Base
      */
@@ -101,15 +103,14 @@ troop.postpone(sntls, 'Path', function () {
                 }
 
                 /**
-                 * Array buffer. Public because grants fast access.
-                 * Should not be changed from the outside.
+                 * Path in array representation. Keys are unencoded. Not to be modified externally.
                  * @type {Array}
                  */
                 this.asArray = asArray;
             },
 
             /**
-             * Clones path
+             * Creates a new instance of the same path subclass, initialized with identical path information.
              * @returns {sntls.Path}
              */
             clone: function () {
@@ -117,8 +118,10 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Trims trailing end of path.
-             * Changes path buffer!
+             * Trims trailing end of path. Alters path buffer!
+             * @example
+             * var p = sntls.Path.create('test>path>it>is');
+             * p.trim().asArray // ['test', 'path', 'it']
              * @returns {sntls.Path}
              */
             trim: function () {
@@ -127,9 +130,8 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Appends path with specified path.
-             * Changes path buffer!
-             * @param {sntls.Path} path
+             * Appends the specified path to the current path. Alters path buffer!
+             * @param {sntls.Path} path Path to be appended to the current path.
              * @returns {sntls.Path}
              */
             append: function (path) {
@@ -138,9 +140,11 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Prepends path with specified path.
-             * Changes path buffer!
-             * @param {sntls.Path} path
+             * Prepends the current path with the specified path. Alters path buffer!
+             * @example
+             * var p = sntls.Path.create('test>path');
+             * p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']
+             * @param {sntls.Path} path Path to be prepended to the current path.
              * @returns {sntls.Path}
              */
             prepend: function (path) {
@@ -149,7 +153,11 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Matches remote path to current path.
+             * Checks whether current path and specified path are identical by value.
+             * @example
+             * var p = sntls.Path.create('foo>bar');
+             * p.equal('foo.bar') // true
+             * p.equal('hello.world') // false
              * @param {sntls.Path} remotePath Remote path
              * @returns {boolean}
              */
@@ -172,9 +180,12 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Tells whether the current path is relative to the
-             * the root path, ie. it matches the beginning of
-             * the current path entirely.
+             * Checks whether current path is relative to the specified root path. Path A is relative to B
+             * when A and B have a common base path and that base path is B.
+             * @example
+             * var p = sntls.Path.create('foo>bar');
+             * p.isRelativeTo('foo') // true
+             * p.isRelativeTo('foo.bar.hello') // false
              * @param {sntls.Path} rootPath
              * @returns {boolean}
              */
@@ -199,7 +210,9 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * String representation
+             * Returns the string representation for the path, keys URI encoded and separated by '>'.
+             * @example
+             * sntls.Path.create(['test^', 'path']).toString() // "test%5E>path"
              * @returns {string}
              */
             toString: function () {
@@ -264,7 +277,7 @@ troop.postpone(sntls, 'Path', function () {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:12 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

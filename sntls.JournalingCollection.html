@@ -40,7 +40,7 @@
     
     
     <div class="description">
-        Collection that keeps a log of changes.
+        Logs all changes in the collection.
     </div>
     
 
@@ -126,7 +126,7 @@
 <dd>
     
     <div class="description">
-        Number of items in collection
+        Number of items in the collection. Writable, but not to be changed externally.
     </div>
     
     
@@ -158,7 +158,66 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 152
+        <a href="Collection.js.html">data/Collection.js</a>, line 170
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Object buffer that stores items. Technically writable and public for performance
+and transparency reasons, but should not be changed externally as may lead to inconsistent state
+especially in `Hash`-based subclasses.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#items">sntls.Collection#items</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 38
     </li></ul></dd>
     
     
@@ -183,7 +242,9 @@
 <dd>
     
     <div class="description">
-        Change log
+        Collection log. Log entries are plain objects with three properties: "method", "name", and "item".
+Property "method" identifies the kind of change, "name" identifies the item that was changed, and
+"item" holds the value before the change.
     </div>
     
     
@@ -210,7 +271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 33
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 42
     </li></ul></dd>
     
     
@@ -222,6 +283,15 @@
 </dl>
 
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>{
+ method: 'add', // 'add', 'change', or 'remove'
+ name: 'itemName', // name of affected item
+ item: {} // item before the change
+}</code></pre>
+
     
 </dd>
 
@@ -470,7 +540,7 @@ and returning them as a collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 37
+        <a href="Collection.js.html">data/Collection.js</a>, line 38
     </li></ul></dd>
     
     
@@ -520,10 +590,9 @@ and returning them as a collection.
     
     
     <div class="description">
-        Creates a collection of specified type initialized with
-the contents of the current collection.
-WARNING: shares item buffer with old collection,
-therefore changes in one will be reflected in the other.
+        Creates a new collection that is an instance of the specified collection subclass, and is initialized
+with the current collection's contents BY REFERENCE. Disposing of the current instance is strongly
+encouraged after calling this method.
     </div>
     
 
@@ -573,7 +642,7 @@ therefore changes in one will be reflected in the other.
             
             
             
-            <td class="description last">Collection class</td>
+            <td class="description last">Subclass of `Collection`</td>
         </tr>
 	
 	
@@ -609,7 +678,7 @@ therefore changes in one will be reflected in the other.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 231
+        <a href="Collection.js.html">data/Collection.js</a>, line 258
     </li></ul></dd>
     
     
@@ -630,8 +699,8 @@ therefore changes in one will be reflected in the other.
     
             
 <div class="param-desc">
-    New instance of the specified
-(collection-based) type initialized w/ with same contents.
+    Instance of the specified collection subclass, initialized with the
+caller's item buffer and item count.
 </div>
 
 
@@ -651,6 +720,13 @@ therefore changes in one will be reflected in the other.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// converts a collection of strings to a string collection
+var stringCollection = sntls.Collection.create(['hello', 'world'])
+ .asType(sntls.Collection.of(String));</code></pre>
+
+    
 </dd>
 
         
@@ -664,8 +740,10 @@ therefore changes in one will be reflected in the other.
     
     
     <div class="description">
-        Invokes a method on each item, identified by name.
-Method results are collected and returned in a new collection.
+        Calls the specified method on each item (assuming they're objects and have a method by the given name),
+and gathers their results in a collection. When the specified method was chainable on *all* items,
+a reference to the original collection is returned, similarly to methods auto-generated by `.of()`.
+The rest of the arguments are forwarded to the method calls.
     </div>
     
 
@@ -715,7 +793,7 @@ Method results are collected and returned in a new collection.
             
             
             
-            <td class="description last">Method name on each item.</td>
+            <td class="description last">Name identifying method on items.</td>
         </tr>
 	
 	
@@ -751,7 +829,7 @@ Method results are collected and returned in a new collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 534
+        <a href="Collection.js.html">data/Collection.js</a>, line 611
     </li></ul></dd>
     
     
@@ -788,6 +866,15 @@ Method results are collected and returned in a new collection.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var c = sntls.Collection.create({
+ foo: "bar",
+ hello: "world"
+});
+c.callOnEachItem('split').items; // {foo: ['b', 'a', 'r'], hello: ['h', 'e', 'l', 'l', 'o']}</code></pre>
+
+    
 </dd>
 
         
@@ -801,7 +888,7 @@ Method results are collected and returned in a new collection.
     
     
     <div class="description">
-        Empties collection.
+        Clears the entire collection and resets log.
     </div>
     
 
@@ -834,7 +921,7 @@ Method results are collected and returned in a new collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 84
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 93
     </li></ul></dd>
     
     
@@ -884,7 +971,8 @@ Method results are collected and returned in a new collection.
     
     
     <div class="description">
-        Clones collection
+        Clones collection. Creates an instance of the same class (for subclasses of `Collection`)
+and initializes it with a shallow copy of the current items buffer and item count.
     </div>
     
 
@@ -922,7 +1010,7 @@ Method results are collected and returned in a new collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 208
+        <a href="Collection.js.html">data/Collection.js</a>, line 232
     </li></ul></dd>
     
     
@@ -943,7 +1031,7 @@ Method results are collected and returned in a new collection.
     
             
 <div class="param-desc">
-    New collection with same contents as this.
+    New collection with identical contents.
 </div>
 
 
@@ -968,7 +1056,7 @@ Method results are collected and returned in a new collection.
         
             
 <dt>
-    <h4 class="name" id="deleteItem"><span class="type-signature"></span>deleteItem<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
+    <h4 class="name" id="deleteItem"><span class="type-signature"></span>deleteItem<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
     
     
 </dt>
@@ -976,7 +1064,7 @@ Method results are collected and returned in a new collection.
     
     
     <div class="description">
-        Removes item from sntls.LOOKUP.
+        Removes item from the collection and logs change.
     </div>
     
 
@@ -1010,7 +1098,7 @@ Method results are collected and returned in a new collection.
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>itemKey</code></td>
             
             
             <td class="type">
@@ -1026,7 +1114,7 @@ Method results are collected and returned in a new collection.
             
             
             
-            <td class="description last">Item name.</td>
+            <td class="description last">Item key.</td>
         </tr>
 	
 	
@@ -1057,7 +1145,7 @@ Method results are collected and returned in a new collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 62
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 71
     </li></ul></dd>
     
     
@@ -1099,7 +1187,7 @@ Method results are collected and returned in a new collection.
         
             
 <dt>
-    <h4 class="name" id="filterByKeys"><span class="type-signature"></span>filterByKeys<span class="signature">(itemNames)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="filterByKeys"><span class="type-signature"></span>filterByKeys<span class="signature">(itemKeys)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -1107,8 +1195,8 @@ Method results are collected and returned in a new collection.
     
     
     <div class="description">
-        Selects specified collection items and returns them in a
-new collection of the same type.
+        Filters the collection by selecting only the items with the specified keys. Item keys that are not
+present in the collection will be included in the results, too, as undefined.
     </div>
     
 
@@ -1142,7 +1230,7 @@ new collection of the same type.
 	
         <tr>
             
-                <td class="name"><code>itemNames</code></td>
+                <td class="name"><code>itemKeys</code></td>
             
             
             <td class="type">
@@ -1158,7 +1246,7 @@ new collection of the same type.
             
             
             
-            <td class="description last">Names of items to include in result</td>
+            <td class="description last">Keys of items to be included in result.</td>
         </tr>
 	
 	
@@ -1194,7 +1282,7 @@ new collection of the same type.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 343
+        <a href="Collection.js.html">data/Collection.js</a>, line 393
     </li></ul></dd>
     
     
@@ -1214,6 +1302,10 @@ new collection of the same type.
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    New instance of the same collection subclass holding the filtered contents.
+</div>
+
 
 
 <dl>
@@ -1244,7 +1336,7 @@ new collection of the same type.
     
     
     <div class="description">
-        Filters collection by key prefix.
+        Filters collection by matching keys against the specified prefix.
     </div>
     
 
@@ -1294,7 +1386,7 @@ new collection of the same type.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Item key prefix that keys must match in order to be included in the result.</td>
         </tr>
 	
 	
@@ -1330,7 +1422,7 @@ new collection of the same type.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 363
+        <a href="Collection.js.html">data/Collection.js</a>, line 413
     </li></ul></dd>
     
     
@@ -1350,6 +1442,10 @@ new collection of the same type.
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    New instance of the same collection subclass holding the filtered contents.
+</div>
+
 
 
 <dl>
@@ -1380,7 +1476,7 @@ new collection of the same type.
     
     
     <div class="description">
-        Filters collection by matching keys to the specified regular expression.
+        Filters collection by matching keys against the specified regular expression.
     </div>
     
 
@@ -1430,7 +1526,7 @@ new collection of the same type.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Regular expression that keys must match in order to be included in the result.</td>
         </tr>
 	
 	
@@ -1466,7 +1562,7 @@ new collection of the same type.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 372
+        <a href="Collection.js.html">data/Collection.js</a>, line 422
     </li></ul></dd>
     
     
@@ -1486,6 +1582,10 @@ new collection of the same type.
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    New instance of the same collection subclass holding the filtered contents.
+</div>
+
 
 
 <dl>
@@ -1516,7 +1616,7 @@ new collection of the same type.
     
     
     <div class="description">
-        Filters collection by a selector function.
+        Filters collection applying the specified selector function to each item.
     </div>
     
 
@@ -1566,9 +1666,10 @@ new collection of the same type.
             
             
             
-            <td class="description last">Selector function. Receives `item` and `itemName`
-as arguments, and the collection as `this`, and should return true when
-item should be included in results.</td>
+            <td class="description last">Selector function. Receives the collection instance as `this`,
+current item as first argument, and the key of the current item as second argument.
+Expected to return a boolean: true when the item should be included in the result, false if not.
+(In reality and truthy or falsy value will do.)</td>
         </tr>
 	
 	
@@ -1604,7 +1705,7 @@ item should be included in results.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 383
+        <a href="Collection.js.html">data/Collection.js</a>, line 439
     </li></ul></dd>
     
     
@@ -1624,6 +1725,10 @@ item should be included in results.</td>
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    New instance of the same collection subclass holding the filtered contents.
+</div>
+
 
 
 <dl>
@@ -1641,6 +1746,14 @@ item should be included in results.</td>
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// filters items with value higher than 50
+c.filterByExpr(function (item, itemKey) {
+ return item > 50;
+}).items; // {force: 100}</code></pre>
+
+    
 </dd>
 
         
@@ -1654,7 +1767,12 @@ item should be included in results.</td>
     
     
     <div class="description">
-        Calls a function on each item.
+        Iterates over collection items and calls the specified handler function on each, until
+either the iteration completes of handler returns `false`.
+Iteration order is non-deterministic.
+Iteration commences according to the initial state of the collection, with regards to
+item keys and count. Therefore any handler function changing the collection will not thwart the
+iteration process. However, changing the collection while iterating is strongly discouraged.
     </div>
     
 
@@ -1704,10 +1822,9 @@ item should be included in results.</td>
             
             
             
-            <td class="description last">Function to call on each item.
-Handler receives the current item and item name as arguments,
-and the collection as `this`.
-Iteration breaks when handler returns false.</td>
+            <td class="description last">Function to be called on each item. The handler receives current item
+as first argument, item key as second argument, and all other arguments passed to `.forEachItem()`
+as the rest of its arguments. A reference to the current collection is passed as `this`.</td>
         </tr>
 	
 	
@@ -1743,7 +1860,7 @@ Iteration breaks when handler returns false.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 451
+        <a href="Collection.js.html">data/Collection.js</a>, line 517
     </li></ul></dd>
     
     
@@ -1780,6 +1897,13 @@ Iteration breaks when handler returns false.</td>
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>c.forEachItem(function (item, itemKey, extraParam) {
+ alert(itemKey + item + extraParam);
+}, 'foo'); // outputs: 'foo1foo', 'bar10foo', 'force100foo'</code></pre>
+
+    
 </dd>
 
         
@@ -1793,7 +1917,8 @@ Iteration breaks when handler returns false.</td>
     
     
     <div class="description">
-        Calls function on each item in a specific order.
+        Iterates over collection items and calls the specified handler function on each in the order of keys.
+Other than that, the method behaves the same way as `.forEach()`.
     </div>
     
 
@@ -1853,9 +1978,7 @@ Iteration breaks when handler returns false.</td>
             
             
             
-            <td class="description last">Function to call on each item.
-Handler receives the current item and item name as arguments,
-and the collection as `this`.
+            <td class="description last">@see sntls.Collection#forEachItem
 Iteration breaks when handler returns false.</td>
         </tr>
 	
@@ -1889,8 +2012,9 @@ Iteration breaks when handler returns false.</td>
             
             
             
-            <td class="description last">Comparator for sorting keys.
-Receives collection instance as context for accessing item values.</td>
+            <td class="description last">Optional callback for comparing keys when sorting. The context (`this`)
+will be set to the collection so item values may be compared too via `this.items`. Expected to return
+an integer, the same way as in `Array.sort()`</td>
         </tr>
 	
 	
@@ -1926,12 +2050,19 @@ Receives collection instance as context for accessing item values.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 479
+        <a href="Collection.js.html">data/Collection.js</a>, line 546
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1976,9 +2107,9 @@ Receives collection instance as context for accessing item values.</td>
     
     
     <div class="description">
-        Retrieves the first key to be found in the Hash.
-Not guaranteed to return the same key on subsequent
-calls when the hash has more than 1 items.
+        Retrieves the first available key it can find. If hash has more than one items,
+any of the hash's keys may be returned. Result does not necessarily match up with the return value
+of `.getFirstValue()`.
     </div>
     
 
@@ -2016,12 +2147,19 @@ calls when the hash has more than 1 items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 41
+        <a href="Hash.js.html">data/Hash.js</a>, line 48
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstValue">sntls.Hash#getFirstValue</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -2066,11 +2204,9 @@ calls when the hash has more than 1 items.
     
     
     <div class="description">
-        Retrieves the first value to be found in the Hash.
-Not guaranteed to return the same value on subsequent
-calls when the hash has more than 1 items.
-Doesn't necessarily correspond to the key returned by
-`.getFirstKey`.
+        Retrieves the first available value it can find. If hash has more than one items,
+any value from the hash may be returned. Result does not necessarily match up with the return value
+of `.getFirstKey()`.
     </div>
     
 
@@ -2108,12 +2244,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 76
+        <a href="Hash.js.html">data/Hash.js</a>, line 84
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstKey">sntls.Hash#getFirstKey</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -2150,7 +2293,7 @@ Doesn't necessarily correspond to the key returned by
         
             
 <dt>
-    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(itemName)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(itemKey)</span><span class="type-signature"> &rarr; {*}</span></h4>
     
     
 </dt>
@@ -2192,7 +2335,7 @@ Doesn't necessarily correspond to the key returned by
 	
         <tr>
             
-                <td class="name"><code>itemName</code></td>
+                <td class="name"><code>itemKey</code></td>
             
             
             <td class="type">
@@ -2208,7 +2351,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last">Item name.</td>
+            <td class="description last">Item key.</td>
         </tr>
 	
 	
@@ -2244,7 +2387,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 163
+        <a href="Collection.js.html">data/Collection.js</a>, line 181
     </li></ul></dd>
     
     
@@ -2298,7 +2441,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves all item keys.
+        Retrieves item keys as an array. The order in which keys appear in the resulting array
+is not deterministic.
     </div>
     
 
@@ -2336,7 +2480,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 56
+        <a href="Hash.js.html">data/Hash.js</a>, line 64
     </li></ul></dd>
     
     
@@ -2386,7 +2530,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item keys wrapped ina hash.
+        Retrieves item keys wrapped in a hash.
     </div>
     
 
@@ -2424,12 +2568,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 64
+        <a href="Hash.js.html">data/Hash.js</a>, line 73
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getKeys">sntls.Hash#getKeys</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -2474,7 +2625,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves collection keys matching the specified prefix
+        Retrieves item keys as an array, filtered by a prefix. The in which keys appear in the resulting
+array is not deterministic.
     </div>
     
 
@@ -2524,7 +2676,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Item key prefix that keys must match in order to be included in the result.</td>
         </tr>
 	
 	
@@ -2560,7 +2712,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 280
+        <a href="Collection.js.html">data/Collection.js</a>, line 320
     </li></ul></dd>
     
     
@@ -2597,6 +2749,16 @@ Doesn't necessarily correspond to the key returned by
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var c = sntls.Collection.create({
+ foo: 1,
+ bar: 10,
+ force: 100
+});
+c.getKeysByPrefix('fo'); // ['foo', 'force']</code></pre>
+
+    
 </dd>
 
         
@@ -2610,7 +2772,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves collection keys matching the specified prefix, wrapped in a hash.
+        Retrieves item keys as an array, filtered by a prefix, and wrapped in a hash.
     </div>
     
 
@@ -2696,12 +2858,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 303
+        <a href="Collection.js.html">data/Collection.js</a>, line 344
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Collection.html#getKeysByPrefix">sntls.Collection#getKeysByPrefix</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -2738,7 +2907,7 @@ Doesn't necessarily correspond to the key returned by
         
             
 <dt>
-    <h4 class="name" id="getKeysByRegExp"><span class="type-signature"></span>getKeysByRegExp<span class="signature">(regExp)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>}</span></h4>
+    <h4 class="name" id="getKeysByRegExp"><span class="type-signature"></span>getKeysByRegExp<span class="signature">(regExp)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
     
     
 </dt>
@@ -2746,7 +2915,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves collection keys matching the specified regular expression.
+        Retrieves item keys as an array, filtered by a RegExp. The in which keys appear in the resulting
+array is not deterministic.
     </div>
     
 
@@ -2796,7 +2966,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Regular expression that keys must match in order to be included in the result.</td>
         </tr>
 	
 	
@@ -2832,7 +3002,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 312
+        <a href="Collection.js.html">data/Collection.js</a>, line 361
     </li></ul></dd>
     
     
@@ -2860,7 +3030,7 @@ Doesn't necessarily correspond to the key returned by
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="Array.html">Array</a></span>
+<span class="param-type">string[]</span>
 
 
 	</dd>
@@ -2868,6 +3038,16 @@ Doesn't necessarily correspond to the key returned by
 
         
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var c = sntls.Collection.create({
+ foo: 1,
+ bar: 10,
+ force: 100
+});
+c.getKeysByRegExp(/^..r/); // ['bar', 'force']</code></pre>
+
     
 </dd>
 
@@ -2882,7 +3062,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves collection keys matching the specified regular expression, wrapped in a hash.
+        Retrieves item keys as an array, filtered by a RegExp, and wrapped in a hash.
     </div>
     
 
@@ -2968,12 +3148,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 333
+        <a href="Collection.js.html">data/Collection.js</a>, line 383
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Collection.html#getKeysByRegExp">sntls.Collection#getKeysByRegExp</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -3018,8 +3205,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves collection items as array in order of their names
-or according to the supplied comparator.
+        Retrieves collection items values in an array, without key information, ordered by item keys, or,
+when a comparator function is specified, in the order defined by that.
     </div>
     
 
@@ -3081,7 +3268,8 @@ or according to the supplied comparator.
             
             
             
-            <td class="description last">Comparator for sorting keys.</td>
+            <td class="description last">Comparator function for sorting items by item keys.
+Same as in `Array.sort`.</td>
         </tr>
 	
 	
@@ -3117,12 +3305,19 @@ or according to the supplied comparator.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 405
+        <a href="Collection.js.html">data/Collection.js</a>, line 463
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -3138,7 +3333,7 @@ or according to the supplied comparator.
     
             
 <div class="param-desc">
-    Item values in order of names.
+    Item values in order of keys.
 </div>
 
 
@@ -3269,7 +3464,7 @@ or according to the supplied comparator.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 425
+        <a href="Collection.js.html">data/Collection.js</a>, line 483
     </li></ul></dd>
     
     
@@ -3279,7 +3474,7 @@ or according to the supplied comparator.
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>sntls.Collection.getSortedValues</li>
+            <li><a href="sntls.Collection.html#getSortedValues">sntls.Collection#getSortedValues</a></li>
         </ul>
     </dd>
     
@@ -3326,7 +3521,8 @@ or according to the supplied comparator.
     
     
     <div class="description">
-        Retrieves item values as an array.
+        Retrieves collection items in an array, without key information. The order in which keys appear
+in the resulting array is not deterministic.
     </div>
     
 
@@ -3364,7 +3560,7 @@ or according to the supplied comparator.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 91
+        <a href="Hash.js.html">data/Hash.js</a>, line 100
     </li></ul></dd>
     
     
@@ -3452,12 +3648,19 @@ or according to the supplied comparator.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 108
+        <a href="Hash.js.html">data/Hash.js</a>, line 118
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getValues">sntls.Hash#getValues</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -3502,7 +3705,8 @@ or according to the supplied comparator.
     
     
     <div class="description">
-        Maps the collection's contents to a new collection.
+        Maps a collection to a new collection instance of subclass `returnType`, using the specified handler
+to create each item in the new collection.
     </div>
     
 
@@ -3562,9 +3766,8 @@ or according to the supplied comparator.
             
             
             
-            <td class="description last">Transform function. Called on each element,
-its return value will be placed in the mapped collection.
-Receives current item and item name as arguments, plus the collection as `this`.</td>
+            <td class="description last">Mapper function. Takes `item` and `itemKey` as arguments, and is expected
+to return the mapped item for the new collection. Original collection is passed as `this`.</td>
         </tr>
 	
 	
@@ -3597,8 +3800,7 @@ Receives current item and item name as arguments, plus the collection as `this`.
             
             
             
-            <td class="description last">Reference to derived collection class.
-When specified, the resulting collection will be an instance of this class.</td>
+            <td class="description last">Optional collection subclass for the output.</td>
         </tr>
 	
 	
@@ -3634,7 +3836,7 @@ When specified, the resulting collection will be an instance of this class.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 509
+        <a href="Collection.js.html">data/Collection.js</a>, line 578
     </li></ul></dd>
     
     
@@ -3655,8 +3857,7 @@ When specified, the resulting collection will be an instance of this class.</td>
     
             
 <div class="param-desc">
-    New collection instance (of the specified type)
-containing mapped items.
+    New collection instance (of the specified type) containing mapped items.
 </div>
 
 
@@ -3676,6 +3877,13 @@ containing mapped items.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>c.mapContents(function (item) {
+ return 'hello' + item;
+}, sntls.Collection.of(String));</code></pre>
+
+    
 </dd>
 
         
@@ -3689,9 +3897,9 @@ containing mapped items.
     
     
     <div class="description">
-        Merges collection with current collection.
-Conflicts are resolved through the optionally supplied callback, or by default,
-the value from the current collection will be used.
+        Merges current collection with another collection. Adds all items from both collections
+to a new collection instance. Item key conflicts are resolved by a suitable callback, or,
+when there is none specified, the value from the current collection will be used.
     </div>
     
 
@@ -3787,7 +3995,7 @@ a common base with the current collection.</td>
             
             <td class="description last">Callback for resolving merge conflicts.
 Callback receives as arguments: current collection, remote collection, and key of
-the conflicting item.</td>
+the conflicting item, and is expected to return a collection item.</td>
         </tr>
 	
 	
@@ -3823,7 +4031,7 @@ the conflicting item.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 254
+        <a href="Collection.js.html">data/Collection.js</a>, line 286
     </li></ul></dd>
     
     
@@ -3865,6 +4073,14 @@ Return type will be that of the current collection.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var merged = stringCollection
+ .mergeWith(otherStringCollection, function (a, b, conflictingKey) {
+     return b.getItem(conflictingKey);
+ });</code></pre>
+
+    
 </dd>
 
         
@@ -3878,7 +4094,9 @@ Return type will be that of the current collection.
     
     
     <div class="description">
-        Resets collection log.
+        Resets the log, removing all log entries and thus all references to past items.
+Since the log holds reference to items that may not be present in the current collection,
+it is important to reset the log once it's no longer necessary.
     </div>
     
 
@@ -3911,7 +4129,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 94
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 105
     </li></ul></dd>
     
     
@@ -3953,7 +4171,7 @@ Return type will be that of the current collection.
         
             
 <dt>
-    <h4 class="name" id="setItem"><span class="type-signature"></span>setItem<span class="signature">(name, item)</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
+    <h4 class="name" id="setItem"><span class="type-signature"></span>setItem<span class="signature">(itemKey, item)</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
     
     
 </dt>
@@ -3961,7 +4179,7 @@ Return type will be that of the current collection.
     
     
     <div class="description">
-        Sets an item in the collection.
+        Sets an item in the collection and logs change.
     </div>
     
 
@@ -3995,7 +4213,7 @@ Return type will be that of the current collection.
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>itemKey</code></td>
             
             
             <td class="type">
@@ -4011,7 +4229,7 @@ Return type will be that of the current collection.
             
             
             
-            <td class="description last">Item name.</td>
+            <td class="description last">Item key.</td>
         </tr>
 	
 	
@@ -4060,7 +4278,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 42
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 51
     </li></ul></dd>
     
     
@@ -4193,6 +4411,10 @@ Return type will be that of the current collection.
 <dd>
     
     
+    <div class="description">
+        Converts hash to collection, optionally to the specified subclass.
+    </div>
+    
 
     
     
@@ -4252,7 +4474,7 @@ Return type will be that of the current collection.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Collection subclass.</td>
         </tr>
 	
 	
@@ -4288,7 +4510,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 584
+        <a href="Collection.js.html">data/Collection.js</a>, line 662
     </li></ul></dd>
     
     
@@ -4456,7 +4678,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 252
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
     </li></ul></dd>
     
     
@@ -4540,7 +4762,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 109
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
     </li></ul></dd>
     
     
@@ -4624,7 +4846,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 217
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 241
     </li></ul></dd>
     
     
@@ -4708,7 +4930,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 93
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 100
     </li></ul></dd>
     
     
@@ -4876,7 +5098,7 @@ Return type will be that of the current collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 116
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 139
     </li></ul></dd>
     
     
@@ -5021,7 +5243,7 @@ Return type will be that of the current collection.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:09 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:17 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

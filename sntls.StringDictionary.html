@@ -40,9 +40,8 @@
     
     
     <div class="description">
-        Specific data structure that is essentially an object
-with properties that are either strings or arrays of strings.
-Base class `Dictionary` handles multiplicity.
+        Dictionary for string values specifically. Methods implemented here expect values to be either strings,
+or other primitives that can be converted to string implicitly (numbers, booleans, etc.).
     </div>
     
 
@@ -133,7 +132,8 @@ Base class `Dictionary` handles multiplicity.
 <dd>
     
     <div class="description">
-        Item count.
+        Number of items in the dictionary. Equal to the number of keys.
+Should not be modified externally.
     </div>
     
     
@@ -165,7 +165,71 @@ Base class `Dictionary` handles multiplicity.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 57
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 63
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>sntls.Dictionary.create({foo:"bar",baz:[1,2]}).itemCount // 2 (foo, baz)</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Object buffer that stores items. Technically writable and public for performance
+and transparency reasons, but should not be changed externally as may lead to inconsistent state
+especially in `Hash`-based subclasses.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Dictionary.html#items">sntls.Dictionary#items</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 38
     </li></ul></dd>
     
     
@@ -190,7 +254,8 @@ Base class `Dictionary` handles multiplicity.
 <dd>
     
     <div class="description">
-        Value count.
+        Reflects the number of values (with multiplicity) in the dictionary.
+Should not be modified externally.
     </div>
     
     
@@ -222,7 +287,7 @@ Base class `Dictionary` handles multiplicity.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 63
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 72
     </li></ul></dd>
     
     
@@ -234,6 +299,11 @@ Base class `Dictionary` handles multiplicity.
 </dl>
 
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>sntls.Dictionary.create({foo:"bar",baz:[1,2]}).valueCount // 3 ("bar", 1, 2)</code></pre>
+
     
 </dd>
 
@@ -246,85 +316,6 @@ Base class `Dictionary` handles multiplicity.
         <dl>
             
 <dt>
-    <h4 class="name" id="clear"><span class="type-signature">&lt;static> </span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.StringDictionary.html">sntls.StringDictionary</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 90
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="sntls.StringDictionary.html">sntls.StringDictionary</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
     <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(items)</span><span class="type-signature"> &rarr; {<a href="sntls.StringDictionary.html">sntls.StringDictionary</a>}</span></h4>
     
     
@@ -334,6 +325,7 @@ Base class `Dictionary` handles multiplicity.
     
     <div class="description">
         Instantiates class.
+Constructs a dictionary, initialized with the items passed in the optional argument.
     </div>
     
 
@@ -464,7 +456,7 @@ Base class `Dictionary` handles multiplicity.
     
     
     <div class="description">
-        Adds item to dictionary
+        Adds key-value pairs to dictionary, where one key, and multiple values may be specified.
     </div>
     
 
@@ -514,7 +506,7 @@ Base class `Dictionary` handles multiplicity.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Single dictionary key.</td>
         </tr>
 	
 	
@@ -540,7 +532,7 @@ Base class `Dictionary` handles multiplicity.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Value or values to be assigned to the specified key.</td>
         </tr>
 	
 	
@@ -576,7 +568,7 @@ Base class `Dictionary` handles multiplicity.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 72
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 85
     </li></ul></dd>
     
     
@@ -613,6 +605,13 @@ Base class `Dictionary` handles multiplicity.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var d = sntls.Dictionary.create({foo: "bar"});
+d.addItem('hello', 'world').items // {foo: "bar", hello: "world"}
+d.addItem('foo', 'boo').items // {foo: ["bar", "boo"], hello: "world"}</code></pre>
+
+    
 </dd>
 
         
@@ -626,8 +625,8 @@ Base class `Dictionary` handles multiplicity.
     
     
     <div class="description">
-        Adds items to dictionary by assigning the same value(s) to
-a set of keys
+        Adds key-value pairs to the dictionary, where multiple keys and values may be specified.
+All specified keys will be assigned each value listed in `value`.
     </div>
     
 
@@ -677,7 +676,7 @@ a set of keys
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Array of keys.</td>
         </tr>
 	
 	
@@ -703,7 +702,7 @@ a set of keys
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Value or values to be assigned to the specified keys.</td>
         </tr>
 	
 	
@@ -739,7 +738,7 @@ a set of keys
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 117
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 134
     </li></ul></dd>
     
     
@@ -776,12 +775,19 @@ a set of keys
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var d = sntls.Dictionary.create();
+d.addItems(['hello', 'greetings'], 'world').items // {hello: "world", greetings: "world"}
+d.addItem(['foo', 'hello'], 'bar').items // {hello: ["world", "bar"], greetings: "world", foo: "bar"}</code></pre>
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Dictionary.html">sntls.Dictionary</a>}</span></h4>
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.StringDictionary.html">sntls.StringDictionary</a>}</span></h4>
     
     
 </dt>
@@ -789,7 +795,7 @@ a set of keys
     
     
     <div class="description">
-        Clears dictionary
+        Clears dictionary and resets counters.
     </div>
     
 
@@ -808,11 +814,6 @@ a set of keys
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.Dictionary.html#clear">sntls.Dictionary#clear</a>
-    </li></dd>
-    
     
     
     
@@ -827,7 +828,7 @@ a set of keys
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 221
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 112
     </li></ul></dd>
     
     
@@ -855,7 +856,7 @@ a set of keys
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.Dictionary.html">sntls.Dictionary</a></span>
+<span class="param-type"><a href="sntls.StringDictionary.html">sntls.StringDictionary</a></span>
 
 
 	</dd>
@@ -877,7 +878,9 @@ a set of keys
     
     
     <div class="description">
-        Combines current dictionary with remote dictionary
+        Combines current dictionary with another dictionary and returns the combined dictionary
+in a new instance. The result will contain values from key-value pairs in the remote dictionary
+where keys match the current dictionary's values.
     </div>
     
 
@@ -958,7 +961,7 @@ a set of keys
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 29
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 38
     </li></ul></dd>
     
     
@@ -979,7 +982,10 @@ a set of keys
     
             
 <div class="param-desc">
-    New dictionary instance with combined items
+    Dictionary instance with the combined items. When the two dictionaries
+(current and remote) are of different (sub)classes, the return value will match the class of the
+remote dictionary. This way, a `StringDictionary` may be combined with a regular dictionary,
+resulting in a regular dictionary, but not the other way around.
 </div>
 
 
@@ -999,6 +1005,13 @@ a set of keys
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var left = sntls.StringDictionary.create({foo: 'bar', hello: ['world', 'all']}),
+    right = sntls.StringDictionary.create({bar: 'BAR', all: 'ALL'});
+left.combineWith(right).items // {foo: "BAR", hello: "ALL"}</code></pre>
+
+    
 </dd>
 
         
@@ -1012,7 +1025,8 @@ a set of keys
     
     
     <div class="description">
-        Performs combine with current dictionary as remote dictionary too.
+        Combines current dictionary itself.
+Equivalent to: `stringDictionary.combineWith(stringDictionary)`.
     </div>
     
 
@@ -1045,7 +1059,7 @@ a set of keys
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 55
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 65
     </li></ul></dd>
     
     
@@ -1066,7 +1080,7 @@ a set of keys
     
             
 <div class="param-desc">
-    New dictionary instance with combined items
+    New dictionary instance with combined items.
 </div>
 
 
@@ -1099,9 +1113,9 @@ a set of keys
     
     
     <div class="description">
-        Retrieves the first key to be found in the Hash.
-Not guaranteed to return the same key on subsequent
-calls when the hash has more than 1 items.
+        Retrieves the first available key it can find. If hash has more than one items,
+any of the hash's keys may be returned. Result does not necessarily match up with the return value
+of `.getFirstValue()`.
     </div>
     
 
@@ -1139,12 +1153,19 @@ calls when the hash has more than 1 items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 41
+        <a href="Hash.js.html">data/Hash.js</a>, line 48
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstValue">sntls.Hash#getFirstValue</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1189,11 +1210,9 @@ calls when the hash has more than 1 items.
     
     
     <div class="description">
-        Retrieves the first value to be found in the Hash.
-Not guaranteed to return the same value on subsequent
-calls when the hash has more than 1 items.
-Doesn't necessarily correspond to the key returned by
-`.getFirstKey`.
+        Retrieves the first available value it can find. If hash has more than one items,
+any value from the hash may be returned. Result does not necessarily match up with the return value
+of `.getFirstKey()`.
     </div>
     
 
@@ -1231,12 +1250,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 76
+        <a href="Hash.js.html">data/Hash.js</a>, line 84
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstKey">sntls.Hash#getFirstKey</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1281,7 +1307,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item(s) from the dictionary
+        Retrieves the value or values associated with `key`.
+TODO: make sure single key / array value returns a copy of the array
     </div>
     
 
@@ -1334,7 +1361,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Array of keys matching dictionary items.</td>
         </tr>
 	
 	
@@ -1370,7 +1397,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 190
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 215
     </li></ul></dd>
     
     
@@ -1391,7 +1418,7 @@ Doesn't necessarily correspond to the key returned by
     
             
 <div class="param-desc">
-    Dictionary item
+    Array of values matching the specified key(s).
 </div>
 
 
@@ -1427,7 +1454,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves all item keys.
+        Retrieves item keys as an array. The order in which keys appear in the resulting array
+is not deterministic.
     </div>
     
 
@@ -1465,7 +1493,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 56
+        <a href="Hash.js.html">data/Hash.js</a>, line 64
     </li></ul></dd>
     
     
@@ -1515,7 +1543,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item keys wrapped ina hash.
+        Retrieves item keys wrapped in a hash.
     </div>
     
 
@@ -1553,12 +1581,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 64
+        <a href="Hash.js.html">data/Hash.js</a>, line 73
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getKeys">sntls.Hash#getKeys</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1603,7 +1638,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item values as an array.
+        Retrieves collection items in an array, without key information. The order in which keys appear
+in the resulting array is not deterministic.
     </div>
     
 
@@ -1641,7 +1677,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 91
+        <a href="Hash.js.html">data/Hash.js</a>, line 100
     </li></ul></dd>
     
     
@@ -1729,12 +1765,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 108
+        <a href="Hash.js.html">data/Hash.js</a>, line 118
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getValues">sntls.Hash#getValues</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1779,8 +1822,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Removes key - value pair from dictionary. When item value is omitted,
-all values associated with `key` are removed.
+        Removes single key-value pair from dictionary. When `value` is omitted all items matched by `key`
+will be removed from the dictionary.
     </div>
     
 
@@ -1840,7 +1883,7 @@ all values associated with `key` are removed.
             
             
             
-            <td class="description last">Key from which to remove value</td>
+            <td class="description last">Key identifying a dictionary item.</td>
         </tr>
 	
 	
@@ -1873,7 +1916,7 @@ all values associated with `key` are removed.
             
             
             
-            <td class="description last">Item value.</td>
+            <td class="description last">Value (by reference if object) to be removed from the item.</td>
         </tr>
 	
 	
@@ -1909,7 +1952,7 @@ all values associated with `key` are removed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 134
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 157
     </li></ul></dd>
     
     
@@ -1946,6 +1989,15 @@ all values associated with `key` are removed.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var d = sntls.Dictionary.create({
+    foo: 'bar',
+    hello: ['world', 'all', 'bar']
+});
+d.removeItem('hello', 'bar').items // {foo: 'bar', hello: ['world', 'all']}</code></pre>
+
+    
 </dd>
 
         
@@ -1959,7 +2011,8 @@ all values associated with `key` are removed.
     
     
     <div class="description">
-        Removes items from dictionary.
+        Removes key-value pairs from dictionary matching `value` and any of the keys listed in `key`.
+When `value` is omitted, all items matching any of `keys` will be removed.
     </div>
     
 
@@ -2019,7 +2072,7 @@ all values associated with `key` are removed.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Array of keys.</td>
         </tr>
 	
 	
@@ -2052,7 +2105,7 @@ all values associated with `key` are removed.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Value (by reference if object).</td>
         </tr>
 	
 	
@@ -2088,7 +2141,7 @@ all values associated with `key` are removed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 175
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 199
     </li></ul></dd>
     
     
@@ -2138,9 +2191,8 @@ all values associated with `key` are removed.
     
     
     <div class="description">
-        Reverses keys and values.
-Values from array items end up as separate keys on the new dictionary,
-and keys associated with the same values stack up in arrays.
+        Flips keys and values in the dictionary and returns the results in a new instance. In the reversed
+dictionary, keys will be the current dictionary's values and vice versa.
     </div>
     
 
@@ -2210,8 +2262,9 @@ and keys associated with the same values stack up in arrays.
                 </td>
             
             
-            <td class="description last">Constructor function specifying buffer type
-for result dictionary (Array or Object)</td>
+            <td class="description last">`Array` or `Object`, specifying the buffer type for the reversed
+dictionary. Specify `Array` here when you're reverting a dictionary with all-numeric values, and want
+to treat the result as an array.</td>
         </tr>
 	
 	
@@ -2242,7 +2295,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 67
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 89
     </li></ul></dd>
     
     
@@ -2282,6 +2335,21 @@ for result dictionary (Array or Object)</td>
 
         
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var d = sntls.StringDictionary.create({
+ foo: 'bar',
+ hello: ['world', 'all', 'bar']
+});
+d.reverse().items // {bar: ["foo", "hello"], world: "hello", all: "hello"}
+
+d = sntls.StringDictionary.create({
+ foo: 1,
+ hello: [2, 0]
+});
+d.reverse(Array).items // ['hello', 'foo', 'hello']</code></pre>
+
     
 </dd>
 
@@ -2379,6 +2447,10 @@ for result dictionary (Array or Object)</td>
 <dd>
     
     
+    <div class="description">
+        Converts hash to collection, optionally to the specified subclass.
+    </div>
+    
 
     
     
@@ -2438,7 +2510,7 @@ for result dictionary (Array or Object)</td>
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Collection subclass.</td>
         </tr>
 	
 	
@@ -2474,7 +2546,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 584
+        <a href="Collection.js.html">data/Collection.js</a>, line 662
     </li></ul></dd>
     
     
@@ -2642,7 +2714,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 252
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
     </li></ul></dd>
     
     
@@ -2726,7 +2798,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 109
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
     </li></ul></dd>
     
     
@@ -2810,7 +2882,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 217
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 241
     </li></ul></dd>
     
     
@@ -2894,7 +2966,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 93
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 100
     </li></ul></dd>
     
     
@@ -3062,7 +3134,7 @@ for result dictionary (Array or Object)</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 116
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 139
     </li></ul></dd>
     
     
@@ -3207,7 +3279,7 @@ for result dictionary (Array or Object)</td>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:11 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:19 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -40,8 +40,7 @@
     
     
     <div class="description">
-        Inserts, deletes, searches in an ordered list
-of strings or numbers.
+        Manages a list of strings or numbers and keeps it prepared for quick access and queries.
     </div>
     
 
@@ -247,7 +246,8 @@ of strings or numbers.
     
     
     <div class="description">
-        Instantiates class
+        Instantiates class.
+Sets the list up with initial items.
     </div>
     
 
@@ -312,7 +312,7 @@ of strings or numbers.
             
             
             
-            <td class="description last">Initial values</td>
+            <td class="description last">Initial values: array of strings or numbers.</td>
         </tr>
 	
 	
@@ -393,7 +393,7 @@ of strings or numbers.
     
     
     <div class="description">
-        Inserts a single value into list while retaining order.
+        Adds a single value to the list and returns the position where the value was inserted.
     </div>
     
 
@@ -446,7 +446,7 @@ of strings or numbers.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Value to be inserted.</td>
         </tr>
 	
 	
@@ -477,7 +477,7 @@ of strings or numbers.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 131
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 146
     </li></ul></dd>
     
     
@@ -498,7 +498,7 @@ of strings or numbers.
     
             
 <div class="param-desc">
-    The index at which the item was spliced in.
+    Array index of the inserted item.
 </div>
 
 
@@ -518,6 +518,14 @@ of strings or numbers.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var ol = sntls.OrderedList.create(['b', 'c']);
+var pos = ol.addItem('a');
+pos // 0
+ol.items // ['a', 'b', 'c']</code></pre>
+
+    
 </dd>
 
         
@@ -531,7 +539,7 @@ of strings or numbers.
     
     
     <div class="description">
-        Adds multiple items to list.
+        Adds multiple values to the list.
     </div>
     
 
@@ -584,7 +592,7 @@ of strings or numbers.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Array of values to be inserted.</td>
         </tr>
 	
 	
@@ -615,7 +623,7 @@ of strings or numbers.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 142
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 157
     </li></ul></dd>
     
     
@@ -664,6 +672,10 @@ of strings or numbers.
 <dd>
     
     
+    <div class="description">
+        Clears the list.
+    </div>
+    
 
     
     
@@ -694,7 +706,7 @@ of strings or numbers.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 202
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 225
     </li></ul></dd>
     
     
@@ -744,9 +756,9 @@ of strings or numbers.
     
     
     <div class="description">
-        Retrieves the first key to be found in the Hash.
-Not guaranteed to return the same key on subsequent
-calls when the hash has more than 1 items.
+        Retrieves the first available key it can find. If hash has more than one items,
+any of the hash's keys may be returned. Result does not necessarily match up with the return value
+of `.getFirstValue()`.
     </div>
     
 
@@ -784,12 +796,19 @@ calls when the hash has more than 1 items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 41
+        <a href="Hash.js.html">data/Hash.js</a>, line 48
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstValue">sntls.Hash#getFirstValue</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -834,11 +853,9 @@ calls when the hash has more than 1 items.
     
     
     <div class="description">
-        Retrieves the first value to be found in the Hash.
-Not guaranteed to return the same value on subsequent
-calls when the hash has more than 1 items.
-Doesn't necessarily correspond to the key returned by
-`.getFirstKey`.
+        Retrieves the first available value it can find. If hash has more than one items,
+any value from the hash may be returned. Result does not necessarily match up with the return value
+of `.getFirstKey()`.
     </div>
     
 
@@ -876,12 +893,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 76
+        <a href="Hash.js.html">data/Hash.js</a>, line 84
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstKey">sntls.Hash#getFirstKey</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -926,7 +950,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves all item keys.
+        Retrieves item keys as an array. The order in which keys appear in the resulting array
+is not deterministic.
     </div>
     
 
@@ -964,7 +989,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 56
+        <a href="Hash.js.html">data/Hash.js</a>, line 64
     </li></ul></dd>
     
     
@@ -1014,7 +1039,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item keys wrapped ina hash.
+        Retrieves item keys wrapped in a hash.
     </div>
     
 
@@ -1052,12 +1077,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 64
+        <a href="Hash.js.html">data/Hash.js</a>, line 73
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getKeys">sntls.Hash#getKeys</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1102,7 +1134,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Returns list items starting from startValue up to but not including endValue.
+        Returns list items in a sorted array starting from `startValue` up to but not including `endValue`.
     </div>
     
 
@@ -1212,7 +1244,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 104
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 114
     </li></ul></dd>
     
     
@@ -1252,6 +1284,14 @@ Doesn't necessarily correspond to the key returned by
 
         
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var ol = sntls.OrderedList.create(['foo', 'bar', 'ban', 'bee']);
+ol.getRange('bar', 'foo') // ['bar', 'bee', 'foo']
+ol.getRange('a', 'bee') // ['ban', 'bar', 'bee']
+ol.getRange('foo', 'fun') // ['foo']</code></pre>
+
     
 </dd>
 
@@ -1376,7 +1416,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 118
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 128
     </li></ul></dd>
     
     
@@ -1386,7 +1426,7 @@ Doesn't necessarily correspond to the key returned by
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>sntls.OrderedList.getRange</li>
+            <li><a href="sntls.OrderedList.html#getRange">sntls.OrderedList#getRange</a></li>
         </ul>
     </dd>
     
@@ -1437,7 +1477,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item values as an array.
+        Retrieves collection items in an array, without key information. The order in which keys appear
+in the resulting array is not deterministic.
     </div>
     
 
@@ -1475,7 +1516,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 91
+        <a href="Hash.js.html">data/Hash.js</a>, line 100
     </li></ul></dd>
     
     
@@ -1563,12 +1604,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 108
+        <a href="Hash.js.html">data/Hash.js</a>, line 118
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getValues">sntls.Hash#getValues</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -1613,7 +1661,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Deletes single value from list while retaining order.
+        Removes the first available item matching the value and returns the affected position.
+Returns -1 when the value is not present in the list.
     </div>
     
 
@@ -1666,7 +1715,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Value to be removed.</td>
         </tr>
 	
 	
@@ -1697,7 +1746,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 156
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 177
     </li></ul></dd>
     
     
@@ -1738,6 +1787,14 @@ Doesn't necessarily correspond to the key returned by
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var ol = sntls.OrderedList.create(['b', 'c', 'a']);
+var pos = ol.removeItem('b');
+pos // 1
+ol.items // ['a', 'c']</code></pre>
+
+    
 </dd>
 
         
@@ -1751,7 +1808,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Removes multiple items from list.
+        Removes all items specified in `values`.
     </div>
     
 
@@ -1804,7 +1861,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Array of values to be removed.</td>
         </tr>
 	
 	
@@ -1835,7 +1892,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 175
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 196
     </li></ul></dd>
     
     
@@ -1885,7 +1942,9 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Removes a range from the list starting from startValue up to but not including endValue.
+        Removes a range from the list starting from startValue up to but not including endValue, and
+returns the index at which actual removal began.
+Neither `startValue` nor `endValue` has to be present in the list.
     </div>
     
 
@@ -1938,7 +1997,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Lower bound for range.</td>
         </tr>
 	
 	
@@ -1964,7 +2023,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Upper bound for range.</td>
         </tr>
 	
 	
@@ -1995,7 +2054,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 190
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 213
     </li></ul></dd>
     
     
@@ -2016,7 +2075,7 @@ Doesn't necessarily correspond to the key returned by
     
             
 <div class="param-desc">
-    The starting position of removal.
+    Actual starting index of removal. -1 if no item matched the specified range.
 </div>
 
 
@@ -2049,9 +2108,9 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Performs binary search on items and returns the lowest index where a given value
-would be spliced into the list. For exact hits, this is the actual position,
-but no information is given whether the value is present in the list.
+        Performs binary search on the list's sorted array buffer and returns the lowest index where
+a given value would be spliced into or out of the list. For exact hits, this is the actual position,
+but no information is given whether the value is present in the list or not.
     </div>
     
 
@@ -2196,7 +2255,7 @@ but no information is given whether the value is present in the list.
                 </td>
             
             
-            <td class="description last">Ending position of search range. Default: this.length - 1.</td>
+            <td class="description last">Ending position of search range. Default: this.items.length - 1.</td>
         </tr>
 	
 	
@@ -2227,7 +2286,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 69
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 74
     </li></ul></dd>
     
     
@@ -2263,6 +2322,14 @@ but no information is given whether the value is present in the list.
 
         
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var ol = sntls.OrderedList.create(['foo', 'bar', 'bee']);
+ol.spliceIndexOf('bee') // 1
+ol.spliceIndexOf('ban') // 0
+ol.spliceIndexOf('fun') // 3</code></pre>
+
     
 </dd>
 
@@ -2360,6 +2427,10 @@ but no information is given whether the value is present in the list.
 <dd>
     
     
+    <div class="description">
+        Converts hash to collection, optionally to the specified subclass.
+    </div>
+    
 
     
     
@@ -2419,7 +2490,7 @@ but no information is given whether the value is present in the list.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Collection subclass.</td>
         </tr>
 	
 	
@@ -2455,7 +2526,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 584
+        <a href="Collection.js.html">data/Collection.js</a>, line 662
     </li></ul></dd>
     
     
@@ -2623,7 +2694,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 252
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
     </li></ul></dd>
     
     
@@ -2707,7 +2778,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 109
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
     </li></ul></dd>
     
     
@@ -2791,7 +2862,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 217
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 241
     </li></ul></dd>
     
     
@@ -2875,7 +2946,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 93
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 100
     </li></ul></dd>
     
     
@@ -3043,7 +3114,7 @@ but no information is given whether the value is present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 116
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 139
     </li></ul></dd>
     
     
@@ -3188,7 +3259,7 @@ but no information is given whether the value is present in the list.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:09 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:17 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -31,6 +31,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
 
     /**
      * Instantiates class.
+     * Constructs a dictionary, initialized with the items passed in the optional argument.
      * @name sntls.StringDictionary.create
      * @function
      * @param {object} items
@@ -38,9 +39,8 @@ troop.postpone(sntls, 'StringDictionary', function () {
      */
 
     /**
-     * Specific data structure that is essentially an object
-     * with properties that are either strings or arrays of strings.
-     * Base class `Dictionary` handles multiplicity.
+     * Dictionary for string values specifically. Methods implemented here expect values to be either strings,
+     * or other primitives that can be converted to string implicitly (numbers, booleans, etc.).
      * @example
      * {foo: 'bar', 'hello': ['all', 'the', 'world']}
      * @class sntls.StringDictionary
@@ -49,9 +49,18 @@ troop.postpone(sntls, 'StringDictionary', function () {
     sntls.StringDictionary = sntls.Dictionary.extend()
         .addMethods(/** @lends sntls.StringDictionary# */{
             /**
-             * Combines current dictionary with remote dictionary
+             * Combines current dictionary with another dictionary and returns the combined dictionary
+             * in a new instance. The result will contain values from key-value pairs in the remote dictionary
+             * where keys match the current dictionary's values.
+             * @example
+             * var left = sntls.StringDictionary.create({foo: 'bar', hello: ['world', 'all']}),
+             *     right = sntls.StringDictionary.create({bar: 'BAR', all: 'ALL'});
+             * left.combineWith(right).items // {foo: "BAR", hello: "ALL"}
              * @param {sntls.Dictionary} remoteDict Remote dictionary (doesn't have to be string dictionary)
-             * @returns {sntls.Dictionary} New dictionary instance with combined items
+             * @returns {sntls.Dictionary} Dictionary instance with the combined items. When the two dictionaries
+             * (current and remote) are of different (sub)classes, the return value will match the class of the
+             * remote dictionary. This way, a `StringDictionary` may be combined with a regular dictionary,
+             * resulting in a regular dictionary, but not the other way around.
              */
             combineWith: function (remoteDict) {
                 dessert.isDictionary(remoteDict, "Invalid dictionary");
@@ -76,19 +85,32 @@ troop.postpone(sntls, 'StringDictionary', function () {
             },
 
             /**
-             * Performs combine with current dictionary as remote dictionary too.
-             * @returns {sntls.StringDictionary} New dictionary instance with combined items
+             * Combines current dictionary itself.
+             * Equivalent to: `stringDictionary.combineWith(stringDictionary)`.
+             * @returns {sntls.StringDictionary} New dictionary instance with combined items.
              */
             combineWithSelf: function () {
                 return /** @type sntls.StringDictionary */ this.combineWith(this);
             },
 
             /**
-             * Reverses keys and values.
-             * Values from array items end up as separate keys on the new dictionary,
-             * and keys associated with the same values stack up in arrays.
-             * @param {function} [bufferType=Object] Constructor function specifying buffer type
-             * for result dictionary (Array or Object)
+             * Flips keys and values in the dictionary and returns the results in a new instance. In the reversed
+             * dictionary, keys will be the current dictionary's values and vice versa.
+             * @example
+             * var d = sntls.StringDictionary.create({
+             *  foo: 'bar',
+             *  hello: ['world', 'all', 'bar']
+             * });
+             * d.reverse().items // {bar: ["foo", "hello"], world: "hello", all: "hello"}
+             *
+             * d = sntls.StringDictionary.create({
+             *  foo: 1,
+             *  hello: [2, 0]
+             * });
+             * d.reverse(Array).items // ['hello', 'foo', 'hello']
+             * @param {function} [bufferType=Object] `Array` or `Object`, specifying the buffer type for the reversed
+             * dictionary. Specify `Array` here when you're reverting a dictionary with all-numeric values, and want
+             * to treat the result as an array.
              * @returns {sntls.StringDictionary} New dictionary instance with reversed key-value pairs.
              */
             reverse: function (bufferType) {
@@ -115,7 +137,8 @@ troop.postpone(sntls, 'StringDictionary', function () {
             }
 
             /**
-             * @name sntls.StringDictionary.clear
+             * Clears dictionary and resets counters.
+             * @name sntls.StringDictionary#clear
              * @function
              * @returns {sntls.StringDictionary}
              */
@@ -161,7 +184,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:13 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

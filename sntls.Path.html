@@ -40,8 +40,8 @@
     
     
     <div class="description">
-        Represents a composite linear key, essentially
-an array, or a '>'-delimited string.
+        Unambiguously identifies a node in a tree-like structure. Paths break down to a series of keys, each
+subsequent key corresponding to a property in the next child node.
     </div>
     
 
@@ -127,8 +127,7 @@ an array, or a '>'-delimited string.
 <dd>
     
     <div class="description">
-        Array buffer. Public because grants fast access.
-Should not be changed from the outside.
+        Path in array representation. Keys are unencoded. Not to be modified externally.
     </div>
     
     
@@ -155,7 +154,7 @@ Should not be changed from the outside.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 81
+        <a href="Path.js.html">tree/Path.js</a>, line 82
     </li></ul></dd>
     
     
@@ -268,7 +267,7 @@ Should not be changed from the outside.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 50
+        <a href="Path.js.html">tree/Path.js</a>, line 52
     </li></ul></dd>
     
     
@@ -403,7 +402,7 @@ Should not be changed from the outside.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 35
+        <a href="Path.js.html">tree/Path.js</a>, line 37
     </li></ul></dd>
     
     
@@ -458,7 +457,7 @@ Should not be changed from the outside.
     
     <div class="description">
         Instantiates class.
-Initializes Path with a string or array. Keys are assumed to be URI-encoded.
+Constructs path instance and populates it with path information. Keys are assumed to be URI-encoded.
     </div>
     
 
@@ -511,7 +510,9 @@ Initializes Path with a string or array. Keys are assumed to be URI-encoded.
             
             
             
-            <td class="description last">Path in string or array representation</td>
+            <td class="description last">Path in either string representation ('>'-separated, eg. "this>is>a>path")
+or array representation (eg. ['this', 'is', 'a', 'path']). When path is given as string,
+keys are URI decoded before adding them to the internal buffer.</td>
         </tr>
 	
 	
@@ -592,8 +593,7 @@ Initializes Path with a string or array. Keys are assumed to be URI-encoded.
     
     
     <div class="description">
-        Appends path with specified path.
-Changes path buffer!
+        Appends the specified path to the current path. Alters path buffer!
     </div>
     
 
@@ -643,7 +643,7 @@ Changes path buffer!
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Path to be appended to the current path.</td>
         </tr>
 	
 	
@@ -674,7 +674,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 108
+        <a href="Path.js.html">tree/Path.js</a>, line 110
     </li></ul></dd>
     
     
@@ -724,7 +724,7 @@ Changes path buffer!
     
     
     <div class="description">
-        Clones path
+        Creates a new instance of the same path subclass, initialized with identical path information.
     </div>
     
 
@@ -757,7 +757,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 88
+        <a href="Path.js.html">tree/Path.js</a>, line 89
     </li></ul></dd>
     
     
@@ -807,7 +807,7 @@ Changes path buffer!
     
     
     <div class="description">
-        Matches remote path to current path.
+        Checks whether current path and specified path are identical by value.
     </div>
     
 
@@ -888,7 +888,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 129
+        <a href="Path.js.html">tree/Path.js</a>, line 137
     </li></ul></dd>
     
     
@@ -925,6 +925,13 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
+p.equal('foo.bar') // true
+p.equal('hello.world') // false</code></pre>
+
+    
 </dd>
 
         
@@ -938,9 +945,8 @@ Changes path buffer!
     
     
     <div class="description">
-        Tells whether the current path is relative to the
-the root path, ie. it matches the beginning of
-the current path entirely.
+        Checks whether current path is relative to the specified root path. Path A is relative to B
+when A and B have a common base path and that base path is B.
     </div>
     
 
@@ -1021,7 +1027,7 @@ the current path entirely.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 154
+        <a href="Path.js.html">tree/Path.js</a>, line 165
     </li></ul></dd>
     
     
@@ -1058,6 +1064,13 @@ the current path entirely.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
+p.isRelativeTo('foo') // true
+p.isRelativeTo('foo.bar.hello') // false</code></pre>
+
+    
 </dd>
 
         
@@ -1071,8 +1084,7 @@ the current path entirely.
     
     
     <div class="description">
-        Prepends path with specified path.
-Changes path buffer!
+        Prepends the current path with the specified path. Alters path buffer!
     </div>
     
 
@@ -1122,7 +1134,7 @@ Changes path buffer!
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Path to be prepended to the current path.</td>
         </tr>
 	
 	
@@ -1153,7 +1165,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 119
+        <a href="Path.js.html">tree/Path.js</a>, line 123
     </li></ul></dd>
     
     
@@ -1190,6 +1202,12 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path');
+p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
+
+    
 </dd>
 
         
@@ -1203,7 +1221,7 @@ Changes path buffer!
     
     
     <div class="description">
-        String representation
+        Returns the string representation for the path, keys URI encoded and separated by '>'.
     </div>
     
 
@@ -1236,7 +1254,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 178
+        <a href="Path.js.html">tree/Path.js</a>, line 191
     </li></ul></dd>
     
     
@@ -1273,6 +1291,11 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>sntls.Path.create(['test^', 'path']).toString() // "test%5E>path"</code></pre>
+
+    
 </dd>
 
         
@@ -1286,8 +1309,7 @@ Changes path buffer!
     
     
     <div class="description">
-        Trims trailing end of path.
-Changes path buffer!
+        Trims trailing end of path. Alters path buffer!
     </div>
     
 
@@ -1320,7 +1342,7 @@ Changes path buffer!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 97
+        <a href="Path.js.html">tree/Path.js</a>, line 100
     </li></ul></dd>
     
     
@@ -1357,6 +1379,12 @@ Changes path buffer!
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path>it>is');
+p.trim().asArray // ['test', 'path', 'it']</code></pre>
+
+    
 </dd>
 
         </dl>
@@ -1381,7 +1409,7 @@ Changes path buffer!
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:09 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:17 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -41,7 +41,8 @@
     
     <div class="description">
         Trait.
-Classes that have this trait may define orthogonal state layers.
+Behavior that makes a class stateful by adding multiple layers of orthogonal state matrices.
+Transitions in those matrices get associated with methods of the class.
     </div>
     
 
@@ -120,7 +121,60 @@ Classes that have this trait may define orthogonal state layers.
         <dl>
             
 <dt>
-    <h4 class="name" id="defaultStates"><span class="type-signature">&lt;static> </span>defaultStates<span class="type-signature"> :<a href="sntls.Collection.html">sntls.Collection</a></span></h4>
+    <h4 class="name" id="currentStates"><span class="type-signature"></span>currentStates<span class="type-signature"> :<a href="sntls.Collection.html">sntls.Collection</a></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Collection holding current state names for each state layer.
+Key: name of state layer, value: name of current state for that layer.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 24
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="defaultStates"><span class="type-signature"></span>defaultStates<span class="type-signature"> :<a href="sntls.Collection.html">sntls.Collection</a></span></h4>
     
     
 </dt>
@@ -154,7 +208,7 @@ Classes that have this trait may define orthogonal state layers.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 58
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 78
     </li></ul></dd>
     
     
@@ -172,7 +226,7 @@ Classes that have this trait may define orthogonal state layers.
         
             
 <dt>
-    <h4 class="name" id="stateMatrices"><span class="type-signature">&lt;static> </span>stateMatrices<span class="type-signature"> :<a href="sntls.StateMatrixCollection.html">sntls.StateMatrixCollection</a></span></h4>
+    <h4 class="name" id="stateMatrices"><span class="type-signature"></span>stateMatrices<span class="type-signature"> :<a href="sntls.StateMatrixCollection.html">sntls.StateMatrixCollection</a></span></h4>
     
     
 </dt>
@@ -206,60 +260,7 @@ Classes that have this trait may define orthogonal state layers.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 64
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="currentStates"><span class="type-signature"></span>currentStates<span class="type-signature"> :<a href="sntls.Collection.html">sntls.Collection</a></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        (Unspecified) collection of strings
-Stores current state names for each state layer
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 22
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 84
     </li></ul></dd>
     
     
@@ -283,7 +284,7 @@ Stores current state names for each state layer
         <dl>
             
 <dt>
-    <h4 class="name" id="addStateLayer"><span class="type-signature"></span>addStateLayer<span class="signature">(layerName, stateMatrix, defaultState)</span><span class="type-signature"> &rarr; {<a href="sntls.Stateful.html">sntls.Stateful</a>}</span></h4>
+    <h4 class="name" id="addStateLayer"><span class="type-signature">&lt;static> </span>addStateLayer<span class="signature">(layerName, stateMatrix, defaultState)</span><span class="type-signature"> &rarr; {<a href="sntls.Stateful.html">sntls.Stateful</a>}</span></h4>
     
     
 </dt>
@@ -291,9 +292,8 @@ Stores current state names for each state layer
     
     
     <div class="description">
-        Adds a state layer.
-A state layer is a set of mutually exclusive states,
-eg. enabled-disabled, or open-closed.
+        Adds an independent state layer to the class.
+A state layer is a set of mutually exclusive states, eg. enabled-disabled, or open-closed.
     </div>
     
 
@@ -343,7 +343,8 @@ eg. enabled-disabled, or open-closed.
             
             
             
-            <td class="description last">Name of new state layer.</td>
+            <td class="description last">Name of state layer. Layer will be referenced by this name
+when accessing or changing states on instance.</td>
         </tr>
 	
 	
@@ -366,7 +367,8 @@ eg. enabled-disabled, or open-closed.
             
             
             
-            <td class="description last">State matrix describing transitions.</td>
+            <td class="description last">State matrix instance. Load in this state matrix
+represents method names for the stateful class.</td>
         </tr>
 	
 	
@@ -420,7 +422,7 @@ eg. enabled-disabled, or open-closed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 46
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 66
     </li></ul></dd>
     
     
@@ -457,6 +459,26 @@ eg. enabled-disabled, or open-closed.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var MyStateful = troop.Base.extend()
+ .addTrait(sntls.Stateful)
+ .addStateLayer(
+     'openClose',
+     sntls.StateMatrix.create()
+         .addEdge('open', 'closed', 'open') // MyStateful.open()
+         .addEdge('closed', 'open', 'close'), // MyStateful.close()
+     'closed' // default state
+ )
+ .addMethod({
+     init: function () {
+         this.initStateful();
+     },
+     open: function () { alert("Opening..."); },
+     close: function () { alert("Closing..."); }
+ });</code></pre>
+
+    
 </dd>
 
         
@@ -470,7 +492,9 @@ eg. enabled-disabled, or open-closed.
     
     
     <div class="description">
-        Changes state on specified state layer.
+        Changes state on stateful instance from current state to destination state and
+calls the method associated with the transition. The method receives no arguments, but is able
+to prevent the transition by returning `false`.
     </div>
     
 
@@ -520,7 +544,7 @@ eg. enabled-disabled, or open-closed.
             
             
             
-            <td class="description last">Destination state</td>
+            <td class="description last">Name of destination state.</td>
         </tr>
 	
 	
@@ -543,7 +567,7 @@ eg. enabled-disabled, or open-closed.
             
             
             
-            <td class="description last">Layer name</td>
+            <td class="description last">Name of selected state layer.</td>
         </tr>
 	
 	
@@ -574,7 +598,7 @@ eg. enabled-disabled, or open-closed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 83
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 109
     </li></ul></dd>
     
     
@@ -611,6 +635,13 @@ eg. enabled-disabled, or open-closed.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var myStateful = MyStateful.create();
+myStateful.currentState('openClose') // 'closed', default state for this layer
+myStateful.changeStateTo('open', 'openClose') // alerts "Opening..."</code></pre>
+
+    
 </dd>
 
         
@@ -624,7 +655,7 @@ eg. enabled-disabled, or open-closed.
     
     
     <div class="description">
-        Retrieves current state name for the specified layer.
+        Retrieves name of the current state for the specified state layer.
     </div>
     
 
@@ -705,7 +736,7 @@ eg. enabled-disabled, or open-closed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 32
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 34
     </li></ul></dd>
     
     
@@ -755,7 +786,8 @@ eg. enabled-disabled, or open-closed.
     
     
     <div class="description">
-        Adds properties required by trait.
+        Initializes stateful instance by assigning default states for each layer
+as the current state.
     </div>
     
 
@@ -788,7 +820,7 @@ eg. enabled-disabled, or open-closed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 16
+        <a href="Stateful.js.html">behavior/Stateful.js</a>, line 18
     </li></ul></dd>
     
     
@@ -831,7 +863,7 @@ eg. enabled-disabled, or open-closed.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:11 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:19 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

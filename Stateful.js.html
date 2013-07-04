@@ -31,19 +31,21 @@ troop.postpone(sntls, 'Stateful', function () {
 
     /**
      * Trait.
-     * Classes that have this trait may define orthogonal state layers.
+     * Behavior that makes a class stateful by adding multiple layers of orthogonal state matrices.
+     * Transitions in those matrices get associated with methods of the class.
      * @class sntls.Stateful
      * @extends troop.Base
      */
     sntls.Stateful = troop.Base.extend()
         .addMethods(/** @lends sntls.Stateful# */{
             /**
-             * Adds properties required by trait.
+             * Initializes stateful instance by assigning default states for each layer
+             * as the current state.
              */
             initStateful: function () {
                 /**
-                 * (Unspecified) collection of strings
-                 * Stores current state names for each state layer
+                 * Collection holding current state names for each state layer.
+                 * Key: name of state layer, value: name of current state for that layer.
                  * @type {sntls.Collection}
                  */
                 this.currentStates = this.defaultStates.clone();
@@ -52,7 +54,7 @@ troop.postpone(sntls, 'Stateful', function () {
             },
 
             /**
-             * Retrieves current state name for the specified layer.
+             * Retrieves name of the current state for the specified state layer.
              * @param {string} layerName
              * @returns {string}
              */
@@ -61,14 +63,32 @@ troop.postpone(sntls, 'Stateful', function () {
             },
 
             /**
-             * Adds a state layer.
-             * A state layer is a set of mutually exclusive states,
-             * eg. enabled-disabled, or open-closed.
-             * @param {string} layerName Name of new state layer.
-             * @param {sntls.StateMatrix} stateMatrix State matrix describing transitions.
+             * Adds an independent state layer to the class.
+             * A state layer is a set of mutually exclusive states, eg. enabled-disabled, or open-closed.
+             * @example
+             * var MyStateful = troop.Base.extend()
+             *  .addTrait(sntls.Stateful)
+             *  .addStateLayer(
+             *      'openClose',
+             *      sntls.StateMatrix.create()
+             *          .addEdge('open', 'closed', 'open') // MyStateful.open()
+             *          .addEdge('closed', 'open', 'close'), // MyStateful.close()
+             *      'closed' // default state
+             *  )
+             *  .addMethod({
+             *      init: function () {
+             *          this.initStateful();
+             *      },
+             *      open: function () { alert("Opening..."); },
+             *      close: function () { alert("Closing..."); }
+             *  });
+             * @param {string} layerName Name of state layer. Layer will be referenced by this name
+             * when accessing or changing states on instance.
+             * @param {sntls.StateMatrix} stateMatrix State matrix instance. Load in this state matrix
+             * represents method names for the stateful class.
              * @param {string} defaultState Default state for this layer.
              * @returns {sntls.Stateful}
-             * @static
+             * @memberOf sntls.Stateful
              */
             addStateLayer: function (layerName, stateMatrix, defaultState) {
                 dessert
@@ -77,7 +97,7 @@ troop.postpone(sntls, 'Stateful', function () {
                     .isString(defaultState, "Invalid default state");
 
                 if (!this.hasOwnProperty('stateMatrices')) {
-                    this.addConstants(/** @lends sntls.Stateful */{
+                    this.addConstants(/** @lends sntls.Stateful# */{
                         /**
                          * Associates layer names with default state names.
                          * @type {sntls.Collection}
@@ -102,9 +122,15 @@ troop.postpone(sntls, 'Stateful', function () {
             },
 
             /**
-             * Changes state on specified state layer.
-             * @param {string} stateName Destination state
-             * @param {string} layerName Layer name
+             * Changes state on stateful instance from current state to destination state and
+             * calls the method associated with the transition. The method receives no arguments, but is able
+             * to prevent the transition by returning `false`.
+             * @example
+             * var myStateful = MyStateful.create();
+             * myStateful.currentState('openClose') // 'closed', default state for this layer
+             * myStateful.changeStateTo('open', 'openClose') // alerts "Opening..."
+             * @param {string} stateName Name of destination state.
+             * @param {string} layerName Name of selected state layer.
              * @returns {sntls.Stateful}
              */
             changeStateTo: function (stateName, layerName) {
@@ -143,7 +169,7 @@ troop.postpone(sntls, 'Stateful', function () {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:07 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:14 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

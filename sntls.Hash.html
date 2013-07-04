@@ -41,8 +41,8 @@
     
     <div class="description">
         General wrapper around objects to treat them as hash.
-No `Object`-delegated methods on `.items` should be called as they may break code.
-All methods that operate *on* `.items` should be implemented on `Hash`.
+Calling `Object.prototype` methods on hash objects is not viable as they may be
+shadowed by user data, and such cases certainly lead the application to break.
 Other `Hash`-based classes may delegate conversion methods to this class.
     </div>
     
@@ -116,6 +116,64 @@ Other `Hash`-based classes may delegate conversion methods to this class.
     
     
     
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Object buffer that stores items. Technically writable and public for performance
+and transparency reasons, but should not be changed externally as may lead to inconsistent state
+especially in `Hash`-based subclasses.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 38
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
     
     
     
@@ -263,7 +321,8 @@ Other `Hash`-based classes may delegate conversion methods to this class.
     
     
     <div class="description">
-        Clears items buffer.
+        Clears hash by replacing items buffer with an empty one.
+Observes current buffer type, ie. if hash was array based, the new buffer will be also array.
     </div>
     
 
@@ -296,7 +355,7 @@ Other `Hash`-based classes may delegate conversion methods to this class.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 116
+        <a href="Hash.js.html">data/Hash.js</a>, line 127
     </li></ul></dd>
     
     
@@ -346,9 +405,9 @@ Other `Hash`-based classes may delegate conversion methods to this class.
     
     
     <div class="description">
-        Retrieves the first key to be found in the Hash.
-Not guaranteed to return the same key on subsequent
-calls when the hash has more than 1 items.
+        Retrieves the first available key it can find. If hash has more than one items,
+any of the hash's keys may be returned. Result does not necessarily match up with the return value
+of `.getFirstValue()`.
     </div>
     
 
@@ -381,12 +440,19 @@ calls when the hash has more than 1 items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 41
+        <a href="Hash.js.html">data/Hash.js</a>, line 48
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstValue">sntls.Hash#getFirstValue</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -431,11 +497,9 @@ calls when the hash has more than 1 items.
     
     
     <div class="description">
-        Retrieves the first value to be found in the Hash.
-Not guaranteed to return the same value on subsequent
-calls when the hash has more than 1 items.
-Doesn't necessarily correspond to the key returned by
-`.getFirstKey`.
+        Retrieves the first available value it can find. If hash has more than one items,
+any value from the hash may be returned. Result does not necessarily match up with the return value
+of `.getFirstKey()`.
     </div>
     
 
@@ -468,12 +532,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 76
+        <a href="Hash.js.html">data/Hash.js</a>, line 84
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getFirstKey">sntls.Hash#getFirstKey</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -518,90 +589,8 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves all item keys.
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 56
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">string[]</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getKeysAsHash"><span class="type-signature"></span>getKeysAsHash<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Retrieves item keys wrapped ina hash.
+        Retrieves item keys as an array. The order in which keys appear in the resulting array
+is not deterministic.
     </div>
     
 
@@ -662,7 +651,7 @@ Doesn't necessarily correspond to the key returned by
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.Hash.html">sntls.Hash</a></span>
+<span class="param-type">string[]</span>
 
 
 	</dd>
@@ -676,7 +665,7 @@ Doesn't necessarily correspond to the key returned by
         
             
 <dt>
-    <h4 class="name" id="getValues"><span class="type-signature"></span>getValues<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>}</span></h4>
+    <h4 class="name" id="getKeysAsHash"><span class="type-signature"></span>getKeysAsHash<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
     
     
 </dt>
@@ -684,7 +673,7 @@ Doesn't necessarily correspond to the key returned by
     
     
     <div class="description">
-        Retrieves item values as an array.
+        Retrieves item keys wrapped in a hash.
     </div>
     
 
@@ -717,7 +706,98 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 91
+        <a href="Hash.js.html">data/Hash.js</a>, line 73
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getKeys">sntls.Hash#getKeys</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Hash.html">sntls.Hash</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getValues"><span class="type-signature"></span>getValues<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves collection items in an array, without key information. The order in which keys appear
+in the resulting array is not deterministic.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 100
     </li></ul></dd>
     
     
@@ -800,12 +880,19 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 108
+        <a href="Hash.js.html">data/Hash.js</a>, line 118
     </li></ul></dd>
     
     
     
     
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.Hash.html#getValues">sntls.Hash#getValues</a></li>
+        </ul>
+    </dd>
     
     
     
@@ -928,6 +1015,10 @@ Doesn't necessarily correspond to the key returned by
 <dd>
     
     
+    <div class="description">
+        Converts hash to collection, optionally to the specified subclass.
+    </div>
+    
 
     
     
@@ -987,7 +1078,7 @@ Doesn't necessarily correspond to the key returned by
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Collection subclass.</td>
         </tr>
 	
 	
@@ -1018,7 +1109,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 584
+        <a href="Collection.js.html">data/Collection.js</a>, line 662
     </li></ul></dd>
     
     
@@ -1176,7 +1267,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 252
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
     </li></ul></dd>
     
     
@@ -1255,7 +1346,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 109
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
     </li></ul></dd>
     
     
@@ -1334,7 +1425,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 217
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 241
     </li></ul></dd>
     
     
@@ -1413,7 +1504,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 93
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 100
     </li></ul></dd>
     
     
@@ -1571,7 +1662,7 @@ Doesn't necessarily correspond to the key returned by
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 116
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 139
     </li></ul></dd>
     
     
@@ -1711,7 +1802,7 @@ Doesn't necessarily correspond to the key returned by
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jul 02 2013 09:41:09 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:08:16 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
