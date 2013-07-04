@@ -8,19 +8,29 @@ troop.postpone(sntls, 'Query', function () {
 
     /**
      * Instantiates class.
-     * Initializes query with a string or array. Keys in the query
-     * (except for patterns) are assumed to be URI-encoded.
+     * Constructs query instance and populates it with query information. Keys in the query
+     * (except for pattern objects) are assumed to be URI-encoded.
      * @name sntls.Query.create
      * @function
-     * @param {Array|string} query
+     * @param {Array|string} query Query in either string representation ('>'-separated, eg. "this>is>|>query")
+     * or array representation (eg. ['this', 'is', '|'.toQueryPattern(), 'path']). When query is given as string,
+     * keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.
      * @returns {sntls.Query}
-     * @example 'root>\\>persons>|>name'
      */
 
     /**
      * An expression that matches several paths.
-     * Technically, queries can be interpreted as paths, ie. wherever a path is accepted,
-     * so is a query.
+     * Queries are backwards-compatible in the sens that a path instance may be treated as a query
+     * that matches a single path.
+     * A series of symbols may be used in specifying a query:
+     * There are three symbols that match keys:
+     * - '|' (pipe) matches all values on a key. Eg. 'hello>|>world' would match 'hello>dear>world'
+     *  as well as 'hello>>world'.
+     * - '<' separates optional key values. Eg. 'hello>world<all' would match 'hello>world' and 'hello>all'
+     *  but not 'hello>people'.
+     * - '\' skips all keys until next pattern in the query is matched. Eg. 'hello>\>world' would match
+     * 'hello>people>of>the>world' as well as 'hello>world', but not 'hello>all'.
+     * - '^value' is ignored.
      * @class sntls.Query
      * @extends sntls.Path
      */
@@ -135,9 +145,10 @@ troop.postpone(sntls, 'Query', function () {
             },
 
             /**
-             * Extracts the longest fixed stem path from the query.
-             * The stem may not contain any wildcards, or other
-             * query expressions, only specific keys.
+             * Extracts the longest path from the start of the query.
+             * Stem may not contain any wildcards, or other query expressions, only key literals.
+             * @example
+             * sntls.Query.create('hello>world>|>foo>\>bar').getStemPath(); // path 'hello>world'
              * @returns {sntls.Path}
              */
             getStemPath: function () {
@@ -159,8 +170,8 @@ troop.postpone(sntls, 'Query', function () {
             },
 
             /**
-             * Determines whether query matches specified path
-             * @param {sntls.Path} path
+             * Determines whether the specified path matches the current query.
+             * @param {sntls.Path} path Path to be tested against the current query.
              * @returns {boolean}
              */
             matchesPath: function (path) {
@@ -204,7 +215,10 @@ troop.postpone(sntls, 'Query', function () {
             },
 
             /**
-             * Generates string representation of query.
+             * Returns the string representation for the query, keys URI encoded and separated by '>',
+             * patterns converted back to their symbol form ('|', '\', '<', and '^').
+             * @example
+             * sntls.Query.create(['test^', '|'.toQueryPattern(), 'path']).toString() // "test%5E>|>path"
              * @returns {string}
              */
             toString: function () {
