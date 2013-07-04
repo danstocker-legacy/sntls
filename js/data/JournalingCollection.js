@@ -13,13 +13,14 @@ troop.postpone(sntls, 'JournalingCollection', function () {
      */
 
     /**
-     * Collection that keeps a log of changes.
+     * Logs all changes in the collection.
      * @class sntls.JournalingCollection
      * @extends sntls.Collection
      */
     sntls.JournalingCollection = base.extend()
         .addMethods(/** @lends sntls.JournalingCollection# */{
             /**
+             * TODO: Rename "name" to "key" in accordance with collection naming rules.
              * @param {object} [items] Initial contents.
              * @ignore
              */
@@ -27,14 +28,22 @@ troop.postpone(sntls, 'JournalingCollection', function () {
                 base.init.apply(this, arguments);
 
                 /**
-                 * Change log
+                 * Collection log. Log entries are plain objects with three properties: "method", "name", and "item".
+                 * Property "method" identifies the kind of change, "name" identifies the item that was changed, and
+                 * "item" holds the value before the change.
+                 * @example
+                 * {
+                 *  method: 'add', // 'add', 'change', or 'remove'
+                 *  name: 'itemName', // name of affected item
+                 *  item: {} // item before the change
+                 * }
                  * @type {Array}
                  */
                 this.log = [];
             },
 
             /**
-             * Sets an item in the collection.
+             * Sets an item in the collection and logs change.
              * @param {string} itemKey Item key.
              * @param item Item variable / object.
              * @returns {sntls.JournalingCollection}
@@ -46,7 +55,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
                 // logging change
                 this.log.unshift({
-                    method: isInCollection ? 'change': 'add',
+                    method: isInCollection ? 'change' : 'add',
                     name  : itemKey,
                     item  : item // before the change
                 });
@@ -55,7 +64,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
             },
 
             /**
-             * Removes item from sntls.LOOKUP.
+             * Removes item from the collection and logs change.
              * @param {string} itemKey Item key.
              * @returns {sntls.JournalingCollection}
              */
@@ -78,7 +87,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
             },
 
             /**
-             * Empties collection.
+             * Clears the entire collection and resets log.
              * @returns {sntls.JournalingCollection}
              */
             clear: function () {
@@ -88,7 +97,9 @@ troop.postpone(sntls, 'JournalingCollection', function () {
             },
 
             /**
-             * Resets collection log.
+             * Resets the log, removing all log entries and thus all references to past items.
+             * Since the log holds reference to items that may not be present in the current collection,
+             * it is important to reset the log once it's no longer necessary.
              * @returns {sntls.JournalingCollection}
              */
             resetLog: function () {
