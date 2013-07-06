@@ -285,6 +285,7 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
     });
 
     /**
+     * Creates a new QueryPattern instance based on the current string.
      * @returns {sntls.QueryPattern}
      */
     String.prototype.toQueryPattern = function () {
@@ -292,6 +293,7 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
     };
 
     /**
+     * Creates a new QueryPattern instance based on the current array.
      * @returns {sntls.QueryPattern}
      */
     Array.prototype.toQueryPattern = function () {

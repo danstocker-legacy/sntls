@@ -272,6 +272,7 @@ troop.postpone(sntls, 'Dictionary', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as a dictionary.
          * @returns {sntls.Dictionary}
          */
         toDictionary: function () {

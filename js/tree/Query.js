@@ -271,6 +271,7 @@ troop.postpone(sntls, 'Query', function () {
     });
 
     /**
+     * Creates a new Query instance based on the current string.
      * @returns {sntls.Query}
      */
     String.prototype.toQuery = function () {
@@ -278,6 +279,8 @@ troop.postpone(sntls, 'Query', function () {
     };
 
     /**
+     * Creates a new Path or Query instance based on the current string, depending on the
+     * actual string contents.
      * @returns {sntls.Path}
      */
     String.prototype.toPathOrQuery = function () {
@@ -287,6 +290,7 @@ troop.postpone(sntls, 'Query', function () {
     };
 
     /**
+     * Creates a new Query instance based on the current array.
      * @returns {sntls.Query}
      */
     Array.prototype.toQuery = function () {
@@ -294,6 +298,8 @@ troop.postpone(sntls, 'Query', function () {
     };
 
     /**
+     * Creates a new Path or Query instance based on the current array, depending on the
+     * actual contents of the array.
      * @returns {sntls.Path}
      */
     Array.prototype.toPathOrQuery = function () {

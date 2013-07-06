@@ -402,6 +402,7 @@ troop.postpone(sntls, 'Tree', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as a tree.
          * @returns {sntls.Tree}
          */
         toTree: function () {

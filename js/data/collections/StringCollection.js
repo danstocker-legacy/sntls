@@ -24,6 +24,7 @@ troop.postpone(sntls, 'StringCollection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as string collection.
          * @returns {sntls.StringCollection}
          */
         toStringCollection: function () {

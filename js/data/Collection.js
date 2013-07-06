@@ -655,15 +655,15 @@ troop.postpone(sntls, 'Collection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
-         * Converts hash to collection, optionally to the specified subclass.
-         * @param {sntls.Collection} [returnType] Collection subclass.
+         * Reinterprets hash as collection, optionally as the specified subclass.
+         * @param {sntls.Collection} [subClass] Collection subclass.
          * @returns {sntls.Collection}
          */
-        toCollection: function (returnType) {
-            dessert.isCollectionOptional(returnType);
+        toCollection: function (subClass) {
+            dessert.isCollectionOptional(subClass);
 
-            if (returnType) {
-                return returnType.create(this.items);
+            if (subClass) {
+                return subClass.create(this.items);
             } else {
                 return sntls.Collection.create(this.items);
             }

@@ -115,6 +115,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as a journaling collection.
          * @returns {sntls.JournalingCollection}
          */
         toJournalingCollection: function () {

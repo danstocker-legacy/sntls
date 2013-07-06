@@ -134,6 +134,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as a string dictionary.
          * @returns {sntls.StringDictionary}
          */
         toStringDictionary: function () {

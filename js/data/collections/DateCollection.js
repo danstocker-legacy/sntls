@@ -24,6 +24,7 @@ troop.postpone(sntls, 'DateCollection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as date collection.
          * @returns {sntls.DateCollection}
          */
         toDateCollection: function () {

@@ -236,6 +236,7 @@ troop.postpone(sntls, 'OrderedList', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
+         * Reinterprets hash as an ordered list.
          * @returns {sntls.OrderedList}
          */
         toOrderedList: function () {

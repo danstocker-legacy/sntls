@@ -210,8 +210,9 @@ troop.postpone(sntls, 'Path', function () {
 
     troop.Properties.addProperties.call(
         String.prototype,
-        /** @lends String.prototype */{
+        /** @lends String# */{
             /**
+             * Creates a new Path instance based on the current string.
              * @returns {sntls.Path}
              */
             toPath: function () {
@@ -223,8 +224,9 @@ troop.postpone(sntls, 'Path', function () {
 
     troop.Properties.addProperties.call(
         Array.prototype,
-        /** @lends Array.prototype */{
+        /** @lends Array# */{
             /**
+             * Creates a new Path instance based on the current array.
              * @returns {sntls.Path}
              */
             toPath: function () {
