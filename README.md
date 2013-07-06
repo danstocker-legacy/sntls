@@ -5,8 +5,14 @@ Sntls
 
 A collection of general purpose classes and behaviors (class traits) such as collections, dictionaries, trees, ordered lists, profiling, stateful objects, etc.
 
+[Wiki](https://github.com/danstocker/sntls/wiki)
+
+[Reference](http://danstocker.github.io/sntls/)
+
 Examples
 --------
+
+[JSFiddle](http://jsfiddle.net/danstocker/EmeEU/)
 
 Splitting multiple strings at once
 
@@ -25,21 +31,25 @@ var whoKnowsWho = {
     "Joan": { knows: ["Joe", "Daniel", "Pam"] }
 };
 
-// first-degree connections of persons with name "J..." formed into sentences
+// first-degree connections of persons with names like "J..."
 sntls.Collection.create(whoKnowsWho)
-    .filterByPrefix('J') // filtering items where keys start with "J"
-    .toTree() // conversion to tree
-    .queryPathValuePairsAsHash('|>knows'.toQuery()) // querying 'knows' nodes
-    .toCollection(sntls.Collection.of(Array)) // and interpreting results as collection of arrays
+    // filtering items where keys start with "J"
+    .filterByPrefix('J')
+    // re-interpreting as Tree
+    .toTree()
+     // querying 'knows' nodes
+    .queryPathValuePairsAsHash('|>knows'.toQuery())
+     // and interpreting results as collection of arrays
+    .toCollection(sntls.Collection.of(Array))
     .join(' and ') // joining all items
+     // forming sentences
     .mapContents(function (item, path) {
-        return path.toPath().asArray[0] + " knows " + item; // forming sentences
+        return path.toPath().asArray[0] + " knows " + item;
     })
-    .getValues() // ["Joe knows Al and David and Joan", "Joan knows Joe and Daniel and Pam"]
+    .getValues()
+
+    // [
+    //  "Joe knows Al and David and Joan",
+    //  "Joan knows Joe and Daniel and Pam"
+    // ]
 ```
-
-[JSFiddle](http://jsfiddle.net/danstocker/EmeEU/)
-
-[Wiki](https://github.com/danstocker/sntls/wiki)
-
-[Reference](http://danstocker.github.io/sntls/)
