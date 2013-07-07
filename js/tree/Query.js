@@ -20,7 +20,7 @@ troop.postpone(sntls, 'Query', function () {
 
     /**
      * An expression that matches several paths.
-     * Queries are backwards-compatible in the sens that a path instance may be treated as a query
+     * Queries are backwards-compatible in the sense that a path instance may be treated as a query
      * that matches a single path.
      * A series of symbols may be used in specifying a query:
      * There are three symbols that match keys:
