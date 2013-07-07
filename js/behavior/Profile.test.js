@@ -41,8 +41,6 @@
     test("Retrieval", function () {
         var profile = sntls.Profile.create();
 
-        strictEqual(profile.getCounters(), profile.counters, "Access to counters object");
-
         profile.inc('foo');
         equal(profile.getCount('foo'), profile.counters.foo, "Counter value");
     });

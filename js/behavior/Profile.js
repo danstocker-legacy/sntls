@@ -79,16 +79,6 @@ troop.postpone(sntls, 'Profile', function () {
             },
 
             /**
-             * TODO: Remove when property accessor is implemented in sntls.Collection
-             * Simple getter for counter object.
-             * @deprecated
-             * @returns {object}
-             */
-            getCounters: function () {
-                return this.counters;
-            },
-
-            /**
              * Resets the profile by emptying the entire counters buffer, or just one counter.
              * @param {string} [counterName] Name of counter to be reset.
              * @returns {sntls.Profile}
