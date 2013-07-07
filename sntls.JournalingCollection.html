@@ -582,7 +582,7 @@ and returning them as a collection.
         
             
 <dt>
-    <h4 class="name" id="asType"><span class="type-signature"></span>asType<span class="signature">(returnType)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="asType"><span class="type-signature"></span>asType<span class="signature">(subClass)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -626,7 +626,7 @@ encouraged after calling this method.
 	
         <tr>
             
-                <td class="name"><code>returnType</code></td>
+                <td class="name"><code>subClass</code></td>
             
             
             <td class="type">
@@ -829,7 +829,7 @@ The rest of the arguments are forwarded to the method calls.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 611
+        <a href="Collection.js.html">data/Collection.js</a>, line 677
     </li></ul></dd>
     
     
@@ -1034,6 +1034,187 @@ and initializes it with a shallow copy of the current items buffer and item coun
     New collection with identical contents.
 </div>
 
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="collectProperty"><span class="type-signature"></span>collectProperty<span class="signature">(propertyName, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Collects property from each item and packs them into a collection.
+Equivalent to mapping the collection using a property getter, but
+saves a function call on each item.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>propertyName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Name of property to retrieve from each item.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>subClass</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Optional collection subclass for the output.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#collectProperty">sntls.Collection#collectProperty</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">data/Collection.js</a>, line 605
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
 
 
 <dl>
@@ -3697,7 +3878,7 @@ in the resulting array is not deterministic.
         
             
 <dt>
-    <h4 class="name" id="mapContents"><span class="type-signature"></span>mapContents<span class="signature">(handler, <span class="optional">returnType</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="mapContents"><span class="type-signature"></span>mapContents<span class="signature">(handler, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -3705,7 +3886,7 @@ in the resulting array is not deterministic.
     
     
     <div class="description">
-        Maps a collection to a new collection instance of subclass `returnType`, using the specified handler
+        Maps a collection to a new collection instance of subclass `subClass`, using the specified handler
 to create each item in the new collection.
     </div>
     
@@ -3774,7 +3955,7 @@ to return the mapped item for the new collection. Original collection is passed 
 	
         <tr>
             
-                <td class="name"><code>returnType</code></td>
+                <td class="name"><code>subClass</code></td>
             
             
             <td class="type">
@@ -4086,6 +4267,195 @@ Return type will be that of the current collection.
         
             
 <dt>
+    <h4 class="name" id="passEachItemTo"><span class="type-signature"></span>passEachItemTo<span class="signature">(handler, <span class="optional">argIndex</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Passes each item to the specified handler as argument, and returns the results packed in a
+plain collection instance. Similar to `.mapContents`
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Any function. Bound if necessary.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>argIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Argument index at which collection items will be expected.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#passEachItemTo">sntls.Collection#passEachItemTo</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">data/Collection.js</a>, line 634
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var c = sntls.Collection.create(['foo', 'bar']);
+function split (delim, str) {
+ return str.split(delim);
+}
+c.passEachItemTo(splitIntoLetters, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="resetLog"><span class="type-signature"></span>resetLog<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
     
     
@@ -4327,6 +4697,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as array collection.
+    </div>
+    
 
     
     
@@ -4362,7 +4736,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ArrayCollection.js.html">data/collections/ArrayCollection.js</a>, line 29
+        <a href="ArrayCollection.js.html">data/collections/ArrayCollection.js</a>, line 30
     </li></ul></dd>
     
     
@@ -4404,7 +4778,7 @@ it is important to reset the log once it's no longer necessary.
         
             
 <dt>
-    <h4 class="name" id="toCollection"><span class="type-signature"></span>toCollection<span class="signature">(<span class="optional">returnType</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="toCollection"><span class="type-signature"></span>toCollection<span class="signature">(<span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -4412,7 +4786,7 @@ it is important to reset the log once it's no longer necessary.
     
     
     <div class="description">
-        Converts hash to collection, optionally to the specified subclass.
+        Reinterprets hash as collection, optionally as the specified subclass.
     </div>
     
 
@@ -4448,7 +4822,7 @@ it is important to reset the log once it's no longer necessary.
 	
         <tr>
             
-                <td class="name"><code>returnType</code></td>
+                <td class="name"><code>subClass</code></td>
             
             
             <td class="type">
@@ -4510,7 +4884,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 662
+        <a href="Collection.js.html">data/Collection.js</a>, line 728
     </li></ul></dd>
     
     
@@ -4559,6 +4933,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as date collection.
+    </div>
+    
 
     
     
@@ -4594,7 +4972,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DateCollection.js.html">data/collections/DateCollection.js</a>, line 29
+        <a href="DateCollection.js.html">data/collections/DateCollection.js</a>, line 30
     </li></ul></dd>
     
     
@@ -4643,6 +5021,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as a dictionary.
+    </div>
+    
 
     
     
@@ -4678,7 +5060,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 278
     </li></ul></dd>
     
     
@@ -4727,6 +5109,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as a journaling collection.
+    </div>
+    
 
     
     
@@ -4762,7 +5148,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 121
     </li></ul></dd>
     
     
@@ -4811,6 +5197,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as an ordered list.
+    </div>
+    
 
     
     
@@ -4846,7 +5236,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 241
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 242
     </li></ul></dd>
     
     
@@ -4895,6 +5285,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as ordered string list.
+    </div>
+    
 
     
     
@@ -4930,7 +5324,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 100
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 101
     </li></ul></dd>
     
     
@@ -4979,6 +5373,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as string collection.
+    </div>
+    
 
     
     
@@ -5014,7 +5412,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringCollection.js.html">data/collections/StringCollection.js</a>, line 29
+        <a href="StringCollection.js.html">data/collections/StringCollection.js</a>, line 30
     </li></ul></dd>
     
     
@@ -5063,6 +5461,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as a string dictionary.
+    </div>
+    
 
     
     
@@ -5098,7 +5500,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 139
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 140
     </li></ul></dd>
     
     
@@ -5147,6 +5549,10 @@ it is important to reset the log once it's no longer necessary.
 <dd>
     
     
+    <div class="description">
+        Reinterprets hash as a tree.
+    </div>
+    
 
     
     
@@ -5182,7 +5588,7 @@ it is important to reset the log once it's no longer necessary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 407
+        <a href="Tree.js.html">tree/Tree.js</a>, line 408
     </li></ul></dd>
     
     
@@ -5243,7 +5649,7 @@ it is important to reset the log once it's no longer necessary.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:17:30 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 07 2013 17:57:03 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

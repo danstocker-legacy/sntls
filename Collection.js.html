@@ -278,14 +278,14 @@ troop.postpone(sntls, 'Collection', function () {
              * // converts a collection of strings to a string collection
              * var stringCollection = sntls.Collection.create(['hello', 'world'])
              *  .asType(sntls.Collection.of(String));
-             * @param {sntls.Collection} returnType Subclass of `Collection`
+             * @param {sntls.Collection} subClass Subclass of `Collection`
              * @returns {sntls.Collection} Instance of the specified collection subclass, initialized with the
              * caller's item buffer and item count.
              */
-            asType: function (returnType) {
-                dessert.isCollection(returnType, "Type must be Collection-based");
+            asType: function (subClass) {
+                dessert.isCollection(subClass, "Type must be Collection-based");
 
-                var result = /** @type sntls.Collection */ returnType.create();
+                var result = /** @type sntls.Collection */ subClass.create();
 
                 result.items = this.items;
                 result.count = this.count;
@@ -421,15 +421,15 @@ troop.postpone(sntls, 'Collection', function () {
                 dessert.isArray(itemKeys, "Invalid item keys");
 
                 var items = this.items,
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     i, itemKey;
 
                 for (i = 0; i &lt; itemKeys.length; i++) {
                     itemKey = itemKeys[i];
-                    result[itemKey] = items[itemKey];
+                    resultItems[itemKey] = items[itemKey];
                 }
 
-                return this.getBase().create(result);
+                return this.getBase().create(resultItems);
             },
 
             /**
@@ -465,18 +465,18 @@ troop.postpone(sntls, 'Collection', function () {
              */
             filterBySelector: function (selector) {
                 var items = this.items,
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     itemKeys = Object.keys(items),
                     i, itemKey;
 
                 for (i = 0; i &lt; itemKeys.length; i++) {
                     itemKey = itemKeys[i];
                     if (selector.call(this, items[itemKey], itemKey)) {
-                        result[itemKey] = items[itemKey];
+                        resultItems[itemKey] = items[itemKey];
                     }
                 }
 
-                return this.getBase().create(result);
+                return this.getBase().create(resultItems);
             },
 
             /**
@@ -591,7 +591,7 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Maps a collection to a new collection instance of subclass `returnType`, using the specified handler
+             * Maps a collection to a new collection instance of subclass `subClass`, using the specified handler
              * to create each item in the new collection.
              * @example
              * c.mapContents(function (item) {
@@ -599,26 +599,92 @@ troop.postpone(sntls, 'Collection', function () {
              * }, sntls.Collection.of(String));
              * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
              * to return the mapped item for the new collection. Original collection is passed as `this`.
-             * @param {sntls.Collection} [returnType] Optional collection subclass for the output.
+             * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
-            mapContents: function (handler, returnType) {
+            mapContents: function (handler, subClass) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
-                    .isCollectionOptional(returnType);
+                    .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
                     keys = Object.keys(items),
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item;
 
                 for (i = 0; i &lt; keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    result[itemKey] = handler.call(this, item, itemKey);
+                    resultItems[itemKey] = handler.call(this, item, itemKey);
                 }
 
-                return (returnType || self).create(result);
+                return (subClass || self).create(resultItems);
+            },
+
+            /**
+             * Collects property from each item and packs them into a collection.
+             * Equivalent to mapping the collection using a property getter, but
+             * saves a function call on each item.
+             * @param {string} propertyName Name of property to retrieve from each item.
+             * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
+             * @returns {sntls.Collection}
+             */
+            collectProperty: function (propertyName, subClass) {
+                dessert.isCollectionOptional(subClass, "Invalid collection subclass");
+
+                var items = this.items,
+                    keys = Object.keys(items),
+                    resultItems = items instanceof Array ? [] : {},
+                    i, itemKey;
+
+                for (i = 0; i &lt; keys.length; i++) {
+                    itemKey = keys[i];
+                    resultItems[itemKey] = items[itemKey][propertyName];
+                }
+
+                return (subClass || self).create(resultItems);
+            },
+
+            /**
+             * Passes each item to the specified handler as argument, and returns the results packed in a
+             * plain collection instance. Similar to `.mapContents`
+             * @example
+             * var c = sntls.Collection.create(['foo', 'bar']);
+             * function split (delim, str) {
+             *  return str.split(delim);
+             * }
+             * c.passEachItemTo(splitIntoLetters, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
+             * @param {function} handler Any function. Bound if necessary.
+             * @param {number} [argIndex] Argument index at which collection items will be expected.
+             * @returns {sntls.Collection}
+             */
+            passEachItemTo: function (handler, argIndex) {
+                var args = Array.prototype.slice.call(arguments, 2),
+                    items = this.items,
+                    keys = Object.keys(items),
+                    resultItems = items instanceof Array ? [] : {},
+                    i, itemKey;
+
+                if (args.length) {
+                    // there are additional arguments specified
+                    // splicing in placeholder for collection item
+                    args.splice(argIndex, 0, null);
+                    for (i = 0; i &lt; keys.length; i++) {
+                        itemKey = keys[i];
+                        args[argIndex] = items[itemKey];
+                        resultItems[itemKey] = handler.apply(this, args);
+                    }
+                } else {
+                    // no additional arguments
+                    // passing items as first argument
+                    for (i = 0; i &lt; keys.length; i++) {
+                        itemKey = keys[i];
+                        resultItems[itemKey] = handler.call(this, items[itemKey]);
+                    }
+                }
+
+                // returning results as plain collection
+                return self.create(resultItems);
             },
 
             /**
@@ -641,7 +707,7 @@ troop.postpone(sntls, 'Collection', function () {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items),
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item,
                     itemMethod, itemResult,
                     isChainable = true;
@@ -652,7 +718,7 @@ troop.postpone(sntls, 'Collection', function () {
                     itemMethod = item[methodName];
                     if (typeof itemMethod === 'function') {
                         itemResult = itemMethod.apply(item, args);
-                        result[itemKey] = itemResult;
+                        resultItems[itemKey] = itemResult;
                         isChainable = isChainable && itemResult === item;
                     }
                 }
@@ -661,7 +727,7 @@ troop.postpone(sntls, 'Collection', function () {
                 // otherwise returning results as plain collection
                 return isChainable ?
                     this :
-                    self.create(result);
+                    self.create(resultItems);
             }
         });
 });
@@ -682,15 +748,15 @@ troop.postpone(sntls, 'Collection', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
-         * Converts hash to collection, optionally to the specified subclass.
-         * @param {sntls.Collection} [returnType] Collection subclass.
+         * Reinterprets hash as collection, optionally as the specified subclass.
+         * @param {sntls.Collection} [subClass] Collection subclass.
          * @returns {sntls.Collection}
          */
-        toCollection: function (returnType) {
-            dessert.isCollectionOptional(returnType);
+        toCollection: function (subClass) {
+            dessert.isCollectionOptional(subClass);
 
-            if (returnType) {
-                return returnType.create(this.items);
+            if (subClass) {
+                return subClass.create(this.items);
             } else {
                 return sntls.Collection.create(this.items);
             }
@@ -713,7 +779,7 @@ troop.postpone(sntls, 'Collection', function () {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Fri Jul 05 2013 00:17:28 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 07 2013 17:57:02 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
