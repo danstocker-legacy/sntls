@@ -394,15 +394,15 @@ troop.postpone(sntls, 'Collection', function () {
                 dessert.isArray(itemKeys, "Invalid item keys");
 
                 var items = this.items,
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     i, itemKey;
 
                 for (i = 0; i < itemKeys.length; i++) {
                     itemKey = itemKeys[i];
-                    result[itemKey] = items[itemKey];
+                    resultItems[itemKey] = items[itemKey];
                 }
 
-                return this.getBase().create(result);
+                return this.getBase().create(resultItems);
             },
 
             /**
@@ -438,18 +438,18 @@ troop.postpone(sntls, 'Collection', function () {
              */
             filterBySelector: function (selector) {
                 var items = this.items,
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     itemKeys = Object.keys(items),
                     i, itemKey;
 
                 for (i = 0; i < itemKeys.length; i++) {
                     itemKey = itemKeys[i];
                     if (selector.call(this, items[itemKey], itemKey)) {
-                        result[itemKey] = items[itemKey];
+                        resultItems[itemKey] = items[itemKey];
                     }
                 }
 
-                return this.getBase().create(result);
+                return this.getBase().create(resultItems);
             },
 
             /**
@@ -582,16 +582,58 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var items = this.items,
                     keys = Object.keys(items),
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    result[itemKey] = handler.call(this, item, itemKey);
+                    resultItems[itemKey] = handler.call(this, item, itemKey);
                 }
 
-                return (returnType || self).create(result);
+                return (returnType || self).create(resultItems);
+            },
+
+            /**
+             * Passes each item to the specified handler as argument, and returns the results packed in a
+             * plain collection instance. Similar to `.mapContents`
+             * @example
+             * var c = sntls.Collection.create(['foo', 'bar']);
+             * function split (delim, str) {
+             *  return str.split(delim);
+             * }
+             * c.passEachItemTo(splitIntoLetters, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
+             * @param {function} handler Any function. Bound if necessary.
+             * @param {number} [argIndex] Argument index at which collection items will be expected.
+             * @returns {sntls.Collection}
+             */
+            passEachItemTo: function (handler, argIndex) {
+                var args = Array.prototype.slice.call(arguments, 2),
+                    items = this.items,
+                    keys = Object.keys(items),
+                    resultItems = items instanceof Array ? [] : {},
+                    i, itemKey;
+
+                if (args.length) {
+                    // there are additional arguments specified
+                    // splicing in placeholder for collection item
+                    args.splice(argIndex, 0, null);
+                    for (i = 0; i < keys.length; i++) {
+                        itemKey = keys[i];
+                        args[argIndex] = items[itemKey];
+                        resultItems[itemKey] = handler.apply(this, args);
+                    }
+                } else {
+                    // no additional arguments
+                    // passing items as first argument
+                    for (i = 0; i < keys.length; i++) {
+                        itemKey = keys[i];
+                        resultItems[itemKey] = handler.call(this, items[itemKey]);
+                    }
+                }
+
+                // returning results as plain collection
+                return self.create(resultItems);
             },
 
             /**
@@ -614,7 +656,7 @@ troop.postpone(sntls, 'Collection', function () {
                 var args = Array.prototype.slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items),
-                    result = items instanceof Array ? [] : {},
+                    resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item,
                     itemMethod, itemResult,
                     isChainable = true;
@@ -625,7 +667,7 @@ troop.postpone(sntls, 'Collection', function () {
                     itemMethod = item[methodName];
                     if (typeof itemMethod === 'function') {
                         itemResult = itemMethod.apply(item, args);
-                        result[itemKey] = itemResult;
+                        resultItems[itemKey] = itemResult;
                         isChainable = isChainable && itemResult === item;
                     }
                 }
@@ -634,7 +676,7 @@ troop.postpone(sntls, 'Collection', function () {
                 // otherwise returning results as plain collection
                 return isChainable ?
                     this :
-                    self.create(result);
+                    self.create(resultItems);
             }
         });
 });

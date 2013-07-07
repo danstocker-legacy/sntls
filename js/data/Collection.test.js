@@ -62,7 +62,7 @@
                     foo : function (a) {
                         return this.a + ' ' + a;
                     },
-                    bar: function () {
+                    bar : function () {
                         return this;
                     }
                 }),
@@ -847,6 +847,38 @@
         result = collection.mapContents(lastChar, StringCollection);
 
         ok(result.instanceOf(StringCollection), "Result is specified collection");
+    });
+
+    test("Corben Dallas multi-pass", function () {
+        var collection = sntls.Collection.create(["foo", "bar", "baz"]);
+
+        function splitIntoLetters(str) {
+            return str.split('');
+        }
+
+        function split(delim, str) {
+            return str.split(delim);
+        }
+
+        deepEqual(
+            collection.passEachItemTo(splitIntoLetters).items,
+            [
+                ['f', 'o', 'o'],
+                ['b', 'a', 'r'],
+                ['b', 'a', 'z']
+            ],
+            "Items split into letters"
+        );
+
+        deepEqual(
+            collection.passEachItemTo(split, 1, 'a').items,
+            [
+                ['foo'],
+                ['b', 'r'],
+                ['b', 'z']
+            ],
+            "Items split along specified delmiters"
+        );
     });
 
     test("Mapping with array buffer", function () {
