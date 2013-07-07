@@ -849,6 +849,19 @@
         ok(result.instanceOf(StringCollection), "Result is specified collection");
     });
 
+    test("Property collection", function () {
+        var collection = sntls.Collection.create(["foo", "bar", "hello"]),
+            NumberCollection = sntls.Collection.of(Number),
+            result;
+
+        result = collection.collectProperty('length');
+        ok(result.isA(sntls.Collection), "Collection returned");
+        deepEqual(result.items, [3, 3, 5], "Result contents");
+
+        result = collection.collectProperty('length', NumberCollection);
+        ok(result.isA(NumberCollection), "Specified collection returned");
+    });
+
     test("Corben Dallas multi-pass", function () {
         var collection = sntls.Collection.create(["foo", "bar", "baz"]);
 

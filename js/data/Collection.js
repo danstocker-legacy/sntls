@@ -578,7 +578,7 @@ troop.postpone(sntls, 'Collection', function () {
             mapContents: function (handler, subClass) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
-                    .isCollectionOptional(subClass);
+                    .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
                     keys = Object.keys(items),
@@ -589,6 +589,30 @@ troop.postpone(sntls, 'Collection', function () {
                     itemKey = keys[i];
                     item = items[itemKey];
                     resultItems[itemKey] = handler.call(this, item, itemKey);
+                }
+
+                return (subClass || self).create(resultItems);
+            },
+
+            /**
+             * Collects property from each item and packs them into a collection.
+             * Equivalent to mapping the collection using a property getter, but
+             * saves a function call on each item.
+             * @param {string} propertyName Name of property to retrieve from each item.
+             * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
+             * @returns {sntls.Collection}
+             */
+            collectProperty: function (propertyName, subClass) {
+                dessert.isCollectionOptional(subClass, "Invalid collection subclass");
+
+                var items = this.items,
+                    keys = Object.keys(items),
+                    resultItems = items instanceof Array ? [] : {},
+                    i, itemKey;
+
+                for (i = 0; i < keys.length; i++) {
+                    itemKey = keys[i];
+                    resultItems[itemKey] = items[itemKey][propertyName];
                 }
 
                 return (subClass || self).create(resultItems);
