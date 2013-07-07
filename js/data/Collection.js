@@ -251,14 +251,14 @@ troop.postpone(sntls, 'Collection', function () {
              * // converts a collection of strings to a string collection
              * var stringCollection = sntls.Collection.create(['hello', 'world'])
              *  .asType(sntls.Collection.of(String));
-             * @param {sntls.Collection} returnType Subclass of `Collection`
+             * @param {sntls.Collection} subClass Subclass of `Collection`
              * @returns {sntls.Collection} Instance of the specified collection subclass, initialized with the
              * caller's item buffer and item count.
              */
-            asType: function (returnType) {
-                dessert.isCollection(returnType, "Type must be Collection-based");
+            asType: function (subClass) {
+                dessert.isCollection(subClass, "Type must be Collection-based");
 
-                var result = /** @type sntls.Collection */ returnType.create();
+                var result = /** @type sntls.Collection */ subClass.create();
 
                 result.items = this.items;
                 result.count = this.count;
@@ -564,7 +564,7 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Maps a collection to a new collection instance of subclass `returnType`, using the specified handler
+             * Maps a collection to a new collection instance of subclass `subClass`, using the specified handler
              * to create each item in the new collection.
              * @example
              * c.mapContents(function (item) {
@@ -572,13 +572,13 @@ troop.postpone(sntls, 'Collection', function () {
              * }, sntls.Collection.of(String));
              * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
              * to return the mapped item for the new collection. Original collection is passed as `this`.
-             * @param {sntls.Collection} [returnType] Optional collection subclass for the output.
+             * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
-            mapContents: function (handler, returnType) {
+            mapContents: function (handler, subClass) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
-                    .isCollectionOptional(returnType);
+                    .isCollectionOptional(subClass);
 
                 var items = this.items,
                     keys = Object.keys(items),
@@ -591,7 +591,7 @@ troop.postpone(sntls, 'Collection', function () {
                     resultItems[itemKey] = handler.call(this, item, itemKey);
                 }
 
-                return (returnType || self).create(resultItems);
+                return (subClass || self).create(resultItems);
             },
 
             /**
