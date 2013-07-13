@@ -22,7 +22,7 @@
             [
                 {
                     method: 'add',
-                    name  : 'i1',
+                    key   : 'i1',
                     item  : "foo"
                 }
             ],
@@ -35,12 +35,12 @@
             [
                 {
                     method: 'add',
-                    name  : 'i2',
+                    key   : 'i2',
                     item  : "bar"
                 },
                 {
                     method: 'add',
-                    name  : 'i1',
+                    key   : 'i1',
                     item  : "foo"
                 }
             ],
@@ -53,17 +53,17 @@
             [
                 {
                     method: 'remove',
-                    name  : 'i1',
+                    key   : 'i1',
                     item  : "foo"
                 },
                 {
                     method: 'add',
-                    name  : 'i2',
+                    key   : 'i2',
                     item  : "bar"
                 },
                 {
                     method: 'add',
-                    name  : 'i1',
+                    key   : 'i1',
                     item  : "foo"
                 }
             ],
@@ -76,22 +76,22 @@
             [
                 {
                     method: 'change',
-                    name  : 'i2',
+                    key   : 'i2',
                     item  : "hello"
                 },
                 {
                     method: 'remove',
-                    name  : 'i1',
+                    key   : 'i1',
                     item  : "foo"
                 },
                 {
                     method: 'add',
-                    name  : 'i2',
+                    key   : 'i2',
                     item  : "bar"
                 },
                 {
                     method: 'add',
-                    name  : 'i1',
+                    key   : 'i1',
                     item  : "foo"
                 }
             ],
@@ -145,7 +145,7 @@
             [
                 {
                     method: 'remove',
-                    name  : 'a',
+                    key   : 'a',
                     item  : "foo"
                 }
             ],

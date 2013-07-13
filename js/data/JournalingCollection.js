@@ -20,7 +20,6 @@ troop.postpone(sntls, 'JournalingCollection', function () {
     sntls.JournalingCollection = base.extend()
         .addMethods(/** @lends sntls.JournalingCollection# */{
             /**
-             * TODO: Rename "name" to "key" in accordance with collection naming rules.
              * @param {object} [items] Initial contents.
              * @ignore
              */
@@ -56,7 +55,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
                 // logging change
                 this.log.unshift({
                     method: isInCollection ? 'change' : 'add',
-                    name  : itemKey,
+                    key   : itemKey,
                     item  : item // before the change
                 });
 
@@ -78,7 +77,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
                     // adding to log
                     this.log.unshift({
                         method: 'remove',
-                        name  : itemKey,
+                        key   : itemKey,
                         item  : oldItem
                     });
                 }

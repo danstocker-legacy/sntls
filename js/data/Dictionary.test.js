@@ -28,16 +28,16 @@
 
         dict = sntls.Dictionary.create();
 
-        equal(dict.itemCount, 0, "Item count in empty buffer");
-        equal(dict.valueCount, 0, "Value count in empty buffer");
+        equal(dict.keyCount, 0, "Item count in empty buffer");
+        equal(dict.itemCount, 0, "Value count in empty buffer");
 
         dict = sntls.Dictionary.create({
             foo  : ['bar', 'moo'],
             hello: 'world'
         });
 
-        equal(dict.itemCount, 2, "Item count in populated buffer");
-        equal(dict.valueCount, 3, "Value count in populated buffer");
+        equal(dict.keyCount, 2, "Item count in populated buffer");
+        equal(dict.itemCount, 3, "Value count in populated buffer");
     });
 
     test("Single item addition", function () {
@@ -47,31 +47,31 @@
         var dict = sntls.Dictionary.create();
 
         dict.addItem('foo', 'bar');
-        equal(dict.itemCount, 1, "Item count");
-        equal(dict.valueCount, 1, "Value count");
+        equal(dict.keyCount, 1, "Item count");
+        equal(dict.itemCount, 1, "Value count");
         deepEqual(dict.items, {
             foo: 'bar'
         }, "Key-value pair added to dictionary");
 
         dict.addItem('hello', 'world');
-        equal(dict.itemCount, 2, "Item count");
-        equal(dict.valueCount, 2, "Value count");
+        equal(dict.keyCount, 2, "Item count");
+        equal(dict.itemCount, 2, "Value count");
         deepEqual(dict.items, {
             foo  : 'bar',
             hello: 'world'
         }, "Key-value pair added to dictionary");
 
         dict.addItem('foo', 'moo');
-        equal(dict.itemCount, 2, "Item count");
-        equal(dict.valueCount, 3, "Value count");
+        equal(dict.keyCount, 2, "Item count");
+        equal(dict.itemCount, 3, "Value count");
         deepEqual(dict.items, {
             foo  : ['bar', 'moo'],
             hello: 'world'
         }, "Value added by existing key");
 
         dict.addItem('foo', 'boo');
-        equal(dict.itemCount, 2, "Item count");
-        equal(dict.valueCount, 4, "Value count");
+        equal(dict.keyCount, 2, "Item count");
+        equal(dict.itemCount, 4, "Value count");
         deepEqual(dict.items, {
             foo  : ['bar', 'moo', 'boo'],
             hello: 'world'
@@ -140,8 +140,8 @@
 
         dict.removeItem('foo', 'BAR');
 
-        equal(dict.itemCount, 2, "Item count");
-        equal(dict.valueCount, 3, "Value count");
+        equal(dict.keyCount, 2, "Item count");
+        equal(dict.itemCount, 3, "Value count");
         deepEqual(
             dict.items,
             {
@@ -153,8 +153,8 @@
 
         dict.removeItem('foo', 'bar');
 
-        equal(dict.itemCount, 2, "Item count");
-        equal(dict.valueCount, 2, "Value count");
+        equal(dict.keyCount, 2, "Item count");
+        equal(dict.itemCount, 2, "Value count");
         deepEqual(
             dict.items,
             {
@@ -166,8 +166,8 @@
 
         dict.removeItem('foo', 'woot');
 
-        equal(dict.itemCount, 1, "Item count");
-        equal(dict.valueCount, 1, "Value count");
+        equal(dict.keyCount, 1, "Item count");
+        equal(dict.itemCount, 1, "Value count");
         deepEqual(
             dict.items,
             {
@@ -178,8 +178,8 @@
 
         dict.removeItem('hello');
 
-        equal(dict.itemCount, 0, "Item count");
-        equal(dict.valueCount, 0, "Value count");
+        equal(dict.keyCount, 0, "Item count");
+        equal(dict.itemCount, 0, "Value count");
         deepEqual(
             dict.items,
             {},
@@ -290,8 +290,8 @@
         });
 
         dict.clear();
-        equal(dict.itemCount, 0, "Item count after emptying");
-        equal(dict.valueCount, 0, "Value count after emptying");
+        equal(dict.keyCount, 0, "Item count after emptying");
+        equal(dict.itemCount, 0, "Value count after emptying");
 
         sntls.Hash.removeMocks();
     });
