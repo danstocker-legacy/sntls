@@ -8,7 +8,7 @@ troop.postpone(sntls, 'Hash', function () {
      * Instantiates class.
      * @name sntls.Hash.create
      * @function
-     * @param {object} items Container for hash items.
+     * @param {object|Array} items Container for hash items.
      * @returns {sntls.Hash}
      */
 
@@ -23,7 +23,7 @@ troop.postpone(sntls, 'Hash', function () {
     sntls.Hash = troop.Base.extend()
         .addMethods(/** @lends sntls.Hash# */{
             /**
-             * @param {object} items Container for hash items.
+             * @param {object|Array} items Container for hash items.
              * @ignore
              */
             init: function (items) {
