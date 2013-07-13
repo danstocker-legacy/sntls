@@ -20,9 +20,9 @@
                 foo  : 'bar',
                 hello: 'world'
             }).combineWith(StringDictionary.create({
-                bar  : 'BAR',
-                world: 'WORLD'
-            })).items,
+                    bar  : 'BAR',
+                    world: 'WORLD'
+                })).items,
             {
                 foo  : 'BAR',
                 hello: 'WORLD'
@@ -35,8 +35,8 @@
                 foo  : 'bar',
                 hello: 'world'
             }).combineWith(StringDictionary.create({
-                world: 'WORLD'
-            })).items,
+                    world: 'WORLD'
+                })).items,
             {
                 hello: 'WORLD'
             },
@@ -47,9 +47,9 @@
             StringDictionary.create({
                 hello: 'world'
             }).combineWith(StringDictionary.create({
-                hats : 'off',
-                world: 'WORLD'
-            })).items,
+                    hats : 'off',
+                    world: 'WORLD'
+                })).items,
             {
                 hello: 'WORLD'
             },
@@ -61,9 +61,9 @@
                 foo  : 'bar',
                 hello: 'world'
             }).combineWith(StringDictionary.create({
-                hats : 'off',
-                world: 'WORLD'
-            })).items,
+                    hats : 'off',
+                    world: 'WORLD'
+                })).items,
             {
                 hello: 'WORLD'
             },
@@ -74,9 +74,9 @@
             StringDictionary.create({
                 hello: ['there', 'world']
             }).combineWith(StringDictionary.create({
-                there: 'THERE',
-                world: 'WORLD'
-            })).items,
+                    there: 'THERE',
+                    world: 'WORLD'
+                })).items,
             {
                 hello: ['THERE', 'WORLD']
             },
@@ -87,9 +87,9 @@
             StringDictionary.create({
                 hello: ['there', 'world']
             }).combineWith(StringDictionary.create({
-                there: ['over', 'there'],
-                world: ['my', 'World']
-            })).items,
+                    there: ['over', 'there'],
+                    world: ['my', 'World']
+                })).items,
             {
                 hello: ['over', 'there', 'my', 'World']
             },
@@ -185,10 +185,10 @@
                 hello: ['world', 'guys', 'all'],
                 big  : ['world', 'bar']
             }).combineWith(StringDictionary.create({
-                world: 'Earth',
-                bar  : 'BAR',
-                guys : ["y'all", 'men']
-            })).reverse().items,
+                    world: 'Earth',
+                    bar  : 'BAR',
+                    guys : ["y'all", 'men']
+                })).reverse().items,
             {
                 "y'all": 'hello',
                 BAR    : ['foo', 'big'],
@@ -208,15 +208,26 @@
             })
                 .reverse()
                 .combineWith(StringDictionary.create({
-                foo: 'whatever',
-                big: ['tree', 'house']
-            })).items,
+                    foo: 'whatever',
+                    big: ['tree', 'house']
+                })).items,
             {
                 bar  : ['whatever', 'tree', 'house'],
                 world: ['tree', 'house']
             },
             "Dictionaries joined by keys"
         );
+    });
+
+    test("Retrieving unique values", function () {
+        var dict = StringDictionary.create({
+            foo  : ['bar', 'baz'],
+            hello: ['world', 'all'],
+            its  : 'all'
+        });
+
+        deepEqual(dict.getUniqueValues().sort(), ['all', 'bar', 'baz', 'world']);
+        deepEqual(dict.getUniqueValuesAsHash().items.sort(), ['all', 'bar', 'baz', 'world']);
     });
 
     test("Removing specified string values from items", function () {

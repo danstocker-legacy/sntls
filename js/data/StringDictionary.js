@@ -107,6 +107,26 @@ troop.postpone(sntls, 'StringDictionary', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Retrieves unique values from dictionary.
+             * @returns {string[]}
+             */
+            getUniqueValues: function () {
+                return this
+                    .reverse()
+                    .getKeys();
+            },
+
+            /**
+             * Retrieves unique values from dictionary wrapped in a hash.
+             * @returns {sntls.Hash}
+             */
+            getUniqueValuesAsHash: function () {
+                return this
+                    .reverse()
+                    .getKeysAsHash();
             }
 
             /**
