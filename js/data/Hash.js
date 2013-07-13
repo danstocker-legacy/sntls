@@ -34,7 +34,7 @@ troop.postpone(sntls, 'Hash', function () {
                  * Object buffer that stores items. Technically writable and public for performance
                  * and transparency reasons, but should not be changed externally as may lead to inconsistent state
                  * especially in `Hash`-based subclasses.
-                 * @type {Object}
+                 * @type {Object|Array}
                  */
                 this.items = items || {};
             },
