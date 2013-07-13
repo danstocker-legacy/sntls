@@ -3,6 +3,7 @@ troop.postpone(sntls, 'Collection', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
+        slice = Array.prototype.slice,
         base = sntls.Hash,
         self = base.extend();
 
@@ -623,16 +624,18 @@ troop.postpone(sntls, 'Collection', function () {
              * plain collection instance. Similar to `.mapContents`
              * @example
              * var c = sntls.Collection.create(['foo', 'bar']);
-             * function split (delim, str) {
+             * function splitIntoLetters(delim, str) {
              *  return str.split(delim);
              * }
-             * c.passEachItemTo(splitIntoLetters, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
-             * @param {function} handler Any function. Bound if necessary.
+             * c.passEachItemTo(splitIntoLetters, null, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
+             * @param {function} handler Any function.
+             * @param {*} [context] Context in which to call the handler. If handler is a method, the context
+             * should be the owner (instance or class) of the method.
              * @param {number} [argIndex] Argument index at which collection items will be expected.
              * @returns {sntls.Collection}
              */
-            passEachItemTo: function (handler, argIndex) {
-                var args = Array.prototype.slice.call(arguments, 2),
+            passEachItemTo: function (handler, context, argIndex) {
+                var args = slice.call(arguments, 3),
                     items = this.items,
                     keys = Object.keys(items),
                     resultItems = items instanceof Array ? [] : {},
@@ -645,14 +648,14 @@ troop.postpone(sntls, 'Collection', function () {
                     for (i = 0; i < keys.length; i++) {
                         itemKey = keys[i];
                         args[argIndex] = items[itemKey];
-                        resultItems[itemKey] = handler.apply(this, args);
+                        resultItems[itemKey] = handler.apply(context || this, args);
                     }
                 } else {
                     // no additional arguments
                     // passing items as first argument
                     for (i = 0; i < keys.length; i++) {
                         itemKey = keys[i];
-                        resultItems[itemKey] = handler.call(this, items[itemKey]);
+                        resultItems[itemKey] = handler.call(context || this, items[itemKey]);
                     }
                 }
 
@@ -677,7 +680,7 @@ troop.postpone(sntls, 'Collection', function () {
             callOnEachItem: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
 
-                var args = Array.prototype.slice.call(arguments, 1),
+                var args = slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items),
                     resultItems = items instanceof Array ? [] : {},

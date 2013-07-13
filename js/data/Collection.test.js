@@ -863,9 +863,11 @@
     });
 
     test("Corben Dallas multi-pass", function () {
-        var collection = sntls.Collection.create(["foo", "bar", "baz"]);
+        var collection = sntls.Collection.create(["foo", "bar", "baz"]),
+            context;
 
         function splitIntoLetters(str) {
+            context = collection;
             return str.split('');
         }
 
@@ -874,7 +876,7 @@
         }
 
         deepEqual(
-            collection.passEachItemTo(splitIntoLetters).items,
+            collection.passEachItemTo(splitIntoLetters, collection).items,
             [
                 ['f', 'o', 'o'],
                 ['b', 'a', 'r'],
@@ -883,8 +885,10 @@
             "Items split into letters"
         );
 
+        strictEqual(context, collection, "Context was set");
+
         deepEqual(
-            collection.passEachItemTo(split, 1, 'a').items,
+            collection.passEachItemTo(split, null, 1, 'a').items,
             [
                 ['foo'],
                 ['b', 'r'],
