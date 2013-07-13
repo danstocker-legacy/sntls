@@ -7,7 +7,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
      * Constructs a dictionary, initialized with the items passed in the optional argument.
      * @name sntls.StringDictionary.create
      * @function
-     * @param {object} items
+     * @param {object|Array} items
      * @returns {sntls.StringDictionary}
      */
 
