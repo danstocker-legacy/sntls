@@ -428,7 +428,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Filters collection applying the specified selector function to each item.
              * @example
              * // filters items with value higher than 50
-             * c.filterByExpr(function (item, itemKey) {
+             * c.filterBySelector(function (item, itemKey) {
              *  return item > 50;
              * }).items; // {force: 100}
              * @param {function} selector Selector function. Receives the collection instance as `this`,
