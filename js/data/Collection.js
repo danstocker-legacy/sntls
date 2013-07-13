@@ -10,7 +10,7 @@ troop.postpone(sntls, 'Collection', function () {
      * Instantiates class.
      * @name sntls.Collection.create
      * @function
-     * @param {object} [items] Initial contents.
+     * @param {object|Array} [items] Initial contents.
      * @returns {sntls.Collection}
      */
 
@@ -157,7 +157,7 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * @param {object} [items] Initial contents.
+             * @param {object|Array} [items] Initial contents.
              * @ignore
              */
             init: function (items) {
