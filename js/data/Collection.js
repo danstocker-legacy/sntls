@@ -438,6 +438,8 @@ troop.postpone(sntls, 'Collection', function () {
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterBySelector: function (selector) {
+                dessert.isFunction(selector, "Invalid selector");
+
                 var items = this.items,
                     resultItems = items instanceof Array ? [] : {},
                     itemKeys = Object.keys(items),
