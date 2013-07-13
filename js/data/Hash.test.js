@@ -1,4 +1,4 @@
-/*global module, test, ok, raises, equal, strictEqual, deepEqual */
+/*global module, test, expect, ok, raises, equal, strictEqual, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -35,10 +35,10 @@
         equal(hash.getFirstValue(), 'world', "First value in singular hash");
 
         hash = sntls.Hash.create({
-            one  : 'hello',
-            two  : 'world!',
-            four : {},
-            five : true
+            one : 'hello',
+            two : 'world!',
+            four: {},
+            five: true
         });
         ok(['one', 'two', 'four', 'five'].indexOf(hash.getFirstKey()) > -1, "First key in regular hash");
         ok(['hello', 'world!', 5, true].indexOf(hash.getFirstValue()) > -1, "First value in regular hash");
@@ -122,5 +122,71 @@
 
         hash.clear();
         deepEqual(hash.items, [], "Array buffer emptied");
+    });
+
+    test("Passing buffer to handler", function () {
+        expect(5);
+
+        var hash,
+            result;
+
+        hash = sntls.Hash.create({
+            foo  : 'bar',
+            hello: 'world'
+        });
+
+        function handler1(items) {
+            /*jshint validthis:true */
+            strictEqual(this, hash, "Context specified");
+            strictEqual(items, hash.items, "Items passed as 1st arg");
+            return 'foo';
+        }
+
+        function handler2(foo, bar, items, baz) {
+            strictEqual(items, hash.items, "Items passed as 3rd arg");
+        }
+
+        result = hash.passItemsTo(handler1, hash);
+
+        equal(result, 'foo', "Passer returns handler result");
+
+        raises(function () {
+            hash.passItemsTo(handler1, hash, 3);
+        }, "Invalid argument index");
+
+        hash.passItemsTo(handler2, hash, 2, 'foo', 'bar', 'world');
+    });
+
+    test("Passing self to handler", function () {
+        expect(5);
+
+        var hash,
+            result;
+
+        hash = sntls.Hash.create({
+            foo  : 'bar',
+            hello: 'world'
+        });
+
+        function handler1(item) {
+            /*jshint validthis:true */
+            strictEqual(this, hash, "Context specified");
+            strictEqual(item, hash, "Hash passed as 1st arg");
+            return 'foo';
+        }
+
+        function handler2(foo, bar, item, baz) {
+            strictEqual(item, hash, "Items passed as 3rd arg");
+        }
+
+        result = hash.passSelfTo(handler1, hash);
+
+        equal(result, 'foo', "Passer returns handler result");
+
+        raises(function () {
+            hash.passSelfTo(handler1, hash, 3);
+        }, "Invalid argument index");
+
+        hash.passSelfTo(handler2, hash, 2, 'foo', 'bar', 'world');
     });
 }());

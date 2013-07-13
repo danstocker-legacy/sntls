@@ -2,7 +2,8 @@
 troop.postpone(sntls, 'Hash', function () {
     "use strict";
 
-    var hOP = Object.prototype.hasOwnProperty;
+    var hOP = Object.prototype.hasOwnProperty,
+        slice = Array.prototype.slice;
 
     /**
      * Instantiates class.
@@ -127,6 +128,38 @@ troop.postpone(sntls, 'Hash', function () {
             clear: function () {
                 this.items = this.items instanceof Array ? [] : {};
                 return this;
+            },
+
+            /**
+             * Passes the items buffer to the specified function.
+             * @param {function} handler External handler accepting the buffer.
+             * @param {*} [context] Context in which to call the handler. If handler is a method, the context
+             * should be the owner (instance or class) of the method.
+             * @param {number} [argIndex=0] Argument index taken by buffer when calling the function.
+             * @returns {*} Whatever is returned by the handler.
+             */
+            passItemsTo: function (handler, context, argIndex) {
+                argIndex = argIndex || 0;
+                var args = slice.call(arguments, 3);
+                dessert.assert(args.length >= argIndex, "Invalid argument index", argIndex);
+                args.splice(argIndex, 0, this.items);
+                return handler.apply(context || this, args);
+            },
+
+            /**
+             * Passes itself to the specified function.
+             * @param {function} handler External handler accepting the hash.
+             * @param {*} [context] Context in which to call the handler. If handler is a method, the context
+             * should be the owner (instance or class) of the method.
+             * @param {number} [argIndex=0] Argument index taken by buffer when calling the function.
+             * @returns {*} Whatever is returned by the handler.
+             */
+            passSelfTo: function (handler, context, argIndex) {
+                argIndex = argIndex || 0;
+                var args = slice.call(arguments, 3);
+                dessert.assert(args.length >= argIndex, "Invalid argument index", argIndex);
+                args.splice(argIndex, 0, this);
+                return handler.apply(context || this, args);
             }
         });
 });
