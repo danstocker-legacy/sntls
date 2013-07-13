@@ -435,10 +435,13 @@ troop.postpone(sntls, 'Collection', function () {
              * current item as first argument, and the key of the current item as second argument.
              * Expected to return a boolean: true when the item should be included in the result, false if not.
              * (In reality and truthy or falsy value will do.)
+             * @param {object} [context] Optional selector context.
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
-            filterBySelector: function (selector) {
-                dessert.isFunction(selector, "Invalid selector");
+            filterBySelector: function (selector, context) {
+                dessert
+                    .isFunction(selector, "Invalid selector")
+                    .isObjectOptional(context, "Invalid context");
 
                 var items = this.items,
                     resultItems = items instanceof Array ? [] : {},
@@ -447,7 +450,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 for (i = 0; i < itemKeys.length; i++) {
                     itemKey = itemKeys[i];
-                    if (selector.call(this, items[itemKey], itemKey)) {
+                    if (selector.call(context || this, items[itemKey], itemKey)) {
                         resultItems[itemKey] = items[itemKey];
                     }
                 }
@@ -515,10 +518,13 @@ troop.postpone(sntls, 'Collection', function () {
              * @param {function} handler Function to be called on each item. The handler receives current item
              * as first argument, item key as second argument, and all other arguments passed to `.forEachItem()`
              * as the rest of its arguments. A reference to the current collection is passed as `this`.
+             * @param {object} [context] Optional handler context.
              * @returns {sntls.Collection}
              */
-            forEachItem: function (handler) {
-                dessert.isFunction(handler, "Invalid callback function");
+            forEachItem: function (handler, context) {
+                dessert
+                    .isFunction(handler, "Invalid callback function")
+                    .isObjectOptional(context, "Invalid context");
 
                 var items = this.items,
                     keys = Object.keys(items),
@@ -527,7 +533,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    if (handler.call(this, item, itemKey) === false) {
+                    if (handler.call(context || this, item, itemKey) === false) {
                         break;
                     }
                 }
@@ -540,15 +546,17 @@ troop.postpone(sntls, 'Collection', function () {
              * Other than that, the method behaves the same way as `.forEach()`.
              * @param {function} handler @see sntls.Collection#forEachItem
              * Iteration breaks when handler returns false.
+             * @param {object} [context] Optional selector context.
              * @param {function} [comparator] Optional callback for comparing keys when sorting. The context (`this`)
              * will be set to the collection so item values may be compared too via `this.items`. Expected to return
              * an integer, the same way as in `Array.sort()`
              * @returns {sntls.Collection}
              * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
-            forEachItemSorted: function (handler, comparator) {
+            forEachItemSorted: function (handler, context, comparator) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
+                    .isObjectOptional(context, "Invalid context")
                     .isFunctionOptional(comparator, "Invalid comparator function");
 
                 var items = this.items,
@@ -558,7 +566,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    if (handler.call(this, item, itemKey) === false) {
+                    if (handler.call(context || this, item, itemKey) === false) {
                         break;
                     }
                 }
@@ -575,12 +583,14 @@ troop.postpone(sntls, 'Collection', function () {
              * }, sntls.Collection.of(String));
              * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
              * to return the mapped item for the new collection. Original collection is passed as `this`.
+             * @param {object} [context] Optional handler context.
              * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
-            mapContents: function (handler, subClass) {
+            mapContents: function (handler, context, subClass) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
+                    .isObjectOptional(context, "Invalid context")
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
@@ -591,7 +601,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    resultItems[itemKey] = handler.call(this, item, itemKey);
+                    resultItems[itemKey] = handler.call(context || this, item, itemKey);
                 }
 
                 return (subClass || self).create(resultItems);

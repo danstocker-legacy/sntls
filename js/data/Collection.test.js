@@ -806,7 +806,7 @@
             strictEqual(this, collection);
         }
 
-        collection.forEachItemSorted(handler, comparator);
+        collection.forEachItemSorted(handler, undefined, comparator);
 
         strictEqual(result, collection, "Comparator receives collection as this");
 
@@ -844,7 +844,7 @@
             "To string & last char"
         );
 
-        result = collection.mapContents(lastChar, StringCollection);
+        result = collection.mapContents(lastChar, undefined, StringCollection);
 
         ok(result.instanceOf(StringCollection), "Result is specified collection");
     });
