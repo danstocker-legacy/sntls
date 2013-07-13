@@ -51,7 +51,7 @@ troop.postpone(sntls, 'utils', function () {
              * Property names will be copied, but property values
              * will point to the original references.
              * @param {object|Array} original
-             * @returns {object} shallow copy of original
+             * @returns {object|Array} shallow copy of original
              */
             shallowCopy: function (original) {
                 if (dessert.validators.isArray(original)) {
