@@ -167,7 +167,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 170
+        <a href="Collection.js.html">data/Collection.js</a>, line 171
     </li></ul></dd>
     
     
@@ -185,7 +185,7 @@
         
             
 <dt>
-    <h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :Object</span></h4>
+    <h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :Object|<a href="Array.html">Array</a></span></h4>
     
     
 </dt>
@@ -226,7 +226,7 @@ especially in `Hash`-based subclasses.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 38
+        <a href="Hash.js.html">data/Hash.js</a>, line 39
     </li></ul></dd>
     
     
@@ -486,7 +486,7 @@ and returning them as a collection.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 38
+        <a href="Collection.js.html">data/Collection.js</a>, line 39
     </li></ul></dd>
     
     
@@ -624,7 +624,7 @@ encouraged after calling this method.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 258
+        <a href="Collection.js.html">data/Collection.js</a>, line 259
     </li></ul></dd>
     
     
@@ -775,7 +775,7 @@ The rest of the arguments are forwarded to the method calls.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 677
+        <a href="Collection.js.html">data/Collection.js</a>, line 692
     </li></ul></dd>
     
     
@@ -872,7 +872,7 @@ c.callOnEachItem('split').items; // {foo: ['b', 'a', 'r'], hello: ['h', 'e', 'l'
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 491
+        <a href="Collection.js.html">data/Collection.js</a>, line 497
     </li></ul></dd>
     
     
@@ -961,7 +961,7 @@ and initializes it with a shallow copy of the current items buffer and item coun
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 232
+        <a href="Collection.js.html">data/Collection.js</a>, line 233
     </li></ul></dd>
     
     
@@ -1146,7 +1146,7 @@ saves a function call on each item.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 605
+        <a href="Collection.js.html">data/Collection.js</a>, line 618
     </li></ul></dd>
     
     
@@ -1282,7 +1282,7 @@ saves a function call on each item.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 215
+        <a href="Collection.js.html">data/Collection.js</a>, line 216
     </li></ul></dd>
     
     
@@ -1419,7 +1419,7 @@ present in the collection will be included in the results, too, as undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 393
+        <a href="Collection.js.html">data/Collection.js</a>, line 394
     </li></ul></dd>
     
     
@@ -1559,7 +1559,7 @@ present in the collection will be included in the results, too, as undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 413
+        <a href="Collection.js.html">data/Collection.js</a>, line 414
     </li></ul></dd>
     
     
@@ -1699,7 +1699,7 @@ present in the collection will be included in the results, too, as undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 422
+        <a href="Collection.js.html">data/Collection.js</a>, line 423
     </li></ul></dd>
     
     
@@ -1745,7 +1745,7 @@ present in the collection will be included in the results, too, as undefined.
         
             
 <dt>
-    <h4 class="name" id="filterBySelector"><span class="type-signature"></span>filterBySelector<span class="signature">(selector)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="filterBySelector"><span class="type-signature"></span>filterBySelector<span class="signature">(selector, <span class="optional">context</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -1775,7 +1775,11 @@ present in the collection will be included in the results, too, as undefined.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
 		
+		
+		
+		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -1800,13 +1804,63 @@ present in the collection will be included in the results, too, as undefined.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
-            <td class="description last">Selector function. Receives the collection instance as `this`,
-current item as first argument, and the key of the current item as second argument.
-Expected to return a boolean: true when the item should be included in the result, false if not.
-(In reality and truthy or falsy value will do.)</td>
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Selector function. Receives current item as first argument, and the key
+of the current item as second argument. Expected to return a boolean: true when the item should be
+included in the result, false if not. (In reality and truthy or falsy value will do.)</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    this
+                
+                </td>
+            
+            
+            <td class="description last">Optional selector context. Set to the collection instance by default.</td>
         </tr>
 	
 	
@@ -1842,7 +1896,7 @@ Expected to return a boolean: true when the item should be included in the resul
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 439
+        <a href="Collection.js.html">data/Collection.js</a>, line 440
     </li></ul></dd>
     
     
@@ -1886,7 +1940,7 @@ Expected to return a boolean: true when the item should be included in the resul
         <h5>Example</h5>
         
     <pre class="prettyprint"><code>// filters items with value higher than 50
-c.filterByExpr(function (item, itemKey) {
+c.filterBySelector(function (item, itemKey) {
  return item > 50;
 }).items; // {force: 100}</code></pre>
 
@@ -1896,7 +1950,7 @@ c.filterByExpr(function (item, itemKey) {
         
             
 <dt>
-    <h4 class="name" id="forEachItem"><span class="type-signature"></span>forEachItem<span class="signature">(handler)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="forEachItem"><span class="type-signature"></span>forEachItem<span class="signature">(handler, <span class="optional">context</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -1931,7 +1985,11 @@ iteration process. However, changing the collection while iterating is strongly 
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
 		
+		
+		
+		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -1956,12 +2014,63 @@ iteration process. However, changing the collection while iterating is strongly 
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
             
+            
+            
+                <td class="default">
+                
+                </td>
             
             
             <td class="description last">Function to be called on each item. The handler receives current item
 as first argument, item key as second argument, and all other arguments passed to `.forEachItem()`
-as the rest of its arguments. A reference to the current collection is passed as `this`.</td>
+as the rest of its arguments.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    this
+                
+                </td>
+            
+            
+            <td class="description last">Optional handler context. Set to the collection instance by default.</td>
         </tr>
 	
 	
@@ -1997,7 +2106,7 @@ as the rest of its arguments. A reference to the current collection is passed as
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 517
+        <a href="Collection.js.html">data/Collection.js</a>, line 524
     </li></ul></dd>
     
     
@@ -2046,7 +2155,7 @@ as the rest of its arguments. A reference to the current collection is passed as
         
             
 <dt>
-    <h4 class="name" id="forEachItemSorted"><span class="type-signature"></span>forEachItemSorted<span class="signature">(handler, <span class="optional">comparator</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="forEachItemSorted"><span class="type-signature"></span>forEachItemSorted<span class="signature">(handler, <span class="optional">context</span>, <span class="optional">comparator</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -2081,6 +2190,8 @@ Other than that, the method behaves the same way as `.forEach()`.
 		
 		
 		
+		<th>Default</th>
+		
 		
 		<th class="last">Description</th>
 	</tr>
@@ -2114,9 +2225,52 @@ Other than that, the method behaves the same way as `.forEach()`.
             
             
             
+                <td class="default">
+                
+                </td>
+            
             
             <td class="description last">@see sntls.Collection#forEachItem
 Iteration breaks when handler returns false.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    this
+                
+                </td>
+            
+            
+            <td class="description last">Optional selector context. Set to the collection instance by default.</td>
         </tr>
 	
 	
@@ -2147,6 +2301,10 @@ Iteration breaks when handler returns false.</td>
                 </td>
             
             
+            
+                <td class="default">
+                
+                </td>
             
             
             <td class="description last">Optional callback for comparing keys when sorting. The context (`this`)
@@ -2187,7 +2345,7 @@ an integer, the same way as in `Array.sort()`</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 546
+        <a href="Collection.js.html">data/Collection.js</a>, line 556
     </li></ul></dd>
     
     
@@ -2284,7 +2442,7 @@ of `.getFirstValue()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 48
+        <a href="Hash.js.html">data/Hash.js</a>, line 49
     </li></ul></dd>
     
     
@@ -2381,7 +2539,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 84
+        <a href="Hash.js.html">data/Hash.js</a>, line 85
     </li></ul></dd>
     
     
@@ -2524,7 +2682,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 181
+        <a href="Collection.js.html">data/Collection.js</a>, line 182
     </li></ul></dd>
     
     
@@ -2617,7 +2775,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 64
+        <a href="Hash.js.html">data/Hash.js</a>, line 65
     </li></ul></dd>
     
     
@@ -2705,7 +2863,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 73
+        <a href="Hash.js.html">data/Hash.js</a>, line 74
     </li></ul></dd>
     
     
@@ -2849,7 +3007,7 @@ array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 320
+        <a href="Collection.js.html">data/Collection.js</a>, line 321
     </li></ul></dd>
     
     
@@ -2995,7 +3153,7 @@ c.getKeysByPrefix('fo'); // ['foo', 'force']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 344
+        <a href="Collection.js.html">data/Collection.js</a>, line 345
     </li></ul></dd>
     
     
@@ -3139,7 +3297,7 @@ array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 361
+        <a href="Collection.js.html">data/Collection.js</a>, line 362
     </li></ul></dd>
     
     
@@ -3285,7 +3443,7 @@ c.getKeysByRegExp(/^..r/); // ['bar', 'force']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 383
+        <a href="Collection.js.html">data/Collection.js</a>, line 384
     </li></ul></dd>
     
     
@@ -3405,8 +3563,9 @@ when a comparator function is specified, in the order defined by that.
             
             
             
-            <td class="description last">Comparator function for sorting items by item keys.
-Same as in `Array.sort`.</td>
+            <td class="description last">Optional callback for comparing keys when sorting. The context (`this`)
+will be set to the collection so item values may be compared too via `this.items`. Expected to return
+an integer, the same way as in `Array.sort()`</td>
         </tr>
 	
 	
@@ -3442,7 +3601,7 @@ Same as in `Array.sort`.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 463
+        <a href="Collection.js.html">data/Collection.js</a>, line 469
     </li></ul></dd>
     
     
@@ -3601,7 +3760,7 @@ Same as in `Array.sort`.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 483
+        <a href="Collection.js.html">data/Collection.js</a>, line 489
     </li></ul></dd>
     
     
@@ -3697,7 +3856,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 100
+        <a href="Hash.js.html">data/Hash.js</a>, line 101
     </li></ul></dd>
     
     
@@ -3785,7 +3944,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 118
+        <a href="Hash.js.html">data/Hash.js</a>, line 119
     </li></ul></dd>
     
     
@@ -3834,7 +3993,7 @@ in the resulting array is not deterministic.
         
             
 <dt>
-    <h4 class="name" id="mapContents"><span class="type-signature"></span>mapContents<span class="signature">(handler, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="mapContents"><span class="type-signature"></span>mapContents<span class="signature">(handler, <span class="optional">context</span>, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -3869,6 +4028,8 @@ to create each item in the new collection.
 		
 		
 		
+		<th>Default</th>
+		
 		
 		<th class="last">Description</th>
 	</tr>
@@ -3902,9 +4063,52 @@ to create each item in the new collection.
             
             
             
+                <td class="default">
+                
+                </td>
+            
             
             <td class="description last">Mapper function. Takes `item` and `itemKey` as arguments, and is expected
-to return the mapped item for the new collection. Original collection is passed as `this`.</td>
+to return the mapped item for the new collection.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    this
+                
+                </td>
+            
+            
+            <td class="description last">Optional handler context. Set to the collection instance by default.</td>
         </tr>
 	
 	
@@ -3935,6 +4139,10 @@ to return the mapped item for the new collection. Original collection is passed 
                 </td>
             
             
+            
+                <td class="default">
+                
+                </td>
             
             
             <td class="description last">Optional collection subclass for the output.</td>
@@ -3973,7 +4181,7 @@ to return the mapped item for the new collection. Original collection is passed 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 578
+        <a href="Collection.js.html">data/Collection.js</a>, line 590
     </li></ul></dd>
     
     
@@ -4168,7 +4376,7 @@ the conflicting item, and is expected to return a collection item.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 286
+        <a href="Collection.js.html">data/Collection.js</a>, line 287
     </li></ul></dd>
     
     
@@ -4223,7 +4431,7 @@ Return type will be that of the current collection.
         
             
 <dt>
-    <h4 class="name" id="passEachItemTo"><span class="type-signature"></span>passEachItemTo<span class="signature">(handler, <span class="optional">argIndex</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="passEachItemTo"><span class="type-signature"></span>passEachItemTo<span class="signature">(handler, <span class="optional">context</span>, <span class="optional">argIndex</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -4258,6 +4466,8 @@ plain collection instance. Similar to `.mapContents`
 		
 		
 		
+		<th>Default</th>
+		
 		
 		<th class="last">Description</th>
 	</tr>
@@ -4291,8 +4501,52 @@ plain collection instance. Similar to `.mapContents`
             
             
             
+                <td class="default">
+                
+                </td>
             
-            <td class="description last">Any function. Bound if necessary.</td>
+            
+            <td class="description last">Any function.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    this
+                
+                </td>
+            
+            
+            <td class="description last">Context in which to call the handler. If handler is a method, the context
+should be the owner (instance or class) of the method. Set to the collection instance by default.</td>
         </tr>
 	
 	
@@ -4323,6 +4577,10 @@ plain collection instance. Similar to `.mapContents`
                 </td>
             
             
+            
+                <td class="default">
+                
+                </td>
             
             
             <td class="description last">Argument index at which collection items will be expected.</td>
@@ -4361,7 +4619,7 @@ plain collection instance. Similar to `.mapContents`
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 634
+        <a href="Collection.js.html">data/Collection.js</a>, line 649
     </li></ul></dd>
     
     
@@ -4401,11 +4659,477 @@ plain collection instance. Similar to `.mapContents`
         <h5>Example</h5>
         
     <pre class="prettyprint"><code>var c = sntls.Collection.create(['foo', 'bar']);
-function split (delim, str) {
+function splitIntoLetters(delim, str) {
  return str.split(delim);
 }
-c.passEachItemTo(splitIntoLetters, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]</code></pre>
+c.passEachItemTo(splitIntoLetters, null, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]</code></pre>
 
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="passItemsTo"><span class="type-signature"></span>passItemsTo<span class="signature">(handler, <span class="optional">context</span>, <span class="optional">argIndex</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Passes the items buffer to the specified function.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">External handler accepting the buffer.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Context in which to call the handler. If handler is a method, the context
+should be the owner (instance or class) of the method.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>argIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">Argument index taken by buffer when calling the function.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#passItemsTo">sntls.Collection#passItemsTo</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 141
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Whatever is returned by the handler.
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">*</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="passSelfTo"><span class="type-signature"></span>passSelfTo<span class="signature">(handler, <span class="optional">context</span>, <span class="optional">argIndex</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Passes itself to the specified function.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">External handler accepting the hash.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Context in which to call the handler. If handler is a method, the context
+should be the owner (instance or class) of the method.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>argIndex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">Argument index taken by buffer when calling the function.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#passSelfTo">sntls.Collection#passSelfTo</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 157
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Whatever is returned by the handler.
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">*</span>
+
+
+	</dd>
+</dl>
+
+        
+    
     
 </dd>
 
@@ -4525,7 +5249,7 @@ Increments counter for new items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 196
+        <a href="Collection.js.html">data/Collection.js</a>, line 197
     </li></ul></dd>
     
     
@@ -4768,7 +5492,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 728
+        <a href="Collection.js.html">data/Collection.js</a>, line 743
     </li></ul></dd>
     
     
@@ -4944,7 +5668,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 278
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
     </li></ul></dd>
     
     
@@ -5032,7 +5756,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 121
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
     </li></ul></dd>
     
     
@@ -5384,7 +6108,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 140
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 160
     </li></ul></dd>
     
     
@@ -5533,7 +6257,7 @@ coll.get('foo'); // "bar"</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 07 2013 17:57:03 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 14 2013 13:12:03 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

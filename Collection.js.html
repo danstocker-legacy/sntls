@@ -30,6 +30,7 @@ troop.postpone(sntls, 'Collection', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
+        slice = Array.prototype.slice,
         base = sntls.Hash,
         self = base.extend();
 
@@ -37,7 +38,7 @@ troop.postpone(sntls, 'Collection', function () {
      * Instantiates class.
      * @name sntls.Collection.create
      * @function
-     * @param {object} [items] Initial contents.
+     * @param {object|Array} [items] Initial contents.
      * @returns {sntls.Collection}
      */
 
@@ -184,7 +185,7 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * @param {object} [items] Initial contents.
+             * @param {object|Array} [items] Initial contents.
              * @ignore
              */
             init: function (items) {
@@ -454,16 +455,20 @@ troop.postpone(sntls, 'Collection', function () {
              * Filters collection applying the specified selector function to each item.
              * @example
              * // filters items with value higher than 50
-             * c.filterByExpr(function (item, itemKey) {
+             * c.filterBySelector(function (item, itemKey) {
              *  return item > 50;
              * }).items; // {force: 100}
-             * @param {function} selector Selector function. Receives the collection instance as `this`,
-             * current item as first argument, and the key of the current item as second argument.
-             * Expected to return a boolean: true when the item should be included in the result, false if not.
-             * (In reality and truthy or falsy value will do.)
+             * @param {function} selector Selector function. Receives current item as first argument, and the key
+             * of the current item as second argument. Expected to return a boolean: true when the item should be
+             * included in the result, false if not. (In reality and truthy or falsy value will do.)
+             * @param {object} [context=this] Optional selector context. Set to the collection instance by default.
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
-            filterBySelector: function (selector) {
+            filterBySelector: function (selector, context) {
+                dessert
+                    .isFunction(selector, "Invalid selector")
+                    .isObjectOptional(context, "Invalid context");
+
                 var items = this.items,
                     resultItems = items instanceof Array ? [] : {},
                     itemKeys = Object.keys(items),
@@ -471,7 +476,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 for (i = 0; i &lt; itemKeys.length; i++) {
                     itemKey = itemKeys[i];
-                    if (selector.call(this, items[itemKey], itemKey)) {
+                    if (selector.call(context || this, items[itemKey], itemKey)) {
                         resultItems[itemKey] = items[itemKey];
                     }
                 }
@@ -482,8 +487,9 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves collection items values in an array, without key information, ordered by item keys, or,
              * when a comparator function is specified, in the order defined by that.
-             * @param {function} [comparator] Comparator function for sorting items by item keys.
-             * Same as in `Array.sort`.
+             * @param {function} [comparator] Optional callback for comparing keys when sorting. The context (`this`)
+             * will be set to the collection so item values may be compared too via `this.items`. Expected to return
+             * an integer, the same way as in `Array.sort()`
              * @returns {Array} Item values in order of keys.
              * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
@@ -538,11 +544,14 @@ troop.postpone(sntls, 'Collection', function () {
              * }, 'foo'); // outputs: 'foo1foo', 'bar10foo', 'force100foo'
              * @param {function} handler Function to be called on each item. The handler receives current item
              * as first argument, item key as second argument, and all other arguments passed to `.forEachItem()`
-             * as the rest of its arguments. A reference to the current collection is passed as `this`.
+             * as the rest of its arguments.
+             * @param {object} [context=this] Optional handler context. Set to the collection instance by default.
              * @returns {sntls.Collection}
              */
-            forEachItem: function (handler) {
-                dessert.isFunction(handler, "Invalid callback function");
+            forEachItem: function (handler, context) {
+                dessert
+                    .isFunction(handler, "Invalid callback function")
+                    .isObjectOptional(context, "Invalid context");
 
                 var items = this.items,
                     keys = Object.keys(items),
@@ -551,7 +560,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i &lt; keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    if (handler.call(this, item, itemKey) === false) {
+                    if (handler.call(context || this, item, itemKey) === false) {
                         break;
                     }
                 }
@@ -564,15 +573,17 @@ troop.postpone(sntls, 'Collection', function () {
              * Other than that, the method behaves the same way as `.forEach()`.
              * @param {function} handler @see sntls.Collection#forEachItem
              * Iteration breaks when handler returns false.
+             * @param {object} [context=this] Optional selector context. Set to the collection instance by default.
              * @param {function} [comparator] Optional callback for comparing keys when sorting. The context (`this`)
              * will be set to the collection so item values may be compared too via `this.items`. Expected to return
              * an integer, the same way as in `Array.sort()`
              * @returns {sntls.Collection}
              * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
-            forEachItemSorted: function (handler, comparator) {
+            forEachItemSorted: function (handler, context, comparator) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
+                    .isObjectOptional(context, "Invalid context")
                     .isFunctionOptional(comparator, "Invalid comparator function");
 
                 var items = this.items,
@@ -582,7 +593,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i &lt; keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    if (handler.call(this, item, itemKey) === false) {
+                    if (handler.call(context || this, item, itemKey) === false) {
                         break;
                     }
                 }
@@ -598,13 +609,15 @@ troop.postpone(sntls, 'Collection', function () {
              *  return 'hello' + item;
              * }, sntls.Collection.of(String));
              * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
-             * to return the mapped item for the new collection. Original collection is passed as `this`.
+             * to return the mapped item for the new collection.
+             * @param {object} [context=this] Optional handler context. Set to the collection instance by default.
              * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
-            mapContents: function (handler, subClass) {
+            mapContents: function (handler, context, subClass) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
+                    .isObjectOptional(context, "Invalid context")
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
@@ -615,7 +628,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i &lt; keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    resultItems[itemKey] = handler.call(this, item, itemKey);
+                    resultItems[itemKey] = handler.call(context || this, item, itemKey);
                 }
 
                 return (subClass || self).create(resultItems);
@@ -650,16 +663,18 @@ troop.postpone(sntls, 'Collection', function () {
              * plain collection instance. Similar to `.mapContents`
              * @example
              * var c = sntls.Collection.create(['foo', 'bar']);
-             * function split (delim, str) {
+             * function splitIntoLetters(delim, str) {
              *  return str.split(delim);
              * }
-             * c.passEachItemTo(splitIntoLetters, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
-             * @param {function} handler Any function. Bound if necessary.
+             * c.passEachItemTo(splitIntoLetters, null, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
+             * @param {function} handler Any function.
+             * @param {*} [context=this] Context in which to call the handler. If handler is a method, the context
+             * should be the owner (instance or class) of the method. Set to the collection instance by default.
              * @param {number} [argIndex] Argument index at which collection items will be expected.
              * @returns {sntls.Collection}
              */
-            passEachItemTo: function (handler, argIndex) {
-                var args = Array.prototype.slice.call(arguments, 2),
+            passEachItemTo: function (handler, context, argIndex) {
+                var args = slice.call(arguments, 3),
                     items = this.items,
                     keys = Object.keys(items),
                     resultItems = items instanceof Array ? [] : {},
@@ -672,14 +687,14 @@ troop.postpone(sntls, 'Collection', function () {
                     for (i = 0; i &lt; keys.length; i++) {
                         itemKey = keys[i];
                         args[argIndex] = items[itemKey];
-                        resultItems[itemKey] = handler.apply(this, args);
+                        resultItems[itemKey] = handler.apply(context || this, args);
                     }
                 } else {
                     // no additional arguments
                     // passing items as first argument
                     for (i = 0; i &lt; keys.length; i++) {
                         itemKey = keys[i];
-                        resultItems[itemKey] = handler.call(this, items[itemKey]);
+                        resultItems[itemKey] = handler.call(context || this, items[itemKey]);
                     }
                 }
 
@@ -704,7 +719,7 @@ troop.postpone(sntls, 'Collection', function () {
             callOnEachItem: function (methodName) {
                 dessert.isString(methodName, "Invalid method name");
 
-                var args = Array.prototype.slice.call(arguments, 1),
+                var args = slice.call(arguments, 1),
                     items = this.items,
                     keys = Object.keys(items),
                     resultItems = items instanceof Array ? [] : {},
@@ -779,7 +794,7 @@ troop.postpone(sntls, 'Collection', function () {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 07 2013 17:57:02 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 14 2013 13:12:02 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
