@@ -773,12 +773,11 @@
 
     test("For-Next with custom order", function () {
         var collection = sntls.Collection.create(),
-            order = [],
-            result;
+            order = [];
 
         init(collection);
 
-        expect(12); // 2 for each item + 2
+        expect(11); // 2 for each item + 1
 
         /**
          * Test comparator
@@ -789,7 +788,6 @@
          */
         function comparator(a, b) {
             /*jshint validthis: true */
-            result = this;
             var x = a[1],
                 y = b[1];
             return x > y ? 1 : y > x ? -1 : 0;
@@ -807,8 +805,6 @@
         }
 
         collection.forEachItemSorted(handler, undefined, comparator);
-
-        strictEqual(result, collection, "Comparator receives collection as this");
 
         deepEqual(
             order,

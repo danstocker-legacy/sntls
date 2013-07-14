@@ -431,11 +431,10 @@ troop.postpone(sntls, 'Collection', function () {
              * c.filterBySelector(function (item, itemKey) {
              *  return item > 50;
              * }).items; // {force: 100}
-             * @param {function} selector Selector function. Receives the collection instance as `this`,
-             * current item as first argument, and the key of the current item as second argument.
-             * Expected to return a boolean: true when the item should be included in the result, false if not.
-             * (In reality and truthy or falsy value will do.)
-             * @param {object} [context] Optional selector context.
+             * @param {function} selector Selector function. Receives current item as first argument, and the key
+             * of the current item as second argument. Expected to return a boolean: true when the item should be
+             * included in the result, false if not. (In reality and truthy or falsy value will do.)
+             * @param {object} [context=this] Optional selector context. Set to the collection instance by default.
              * @returns {sntls.Collection} New instance of the same collection subclass holding the filtered contents.
              */
             filterBySelector: function (selector, context) {
@@ -461,8 +460,9 @@ troop.postpone(sntls, 'Collection', function () {
             /**
              * Retrieves collection items values in an array, without key information, ordered by item keys, or,
              * when a comparator function is specified, in the order defined by that.
-             * @param {function} [comparator] Comparator function for sorting items by item keys.
-             * Same as in `Array.sort`.
+             * @param {function} [comparator] Optional callback for comparing keys when sorting. The context (`this`)
+             * will be set to the collection so item values may be compared too via `this.items`. Expected to return
+             * an integer, the same way as in `Array.sort()`
              * @returns {Array} Item values in order of keys.
              * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
              */
@@ -517,8 +517,8 @@ troop.postpone(sntls, 'Collection', function () {
              * }, 'foo'); // outputs: 'foo1foo', 'bar10foo', 'force100foo'
              * @param {function} handler Function to be called on each item. The handler receives current item
              * as first argument, item key as second argument, and all other arguments passed to `.forEachItem()`
-             * as the rest of its arguments. A reference to the current collection is passed as `this`.
-             * @param {object} [context] Optional handler context.
+             * as the rest of its arguments.
+             * @param {object} [context=this] Optional handler context. Set to the collection instance by default.
              * @returns {sntls.Collection}
              */
             forEachItem: function (handler, context) {
@@ -546,7 +546,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Other than that, the method behaves the same way as `.forEach()`.
              * @param {function} handler @see sntls.Collection#forEachItem
              * Iteration breaks when handler returns false.
-             * @param {object} [context] Optional selector context.
+             * @param {object} [context=this] Optional selector context. Set to the collection instance by default.
              * @param {function} [comparator] Optional callback for comparing keys when sorting. The context (`this`)
              * will be set to the collection so item values may be compared too via `this.items`. Expected to return
              * an integer, the same way as in `Array.sort()`
@@ -582,8 +582,8 @@ troop.postpone(sntls, 'Collection', function () {
              *  return 'hello' + item;
              * }, sntls.Collection.of(String));
              * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
-             * to return the mapped item for the new collection. Original collection is passed as `this`.
-             * @param {object} [context] Optional handler context.
+             * to return the mapped item for the new collection.
+             * @param {object} [context=this] Optional handler context. Set to the collection instance by default.
              * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
@@ -641,8 +641,8 @@ troop.postpone(sntls, 'Collection', function () {
              * }
              * c.passEachItemTo(splitIntoLetters, null, 1, '').items; // [['f', 'o', 'o'], ['b', 'a', 'r']]
              * @param {function} handler Any function.
-             * @param {*} [context] Context in which to call the handler. If handler is a method, the context
-             * should be the owner (instance or class) of the method.
+             * @param {*} [context=this] Context in which to call the handler. If handler is a method, the context
+             * should be the owner (instance or class) of the method. Set to the collection instance by default.
              * @param {number} [argIndex] Argument index at which collection items will be expected.
              * @returns {sntls.Collection}
              */
