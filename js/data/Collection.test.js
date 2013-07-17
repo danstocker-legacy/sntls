@@ -824,7 +824,7 @@
 
         init(collection);
 
-        result = collection.mapContents(lastChar);
+        result = collection.mapValues(lastChar);
 
         ok(result.instanceOf(sntls.Collection), "Result plain collection");
 
@@ -840,7 +840,7 @@
             "To string & last char"
         );
 
-        result = collection.mapContents(lastChar, undefined, StringCollection);
+        result = collection.mapValues(lastChar, undefined, StringCollection);
 
         ok(result.instanceOf(StringCollection), "Result is specified collection");
     });
@@ -898,7 +898,7 @@
         var collection = sntls.Collection.create(['foo', 'bar']),
             result;
 
-        result = collection.mapContents(function (item) {
+        result = collection.mapValues(function (item) {
             return 'a' + item;
         });
 

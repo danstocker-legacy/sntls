@@ -578,7 +578,7 @@ troop.postpone(sntls, 'Collection', function () {
              * Maps a collection to a new collection instance of subclass `subClass`, using the specified handler
              * to create each item in the new collection.
              * @example
-             * c.mapContents(function (item) {
+             * c.mapValues(function (item) {
              *  return 'hello' + item;
              * }, sntls.Collection.of(String));
              * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
@@ -587,7 +587,7 @@ troop.postpone(sntls, 'Collection', function () {
              * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
-            mapContents: function (handler, context, subClass) {
+            mapValues: function (handler, context, subClass) {
                 dessert
                     .isFunction(handler, "Invalid callback function")
                     .isObjectOptional(context, "Invalid context")
@@ -633,7 +633,7 @@ troop.postpone(sntls, 'Collection', function () {
 
             /**
              * Passes each item to the specified handler as argument, and returns the results packed in a
-             * plain collection instance. Similar to `.mapContents`
+             * plain collection instance. Similar to `.mapValues`
              * @example
              * var c = sntls.Collection.create(['foo', 'bar']);
              * function splitIntoLetters(delim, str) {

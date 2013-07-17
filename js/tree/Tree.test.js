@@ -407,7 +407,7 @@
         deepEqual(
             tree.queryPathsAsHash('foo>baz>\\'.toQuery())
                 .toCollection()
-                .mapContents(function (item) {
+                .mapValues(function (item) {
                     return item.toString();
                 })
                 .getValues(),
