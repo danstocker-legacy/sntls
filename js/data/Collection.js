@@ -124,7 +124,7 @@ troop.postpone(sntls, 'Collection', function () {
                 if (typeof template === 'function') {
                     template = template.prototype;
                 } else if (dessert.validators.isClass(template)) {
-                    template = sntls.utils.shallowCopy(template.getTarget());
+                    template = sntls.Utils.shallowCopy(template.getTarget());
                     delete template.init;
                 }
 
@@ -238,7 +238,7 @@ troop.postpone(sntls, 'Collection', function () {
                  * Other properties added by descendants
                  * must be cloned in override methods
                  */
-                result.items = sntls.utils.shallowCopy(this.items);
+                result.items = sntls.Utils.shallowCopy(this.items);
                 result.count = this.count;
 
                 return result;

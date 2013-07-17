@@ -177,7 +177,7 @@ troop.postpone(sntls, 'Tree', function () {
                 for (i = 0; i < asArray.length; i++) {
                     nextKey = asArray[i];
 
-                    currentNodeSingle = sntls.utils.isSingularObject(currentNode);
+                    currentNodeSingle = sntls.Utils.isSingularObject(currentNode);
                     if (currentNodeSingle) {
                         // current node has exactly one child
                         if (!parentNodeSingle) {

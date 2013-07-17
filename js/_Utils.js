@@ -2,17 +2,17 @@
  * General Utilities
  */
 /*global dessert, troop, sntls */
-troop.postpone(sntls, 'utils', function () {
+troop.postpone(sntls, 'Utils', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty;
 
     /**
-     * @class sntls.utils
+     * @class sntls.Utils
      * @extends troop.Base
      */
-    sntls.utils = troop.Base.extend()
-        .addMethods(/** @lends sntls.utils */{
+    sntls.Utils = troop.Base.extend()
+        .addMethods(/** @lends sntls.Utils */{
             /**
              * Determines whether an object has any enumerable
              * properties.

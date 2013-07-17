@@ -2,15 +2,15 @@
 (function () {
     "use strict";
 
-    module("utils");
+    module("Utils");
 
     test("Object property count", function () {
-        ok(sntls.utils.isEmptyObject({}), "Empty object");
-        ok(!sntls.utils.isEmptyObject({foo: "bar"}), "Non-empty object");
+        ok(sntls.Utils.isEmptyObject({}), "Empty object");
+        ok(!sntls.Utils.isEmptyObject({foo: "bar"}), "Non-empty object");
 
-        ok(sntls.utils.isSingularObject({foo: "bar"}), "Singular object");
-        ok(!sntls.utils.isSingularObject({}), "Non-singular object (too few)");
-        ok(!sntls.utils.isSingularObject({foo: "bar", hello: "world"}), "Non-singular object (too many)");
+        ok(sntls.Utils.isSingularObject({foo: "bar"}), "Singular object");
+        ok(!sntls.Utils.isSingularObject({}), "Non-singular object (too few)");
+        ok(!sntls.Utils.isSingularObject({foo: "bar", hello: "world"}), "Non-singular object (too many)");
     });
 
     test("Shallow copy", function () {
@@ -20,8 +20,8 @@
                 bar: referenceObject
             },
             originalArray = [referenceObject, referenceObject],
-            copyObject = sntls.utils.shallowCopy(originalObject),
-            copyArray = sntls.utils.shallowCopy(originalArray);
+            copyObject = sntls.Utils.shallowCopy(originalObject),
+            copyArray = sntls.Utils.shallowCopy(originalArray);
 
         deepEqual(copyArray, originalArray, "Arrays identical by value");
         deepEqual(copyObject, originalObject, "Objects identical by value");
