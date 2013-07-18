@@ -102,7 +102,7 @@ troop.postpone(sntls, 'Path', function () {
                 if (typeof count === 'undefined' || count === 1) {
                     this.asArray.pop();
                 } else {
-                    this.asArray = this.asArray.slice(0 - count);
+                    this.asArray = this.asArray.slice(0, 0 - count);
                 }
                 return this;
             },

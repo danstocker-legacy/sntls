@@ -51,7 +51,7 @@
 
         originalPath.trim(2);
         deepEqual(
-            trimmedPath.asArray,
+            originalPath.asArray,
             ['test'],
             "Trimmed multiple keys"
         );
