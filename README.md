@@ -40,7 +40,7 @@ Examples
         .toCollection(sntls.Collection.of(Array))
         .join(' and ') // joining all items
         // forming sentences
-        .mapContents(function (item, path) {
+        .mapValues(function (item, path) {
             return path.toPath().asArray[0] + " knows " + item;
         })
         .getValues()
