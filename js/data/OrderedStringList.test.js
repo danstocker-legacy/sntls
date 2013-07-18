@@ -21,7 +21,8 @@
     });
 
     test("String prefix search", function () {
-        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"]);
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert",
+            "item"]);
 
         raises(function () {
             orderedStringList.getRangeByPrefix("");
@@ -62,8 +63,25 @@
         );
     });
 
+    test("String prefix search w/ offset & limit", function () {
+        var orderedStringList = sntls.OrderedStringList.create(["car", "car", "career", "carpet", "foo"]);
+
+        deepEqual(
+            orderedStringList.getRangeByPrefix('car', false, 1),
+            ["car", "career", "carpet"],
+            "Skipped first item in results"
+        );
+
+        deepEqual(
+            orderedStringList.getRangeByPrefix('car', false, 1, 2),
+            ["car", "career"],
+            "Skipped first item and fetched 2 in results"
+        );
+    });
+
     test("String prefix search as hash", function () {
-        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert", "item"], true),
+        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert",
+                "item"], true),
             result;
 
         result = orderedStringList.getRangeByPrefixAsHash("a");

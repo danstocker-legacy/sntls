@@ -45,11 +45,13 @@ troop.postpone(sntls, 'OrderedStringList', function () {
              * var osl = sntls.OrderedStringList(['hi', 'hello', 'hire', 'foo']);
              * osl.getRangeByPrefix('hi') // ['hi', 'hire']
              * osl.getRangeByPrefix('h') // ['hello', 'hi', 'hire']
-             * @param {string} prefix
+             * @param {string} prefix Prefix to be matched by list items.
              * @param {boolean} [excludeOriginal=false] Whether to exclude `prefix` from the results
+             * @param {number} [offset=0] Number of items to skip at start.
+             * @param {number} [limit=Infinity] Number of items to fetch at most.
              * @returns {string[]} Sorted array of matches.
              */
-            getRangeByPrefix: function (prefix, excludeOriginal) {
+            getRangeByPrefix: function (prefix, excludeOriginal, offset, limit) {
                 dessert
                     .assert(typeof prefix === 'string' && prefix.length > 0, "Empty prefix")
                     .isBooleanOptional(excludeOriginal);
@@ -59,17 +61,19 @@ troop.postpone(sntls, 'OrderedStringList', function () {
                         prefix,
                     endValue = this._getEndValue(prefix);
 
-                return this.getRange(startValue, endValue);
+                return this.getRange(startValue, endValue, offset, limit);
             },
 
             /**
              * Retrieves items from the list matching the specified prefix, wrapped in a hash.
-             * @param {string} prefix
+             * @param {string} prefix Prefix to be matched by list items.
              * @param {boolean} [excludeOriginal=false] Whether to exclude `prefix` from the results
+             * @param {number} [offset=0] Number of items to skip at start.
+             * @param {number} [limit=Infinity] Number of items to fetch at most.
              * @returns {sntls.Hash}
              * @see sntls.OrderedList#getRange
              */
-            getRangeByPrefixAsHash: function (prefix, excludeOriginal) {
+            getRangeByPrefixAsHash: function (prefix, excludeOriginal, offset, limit) {
                 var range = this.getRangeByPrefix.apply(this, arguments);
                 return sntls.Hash.create(range);
             },
