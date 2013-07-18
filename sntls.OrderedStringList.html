@@ -685,7 +685,7 @@ Increments char code on the string's last character.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 146
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 153
     </li></ul></dd>
     
     
@@ -836,7 +836,7 @@ ol.items // ['a', 'b', 'c']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 157
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 164
     </li></ul></dd>
     
     
@@ -924,7 +924,7 @@ ol.items // ['a', 'b', 'c']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 225
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 232
     </li></ul></dd>
     
     
@@ -1344,7 +1344,7 @@ is not deterministic.
         
             
 <dt>
-    <h4 class="name" id="getRange"><span class="type-signature"></span>getRange<span class="signature">(startValue, endValue)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>}</span></h4>
+    <h4 class="name" id="getRange"><span class="type-signature"></span>getRange<span class="signature">(startValue, endValue, <span class="optional">offset</span>, <span class="optional">limit</span>)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>}</span></h4>
     
     
 </dt>
@@ -1374,7 +1374,11 @@ is not deterministic.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
 		
+		
+		
+		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -1402,10 +1406,22 @@ is not deterministic.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
-            <td class="description last"></td>
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Value marking start of the range.</td>
         </tr>
 	
 	
@@ -1428,10 +1444,100 @@ is not deterministic.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
-            <td class="description last"></td>
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Value marking end of the range.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to skip at start.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to fetch at most.</td>
         </tr>
 	
 	
@@ -1467,7 +1573,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 114
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 116
     </li></ul></dd>
     
     
@@ -1521,7 +1627,7 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
         
             
 <dt>
-    <h4 class="name" id="getRangeAsHash"><span class="type-signature"></span>getRangeAsHash<span class="signature">(startValue, endValue)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
+    <h4 class="name" id="getRangeAsHash"><span class="type-signature"></span>getRangeAsHash<span class="signature">(startValue, endValue, <span class="optional">offset</span>, <span class="optional">limit</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
     
     
 </dt>
@@ -1551,7 +1657,11 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
 		
+		
+		
+		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -1579,10 +1689,22 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
-            <td class="description last"></td>
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Value marking start of the range.</td>
         </tr>
 	
 	
@@ -1605,10 +1727,100 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
             
             
             
-            <td class="description last"></td>
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Value marking end of the range.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to skip at start.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to fetch at most.</td>
         </tr>
 	
 	
@@ -1644,7 +1856,7 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 128
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 135
     </li></ul></dd>
     
     
@@ -1697,7 +1909,7 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
         
             
 <dt>
-    <h4 class="name" id="getRangeByPrefix"><span class="type-signature"></span>getRangeByPrefix<span class="signature">(prefix, <span class="optional">excludeOriginal</span>)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    <h4 class="name" id="getRangeByPrefix"><span class="type-signature"></span>getRangeByPrefix<span class="signature">(prefix, <span class="optional">excludeOriginal</span>, <span class="optional">offset</span>, <span class="optional">limit</span>)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
     
     
 </dt>
@@ -1771,7 +1983,7 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
                 </td>
             
             
-            <td class="description last"></td>
+            <td class="description last">Prefix to be matched by list items.</td>
         </tr>
 	
 	
@@ -1814,6 +2026,84 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to skip at start.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to fetch at most.</td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -1841,7 +2131,7 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 52
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 54
     </li></ul></dd>
     
     
@@ -1894,7 +2184,7 @@ osl.getRangeByPrefix('h') // ['hello', 'hi', 'hire']</code></pre>
         
             
 <dt>
-    <h4 class="name" id="getRangeByPrefixAsHash"><span class="type-signature"></span>getRangeByPrefixAsHash<span class="signature">(prefix, <span class="optional">excludeOriginal</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
+    <h4 class="name" id="getRangeByPrefixAsHash"><span class="type-signature"></span>getRangeByPrefixAsHash<span class="signature">(prefix, <span class="optional">excludeOriginal</span>, <span class="optional">offset</span>, <span class="optional">limit</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
     
     
 </dt>
@@ -1968,7 +2258,7 @@ osl.getRangeByPrefix('h') // ['hello', 'hi', 'hire']</code></pre>
                 </td>
             
             
-            <td class="description last"></td>
+            <td class="description last">Prefix to be matched by list items.</td>
         </tr>
 	
 	
@@ -2011,6 +2301,84 @@ osl.getRangeByPrefix('h') // ['hello', 'hi', 'hire']</code></pre>
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to skip at start.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+            
+            <td class="description last">Number of items to fetch at most.</td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -2038,7 +2406,7 @@ osl.getRangeByPrefix('h') // ['hello', 'hi', 'hire']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 72
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 76
     </li></ul></dd>
     
     
@@ -2826,7 +3194,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 85
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 89
     </li></ul></dd>
     
     
@@ -2972,7 +3340,7 @@ Returns -1 when the value is not present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 177
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 184
     </li></ul></dd>
     
     
@@ -3123,7 +3491,7 @@ ol.items // ['a', 'c']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 196
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 203
     </li></ul></dd>
     
     
@@ -3290,7 +3658,7 @@ Neither `startValue` nor `endValue` has to be present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 213
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 220
     </li></ul></dd>
     
     
@@ -4123,7 +4491,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 242
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 249
     </li></ul></dd>
     
     
@@ -4211,7 +4579,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 101
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 105
     </li></ul></dd>
     
     
@@ -4536,7 +4904,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 18 2013 13:22:39 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 18 2013 16:03:59 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
