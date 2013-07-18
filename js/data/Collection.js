@@ -575,21 +575,56 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Maps a collection to a new collection instance of subclass `subClass`, using the specified handler
-             * to create each item in the new collection.
+             * Maps collection, changing the keys but keeping the values.
+             * @param {function} mapper Mapper function. Takes `item` and `itemKey` as arguments, and is expected
+             * to return the mapped item key for the new collection.
+             * @param {object} [context=this] Optional handler context. Set to the collection instance by default.
+             * @param {function} [conflictResolver] Optional callback that resolves key conflicts.
+             * Takes conflicting values and the mapped key associated with them.
+             * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
+             * @return {sntls.Collection}
+             */
+            mapKeys: function (mapper, context, conflictResolver, subClass) {
+                dessert
+                    .isFunction(mapper, "Invalid mapper function")
+                    .isObjectOptional(context, "Invalid context")
+                    .isFunctionOptional(conflictResolver, "Invalid conflict resolver function")
+                    .isCollectionOptional(subClass, "Invalid collection subclass");
+
+                var items = this.items,
+                    keys = Object.keys(items),
+                    resultItems = items instanceof Array ? [] : {},
+                    i, itemKey, mappedKey, item;
+
+                for (i = 0; i < keys.length; i++) {
+                    itemKey = keys[i];
+                    item = items[itemKey];
+                    mappedKey = mapper.call(context || this, item, itemKey);
+                    if (hOP.call(resultItems, mappedKey) && conflictResolver) {
+                        // when there's a key conflict and resolver is specified
+                        item = conflictResolver.call(this, resultItems[mappedKey], item, mappedKey);
+                    }
+                    resultItems[mappedKey] = item;
+                }
+
+                return (subClass || self).create(resultItems);
+            },
+
+            /**
+             * Maps collection, changing the values but keeping the keys.
              * @example
              * c.mapValues(function (item) {
              *  return 'hello' + item;
              * }, sntls.Collection.of(String));
-             * @param {function} handler Mapper function. Takes `item` and `itemKey` as arguments, and is expected
-             * to return the mapped item for the new collection.
+             * @param {function} mapper Mapper function. Takes `item` and `itemKey` as arguments, and is expected
+             * to return the mapped item value for the new collection.
              * @param {object} [context=this] Optional handler context. Set to the collection instance by default.
              * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
              * @returns {sntls.Collection} New collection instance (of the specified type) containing mapped items.
              */
-            mapValues: function (handler, context, subClass) {
+            mapValues: function (mapper, context, subClass) {
                 dessert
-                    .isFunction(handler, "Invalid callback function")
+                    .isFunction(mapper, "Invalid mapper function")
                     .isObjectOptional(context, "Invalid context")
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
@@ -601,7 +636,7 @@ troop.postpone(sntls, 'Collection', function () {
                 for (i = 0; i < keys.length; i++) {
                     itemKey = keys[i];
                     item = items[itemKey];
-                    resultItems[itemKey] = handler.call(context || this, item, itemKey);
+                    resultItems[itemKey] = mapper.call(context || this, item, itemKey);
                 }
 
                 return (subClass || self).create(resultItems);

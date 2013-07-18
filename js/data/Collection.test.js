@@ -813,7 +813,63 @@
         );
     });
 
-    test("Mapping", function () {
+    test("Key mapping", function () {
+        var StringCollection = sntls.Collection.of(String),
+            collection = sntls.Collection.create({
+                foo  : "bar",
+                hello: "world",
+                howdy: "all"
+            }),
+            result;
+
+        result = collection.mapKeys(function (item, itemKey) {
+            return itemKey.toUpperCase();
+        });
+
+        ok(result.isA(sntls.Collection), "Mapping returns collection");
+        notStrictEqual(result, collection, "Mapping returns different collection");
+        deepEqual(result.items, {
+            FOO  : "bar",
+            HELLO: "world",
+            HOWDY: "all"
+        }, "Collection items w/ mapped keys");
+
+        result = collection.mapKeys(function (item, itemKey) {
+            return itemKey.toUpperCase();
+        }, undefined, undefined, StringCollection);
+
+        ok(result.isA(StringCollection), "Mapping returns specified collection");
+
+        result = collection.mapKeys(function (item, itemKey) {
+            return itemKey[0];
+        });
+
+        deepEqual(result.items, {
+            f: "bar",
+            h: "all"
+        }, "Collection items w/ conflicting mapped keys");
+
+        result = collection.mapKeys(
+            function (item, itemKey) {
+                return itemKey[0];
+            },
+            collection,
+            function (value1, value2) {
+                if (value1.length > value2.length) {
+                    return value1;
+                } else {
+                    return value2;
+                }
+            }
+        );
+
+        deepEqual(result.items, {
+            f: "bar",
+            h: "world"
+        }, "Collection items w/ resolved conflicting mapped keys");
+    });
+
+    test("Value mapping", function () {
         var StringCollection = sntls.Collection.of(String),
             collection = sntls.Collection.create(),
             result;
