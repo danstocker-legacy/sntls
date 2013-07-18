@@ -43,11 +43,17 @@
             trimmedPath = originalPath.trim();
 
         strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
-
         deepEqual(
             trimmedPath.asArray,
             ['test', 'originalPath', 'it'],
             "Trimmed path"
+        );
+
+        originalPath.trim(2);
+        deepEqual(
+            trimmedPath.asArray,
+            ['test'],
+            "Trimmed multiple keys"
         );
     });
 

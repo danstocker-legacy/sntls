@@ -95,10 +95,15 @@ troop.postpone(sntls, 'Path', function () {
              * @example
              * var p = sntls.Path.create('test>path>it>is');
              * p.trim().asArray // ['test', 'path', 'it']
+             * @param {number} [count=1] Number of keys to remove from path.
              * @returns {sntls.Path}
              */
-            trim: function () {
-                this.asArray.pop();
+            trim: function (count) {
+                if (typeof count === 'undefined' || count === 1) {
+                    this.asArray.pop();
+                } else {
+                    this.asArray = this.asArray.slice(0 - count);
+                }
                 return this;
             },
 
