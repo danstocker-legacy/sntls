@@ -107,25 +107,32 @@ troop.postpone(sntls, 'OrderedList', function () {
              * ol.getRange('bar', 'foo') // ['bar', 'bee', 'foo']
              * ol.getRange('a', 'bee') // ['ban', 'bar', 'bee']
              * ol.getRange('foo', 'fun') // ['foo']
-             * @param {string|number} startValue
-             * @param {string|number} endValue
+             * @param {string|number} startValue Value marking start of the range.
+             * @param {string|number} endValue Value marking end of the range.
+             * @param {number} [offset=0] Number of items to skip at start.
+             * @param {number} [limit=Infinity] Number of items to fetch at most.
              * @returns {Array} Shallow copy of the array's affected segment.
              */
-            getRange: function (startValue, endValue) {
+            getRange: function (startValue, endValue, offset, limit) {
+                offset = offset || 0;
+                limit = typeof limit === 'undefined' ? Infinity : limit;
+
                 var startIndex = this.spliceIndexOf(startValue),
                     endIndex = this.spliceIndexOf(endValue);
 
-                return this.items.slice(startIndex, endIndex);
+                return this.items.slice(startIndex + offset, Math.min(endIndex, startIndex + offset + limit));
             },
 
             /**
              * Retrieves a range of values and wraps it in a Hash object.
-             * @param {string|number} startValue
-             * @param {string|number} endValue
+             * @param {string|number} startValue Value marking start of the range.
+             * @param {string|number} endValue Value marking end of the range.
+             * @param {number} [offset=0] Number of items to skip at start.
+             * @param {number} [limit=Infinity] Number of items to fetch at most.
              * @returns {sntls.Hash} Hash with a shallow copy of the array's affected segment.
              * @see sntls.OrderedList#getRange
              */
-            getRangeAsHash: function (startValue, endValue) {
+            getRangeAsHash: function (startValue, endValue, offset, limit) {
                 var range = this.getRange.apply(this, arguments);
                 return sntls.Hash.create(range);
             },

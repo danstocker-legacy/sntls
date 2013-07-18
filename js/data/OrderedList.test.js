@@ -123,6 +123,28 @@
         );
     });
 
+    test("Range retrieval with offset & limit", function () {
+        var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "world"]);
+
+        deepEqual(
+            orderedList.getRange("bar", "lorem", 2),
+            ["foo", "foo"],
+            "Skipped 2 at start"
+        );
+
+        deepEqual(
+            orderedList.getRange("bar", "lorem", 2, 3),
+            ["foo", "foo"],
+            "Skipped 2 at start, tries to fetch more than available"
+        );
+
+        deepEqual(
+            orderedList.getRange("bar", "lorem", 2, 1),
+            ["foo"],
+            "Skipped 2 at start, fetches 1 at most"
+        );
+    });
+
     test("Range retrieval as hash", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "world"]),
             result;
