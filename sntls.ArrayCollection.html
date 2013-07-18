@@ -775,7 +775,7 @@ The rest of the arguments are forwarded to the method calls.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 692
+        <a href="Collection.js.html">data/Collection.js</a>, line 727
     </li></ul></dd>
     
     
@@ -1146,7 +1146,7 @@ saves a function call on each item.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 618
+        <a href="Collection.js.html">data/Collection.js</a>, line 653
     </li></ul></dd>
     
     
@@ -3993,7 +3993,7 @@ in the resulting array is not deterministic.
         
             
 <dt>
-    <h4 class="name" id="mapContents"><span class="type-signature"></span>mapContents<span class="signature">(handler, <span class="optional">context</span>, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="mapKeys"><span class="type-signature"></span>mapKeys<span class="signature">(mapper, <span class="optional">context</span>, <span class="optional">conflictResolver</span>, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
     
     
 </dt>
@@ -4001,8 +4001,7 @@ in the resulting array is not deterministic.
     
     
     <div class="description">
-        Maps a collection to a new collection instance of subclass `subClass`, using the specified handler
-to create each item in the new collection.
+        Maps collection, changing the keys but keeping the values.
     </div>
     
 
@@ -4040,7 +4039,7 @@ to create each item in the new collection.
 	
         <tr>
             
-                <td class="name"><code>handler</code></td>
+                <td class="name"><code>mapper</code></td>
             
             
             <td class="type">
@@ -4069,7 +4068,274 @@ to create each item in the new collection.
             
             
             <td class="description last">Mapper function. Takes `item` and `itemKey` as arguments, and is expected
-to return the mapped item for the new collection.</td>
+to return the mapped item key for the new collection.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    this
+                
+                </td>
+            
+            
+            <td class="description last">Optional handler context. Set to the collection instance by default.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>conflictResolver</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Optional callback that resolves key conflicts.
+Takes conflicting values and the mapped key associated with them.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>subClass</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Optional collection subclass for the output.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#mapKeys">sntls.Collection#mapKeys</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">data/Collection.js</a>, line 587
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="mapValues"><span class="type-signature"></span>mapValues<span class="signature">(mapper, <span class="optional">context</span>, <span class="optional">subClass</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Maps collection, changing the values but keeping the keys.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>mapper</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Mapper function. Takes `item` and `itemKey` as arguments, and is expected
+to return the mapped item value for the new collection.</td>
         </tr>
 	
 	
@@ -4164,7 +4430,7 @@ to return the mapped item for the new collection.</td>
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.Collection.html#mapContents">sntls.Collection#mapContents</a>
+        <a href="sntls.Collection.html#mapValues">sntls.Collection#mapValues</a>
     </li></dd>
     
     
@@ -4181,7 +4447,7 @@ to return the mapped item for the new collection.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 590
+        <a href="Collection.js.html">data/Collection.js</a>, line 625
     </li></ul></dd>
     
     
@@ -4224,7 +4490,7 @@ to return the mapped item for the new collection.</td>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>c.mapContents(function (item) {
+    <pre class="prettyprint"><code>c.mapValues(function (item) {
  return 'hello' + item;
 }, sntls.Collection.of(String));</code></pre>
 
@@ -4440,7 +4706,7 @@ Return type will be that of the current collection.
     
     <div class="description">
         Passes each item to the specified handler as argument, and returns the results packed in a
-plain collection instance. Similar to `.mapContents`
+plain collection instance. Similar to `.mapValues`
     </div>
     
 
@@ -4619,7 +4885,7 @@ should be the owner (instance or class) of the method. Set to the collection ins
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 649
+        <a href="Collection.js.html">data/Collection.js</a>, line 684
     </li></ul></dd>
     
     
@@ -5492,7 +5758,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 743
+        <a href="Collection.js.html">data/Collection.js</a>, line 778
     </li></ul></dd>
     
     
@@ -6020,7 +6286,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 232
+        <a href="Path.js.html">tree/Path.js</a>, line 237
     </li></ul></dd>
     
     
@@ -6604,13 +6870,13 @@ actual contents of the array.
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 14 2013 13:12:03 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 18 2013 13:22:37 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
