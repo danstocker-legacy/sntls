@@ -860,13 +860,40 @@
                 } else {
                     return value2;
                 }
-            }
-        );
+            });
 
         deepEqual(result.items, {
             f: "bar",
             h: "world"
         }, "Collection items w/ resolved conflicting mapped keys");
+    });
+
+    test("Key mapping mimicking dictionary reverse", function () {
+        var collection = sntls.Collection.create({
+                foo  : 'bar',
+                baz  : 'bar',
+                hello: 'world'
+            }),
+            result;
+
+        result = collection.mapKeys(
+            function (value) {
+                return value;
+            },
+            collection,
+            function (value1, value2) {
+                if (value1 instanceof Array) {
+                    value1.push(value2);
+                    return value1;
+                } else {
+                    return [value1, value2];
+                }
+            });
+
+        deepEqual(result.items, {
+            bar  : ['bar', 'bar'],
+            world: 'world'
+        });
     });
 
     test("Value mapping", function () {
