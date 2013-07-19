@@ -284,19 +284,31 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
         }
     });
 
-    /**
-     * Creates a new QueryPattern instance based on the current string.
-     * @returns {sntls.QueryPattern}
-     */
-    String.prototype.toQueryPattern = function () {
-        return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
-    };
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Creates a new QueryPattern instance based on the current string.
+             * @returns {sntls.QueryPattern}
+             */
+            toQueryPattern: function () {
+                return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+            }
+        },
+        false, false, false
+    );
 
-    /**
-     * Creates a new QueryPattern instance based on the current array.
-     * @returns {sntls.QueryPattern}
-     */
-    Array.prototype.toQueryPattern = function () {
-        return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
-    };
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new QueryPattern instance based on the current array.
+             * @returns {sntls.QueryPattern}
+             */
+            toQueryPattern: function () {
+                return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

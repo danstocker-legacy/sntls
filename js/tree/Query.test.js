@@ -117,6 +117,9 @@
     test("Type conversion", function () {
         var query;
 
+        ok(!Array.prototype.propertyIsEnumerable('toQuery'), "Array type converter is not enumerable");
+        ok(!String.prototype.propertyIsEnumerable('toQuery'), "String type converter is not enumerable");
+
         query = ['hello', '|'.toQueryPattern(), 'you<all'.toQueryPattern()].toQuery();
         equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
@@ -137,6 +140,9 @@
 
     test("Type conversion with either types", function () {
         var query;
+
+        ok(!Array.prototype.propertyIsEnumerable('toPathOrQuery'), "Array type converter is not enumerable");
+        ok(!String.prototype.propertyIsEnumerable('toPathOrQuery'), "String type converter is not enumerable");
 
         query = 'test>path>it>is'.toPathOrQuery();
         ok(!query.isA(sntls.Query), "String path did not satisfy query conditions");

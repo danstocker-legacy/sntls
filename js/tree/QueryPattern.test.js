@@ -126,6 +126,9 @@
     test("Type conversion", function () {
         var pattern;
 
+        ok(!Array.prototype.propertyIsEnumerable('toQueryPattern'), "Array type converter is not enumerable");
+        ok(!String.prototype.propertyIsEnumerable('toQueryPattern'), "String type converter is not enumerable");
+
         pattern = '|'.toQueryPattern();
         ok(pattern.isA(sntls.QueryPattern), "Type of converted value");
         deepEqual(
