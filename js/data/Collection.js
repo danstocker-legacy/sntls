@@ -294,18 +294,6 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves collection keys as an array. Also sets item counter when it is uninitialized.
-             * @returns {string[]}
-             */
-            getKeys: function () {
-                var result = Object.keys(this.items);
-                if (typeof this.keyCount !== 'number') {
-                    this.keyCount = result.length;
-                }
-                return result;
-            },
-
-            /**
              * Retrieves item keys as an array, filtered by a prefix. The in which keys appear in the resulting
              * array is not deterministic.
              * @example
