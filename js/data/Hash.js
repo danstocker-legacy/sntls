@@ -72,7 +72,7 @@ troop.postpone(sntls, 'Hash', function () {
              * @see sntls.Hash#getKeys
              */
             getKeysAsHash: function () {
-                return sntls.Hash.create(Object.keys(this.items));
+                return sntls.Hash.create(this.getKeys());
             },
 
             /**
