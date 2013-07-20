@@ -25,7 +25,7 @@
     });
 
     test("Shortcuts", function () {
-        var mockCollection = {items: {a: 'a', b: 'b'}};
+        var mockCollection = sntls.Collection.create({a: 'a', b: 'b'});
         mockCollection.toUpperCase = sntls.Collection._genShortcut('toUpperCase');
         deepEqual(
             mockCollection.toUpperCase().items,
@@ -35,7 +35,7 @@
     });
 
     test("Shortcuts with array buffer", function () {
-        var mockCollection = {items: ['a', 'b']},
+        var mockCollection = sntls.Collection.create(['a', 'b']),
             result;
         mockCollection.toUpperCase = sntls.Collection._genShortcut('toUpperCase');
 
@@ -213,7 +213,12 @@
     });
 
     test("Initializing collection", function () {
-        var collection = sntls.Collection.create({
+        var collection;
+
+        collection = sntls.Collection.create();
+        equal(collection.count, 0, "Count initialized to empty");
+
+        collection = sntls.Collection.create({
             0: "hello",
             1: "world",
             2: "what",
@@ -230,7 +235,7 @@
             },
             "Items initialized"
         );
-        equal(collection.count, 4, "Count initialized");
+        equal(typeof collection.count, 'undefined', "Count remains uninitialized");
     });
 
     test("Type conversion", function () {
@@ -329,7 +334,7 @@
             "Original collection remains intact"
         );
 
-        equal(merged.count, collection1.count + collection2.count, "Merged item count");
+        equal(merged.getCount(), 4, "Merged item count");
         deepEqual(
             merged.items,
             {
@@ -356,7 +361,7 @@
             merged;
 
         merged = collection1.mergeWith(collection2);
-        equal(merged.count, 3, "Merged item count");
+        equal(merged.getCount(), 3, "Merged item count");
         deepEqual(
             merged.items,
             {
@@ -372,7 +377,7 @@
             ok(rightCollection.isA(sntls.Collection));
             return rightCollection.items[itemName];
         });
-        equal(merged.count, 3, "Merged item count");
+        equal(merged.getCount(), 3, "Merged item count");
         deepEqual(
             merged.items,
             {
@@ -482,6 +487,24 @@
             [undefined, 'friend', undefined, 'boom'],
             "Array buffer filtered"
         );
+    });
+
+    test("Key extraction (plain)", function () {
+        var collection = sntls.Collection.create({
+            test : 'test',
+            hello: 'hello',
+            world: 'world!',
+            foo  : 'foo',
+            bar  : 'bar'
+        });
+
+        equal(typeof collection.count, 'undefined', "Item count uninitialized");
+        deepEqual(
+            collection.getKeys().sort(),
+            ['bar', 'foo', 'hello', 'test', 'world'],
+            "Extracted all keys"
+        );
+        equal(collection.count, 5, "Count set after key extraction");
     });
 
     test("Key extraction (RegExp)", function () {
@@ -635,6 +658,20 @@
             },
             "Collection after removals"
         );
+    });
+
+    test("Counting items", function () {
+        var collection = sntls.Collection.create({
+            test : 'test',
+            hello: 'hello',
+            world: 'world!',
+            foo  : 'foo',
+            bar  : 'bar'
+        });
+
+        equal(typeof collection.count, 'undefined', "Count not set initially");
+        equal(collection.getCount(), 5, "Forcing count");
+        equal(collection.count, 5, "Counter set afterwards");
     });
 
     test("Clearing", function () {

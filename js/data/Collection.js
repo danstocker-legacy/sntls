@@ -45,7 +45,7 @@ troop.postpone(sntls, 'Collection', function () {
                 return function () {
                     var items = this.items,
                         result = items instanceof Array ? [] : {},
-                        itemKeys = Object.keys(items),
+                        itemKeys = this.getKeys(),
                         i, itemKey, item,
                         itemResult,
                         isChainable = true;
@@ -168,7 +168,7 @@ troop.postpone(sntls, 'Collection', function () {
                  * Number of items in the collection. Writable, but not to be changed externally.
                  * @type {Number}
                  */
-                this.count = items ? Object.keys(items).length : 0;
+                this.count = items ? undefined : 0;
             },
 
             //////////////////////////////
@@ -201,7 +201,7 @@ troop.postpone(sntls, 'Collection', function () {
                 this.items[itemKey] = item;
 
                 // increasing count when new item was added
-                if (isNew) {
+                if (isNew && typeof this.count === 'number') {
                     this.count++;
                 }
 
@@ -219,10 +219,29 @@ troop.postpone(sntls, 'Collection', function () {
                     delete this.items[itemKey];
 
                     // decreasing count
-                    this.count--;
+                    if (typeof this.count === 'number') {
+                        this.count--;
+                    }
                 }
 
                 return this;
+            },
+
+            /**
+             * Returns collection item count. Since `this.count` is not guaranteed to be
+             * initialized until after an iteration ran, use this method to safely obtain
+             * collection length.
+             * @example
+             * var c = sntls.Collection.create({foo: 1, bar: 2});
+             * c.getCount() // 2
+             * @returns {number} Number of collection items.
+             */
+            getCount: function () {
+                if (typeof this.count !== 'number') {
+                    // initializing count
+                    this.count = Object.keys(this.items).length;
+                }
+                return this.count;
             },
 
             /**
@@ -306,6 +325,18 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
+             * Retrieves collection keys as an array. Also sets item counter when it is uninitialized.
+             * @returns {string[]}
+             */
+            getKeys: function () {
+                var result = Object.keys(this.items);
+                if (typeof this.count !== 'number') {
+                    this.count = result.length;
+                }
+                return result;
+            },
+
+            /**
              * Retrieves item keys as an array, filtered by a prefix. The in which keys appear in the resulting
              * array is not deterministic.
              * @example
@@ -322,7 +353,7 @@ troop.postpone(sntls, 'Collection', function () {
                 dessert.isString(prefix, "Invalid prefix");
 
                 var result = [],
-                    itemKeys = Object.keys(this.items),
+                    itemKeys = this.getKeys(),
                     i, itemKey;
 
                 for (i = 0; i < itemKeys.length; i++) {
@@ -361,7 +392,7 @@ troop.postpone(sntls, 'Collection', function () {
              */
             getKeysByRegExp: function (regExp) {
                 var result = [],
-                    itemKeys = Object.keys(this.items),
+                    itemKeys = this.getKeys(),
                     i, itemKey;
 
                 for (i = 0; i < itemKeys.length; i++) {
@@ -444,7 +475,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var items = this.items,
                     resultItems = items instanceof Array ? [] : {},
-                    itemKeys = Object.keys(items),
+                    itemKeys = this.getKeys(),
                     i, itemKey;
 
                 for (i = 0; i < itemKeys.length; i++) {
@@ -469,7 +500,7 @@ troop.postpone(sntls, 'Collection', function () {
             getSortedValues: function (comparator) {
                 dessert.isFunctionOptional(comparator, "Invalid comparator function");
 
-                var keys = Object.keys(this.items).sort(comparator ? comparator.bind(this) : undefined),
+                var keys = this.getKeys().sort(comparator ? comparator.bind(this) : undefined),
                     result = [],
                     i;
 
@@ -527,7 +558,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isObjectOptional(context, "Invalid context");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
@@ -560,7 +591,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isFunctionOptional(comparator, "Invalid comparator function");
 
                 var items = this.items,
-                    keys = Object.keys(items).sort(comparator ? comparator.bind(this) : undefined),
+                    keys = this.getKeys().sort(comparator ? comparator.bind(this) : undefined),
                     i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
@@ -592,7 +623,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey, mappedKey, item;
 
@@ -629,7 +660,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item;
 
@@ -654,7 +685,7 @@ troop.postpone(sntls, 'Collection', function () {
                 dessert.isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey;
 
@@ -684,7 +715,7 @@ troop.postpone(sntls, 'Collection', function () {
             passEachItemTo: function (handler, context, argIndex) {
                 var args = slice.call(arguments, 3),
                     items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey;
 
@@ -729,7 +760,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var args = slice.call(arguments, 1),
                     items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item,
                     itemMethod, itemResult,
