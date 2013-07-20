@@ -21,21 +21,21 @@ troop.postpone(sntls, 'Dictionary', function () {
      * @extends sntls.Hash
      */
     sntls.Dictionary = base.extend()
-        .addPrivateMethods(/** @lends sntls.Dictionary */{
+        .addPrivateMethods(/** @lends sntls.Dictionary# */{
             /**
-             * Counts values in dictionary.
-             * Since one item may hold multiple values, value count =/= item count.
-             * @param {object} dictionaryItems Dictionary item buffer
+             * Counts key-value pairs in dictionary.
+             * Since one item may hold multiple values, value count =/= key count.
              * @returns {number}
              * @private
              */
-            _countValues: function (dictionaryItems) {
-                var keys = Object.keys(dictionaryItems),
+            _countValues: function () {
+                var items = this.items,
+                    keys = this.getKeys(),
                     result = 0,
                     i, item;
 
                 for (i = 0; i < keys.length; i++) {
-                    item = dictionaryItems[keys[i]];
+                    item = items[keys[i]];
                     result += item instanceof Array ?
                         item.length :
                         1;
@@ -55,20 +55,16 @@ troop.postpone(sntls, 'Dictionary', function () {
                 /**
                  * Number of items in the dictionary. Equal to the number of keys.
                  * Should not be modified externally.
-                 * @example
-                 * sntls.Dictionary.create({foo:"bar",baz:[1,2]}).keyCount // 2 (foo, baz)
                  * @type {number}
                  */
-                this.keyCount = items ? Object.keys(items).length : 0;
+                this.keyCount = items ? undefined : 0;
 
                 /**
                  * Reflects the number of values (with multiplicity) in the dictionary.
                  * Should not be modified externally.
-                 * @example
-                 * sntls.Dictionary.create({foo:"bar",baz:[1,2]}).itemCount // 3 ("bar", 1, 2)
                  * @type {number}
                  */
-                this.itemCount = items ? this._countValues(items) : 0;
+                this.itemCount = items ? undefined : 0;
             },
 
             /**
@@ -103,7 +99,9 @@ troop.postpone(sntls, 'Dictionary', function () {
                         value;
 
                     // updating item count (new key was added)
-                    this.keyCount++;
+                    if (typeof this.keyCount === 'number') {
+                        this.keyCount++;
+                    }
                 } else {
                     // current item is single value
                     items[key] = valueIsArray ?
@@ -112,9 +110,11 @@ troop.postpone(sntls, 'Dictionary', function () {
                 }
 
                 // updating value count
-                this.itemCount += valueIsArray ?
-                    value.length :
-                    1;
+                if (typeof this.itemCount === 'number') {
+                    this.itemCount += valueIsArray ?
+                        value.length :
+                        1;
+                }
 
                 return this;
             },
@@ -172,17 +172,23 @@ troop.postpone(sntls, 'Dictionary', function () {
                         }
 
                         // updating value counter
-                        this.itemCount--;
+                        if (typeof this.itemCount === 'number') {
+                            this.itemCount--;
+                        }
                     }
                 } else {
                     // removing full item
                     delete items[key];
 
                     // updating counters
-                    this.keyCount--;
-                    this.itemCount -= currentValueIsArray ?
-                        currentValue.length :
-                        1;
+                    if (typeof this.keyCount === 'number') {
+                        this.keyCount--;
+                    }
+                    if (typeof this.itemCount === 'number') {
+                        this.itemCount -= currentValueIsArray ?
+                            currentValue.length :
+                            1;
+                    }
                 }
 
                 return this;
@@ -235,6 +241,40 @@ troop.postpone(sntls, 'Dictionary', function () {
                     dessert.assert(false, "Invalid key");
                 }
 
+                return result;
+            },
+
+            /**
+             * Retrieves the number of keys in the dictionary.
+             * @returns {number}
+             */
+            getKeyCount: function () {
+                if (typeof this.keyCount !== 'number') {
+                    this.keyCount = Object.keys(this.items).length;
+                }
+                return this.keyCount;
+            },
+
+            /**
+             * Retrieves the number of items (key-value pairs) in the dictionary.
+             * @return {number}
+             */
+            getItemCount: function () {
+                if (typeof this.itemCount !== 'number') {
+                    this.itemCount = this._countValues();
+                }
+                return this.itemCount;
+            },
+
+            /**
+             * Retrieves dictionary keys as an array. Also sets key counter when it is uninitialized.
+             * @returns {string[]}
+             */
+            getKeys: function () {
+                var result = Object.keys(this.items);
+                if (typeof this.keyCount !== 'number') {
+                    this.keyCount = result.length;
+                }
                 return result;
             },
 

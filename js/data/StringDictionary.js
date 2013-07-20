@@ -41,7 +41,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
                 var items = this.items,
                     resultBuffer = items instanceof Array ? [] : {},
                     result = /** @type {sntls.Dictionary} */ remoteDict.getBase().create(resultBuffer),
-                    currentKeys = Object.keys(items),
+                    currentKeys = this.getKeys(),
                     i, currentKey, currentValue, remoteValue;
 
                 for (i = 0; i < currentKeys.length; i++) {
@@ -91,7 +91,7 @@ troop.postpone(sntls, 'StringDictionary', function () {
 
                 var resultBuffer = bufferType === Array ? [] : {},
                     result = this.getBase().create(resultBuffer),
-                    keys = Object.keys(this.items),
+                    keys = this.getKeys(),
                     i, key, value;
 
                 for (i = 0; i < keys.length; i++) {
