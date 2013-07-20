@@ -37,6 +37,13 @@ troop.postpone(sntls, 'Hash', function () {
                  * @type {Object|Array}
                  */
                 this.items = items || {};
+
+                /**
+                 * Number of distinct keys in the hash.
+                 * Should not be modified externally.
+                 * @type {number}
+                 */
+                this.keyCount = items ? undefined : 0;
             },
 
             /**
@@ -63,7 +70,11 @@ troop.postpone(sntls, 'Hash', function () {
              * @returns {string[]}
              */
             getKeys: function () {
-                return Object.keys(this.items);
+                var result = Object.keys(this.items);
+                if (typeof this.keyCount !== 'number') {
+                    this.keyCount = result.length;
+                }
+                return result;
             },
 
             /**
@@ -73,6 +84,20 @@ troop.postpone(sntls, 'Hash', function () {
              */
             getKeysAsHash: function () {
                 return sntls.Hash.create(this.getKeys());
+            },
+
+            /**
+             * Retrieves the number of keys in hash.
+             * @example
+             * var c = sntls.Hash.create({foo: 1, bar: 2});
+             * c.getKeyCount() // 2
+             * @returns {number}
+             */
+            getKeyCount: function () {
+                if (typeof this.keyCount !== 'number') {
+                    this.keyCount = Object.keys(this.items).length;
+                }
+                return this.keyCount;
             },
 
             /**

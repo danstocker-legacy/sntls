@@ -53,7 +53,23 @@
             five : true
         });
 
-        deepEqual(hash.getKeys(), ['one', 'two', 'three', 'four', 'five'], "Retrieving all keys");
+        equal(typeof this.keyCount, 'undefined', "Key count initially unset");
+        deepEqual(hash.getKeys().sort(), ['five', 'four', 'one', 'three', 'two'], "Retrieving all keys");
+        equal(hash.keyCount, 5, "Extraction sets key count");
+    });
+
+    test("Key counter", function () {
+        var hash = sntls.Hash.create({
+            one  : 'hello',
+            two  : 'world!',
+            three: 5,
+            four : {},
+            five : true
+        });
+
+        equal(typeof this.keyCount, 'undefined', "Key count initially unset");
+        equal(hash.getKeyCount(), 5, "Counter ran");
+        equal(hash.keyCount, 5, "Key count set after first call");
     });
 
     test("Value extraction", function () {

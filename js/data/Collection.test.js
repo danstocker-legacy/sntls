@@ -216,7 +216,7 @@
         var collection;
 
         collection = sntls.Collection.create();
-        equal(collection.count, 0, "Count initialized to empty");
+        equal(collection.keyCount, 0, "Count initialized to empty");
 
         collection = sntls.Collection.create({
             0: "hello",
@@ -235,7 +235,7 @@
             },
             "Items initialized"
         );
-        equal(typeof collection.count, 'undefined', "Count remains uninitialized");
+        equal(typeof collection.keyCount, 'undefined', "Count remains uninitialized");
     });
 
     test("Type conversion", function () {
@@ -254,14 +254,14 @@
         var collection = sntls.Collection.create();
 
         deepEqual(collection.items, {}, "Initial buffer is empty object");
-        equal(collection.count, 0, "Initial count");
+        equal(collection.keyCount, 0, "Initial count");
 
         collection.setItem('testItem', 2);
-        equal(collection.count, 1, "Collection count increased");
+        equal(collection.keyCount, 1, "Collection count increased");
         equal(collection.items.testItem, 2, "Numeric value stored in collection");
 
         collection.setItem('testItem', 6, true);
-        equal(collection.count, 1, "Collection count remains the same");
+        equal(collection.keyCount, 1, "Collection count remains the same");
         equal(collection.items.testItem, 6, "Stored item by pre-existing name");
 
         collection.setItem('otherItem', 'testValue');
@@ -276,7 +276,7 @@
             clone = original.clone();
 
         deepEqual(original.items, clone.items, "Clone has identical content");
-        equal(original.count, clone.count, "Original and clone counts match");
+        equal(original.keyCount, clone.keyCount, "Original and clone counts match");
         notStrictEqual(original, clone, "Original and clone different objects");
         notStrictEqual(original.items, clone.items, "Original and clone items different objects");
     });
@@ -302,7 +302,7 @@
         ok(rebased.isA(sntls.Collection), "Rebased still a collection");
         equal(typeof rebased.split, 'function', "Rebased is specified collection");
         strictEqual(rebased.items, original.items, "Rebased shares items w/ original");
-        equal(rebased.count, original.count, "Rebased item count same as in original");
+        equal(rebased.keyCount, original.keyCount, "Rebased item count same as in original");
     });
 
     test("Merging collections", function () {
@@ -334,7 +334,7 @@
             "Original collection remains intact"
         );
 
-        equal(merged.getCount(), 4, "Merged item count");
+        equal(merged.getKeyCount(), 4, "Merged item count");
         deepEqual(
             merged.items,
             {
@@ -361,7 +361,7 @@
             merged;
 
         merged = collection1.mergeWith(collection2);
-        equal(merged.getCount(), 3, "Merged item count");
+        equal(merged.getKeyCount(), 3, "Merged item count");
         deepEqual(
             merged.items,
             {
@@ -377,7 +377,7 @@
             ok(rightCollection.isA(sntls.Collection));
             return rightCollection.items[itemName];
         });
-        equal(merged.getCount(), 3, "Merged item count");
+        equal(merged.getKeyCount(), 3, "Merged item count");
         deepEqual(
             merged.items,
             {
@@ -487,24 +487,6 @@
             [undefined, 'friend', undefined, 'boom'],
             "Array buffer filtered"
         );
-    });
-
-    test("Key extraction (plain)", function () {
-        var collection = sntls.Collection.create({
-            test : 'test',
-            hello: 'hello',
-            world: 'world!',
-            foo  : 'foo',
-            bar  : 'bar'
-        });
-
-        equal(typeof collection.count, 'undefined', "Item count uninitialized");
-        deepEqual(
-            collection.getKeys().sort(),
-            ['bar', 'foo', 'hello', 'test', 'world'],
-            "Extracted all keys"
-        );
-        equal(collection.count, 5, "Count set after key extraction");
     });
 
     test("Key extraction (RegExp)", function () {
@@ -623,9 +605,9 @@
             countBefore,
             beforeCount;
 
-        beforeCount = collection.count;
+        beforeCount = collection.keyCount;
         collection.deleteItem('one');
-        equal(collection.count, beforeCount, "Attempting to remove non-existing item fails");
+        equal(collection.keyCount, beforeCount, "Attempting to remove non-existing item fails");
 
         init(collection);
 
@@ -641,10 +623,10 @@
             "Collection before removals"
         );
 
-        countBefore = collection.count;
+        countBefore = collection.keyCount;
 
         collection.deleteItem('one');
-        equal(collection.count, countBefore - 1, "Collection count decreased");
+        equal(collection.keyCount, countBefore - 1, "Collection count decreased");
         equal(typeof collection.getItem('one'), 'undefined', "Collection item removed");
 
         collection.deleteItem('three');
@@ -658,20 +640,6 @@
             },
             "Collection after removals"
         );
-    });
-
-    test("Counting items", function () {
-        var collection = sntls.Collection.create({
-            test : 'test',
-            hello: 'hello',
-            world: 'world!',
-            foo  : 'foo',
-            bar  : 'bar'
-        });
-
-        equal(typeof collection.count, 'undefined', "Count not set initially");
-        equal(collection.getCount(), 5, "Forcing count");
-        equal(collection.count, 5, "Counter set afterwards");
     });
 
     test("Clearing", function () {
@@ -700,7 +668,7 @@
         });
 
         collection.clear();
-        equal(collection.count, 0, "Item count after emptying");
+        equal(collection.keyCount, 0, "Item count after emptying");
 
         sntls.Hash.removeMocks();
     });

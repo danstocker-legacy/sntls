@@ -274,17 +274,6 @@
         );
     });
 
-    test("Key counter", function () {
-        var dictionary = sntls.Dictionary.create({
-            foo  : 'bar',
-            hello: ['world', 'all']
-        });
-
-        equal(typeof dictionary.keyCount, 'undefined', "Key count uninitialized");
-        equal(dictionary.getKeyCount(), 2, "Counter ran");
-        equal(dictionary.keyCount, 2, "Key count set after first call");
-    });
-
     test("Item counter", function () {
         var dictionary = sntls.Dictionary.create({
             foo  : 'bar',
@@ -294,17 +283,6 @@
         equal(typeof dictionary.itemCount, 'undefined', "Key count uninitialized");
         equal(dictionary.getItemCount(), 3, "Counter ran");
         equal(dictionary.itemCount, 3, "Item count set after first call");
-    });
-
-    test("Key extraction", function () {
-        var dictionary = sntls.Dictionary.create({
-            foo  : 'bar',
-            hello: ['world', 'all']
-        });
-
-        equal(typeof dictionary.keyCount, 'undefined', "Key count uninitialized");
-        deepEqual(dictionary.getKeys().sort(), ['foo', 'hello'], "Extracted all keys");
-        equal(dictionary.keyCount, 2, "Key count set after extraction");
     });
 
     test("Clearing", function () {

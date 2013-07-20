@@ -157,20 +157,6 @@ troop.postpone(sntls, 'Collection', function () {
                 return specifiedCollection;
             },
 
-            /**
-             * @param {object|Array} [items] Initial contents.
-             * @ignore
-             */
-            init: function (items) {
-                base.init.apply(this, arguments);
-
-                /**
-                 * Number of items in the collection. Writable, but not to be changed externally.
-                 * @type {Number}
-                 */
-                this.count = items ? undefined : 0;
-            },
-
             //////////////////////////////
             // Basic functions
 
@@ -201,8 +187,8 @@ troop.postpone(sntls, 'Collection', function () {
                 this.items[itemKey] = item;
 
                 // increasing count when new item was added
-                if (isNew && typeof this.count === 'number') {
-                    this.count++;
+                if (isNew && typeof this.keyCount === 'number') {
+                    this.keyCount++;
                 }
 
                 return this;
@@ -219,29 +205,12 @@ troop.postpone(sntls, 'Collection', function () {
                     delete this.items[itemKey];
 
                     // decreasing count
-                    if (typeof this.count === 'number') {
-                        this.count--;
+                    if (typeof this.keyCount === 'number') {
+                        this.keyCount--;
                     }
                 }
 
                 return this;
-            },
-
-            /**
-             * Returns collection item count. Since `this.count` is not guaranteed to be
-             * initialized until after an iteration ran, use this method to safely obtain
-             * collection length.
-             * @example
-             * var c = sntls.Collection.create({foo: 1, bar: 2});
-             * c.getCount() // 2
-             * @returns {number} Number of collection items.
-             */
-            getCount: function () {
-                if (typeof this.count !== 'number') {
-                    // initializing count
-                    this.count = Object.keys(this.items).length;
-                }
-                return this.count;
             },
 
             /**
@@ -258,7 +227,7 @@ troop.postpone(sntls, 'Collection', function () {
                  * must be cloned in override methods
                  */
                 result.items = sntls.Utils.shallowCopy(this.items);
-                result.count = this.count;
+                result.keyCount = this.keyCount;
 
                 return result;
             },
@@ -281,7 +250,7 @@ troop.postpone(sntls, 'Collection', function () {
                 var result = /** @type sntls.Collection */ subClass.create();
 
                 result.items = this.items;
-                result.count = this.count;
+                result.keyCount = this.keyCount;
 
                 return result;
             },
@@ -330,8 +299,8 @@ troop.postpone(sntls, 'Collection', function () {
              */
             getKeys: function () {
                 var result = Object.keys(this.items);
-                if (typeof this.count !== 'number') {
-                    this.count = result.length;
+                if (typeof this.keyCount !== 'number') {
+                    this.keyCount = result.length;
                 }
                 return result;
             },
@@ -530,7 +499,7 @@ troop.postpone(sntls, 'Collection', function () {
                 base.clear.call(this);
 
                 // resetting counter
-                this.count = 0;
+                this.keyCount = 0;
 
                 return this;
             },

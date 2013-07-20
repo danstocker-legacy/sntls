@@ -53,13 +53,6 @@ troop.postpone(sntls, 'Dictionary', function () {
                 base.init.call(this, items);
 
                 /**
-                 * Number of items in the dictionary. Equal to the number of keys.
-                 * Should not be modified externally.
-                 * @type {number}
-                 */
-                this.keyCount = items ? undefined : 0;
-
-                /**
                  * Reflects the number of values (with multiplicity) in the dictionary.
                  * Should not be modified externally.
                  * @type {number}
@@ -245,17 +238,6 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
-             * Retrieves the number of keys in the dictionary.
-             * @returns {number}
-             */
-            getKeyCount: function () {
-                if (typeof this.keyCount !== 'number') {
-                    this.keyCount = Object.keys(this.items).length;
-                }
-                return this.keyCount;
-            },
-
-            /**
              * Retrieves the number of items (key-value pairs) in the dictionary.
              * @return {number}
              */
@@ -264,18 +246,6 @@ troop.postpone(sntls, 'Dictionary', function () {
                     this.itemCount = this._countValues();
                 }
                 return this.itemCount;
-            },
-
-            /**
-             * Retrieves dictionary keys as an array. Also sets key counter when it is uninitialized.
-             * @returns {string[]}
-             */
-            getKeys: function () {
-                var result = Object.keys(this.items);
-                if (typeof this.keyCount !== 'number') {
-                    this.keyCount = result.length;
-                }
-                return result;
             },
 
             /**
