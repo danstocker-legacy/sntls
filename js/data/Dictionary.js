@@ -53,7 +53,8 @@ troop.postpone(sntls, 'Dictionary', function () {
                 base.init.call(this, items);
 
                 /**
-                 * Reflects the number of values (with multiplicity) in the dictionary.
+                 * Tracks the number of distinct key-value pairs in the dictionary. Uninitialized until first queried
+                 * (by `.getItemCount()`), therefore it is safer to use its getter instead.
                  * Should not be modified externally.
                  * @type {number}
                  */
@@ -239,6 +240,11 @@ troop.postpone(sntls, 'Dictionary', function () {
 
             /**
              * Retrieves the number of items (key-value pairs) in the dictionary.
+             * @example
+             * var d = sntls.Dictionary.create({
+             *     foo: 'bar',
+             *     hello: ['world', 'all', 'bar']
+             * }).getItemCount() // 4
              * @return {number}
              */
             getItemCount: function () {

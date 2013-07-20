@@ -39,8 +39,9 @@ troop.postpone(sntls, 'Hash', function () {
                 this.items = items || {};
 
                 /**
-                 * Number of distinct keys in the hash.
-                 * Should not be modified externally.
+                 * Tracks number of distinct keys in the hash. Uninitialized until first queried.
+                 * (by either `.getKeys()` or `.getKeyCount()`), therefore it is safer to use its getter
+                 * method. Should not be modified externally.
                  * @type {number}
                  */
                 this.keyCount = items ? undefined : 0;
