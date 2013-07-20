@@ -164,6 +164,65 @@
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="keyCount"><span class="type-signature"></span>keyCount<span class="type-signature"> :number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Tracks number of distinct keys in the hash. Uninitialized until first queried.
+(by either `.getKeys()` or `.getKeyCount()`), therefore it is safer to use its getter
+method. Should not be modified externally.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Hash.html#keyCount">sntls.Hash#keyCount</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 47
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
         </dl>
     
     
@@ -796,7 +855,7 @@ of `.getFirstValue()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 49
+        <a href="Hash.js.html">data/Hash.js</a>, line 57
     </li></ul></dd>
     
     
@@ -893,7 +952,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 85
+        <a href="Hash.js.html">data/Hash.js</a>, line 111
     </li></ul></dd>
     
     
@@ -936,6 +995,100 @@ of `.getFirstKey()`.
 
         
     
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getKeyCount"><span class="type-signature"></span>getKeyCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves the number of keys in hash.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Hash.html#getKeyCount">sntls.Hash#getKeyCount</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 97
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var c = sntls.Hash.create({foo: 1, bar: 2});
+c.getKeyCount() // 2</code></pre>
+
     
 </dd>
 
@@ -989,7 +1142,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 65
+        <a href="Hash.js.html">data/Hash.js</a>, line 73
     </li></ul></dd>
     
     
@@ -1077,7 +1230,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 74
+        <a href="Hash.js.html">data/Hash.js</a>, line 86
     </li></ul></dd>
     
     
@@ -1728,7 +1881,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 101
+        <a href="Hash.js.html">data/Hash.js</a>, line 127
     </li></ul></dd>
     
     
@@ -1816,7 +1969,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 119
+        <a href="Hash.js.html">data/Hash.js</a>, line 145
     </li></ul></dd>
     
     
@@ -2052,7 +2205,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 141
+        <a href="Hash.js.html">data/Hash.js</a>, line 167
     </li></ul></dd>
     
     
@@ -2285,7 +2438,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 157
+        <a href="Hash.js.html">data/Hash.js</a>, line 183
     </li></ul></dd>
     
     
@@ -3208,7 +3361,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 778
+        <a href="Collection.js.html">data/Collection.js</a>, line 766
     </li></ul></dd>
     
     
@@ -3384,7 +3537,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 293
     </li></ul></dd>
     
     
@@ -3973,7 +4126,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 18 2013 16:03:59 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Jul 20 2013 16:07:38 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

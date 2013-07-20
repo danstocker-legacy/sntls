@@ -128,7 +128,8 @@ associated with values or arrays of values.
 <dd>
     
     <div class="description">
-        Reflects the number of values (with multiplicity) in the dictionary.
+        Tracks the number of distinct key-value pairs in the dictionary. Uninitialized until first queried
+(by `.getItemCount()`), therefore it is safer to use its getter instead.
 Should not be modified externally.
     </div>
     
@@ -156,7 +157,7 @@ Should not be modified externally.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 71
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 61
     </li></ul></dd>
     
     
@@ -168,11 +169,6 @@ Should not be modified externally.
 </dl>
 
     
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>sntls.Dictionary.create({foo:"bar",baz:[1,2]}).itemCount // 3 ("bar", 1, 2)</code></pre>
-
     
 </dd>
 
@@ -235,64 +231,6 @@ especially in `Hash`-based subclasses.
     
 </dd>
 
-        
-            
-<dt>
-    <h4 class="name" id="keyCount"><span class="type-signature"></span>keyCount<span class="type-signature"> :number</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Number of items in the dictionary. Equal to the number of keys.
-Should not be modified externally.
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 62
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>sntls.Dictionary.create({foo:"bar",baz:[1,2]}).keyCount // 2 (foo, baz)</code></pre>
-
-    
-</dd>
-
         </dl>
     
     
@@ -300,138 +238,6 @@ Should not be modified externally.
         <h3 class="subsection-title">Methods</h3>
         
         <dl>
-            
-<dt>
-    <h4 class="name" id="_countValues"><span class="type-signature">&lt;private, static> </span>_countValues<span class="signature">(dictionaryItems)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Counts values in dictionary.
-Since one item may hold multiple values, value count =/= item count.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>dictionaryItems</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Dictionary item buffer</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 32
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">number</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
             
 <dt>
     <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(<span class="optional">items</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Dictionary.html">sntls.Dictionary</a>}</span></h4>
@@ -578,6 +384,90 @@ Constructs a dictionary, initialized with the items passed in the optional argum
         
             
 <dt>
+    <h4 class="name" id="_countValues"><span class="type-signature">&lt;private> </span>_countValues<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Counts key-value pairs in dictionary.
+Since one item may hold multiple values, value count =/= key count.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 31
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="addItem"><span class="type-signature"></span>addItem<span class="signature">(key, value)</span><span class="type-signature"> &rarr; {<a href="sntls.Dictionary.html">sntls.Dictionary</a>}</span></h4>
     
     
@@ -693,7 +583,7 @@ Constructs a dictionary, initialized with the items passed in the optional argum
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 84
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 74
     </li></ul></dd>
     
     
@@ -858,7 +748,7 @@ All specified keys will be assigned each value listed in `value`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 133
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 127
     </li></ul></dd>
     
     
@@ -948,7 +838,7 @@ d.addItem(['foo', 'hello'], 'bar').items // {hello: ["world", "bar"], greetings:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 245
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 261
     </li></ul></dd>
     
     
@@ -1038,7 +928,7 @@ of `.getFirstValue()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 49
+        <a href="Hash.js.html">data/Hash.js</a>, line 57
     </li></ul></dd>
     
     
@@ -1135,7 +1025,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 85
+        <a href="Hash.js.html">data/Hash.js</a>, line 111
     </li></ul></dd>
     
     
@@ -1326,6 +1216,191 @@ TODO: make sure single key / array value returns a copy of the array
         
             
 <dt>
+    <h4 class="name" id="getItemCount"><span class="type-signature"></span>getItemCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves the number of items (key-value pairs) in the dictionary.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 250
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var d = sntls.Dictionary.create({
+    foo: 'bar',
+    hello: ['world', 'all', 'bar']
+}).getItemCount() // 4</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getKeyCount"><span class="type-signature"></span>getKeyCount<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves the number of keys in hash.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Hash.html#getKeyCount">sntls.Hash#getKeyCount</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 97
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var c = sntls.Hash.create({foo: 1, bar: 2});
+c.getKeyCount() // 2</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="getKeys"><span class="type-signature"></span>getKeys<span class="signature">()</span><span class="type-signature"> &rarr; {string[]}</span></h4>
     
     
@@ -1373,7 +1448,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 65
+        <a href="Hash.js.html">data/Hash.js</a>, line 73
     </li></ul></dd>
     
     
@@ -1461,7 +1536,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 74
+        <a href="Hash.js.html">data/Hash.js</a>, line 86
     </li></ul></dd>
     
     
@@ -1557,7 +1632,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 101
+        <a href="Hash.js.html">data/Hash.js</a>, line 127
     </li></ul></dd>
     
     
@@ -1645,7 +1720,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 119
+        <a href="Hash.js.html">data/Hash.js</a>, line 145
     </li></ul></dd>
     
     
@@ -1881,7 +1956,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 141
+        <a href="Hash.js.html">data/Hash.js</a>, line 167
     </li></ul></dd>
     
     
@@ -2114,7 +2189,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 157
+        <a href="Hash.js.html">data/Hash.js</a>, line 183
     </li></ul></dd>
     
     
@@ -2293,7 +2368,7 @@ will be removed from the dictionary.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 156
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 150
     </li></ul></dd>
     
     
@@ -2713,7 +2788,7 @@ When `value` is omitted, all items matching any of `keys` will be removed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 778
+        <a href="Collection.js.html">data/Collection.js</a>, line 766
     </li></ul></dd>
     
     
@@ -2889,7 +2964,7 @@ When `value` is omitted, all items matching any of `keys` will be removed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 277
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 293
     </li></ul></dd>
     
     
@@ -3478,7 +3553,7 @@ When `value` is omitted, all items matching any of `keys` will be removed.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 18 2013 16:03:57 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Jul 20 2013 16:07:37 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

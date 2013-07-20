@@ -72,7 +72,7 @@ troop.postpone(sntls, 'Collection', function () {
                 return function () {
                     var items = this.items,
                         result = items instanceof Array ? [] : {},
-                        itemKeys = Object.keys(items),
+                        itemKeys = this.getKeys(),
                         i, itemKey, item,
                         itemResult,
                         isChainable = true;
@@ -184,20 +184,6 @@ troop.postpone(sntls, 'Collection', function () {
                 return specifiedCollection;
             },
 
-            /**
-             * @param {object|Array} [items] Initial contents.
-             * @ignore
-             */
-            init: function (items) {
-                base.init.apply(this, arguments);
-
-                /**
-                 * Number of items in the collection. Writable, but not to be changed externally.
-                 * @type {Number}
-                 */
-                this.count = items ? Object.keys(items).length : 0;
-            },
-
             //////////////////////////////
             // Basic functions
 
@@ -228,8 +214,8 @@ troop.postpone(sntls, 'Collection', function () {
                 this.items[itemKey] = item;
 
                 // increasing count when new item was added
-                if (isNew) {
-                    this.count++;
+                if (isNew && typeof this.keyCount === 'number') {
+                    this.keyCount++;
                 }
 
                 return this;
@@ -246,7 +232,9 @@ troop.postpone(sntls, 'Collection', function () {
                     delete this.items[itemKey];
 
                     // decreasing count
-                    this.count--;
+                    if (typeof this.keyCount === 'number') {
+                        this.keyCount--;
+                    }
                 }
 
                 return this;
@@ -266,7 +254,7 @@ troop.postpone(sntls, 'Collection', function () {
                  * must be cloned in override methods
                  */
                 result.items = sntls.Utils.shallowCopy(this.items);
-                result.count = this.count;
+                result.keyCount = this.keyCount;
 
                 return result;
             },
@@ -289,7 +277,7 @@ troop.postpone(sntls, 'Collection', function () {
                 var result = /** @type sntls.Collection */ subClass.create();
 
                 result.items = this.items;
-                result.count = this.count;
+                result.keyCount = this.keyCount;
 
                 return result;
             },
@@ -349,7 +337,7 @@ troop.postpone(sntls, 'Collection', function () {
                 dessert.isString(prefix, "Invalid prefix");
 
                 var result = [],
-                    itemKeys = Object.keys(this.items),
+                    itemKeys = this.getKeys(),
                     i, itemKey;
 
                 for (i = 0; i &lt; itemKeys.length; i++) {
@@ -388,7 +376,7 @@ troop.postpone(sntls, 'Collection', function () {
              */
             getKeysByRegExp: function (regExp) {
                 var result = [],
-                    itemKeys = Object.keys(this.items),
+                    itemKeys = this.getKeys(),
                     i, itemKey;
 
                 for (i = 0; i &lt; itemKeys.length; i++) {
@@ -471,7 +459,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var items = this.items,
                     resultItems = items instanceof Array ? [] : {},
-                    itemKeys = Object.keys(items),
+                    itemKeys = this.getKeys(),
                     i, itemKey;
 
                 for (i = 0; i &lt; itemKeys.length; i++) {
@@ -496,7 +484,7 @@ troop.postpone(sntls, 'Collection', function () {
             getSortedValues: function (comparator) {
                 dessert.isFunctionOptional(comparator, "Invalid comparator function");
 
-                var keys = Object.keys(this.items).sort(comparator ? comparator.bind(this) : undefined),
+                var keys = this.getKeys().sort(comparator ? comparator.bind(this) : undefined),
                     result = [],
                     i;
 
@@ -526,7 +514,7 @@ troop.postpone(sntls, 'Collection', function () {
                 base.clear.call(this);
 
                 // resetting counter
-                this.count = 0;
+                this.keyCount = 0;
 
                 return this;
             },
@@ -554,7 +542,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isObjectOptional(context, "Invalid context");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     i, itemKey, item;
 
                 for (i = 0; i &lt; keys.length; i++) {
@@ -587,7 +575,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isFunctionOptional(comparator, "Invalid comparator function");
 
                 var items = this.items,
-                    keys = Object.keys(items).sort(comparator ? comparator.bind(this) : undefined),
+                    keys = this.getKeys().sort(comparator ? comparator.bind(this) : undefined),
                     i, itemKey, item;
 
                 for (i = 0; i &lt; keys.length; i++) {
@@ -619,7 +607,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey, mappedKey, item;
 
@@ -656,7 +644,7 @@ troop.postpone(sntls, 'Collection', function () {
                     .isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item;
 
@@ -681,7 +669,7 @@ troop.postpone(sntls, 'Collection', function () {
                 dessert.isCollectionOptional(subClass, "Invalid collection subclass");
 
                 var items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey;
 
@@ -711,7 +699,7 @@ troop.postpone(sntls, 'Collection', function () {
             passEachItemTo: function (handler, context, argIndex) {
                 var args = slice.call(arguments, 3),
                     items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey;
 
@@ -756,7 +744,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var args = slice.call(arguments, 1),
                     items = this.items,
-                    keys = Object.keys(items),
+                    keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
                     i, itemKey, item,
                     itemMethod, itemResult,
@@ -829,7 +817,7 @@ troop.postpone(sntls, 'Collection', function () {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jul 18 2013 16:03:56 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Jul 20 2013 16:07:35 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
