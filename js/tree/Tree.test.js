@@ -57,13 +57,17 @@
     });
 
     test("Safe node retrieval", function () {
+        expect(4);
+
         var tree = sntls.Tree.create({
                 hello: "world"
             }),
             path = 'foo>bar'.toPath(),
             result;
 
-        result = tree.getSafeNode(path);
+        result = tree.getSafeNode(path, function (path) {
+            equal(path.toString(), 'foo>bar', "Affected path");
+        });
 
         deepEqual(tree.items, {
             hello: "world",
@@ -104,6 +108,8 @@
     });
 
     test("Getting or setting node", function () {
+        expect(4);
+
         var json = {
                 foo: {
                     bar: "Hello world!"
@@ -120,6 +126,8 @@
 
         result = tree.getOrSetNode('hello>world'.toPath(), function () {
             return [];
+        }, function (path) {
+            equal(path.toString(), 'hello>world', "Affected path");
         });
 
         deepEqual(result, [], "New value generated for new path");
@@ -152,6 +160,8 @@
     });
 
     test("Key deletion from object", function () {
+        expect(3);
+
         var tree = sntls.Tree.create({
                 foo: {
                     bar: "Hello world!"
@@ -159,23 +169,31 @@
             }),
             result;
 
-        result = tree.unsetKey('foo>bar'.toPath());
+        result = tree.unsetKey('foo>bar'.toPath(), false, function (path) {
+            equal(path.toString(), 'foo>bar', "Affected path");
+        });
 
         strictEqual(result, tree, "Tree.unsetKey is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
     });
 
     test("Key deletion from array", function () {
+        expect(5);
+
         var tree = sntls.Tree.create({
             foo: {
                 bar: ['hello', 'all', 'the', 'world']
             }
         });
 
-        tree.unsetKey('foo>bar>2'.toPath());
+        tree.unsetKey('foo>bar>2'.toPath(), false, function (path) {
+            equal(path.toString(), 'foo>bar>2', "Affected path");
+        });
         deepEqual(tree.items, {foo: {bar: ['hello', 'all', undefined, 'world']}}, "Node deleted");
 
-        tree.unsetKey('foo>bar>2'.toPath(), true);
+        tree.unsetKey('foo>bar>2'.toPath(), true, function (path) {
+            equal(path.toString(), 'foo>bar', "Affected path");
+        });
         deepEqual(tree.items, {foo: {bar: ['hello', 'all', 'world']}}, "Node spliced out");
 
         tree.unsetKey('foo>bar>2'.toPath(), true);
@@ -183,6 +201,8 @@
     });
 
     test("Path deletion in objects", function () {
+        expect(7);
+
         var tree = sntls.Tree.create({
                 a: {d: {}, e: {}, f: {
                     g: {}, h: {
@@ -212,7 +232,9 @@
             "First path removed"
         );
 
-        tree.unsetPath('a>f>h>i>j>k>m'.toPath());
+        tree.unsetPath('a>f>h>i>j>k>m'.toPath(), false, function (path) {
+            equal(path.toString(), 'a>f>h', "Affected path");
+        });
         deepEqual(
             tree.items,
             {

@@ -53,19 +53,26 @@ troop.postpone(sntls, 'Tree', function () {
              * when the path does not exist, creates path and
              * assigns an empty object.
              * @param {sntls.Path} path
+             * @param {function} [handler] Callback receiving the path and value affected by change.
              * @returns {object}
              */
-            getSafeNode: function (path) {
+            getSafeNode: function (path, handler) {
                 var asArray = path.asArray,
+                    hasChanged = false,
                     result = this.items,
                     i, key;
 
                 for (i = 0; i < asArray.length; i++) {
                     key = asArray[i];
                     if (typeof result[key] !== 'object') {
+                        hasChanged = true;
                         result[key] = {};
                     }
                     result = result[key];
+                }
+
+                if (hasChanged && handler) {
+                    handler(path);
                 }
 
                 return result;
@@ -74,10 +81,11 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Retrieves safe value at path, wrapped in a hash.
              * @param {sntls.Path} path
+             * @param {function} [handler] Callback receiving the path affected by change.
              * @returns {sntls.Hash}
              */
-            getSafeNodeAsHash: function (path) {
-                return Hash.create(this.getSafeNode(path));
+            getSafeNodeAsHash: function (path, handler) {
+                return Hash.create(this.getSafeNode(path, handler));
             },
 
             /**
@@ -102,18 +110,23 @@ troop.postpone(sntls, 'Tree', function () {
              * assigns the return value of the generator.
              * @param {sntls.Path} path Path to node
              * @param {function} generator Generator function returning value
+             * @param {function} [handler] Callback receiving the path affected by change.
              * @returns {*}
              */
-            getOrSetNode: function (path, generator) {
-                var node = this.getSafeNode(path.clone().trim()),
+            getOrSetNode: function (path, generator, handler) {
+                var parentPath = path.clone().trim(),
+                    targetParent = this.getSafeNode(parentPath),
                     asArray = path.asArray,
-                    lastKey = asArray[asArray.length - 1];
+                    targetKey = asArray[asArray.length - 1];
 
-                if (!node.hasOwnProperty(lastKey)) {
-                    node[lastKey] = generator();
+                if (!targetParent.hasOwnProperty(targetKey)) {
+                    targetParent[targetKey] = generator();
+                    if (handler) {
+                        handler(path);
+                    }
                 }
 
-                return node[lastKey];
+                return targetParent[targetKey];
             },
 
             /**
@@ -136,19 +149,29 @@ troop.postpone(sntls, 'Tree', function () {
              * Removes key from the specified path.
              * @param {sntls.Path} path Path to node
              * @param {boolean} [splice=false] Whether to use splice when removing key from array.
+             * @param {function} [handler] Callback receiving the path affected by change.
              * @returns {sntls.Tree}
              */
-            unsetKey: function (path, splice) {
+            unsetKey: function (path, splice, handler) {
                 var asArray = path.asArray,
-                    targetParent = this.getSafeNode(path.clone().trim()),
+                    parentPath = path.clone().trim(),
+                    targetParent = this.getSafeNode(parentPath),
                     targetKey = asArray[asArray.length - 1];
 
                 if (splice && targetParent instanceof Array) {
                     // removing marked node by splicing it out of array
                     targetParent.splice(targetKey, 1);
+                    if (handler) {
+                        // entire parent changed
+                        handler(parentPath);
+                    }
                 } else {
                     // deleting marked node
                     delete targetParent[targetKey];
+                    if (handler) {
+                        // only leaf node changed
+                        handler(path);
+                    }
                 }
 
                 return this;
@@ -159,9 +182,10 @@ troop.postpone(sntls, 'Tree', function () {
              * other than the one specified by the path.
              * @param {sntls.Path} path Datastore path
              * @param {boolean} [splice=false] Whether to use splice when removing key from array.
+             * @param {function} [handler] Callback receiving the path affected by change.
              * @returns {sntls.Tree}
              */
-            unsetPath: function (path, splice) {
+            unsetPath: function (path, splice, handler) {
                 var asArray = path.asArray,
                     parentNode = null, // parent node of current node
                     parentNodeSingle, // whether parent node has one child
@@ -170,6 +194,7 @@ troop.postpone(sntls, 'Tree', function () {
                     currentNodeSingle, // whether current node has one child
                     i, nextKey, // next key to be processed within current node
 
+                    targetLevel, // position of target key in path
                     targetParent, // parent node in which to delete
                     targetKey; // key in parent node to be deleted
 
@@ -183,12 +208,14 @@ troop.postpone(sntls, 'Tree', function () {
                         if (!parentNodeSingle) {
                             // ...but parent had more
                             // marking current node for deletion
+                            targetLevel = i;
                             targetKey = currentKey;
                             targetParent = parentNode;
                         }
                     } else {
                         // current node has more than one child
                         // marking next node for deletion
+                        targetLevel = i + 1;
                         targetKey = nextKey;
                         targetParent = currentNode;
                     }
@@ -206,6 +233,11 @@ troop.postpone(sntls, 'Tree', function () {
                 } else {
                     // deleting marked node
                     delete targetParent[targetKey];
+                }
+
+                if (handler) {
+                    // calling handler with affected path
+                    handler(asArray.slice(0, targetLevel).toPath());
                 }
 
                 return this;
