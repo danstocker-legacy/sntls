@@ -57,7 +57,7 @@
     });
 
     test("Safe node retrieval", function () {
-        expect(4);
+        expect(5);
 
         var tree = sntls.Tree.create({
                 hello: "world"
@@ -65,8 +65,9 @@
             path = 'foo>bar'.toPath(),
             result;
 
-        result = tree.getSafeNode(path, function (path) {
+        result = tree.getSafeNode(path, function (path, value) {
             equal(path.toString(), 'foo>bar', "Affected path");
+            deepEqual(value, {}, "Affected value");
         });
 
         deepEqual(tree.items, {
@@ -108,7 +109,7 @@
     });
 
     test("Getting or setting node", function () {
-        expect(4);
+        expect(5);
 
         var json = {
                 foo: {
@@ -126,8 +127,9 @@
 
         result = tree.getOrSetNode('hello>world'.toPath(), function () {
             return [];
-        }, function (path) {
+        }, function (path, value) {
             equal(path.toString(), 'hello>world', "Affected path");
+            deepEqual(value, [], "Affected value");
         });
 
         deepEqual(result, [], "New value generated for new path");

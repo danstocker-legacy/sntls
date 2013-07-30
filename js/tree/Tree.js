@@ -72,7 +72,7 @@ troop.postpone(sntls, 'Tree', function () {
                 }
 
                 if (hasChanged && handler) {
-                    handler(path);
+                    handler(path, result);
                 }
 
                 return result;
@@ -110,23 +110,26 @@ troop.postpone(sntls, 'Tree', function () {
              * assigns the return value of the generator.
              * @param {sntls.Path} path Path to node
              * @param {function} generator Generator function returning value
-             * @param {function} [handler] Callback receiving the path affected by change.
+             * @param {function} [handler] Callback receiving the path and value affected by change.
              * @returns {*}
              */
             getOrSetNode: function (path, generator, handler) {
                 var parentPath = path.clone().trim(),
                     targetParent = this.getSafeNode(parentPath),
                     asArray = path.asArray,
-                    targetKey = asArray[asArray.length - 1];
+                    targetKey = asArray[asArray.length - 1],
+                    result;
 
-                if (!targetParent.hasOwnProperty(targetKey)) {
-                    targetParent[targetKey] = generator();
+                if (targetParent.hasOwnProperty(targetKey)) {
+                    result = targetParent[targetKey];
+                } else {
+                    result = targetParent[targetKey] = generator();
                     if (handler) {
-                        handler(path);
+                        handler(path, result);
                     }
                 }
 
-                return targetParent[targetKey];
+                return result;
             },
 
             /**
