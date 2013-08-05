@@ -570,7 +570,7 @@ troop.postpone(sntls, 'Collection', function () {
              * @param {function} [conflictResolver] Optional callback that resolves key conflicts.
              * Takes conflicting values and the mapped key associated with them.
              * @param {sntls.Collection} [subClass] Optional collection subclass for the output.
-             * @return {sntls.Collection}
+             * @return {sntls.Collection} New collection with mapped keys.
              */
             mapKeys: function (mapper, context, conflictResolver, subClass) {
                 dessert
@@ -581,7 +581,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 var items = this.items,
                     keys = this.getKeys(),
-                    resultItems = items instanceof Array ? [] : {},
+                    resultItems = {},
                     i, itemKey, mappedKey, item;
 
                 for (i = 0; i < keys.length; i++) {
