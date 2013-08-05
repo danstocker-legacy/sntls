@@ -131,7 +131,7 @@
             3: '!'
         });
 
-        result = hash.changeBufferType(Array);
+        result = hash.changeBufferTypeTo(Array);
 
         strictEqual(result, hash, "Buffer change is chainable");
         deepEqual(
@@ -141,7 +141,7 @@
         );
         equal(typeof hash.keyCount, 'undefined', "Key count reset");
 
-        hash.changeBufferType(Object);
+        hash.changeBufferTypeTo(Object);
 
         deepEqual(
             hash.items,

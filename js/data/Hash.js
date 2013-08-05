@@ -151,10 +151,10 @@ troop.postpone(sntls, 'Hash', function () {
              * Changes the current hash instance!
              * @param {function} bufferType=Object `Array` or `Object`, specifying new buffer type.
              * @example
-             * sntls.Hash.create({0: 'foo', 1: 'bar'}).changeBufferType
+             * sntls.Hash.create({0: 'foo', 1: 'bar'}).changeBufferTypeTo(Array).items // ['foo', 'bar']
              * @returns {sntls.Hash}
              */
-            changeBufferType: function (bufferType) {
+            changeBufferTypeTo: function (bufferType) {
                 if (!this.items instanceof bufferType) {
                     return this;
                 }
