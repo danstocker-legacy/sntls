@@ -374,6 +374,148 @@ method. Should not be modified externally.
         
             
 <dt>
+    <h4 class="name" id="changeBufferTypeTo"><span class="type-signature"></span>changeBufferTypeTo<span class="signature">(bufferType=Object)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Changes buffer type from Object to Array or vice versa.
+Changes the current hash instance!
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>bufferType=Object</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">`Array` or `Object`, specifying new buffer type.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Hash.html#changeBufferTypeTo">sntls.Hash#changeBufferTypeTo</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 157
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Hash.html">sntls.Hash</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>sntls.Hash.create({0: 'foo', 1: 'bar'}).changeBufferTypeTo(Array).items // ['foo', 'bar']</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
     
     
@@ -421,7 +563,7 @@ Observes current buffer type, ie. if hash was array based, the new buffer will b
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 154
+        <a href="Hash.js.html">data/Hash.js</a>, line 185
     </li></ul></dd>
     
     
@@ -1201,7 +1343,7 @@ is not deterministic.
         
             
 <dt>
-    <h4 class="name" id="getOrSetNode"><span class="type-signature"></span>getOrSetNode<span class="signature">(path, generator)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="getOrSetNode"><span class="type-signature"></span>getOrSetNode<span class="signature">(path, generator, <span class="optional">handler</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
     
     
 </dt>
@@ -1233,6 +1375,8 @@ assigns the return value of the generator.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
+		
 		
 		
 		
@@ -1258,6 +1402,14 @@ assigns the return value of the generator.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
             
             
             
@@ -1281,10 +1433,51 @@ assigns the return value of the generator.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
             
             
             
             <td class="description last">Generator function returning value</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Callback receiving the path and value affected by change.</td>
         </tr>
 	
 	
@@ -1315,7 +1508,7 @@ assigns the return value of the generator.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 107
+        <a href="Tree.js.html">tree/Tree.js</a>, line 116
     </li></ul></dd>
     
     
@@ -1357,7 +1550,7 @@ assigns the return value of the generator.
         
             
 <dt>
-    <h4 class="name" id="getSafeNode"><span class="type-signature"></span>getSafeNode<span class="signature">(path)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="getSafeNode"><span class="type-signature"></span>getSafeNode<span class="signature">(path, <span class="optional">handler</span>)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -1389,6 +1582,8 @@ assigns an empty object.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
+		
 		
 		
 		
@@ -1414,10 +1609,51 @@ assigns an empty object.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
             
             
             
             <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Callback receiving the path and value affected by change.</td>
         </tr>
 	
 	
@@ -1448,7 +1684,7 @@ assigns an empty object.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 58
+        <a href="Tree.js.html">tree/Tree.js</a>, line 59
     </li></ul></dd>
     
     
@@ -1490,7 +1726,7 @@ assigns an empty object.
         
             
 <dt>
-    <h4 class="name" id="getSafeNodeAsHash"><span class="type-signature"></span>getSafeNodeAsHash<span class="signature">(path)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
+    <h4 class="name" id="getSafeNodeAsHash"><span class="type-signature"></span>getSafeNodeAsHash<span class="signature">(path, <span class="optional">handler</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
     
     
 </dt>
@@ -1520,6 +1756,8 @@ assigns an empty object.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
+		
 		
 		
 		
@@ -1545,10 +1783,51 @@ assigns an empty object.
             </td>
             
             
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
             
             
             
             <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Callback receiving the path affected by change.</td>
         </tr>
 	
 	
@@ -1579,7 +1858,7 @@ assigns an empty object.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 79
+        <a href="Tree.js.html">tree/Tree.js</a>, line 87
     </li></ul></dd>
     
     
@@ -1992,7 +2271,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 167
+        <a href="Hash.js.html">data/Hash.js</a>, line 198
     </li></ul></dd>
     
     
@@ -2225,7 +2504,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 183
+        <a href="Hash.js.html">data/Hash.js</a>, line 214
     </li></ul></dd>
     
     
@@ -2360,7 +2639,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 276
+        <a href="Tree.js.html">tree/Tree.js</a>, line 311
     </li></ul></dd>
     
     
@@ -2491,7 +2770,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 296
+        <a href="Tree.js.html">tree/Tree.js</a>, line 331
     </li></ul></dd>
     
     
@@ -2622,7 +2901,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 334
+        <a href="Tree.js.html">tree/Tree.js</a>, line 369
     </li></ul></dd>
     
     
@@ -2753,7 +3032,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 354
+        <a href="Tree.js.html">tree/Tree.js</a>, line 389
     </li></ul></dd>
     
     
@@ -2884,7 +3163,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 305
+        <a href="Tree.js.html">tree/Tree.js</a>, line 340
     </li></ul></dd>
     
     
@@ -3015,7 +3294,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 325
+        <a href="Tree.js.html">tree/Tree.js</a>, line 360
     </li></ul></dd>
     
     
@@ -3146,7 +3425,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 363
+        <a href="Tree.js.html">tree/Tree.js</a>, line 398
     </li></ul></dd>
     
     
@@ -3277,7 +3556,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 383
+        <a href="Tree.js.html">tree/Tree.js</a>, line 418
     </li></ul></dd>
     
     
@@ -3408,7 +3687,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 248
+        <a href="Tree.js.html">tree/Tree.js</a>, line 283
     </li></ul></dd>
     
     
@@ -3539,7 +3818,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 267
+        <a href="Tree.js.html">tree/Tree.js</a>, line 302
     </li></ul></dd>
     
     
@@ -3693,7 +3972,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 89
+        <a href="Tree.js.html">tree/Tree.js</a>, line 97
     </li></ul></dd>
     
     
@@ -4545,7 +4824,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 160
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 149
     </li></ul></dd>
     
     
@@ -4633,7 +4912,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 408
+        <a href="Tree.js.html">tree/Tree.js</a>, line 443
     </li></ul></dd>
     
     
@@ -4765,7 +5044,7 @@ unless interrupted by returning false from handler.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 234
+        <a href="Tree.js.html">tree/Tree.js</a>, line 269
     </li></ul></dd>
     
     
@@ -4919,7 +5198,7 @@ unless interrupted by returning false from handler.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 220
+        <a href="Tree.js.html">tree/Tree.js</a>, line 255
     </li></ul></dd>
     
     
@@ -4961,7 +5240,7 @@ unless interrupted by returning false from handler.
         
             
 <dt>
-    <h4 class="name" id="unsetKey"><span class="type-signature"></span>unsetKey<span class="signature">(path, <span class="optional">splice</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Tree.html">sntls.Tree</a>}</span></h4>
+    <h4 class="name" id="unsetKey"><span class="type-signature"></span>unsetKey<span class="signature">(path, <span class="optional">splice</span>, <span class="optional">handler</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Tree.html">sntls.Tree</a>}</span></h4>
     
     
 </dt>
@@ -5078,6 +5357,43 @@ unless interrupted by returning false from handler.
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Callback receiving the path affected by change.</td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -5105,7 +5421,7 @@ unless interrupted by returning false from handler.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 141
+        <a href="Tree.js.html">tree/Tree.js</a>, line 158
     </li></ul></dd>
     
     
@@ -5237,7 +5553,7 @@ the node will be overwritten with an undefined value.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 125
+        <a href="Tree.js.html">tree/Tree.js</a>, line 141
     </li></ul></dd>
     
     
@@ -5279,7 +5595,7 @@ the node will be overwritten with an undefined value.
         
             
 <dt>
-    <h4 class="name" id="unsetPath"><span class="type-signature"></span>unsetPath<span class="signature">(path, <span class="optional">splice</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Tree.html">sntls.Tree</a>}</span></h4>
+    <h4 class="name" id="unsetPath"><span class="type-signature"></span>unsetPath<span class="signature">(path, <span class="optional">splice</span>, <span class="optional">handler</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Tree.html">sntls.Tree</a>}</span></h4>
     
     
 </dt>
@@ -5397,6 +5713,43 @@ other than the one specified by the path.
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">Callback receiving the path affected by change.</td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -5424,7 +5777,7 @@ other than the one specified by the path.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 164
+        <a href="Tree.js.html">tree/Tree.js</a>, line 191
     </li></ul></dd>
     
     
@@ -5485,7 +5838,7 @@ other than the one specified by the path.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Jul 20 2013 16:07:41 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Aug 05 2013 09:48:21 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
