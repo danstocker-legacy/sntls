@@ -121,6 +121,39 @@
         );
     });
 
+    test("Buffer type change", function () {
+        var hash,
+            result;
+
+        hash = sntls.Hash.create({
+            0: 'hello',
+            1: 'world',
+            3: '!'
+        });
+
+        result = hash.changeBufferType(Array);
+
+        strictEqual(result, hash, "Buffer change is chainable");
+        deepEqual(
+            hash.items,
+            ['hello', 'world', undefined, '!'],
+            "Buffer converted to array"
+        );
+        equal(typeof hash.keyCount, 'undefined', "Key count reset");
+
+        hash.changeBufferType(Object);
+
+        deepEqual(
+            hash.items,
+            {
+                0: 'hello',
+                1: 'world',
+                3: '!'
+            },
+            "Buffer converted to object"
+        );
+    });
+
     test("Clearing", function () {
         var hash,
             result;

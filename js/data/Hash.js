@@ -147,6 +147,37 @@ troop.postpone(sntls, 'Hash', function () {
             },
 
             /**
+             * Changes buffer type from Object to Array or vice versa.
+             * Changes the current hash instance!
+             * @param {function} bufferType=Object `Array` or `Object`, specifying new buffer type.
+             * @example
+             * sntls.Hash.create({0: 'foo', 1: 'bar'}).changeBufferType
+             * @returns {sntls.Hash}
+             */
+            changeBufferType: function (bufferType) {
+                if (!this.items instanceof bufferType) {
+                    return this;
+                }
+
+                var items = this.items,
+                    buffer = bufferType === Array ? [] : {},
+                    keys = Object.keys(items),
+                    i, key;
+
+                // adding items to new buffer
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    buffer[key] = items[key];
+                }
+
+                // setting new buffer and resetting key count
+                this.items = buffer;
+                this.keyCount = undefined;
+
+                return this;
+            },
+
+            /**
              * Clears hash by replacing items buffer with an empty one.
              * Observes current buffer type, ie. if hash was array based, the new buffer will be also array.
              * @returns {sntls.Hash}
