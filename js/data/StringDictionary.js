@@ -75,21 +75,10 @@ troop.postpone(sntls, 'StringDictionary', function () {
              *  hello: ['world', 'all', 'bar']
              * });
              * d.reverse().items // {bar: ["foo", "hello"], world: "hello", all: "hello"}
-             *
-             * d = sntls.StringDictionary.create({
-             *  foo: 1,
-             *  hello: [2, 0]
-             * });
-             * d.reverse(Array).items // ['hello', 'foo', 'hello']
-             * @param {function} [bufferType=Object] `Array` or `Object`, specifying the buffer type for the reversed
-             * dictionary. Specify `Array` here when you're reverting a dictionary with all-numeric values, and want
-             * to treat the result as an array.
              * @returns {sntls.StringDictionary} New dictionary instance with reversed key-value pairs.
              */
-            reverse: function (bufferType) {
-                dessert.isFunctionOptional(bufferType, "Invalid buffer type");
-
-                var resultBuffer = bufferType === Array ? [] : {},
+            reverse: function () {
+                var resultBuffer = {},
                     result = this.getBase().create(resultBuffer),
                     keys = this.getKeys(),
                     i, key, value;

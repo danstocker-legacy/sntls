@@ -160,24 +160,6 @@
         );
     });
 
-    test("Reversal with buffer type", function () {
-        var dict = StringDictionary.create({
-            foo  : 1,
-            moo  : 2,
-            hello: [3, 4, 0]
-        });
-
-        raises(function () {
-            dict.reverse('foo');
-        }, "Invalid buffer type");
-
-        deepEqual(
-            dict.reverse(Array).items,
-            ['hello', 'foo', 'moo', 'hello', 'hello'],
-            "Reversed dictionary is array"
-        );
-    });
-
     test("Integration", function () {
         deepEqual(
             StringDictionary.create({
