@@ -4,24 +4,43 @@
 
     module("Collection");
 
-    test("Method names", function () {
+    test("Object method names", function () {
         deepEqual(
-            sntls.Collection._getMethodNames({foo: function () {}, bar: "hello"}),
+            sntls.Collection._getObjectMethodNames({foo: function () {}, bar: "hello"}),
             ['foo'],
             "Gets method names from object (ES5)"
         );
 
         // adding user-defined, enumerable method to built-in type
-        // _getMethodNames should retrieve those AND built-in method names
+        // _getObjectMethodNames should retrieve those AND built-in method names
         Boolean.prototype.sntlsTest = function () {};
 
         if (!troop.Feature.hasPropertyAttributes()) {
             deepEqual(
-                sntls.Collection._getMethodNames(Boolean.prototype).sort(), // boolean is used b/c of the brevity of its method list
+                sntls.Collection._getObjectMethodNames(Boolean.prototype).sort(), // boolean is used b/c of the brevity of its method list
                 ["sntlsTest", "toString", "valueOf"],
                 "ES3 general purpose object proto"
             );
         }
+
+        delete Boolean.prototype.sntlsTest;
+    });
+
+    test("Class method names", function () {
+        var MyClass = troop.Base.extend()
+            .addMethods({
+                foo: function () {}
+            })
+            .extend()
+            .addMethods({
+                bar: function () {}
+            });
+
+        deepEqual(
+            sntls.Collection._getClassMethodNames(MyClass).sort(),
+            ['foo', 'bar'].concat(Object.getOwnPropertyNames(troop.Base)).sort(),
+            "Gets method names from class"
+        );
     });
 
     test("Shortcuts", function () {
@@ -119,6 +138,31 @@
             collection,
             "Generated collection method chainable for chainable item methods"
         );
+    });
+
+    test("Sp. collection of extended class", function () {
+        var result = [],
+            MyClass = troop.Base.extend()
+                .addMethods({
+                    init: function () {},
+                    foo : function () {
+                        result.push('foo');
+                    }
+                })
+                .extend()
+                .addMethods({
+                    bar: function () {
+                        result.push('bar');
+                    }
+                }),
+            MyCollection = sntls.Collection.of(MyClass),
+            collection = MyCollection.create({0: MyClass.create()});
+
+        collection.foo();
+        deepEqual(result, ['foo'], "Base class method called");
+
+        collection.bar();
+        deepEqual(result, ['foo', 'bar'], "Class method called");
     });
 
     test("Method conflicts (sp. coll)", function () {

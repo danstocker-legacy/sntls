@@ -4,6 +4,7 @@ troop.postpone(sntls, 'Collection', function () {
 
     var hOP = Object.prototype.hasOwnProperty,
         slice = Array.prototype.slice,
+        validators = dessert.validators,
         base = sntls.Hash,
         self = base.extend();
 
@@ -70,17 +71,37 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Retrieves property names from object and returns an array for those that are functions.
+             * Retrieves all method names from plain object.
+             * Deals with non-enumerable nature of built-ins' methods.
              * @param {object} obj
              * @returns {string[]}
              * @private
              */
-            _getMethodNames: function (obj) {
+            _getObjectMethodNames: function (obj) {
                 var propertyNames = Object.getOwnPropertyNames(obj),
                     methodNames = [],
                     i, propertyName;
                 for (i = 0; i < propertyNames.length; i++) {
                     propertyName = propertyNames[i];
+                    if (typeof obj[propertyName] === 'function') {
+                        methodNames.push(propertyName);
+                    }
+                }
+                return methodNames;
+            },
+
+            /**
+             * Retrieves all accessible method names from Troop classes.
+             * @param {object} obj
+             * @returns {string[]}
+             * @private
+             */
+            _getClassMethodNames: function (obj) {
+                /*jshint forin:false */
+                var methodNames = [],
+                    propertyName;
+                // iterating over all accessible properties, event inherited ones
+                for (propertyName in obj) {
                     if (typeof obj[propertyName] === 'function') {
                         methodNames.push(propertyName);
                     }
@@ -123,14 +144,13 @@ troop.postpone(sntls, 'Collection', function () {
                 // in case methodNames is a fat constructor
                 if (typeof template === 'function') {
                     template = template.prototype;
-                } else if (dessert.validators.isClass(template)) {
-                    template = sntls.Utils.shallowCopy(template.getTarget());
-                    delete template.init;
                 }
 
                 var methodNames;
-                if (dessert.validators.isObject(template)) {
-                    methodNames = this._getMethodNames(template);
+                if (validators.isClass(template)) {
+                    methodNames = this._getClassMethodNames(template);
+                } else if (validators.isObject(template)) {
+                    methodNames = this._getObjectMethodNames(template);
                 } else {
                     dessert.isArray(template, "Invalid collection template");
                     methodNames = template;
