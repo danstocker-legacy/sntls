@@ -134,10 +134,12 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetNode: function (path) {
-                var targetParent = this.getSafeNode(path.clone().trim()),
-                    targetKey = path.getLastKey();
+                var targetParent = this.getNode(path.clone().trim());
 
-                targetParent[targetKey] = undefined;
+                if (targetParent instanceof Object) {
+                    // concerns existing parent nodes only
+                    targetParent[path.getLastKey()] = undefined;
+                }
 
                 return this;
             },
@@ -151,22 +153,24 @@ troop.postpone(sntls, 'Tree', function () {
              */
             unsetKey: function (path, splice, handler) {
                 var parentPath = path.clone().trim(),
-                    targetParent = this.getSafeNode(parentPath),
-                    targetKey = path.getLastKey();
+                    targetParent = this.getNode(parentPath);
 
-                if (splice && targetParent instanceof Array) {
-                    // removing marked node by splicing it out of array
-                    targetParent.splice(targetKey, 1);
-                    if (handler) {
-                        // entire parent changed
-                        handler(parentPath, targetParent);
-                    }
-                } else {
-                    // deleting marked node
-                    delete targetParent[targetKey];
-                    if (handler) {
-                        // only leaf node changed
-                        handler(path);
+                if (targetParent instanceof Object) {
+                    // concerns existing parent nodes only
+                    if (splice && targetParent instanceof Array) {
+                        // removing marked node by splicing it out of array
+                        targetParent.splice(path.getLastKey(), 1);
+                        if (handler) {
+                            // entire parent changed
+                            handler(parentPath, targetParent);
+                        }
+                    } else {
+                        // deleting marked node
+                        delete targetParent[path.getLastKey()];
+                        if (handler) {
+                            // only leaf node changed
+                            handler(path);
+                        }
                     }
                 }
 
