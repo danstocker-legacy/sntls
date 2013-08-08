@@ -162,7 +162,7 @@
     });
 
     test("Key deletion from object", function () {
-        expect(3);
+        expect(4);
 
         var tree = sntls.Tree.create({
                 foo: {
@@ -171,8 +171,9 @@
             }),
             result;
 
-        result = tree.unsetKey('foo>bar'.toPath(), false, function (path) {
+        result = tree.unsetKey('foo>bar'.toPath(), false, function (path, value) {
             equal(path.toString(), 'foo>bar', "Affected path");
+            equal(typeof value, 'undefined', "Affected value undefined");
         });
 
         strictEqual(result, tree, "Tree.unsetKey is chainable");
@@ -180,7 +181,7 @@
     });
 
     test("Key deletion from array", function () {
-        expect(5);
+        expect(7);
 
         var tree = sntls.Tree.create({
             foo: {
@@ -188,13 +189,15 @@
             }
         });
 
-        tree.unsetKey('foo>bar>2'.toPath(), false, function (path) {
+        tree.unsetKey('foo>bar>2'.toPath(), false, function (path, value) {
             equal(path.toString(), 'foo>bar>2', "Affected path");
+            equal(typeof value, 'undefined', "Affected value undefined");
         });
         deepEqual(tree.items, {foo: {bar: ['hello', 'all', undefined, 'world']}}, "Node deleted");
 
-        tree.unsetKey('foo>bar>2'.toPath(), true, function (path) {
+        tree.unsetKey('foo>bar>2'.toPath(), true, function (path, value) {
             equal(path.toString(), 'foo>bar', "Affected path");
+            deepEqual(value, ['hello', 'all', 'world'], "Affected value undefined");
         });
         deepEqual(tree.items, {foo: {bar: ['hello', 'all', 'world']}}, "Node spliced out");
 
@@ -203,7 +206,7 @@
     });
 
     test("Path deletion in objects", function () {
-        expect(7);
+        expect(8);
 
         var tree = sntls.Tree.create({
                 a: {d: {}, e: {}, f: {
@@ -234,8 +237,9 @@
             "First path removed"
         );
 
-        tree.unsetPath('a>f>h>i>j>k>m'.toPath(), false, function (path) {
+        tree.unsetPath('a>f>h>i>j>k>m'.toPath(), false, function (path, value) {
             equal(path.toString(), 'a>f>h', "Affected path");
+            equal(typeof value, 'undefined', "Affected value");
         });
         deepEqual(
             tree.items,
@@ -282,6 +286,8 @@
     });
 
     test("Path deletion in arrays", function () {
+        expect(10);
+
         var tree = sntls.Tree.create([
             [1, 2, 3],
             [4, 5],
@@ -291,7 +297,10 @@
             ]
         ]);
 
-        tree.unsetPath([1, 1].toPath());
+        tree.unsetPath([1, 1].toPath(), false, function (path, value) {
+            equal(path.toString(), '1>1', "Affected path");
+            equal(typeof value, 'undefined', "Affected value");
+        });
         deepEqual(
             tree.items,
             [
@@ -305,7 +314,16 @@
             "Path deleted from array"
         );
 
-        tree.unsetPath([1, 0].toPath(), true);
+        tree.unsetPath([1, 0].toPath(), true, function (/**sntls.Path*/path, value) {
+            equal(path.asArray.length, 0, "Affected path");
+            deepEqual(value, [
+                [1, 2, 3],
+                [
+                    [6, 7],
+                    8
+                ]
+            ], "Affected value");
+        });
         deepEqual(
             tree.items,
             [
@@ -318,7 +336,10 @@
             "Path spliced out from array"
         );
 
-        tree.unsetPath([1, 0, 0].toPath(), true);
+        tree.unsetPath([1, 0, 0].toPath(), true, function (path, value) {
+            equal(path.toString(), '1>0', "Affected path");
+            deepEqual(value, [7], "Affected value");
+        });
         deepEqual(
             tree.items,
             [

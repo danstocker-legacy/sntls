@@ -166,7 +166,7 @@ troop.postpone(sntls, 'Tree', function () {
                     targetParent.splice(targetKey, 1);
                     if (handler) {
                         // entire parent changed
-                        handler(parentPath);
+                        handler(parentPath, targetParent);
                     }
                 } else {
                     // deleting marked node
@@ -232,15 +232,19 @@ troop.postpone(sntls, 'Tree', function () {
 
                 if (splice && targetParent instanceof Array) {
                     // removing marked node by splicing it out of array
+                    // and setting target to parent (indicates update un that level)
                     targetParent.splice(targetKey, 1);
+                    targetLevel--;
+                    currentNode = targetParent;
                 } else {
-                    // deleting marked node
+                    // deleting marked node and setting target to undefined (indicates removal)
                     delete targetParent[targetKey];
+                    currentNode = undefined;
                 }
 
                 if (handler) {
                     // calling handler with affected path
-                    handler(asArray.slice(0, targetLevel).toPath());
+                    handler(asArray.slice(0, targetLevel).toPath(), currentNode);
                 }
 
                 return this;
