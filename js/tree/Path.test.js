@@ -19,6 +19,11 @@
         deepEqual(path.asArray, ['test', 'path', 'it', 'is'], "Array representation");
     });
 
+    test("Key retrieval", function () {
+        var path = sntls.Path.create('test>path>it>is');
+        equal(path.getLastKey(), 'is', "Last key");
+    });
+
     test("Serialization", function () {
         var path;
 
@@ -70,6 +75,19 @@
         );
     });
 
+    test("Appending key", function () {
+        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+            appendedPath = originalPath.appendKey('foo');
+
+        strictEqual(originalPath, appendedPath, "Appending returns new Path");
+
+        deepEqual(
+            appendedPath.asArray,
+            ['test', 'originalPath', 'it', 'is', 'foo'],
+            "Appended path"
+        );
+    });
+
     test("Prepending", function () {
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
             prependedPath = originalPath.prepend('foo>bar'.toPath());
@@ -79,6 +97,19 @@
         deepEqual(
             prependedPath.asArray,
             ['foo', 'bar', 'test', 'originalPath', 'it', 'is'],
+            "Prepended path"
+        );
+    });
+
+    test("Prepending key", function () {
+        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+            prependedPath = originalPath.prependKey('foo');
+
+        strictEqual(originalPath, prependedPath, "Prepending returns new Path");
+
+        deepEqual(
+            prependedPath.asArray,
+            ['foo', 'test', 'originalPath', 'it', 'is'],
             "Prepended path"
         );
     });

@@ -95,12 +95,8 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             setNode: function (path, value) {
-                var node = this.getSafeNode(path.clone().trim()),
-                    asArray = path.asArray,
-                    lastKey = asArray[asArray.length - 1];
-
-                node[lastKey] = value;
-
+                var node = this.getSafeNode(path.clone().trim());
+                node[path.getLastKey()] = value;
                 return this;
             },
 
@@ -116,8 +112,7 @@ troop.postpone(sntls, 'Tree', function () {
             getOrSetNode: function (path, generator, handler) {
                 var parentPath = path.clone().trim(),
                     targetParent = this.getSafeNode(parentPath),
-                    asArray = path.asArray,
-                    targetKey = asArray[asArray.length - 1],
+                    targetKey = path.getLastKey(),
                     result;
 
                 if (targetParent.hasOwnProperty(targetKey)) {
@@ -139,9 +134,8 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetNode: function (path) {
-                var asArray = path.asArray,
-                    targetParent = this.getSafeNode(path.clone().trim()),
-                    targetKey = asArray[asArray.length - 1];
+                var targetParent = this.getSafeNode(path.clone().trim()),
+                    targetKey = path.getLastKey();
 
                 targetParent[targetKey] = undefined;
 
@@ -156,10 +150,9 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetKey: function (path, splice, handler) {
-                var asArray = path.asArray,
-                    parentPath = path.clone().trim(),
+                var parentPath = path.clone().trim(),
                     targetParent = this.getSafeNode(parentPath),
-                    targetKey = asArray[asArray.length - 1];
+                    targetKey = path.getLastKey();
 
                 if (splice && targetParent instanceof Array) {
                     // removing marked node by splicing it out of array

@@ -83,6 +83,15 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
+             * Fetches the last key from the path.
+             * @returns {*}
+             */
+            getLastKey: function () {
+                var asArray = this.asArray;
+                return asArray[asArray.length - 1];
+            },
+
+            /**
              * Creates a new instance of the same path subclass, initialized with identical path information.
              * @returns {sntls.Path}
              */
@@ -118,6 +127,16 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
+             * Appends a single key to the current path. Alters path buffer!
+             * @param {string} key Key to be appended to the current path.
+             * @returns {sntls.Path}
+             */
+            appendKey: function (key) {
+                this.asArray.push(key);
+                return this;
+            },
+
+            /**
              * Prepends the current path with the specified path. Alters path buffer!
              * @example
              * var p = sntls.Path.create('test>path');
@@ -127,6 +146,16 @@ troop.postpone(sntls, 'Path', function () {
              */
             prepend: function (path) {
                 this.asArray = path.asArray.concat(this.asArray);
+                return this;
+            },
+
+            /**
+             * Prepends a single key to the current path. Alters path buffer!
+             * @param {string} key Key to be prepended to the current path.
+             * @returns {sntls.Path}
+             */
+            prependKey: function (key) {
+                this.asArray.unshift(key);
                 return this;
             },
 
