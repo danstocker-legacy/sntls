@@ -602,6 +602,17 @@
             one: 'hello',
             two: 'world!'
         }, "Result of filtering by callback");
+
+        filtered = collection.filterByType('string');
+        deepEqual(filtered.items, {
+            one: 'hello',
+            two: 'world!'
+        }, "Strings only");
+
+        filtered = collection.filterByType(Object.prototype);
+        deepEqual(filtered.items, {
+            four: {}
+        }, "Objects only");
     });
 
     test("Filtering on array buffer", function () {

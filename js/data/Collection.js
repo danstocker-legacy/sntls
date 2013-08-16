@@ -433,6 +433,37 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
+             * Filters collection by matching items against specified type.
+             * @param {string|function|object} type String, constructor function, or prototype object each item is
+             * checked against.
+             * @example
+             * c.filterByType('string') // fetches string items only
+             * c.filterByType(troop.Base) // fetches classes and instances only
+             * @returns {sntls.Collection}
+             */
+            filterByType: function (type) {
+                var isString = typeof type === 'string',
+                    isConstructor = typeof type === 'function',
+                    isObject = typeof type === 'object',
+                    items = this.items,
+                    resultItems = items instanceof Array ? [] : {},
+                    itemKeys = this.getKeys(),
+                    i, itemKey, item;
+
+                for (i = 0; i < itemKeys.length; i++) {
+                    itemKey = itemKeys[i];
+                    item = items[itemKey];
+                    if (isObject && type.isPrototypeOf(item) ||
+                        isString && typeof item === type ||
+                        isConstructor && item instanceof type) {
+                        resultItems[itemKey] = items[itemKey];
+                    }
+                }
+
+                return this.getBase().create(resultItems);
+            },
+
+            /**
              * Filters collection applying the specified selector function to each item.
              * @example
              * // filters items with value higher than 50
