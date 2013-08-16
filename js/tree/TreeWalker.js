@@ -18,9 +18,10 @@ troop.postpone(sntls, 'TreeWalker', function () {
                 dessert.isFunction(handler, "Invalid walker handler");
 
                 /**
-                 * Handler to be called on each relevant node.
-                 * Returning false interrupts traversal.
+                 * Handler to be called on each relevant node. Receives TreeWalker instance as context
+                 * and current node as argument. Returning false interrupts traversal.
                  * @type {Function}
+                 * @param {object} currentNode Node currently being traversed.
                  */
                 this.handler = handler;
 
