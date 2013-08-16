@@ -1026,6 +1026,36 @@
         );
     });
 
+    test("Creating new instance for each", function () {
+        expect(4);
+
+        var collection = sntls.Collection.create(['foo>bar', 'hello>world', 'one>two>three']),
+            result;
+
+        collection.addMocks({
+            passEachItemTo: function (handler, context) {
+                strictEqual(handler, sntls.Path.create, "Handler set to constructor");
+                strictEqual(context, sntls.Path, "Context set to class");
+            }
+        });
+
+        collection.createWithEachItem(sntls.Path);
+
+        collection.removeMocks();
+
+        result = collection.createWithEachItem(sntls.Path);
+
+        ok(result.isA(sntls.Collection), "Result is collection");
+        deepEqual(
+            result.collectProperty('asArray').items,
+            [
+                ['foo', 'bar'],
+                ['hello', 'world'],
+                ['one', 'two', 'three']
+            ]
+        );
+    });
+
     test("Mapping with array buffer", function () {
         var collection = sntls.Collection.create(['foo', 'bar']),
             result;
