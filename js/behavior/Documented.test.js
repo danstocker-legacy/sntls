@@ -1,0 +1,22 @@
+/*global phil, dessert, troop, sntls, module, test, expect, ok, equal, notEqual, strictEqual, deepEqual, raises */
+(function () {
+    "use strict";
+
+    module("Documented");
+
+    test("Instantiation", function () {
+        var MyDocumented = troop.Base.extend()
+                .addTrait(sntls.Documented)
+                .extend('MyDocumented'),
+            nextInstanceId = sntls.Documented.nextInstanceId,
+            myInstance;
+
+        equal(MyDocumented.className, 'MyDocumented', "Class name");
+
+        myInstance = MyDocumented.create();
+
+        equal(myInstance.instanceId, nextInstanceId, "Assigned instance ID");
+
+        equal(sntls.Documented.nextInstanceId, nextInstanceId + 1, "Incremented instance ID");
+    });
+}());
