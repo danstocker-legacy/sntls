@@ -2,7 +2,8 @@
 troop.postpone(sntls, 'Documented', function () {
     "use strict";
 
-    var self = troop.Base.extend();
+    var base = troop.Base,
+        self = base.extend();
 
     /**
      * Documented trait. Adds meta information to the class, including class name, namespace, and instance ID.
@@ -26,8 +27,7 @@ troop.postpone(sntls, 'Documented', function () {
             extend: function (className) {
                 dessert.isString(className, "Invalid class name");
 
-                var base = this.getBase(),
-                    result = /** @type {sntls.Documented} */ base.extend.call(this);
+                var result = /** @type {sntls.Documented} */ base.extend.call(this);
 
                 result.addConstants(/** @lends sntls.Documented */{
                     /**
