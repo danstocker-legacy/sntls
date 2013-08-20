@@ -1,8 +1,9 @@
 /*global dessert, troop, sntls */
-troop.postpone(sntls, 'Managed', function () {
+troop.postpone(sntls, 'Managed', function (ns, className) {
     "use strict";
 
-    var self = troop.Base.extend();
+    var base = sntls.Documented,
+        self = base.extend(className);
 
     /**
      * Managed trait, extends the Documented trait with a controllable instance registry.
@@ -10,11 +11,18 @@ troop.postpone(sntls, 'Managed', function () {
      * @extends sntls.Documented
      */
     sntls.Managed = self
-        .addTrait(sntls.Documented)
         .addPublic(/** @lends sntls.Managed */{
             instanceRegistry: sntls.Collection.create()
         })
         .addMethods(/** @lends sntls.Managed# */{
+            /**
+             * @ignore
+             */
+            init: function () {
+                base.init.call(this);
+                this.addToRegistry();
+            },
+
             /**
              * Adds instance to registry.
              * @returns {sntls.Managed}

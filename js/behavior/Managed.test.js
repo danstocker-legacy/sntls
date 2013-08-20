@@ -14,12 +14,18 @@
                 }
             });
 
+    test("Instantiation", function () {
+        var nextInstanceId = sntls.Documented.nextInstanceId,
+            myInstance = MyManaged.create();
+
+        equal(sntls.Documented.nextInstanceId, nextInstanceId + 1);
+        equal(myInstance.instanceId, nextInstanceId);
+    });
+
     test("Registering", function () {
         var myInstance = MyManaged.create(),
             instanceId = myInstance.instanceId,
             result;
-
-        ok(!sntls.Managed.instanceRegistry.getItem(instanceId), "Instance not in registry");
 
         result = myInstance.addToRegistry();
 
@@ -30,16 +36,21 @@
         strictEqual(result, myInstance, "Registry removal is chainable");
 
         ok(!sntls.Managed.instanceRegistry.getItem(instanceId), "Instance not in registry");
+
+        result = myInstance.addToRegistry();
+
+        strictEqual(result, myInstance, "Registry addition is chainable");
+        strictEqual(sntls.Managed.instanceRegistry.getItem(instanceId), myInstance, "Removed instance stored again");
     });
 
     test("Fetching instance", function () {
         var myInstance = MyManaged.create(),
             instanceId = myInstance.instanceId;
 
-        strictEqual(typeof sntls.Managed.getInstanceById(instanceId), 'undefined', "Fetches nothing");
-
-        myInstance.addToRegistry();
-
         strictEqual(sntls.Managed.getInstanceById(instanceId), myInstance, "Instance fetched");
+
+        myInstance.removeFromRegistry();
+
+        strictEqual(typeof sntls.Managed.getInstanceById(instanceId), 'undefined', "Fetches nothing");
     });
 }());
