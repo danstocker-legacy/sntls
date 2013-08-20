@@ -5,6 +5,12 @@
     module("Documented");
 
     test("Instantiation", function () {
+        raises(function () {
+            troop.Base.extend()
+                .addTrait(sntls.Documented)
+                .extend();
+        }, "Invalid class name");
+
         var MyDocumented = troop.Base.extend()
                 .addTrait(sntls.Documented)
                 .extend('MyDocumented'),

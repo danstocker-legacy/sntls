@@ -24,6 +24,8 @@ troop.postpone(sntls, 'Documented', function () {
              * @returns {sntls.Documented}
              */
             extend: function (className) {
+                dessert.isString(className, "Invalid class name");
+
                 var base = this.getBase(),
                     result = /** @type {sntls.Documented} */ base.extend.call(this);
 
