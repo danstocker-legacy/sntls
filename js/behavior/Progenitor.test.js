@@ -48,4 +48,16 @@
 
         equal(myInstance.lineages.getKeyCount(), 0, "No lineages after removal");
     });
+
+    test("Parent assessment", function () {
+        var parent = /** @type sntls.Progenitor */ MyProgenitor.create()
+                .addToLineage('foo'),
+            child = /** @type sntls.Progenitor */ MyProgenitor.create()
+                .addToLineage('foo', parent);
+
+        equal(typeof parent.getParent('foo'), 'undefined', "Ancestor");
+        equal(typeof child.getParent('invalid'), 'undefined', "Invalid lineage");
+        strictEqual(child.getParent('foo'), parent, "Lineage specified");
+        strictEqual(child.getParent(), parent, "Default lineage");
+    });
 }());

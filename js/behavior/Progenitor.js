@@ -59,6 +59,28 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             removeFromLineage: function (lineageName) {
                 this.lineages.deleteItem(lineageName);
                 return this;
+            },
+
+            /**
+             * Retrieves parent for the specified lineage.
+             * @param {string} [lineageName] Lineage name. When omitted, resolves to first available lineage.
+             * @returns {sntls.Managed}
+             */
+            getParent: function (lineageName) {
+                var lineage = lineageName ?
+                        this.lineages.getItem(lineageName) :
+                        this.lineages.getFirstValue(),
+                    parentInstanceId,
+                    result;
+
+                if (lineage) {
+                    parentInstanceId = lineage.asArray[lineage.asArray.length - 2];
+                    if (parentInstanceId) {
+                        result = self.getInstanceById(parentInstanceId);
+                    }
+                }
+
+                return result;
             }
         });
 });
