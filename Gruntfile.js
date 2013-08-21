@@ -26,6 +26,7 @@ module.exports = function (grunt) {
             'js/behavior/Stateful.js',
             'js/behavior/Documented.js',
             'js/behavior/Managed.js',
+            'js/behavior/Progenitor.js',
             'js/data/collections/ArrayCollection.js',
             'js/data/collections/DateCollection.js',
             'js/data/collections/StringCollection.js',
