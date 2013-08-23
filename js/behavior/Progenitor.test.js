@@ -14,8 +14,9 @@
         });
 
     test("Instantiation", function () {
-        var myInstance = MyProgenitor.create();
+        var myInstance = /** @type sntls.Progenitor */ MyProgenitor.create();
         ok(myInstance.lineages.isA(sntls.Collection), "Lineages collection");
+        ok(myInstance.children.isA(sntls.Collection), "Children collection");
     });
 
     test("Adding to lineage", function () {
@@ -23,6 +24,7 @@
             child = /** @type sntls.Progenitor */ MyProgenitor.create();
 
         equal(parent.lineages.getKeyCount(), 0, "No lineages up front");
+        equal(parent.children.getKeyCount(), 0, "No children up front");
 
         parent.addToLineage('foo');
 
@@ -35,18 +37,27 @@
         deepEqual(child.lineages.getKeys(), ['foo'], "Lineage names");
         ok(child.lineages.getItem('foo').isA(sntls.Path), "Lineage is a path");
         deepEqual(child.lineages.getItem('foo').asArray, [parent.instanceId, child.instanceId], "Specific lineage");
+
+        equal(parent.children.getKeyCount(), 1, "Number of children on parent instance");
+        strictEqual(parent.children.getItem(child.instanceId), child, "Child assigned to parent");
     });
 
     test("Removal from lineage", function () {
-        var myInstance = /** @type sntls.Progenitor */ MyProgenitor.create();
+        var parent = /** @type sntls.Progenitor */ MyProgenitor.create()
+                .addToLineage('foo'),
+            child = /** @type sntls.Progenitor */ MyProgenitor.create()
+                .addToLineage('foo', parent);
 
-        myInstance.addToLineage('foo');
+        deepEqual(parent.lineages.getItem('foo').asArray, [parent.instanceId], "Specific lineage");
+        equal(parent.children.getKeyCount(), 1, "Number of children before removal");
 
-        deepEqual(myInstance.lineages.getItem('foo').asArray, [myInstance.instanceId], "Specific lineage");
+        child.removeFromLineage('foo');
 
-        myInstance.removeFromLineage('foo');
+        equal(parent.children.getKeyCount(), 0, "No children left after removal");
 
-        equal(myInstance.lineages.getKeyCount(), 0, "No lineages after removal");
+        parent.removeFromLineage('foo');
+
+        equal(parent.lineages.getKeyCount(), 0, "No lineages after removal");
     });
 
     test("Parent assessment", function () {

@@ -23,6 +23,12 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                  * @type {sntls.Collection}
                  */
                 this.lineages = sntls.Collection.create();
+
+                /**
+                 * Child instances.
+                 * @type {sntls.Collection}
+                 */
+                this.children = sntls.Collection.create();
             },
 
             /**
@@ -42,10 +48,14 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                 }
 
                 if (parent) {
+                    // extending parent's lineage
                     parentLineage = parent.lineages.getItem(lineageName);
                     if (parentLineage) {
                         lineage.prepend(parentLineage);
                     }
+
+                    // adding self to parent's children
+                    parent.children.setItem(this.instanceId, this);
                 }
 
                 return this;
@@ -57,7 +67,17 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Progenitor}
              */
             removeFromLineage: function (lineageName) {
+                // parent-related operations must come before abandoning lineage altogether
+                var parent = this.getParent(lineageName);
+                if (parent) {
+                    // removing current instance from among parent's children
+                    // FIXME: bug prone if child is present on multiple lineages w/ same parent
+                    parent.children.deleteItem(this.instanceId);
+                }
+
+                // deleting current instance from lineage
                 this.lineages.deleteItem(lineageName);
+
                 return this;
             },
 
