@@ -6,6 +6,12 @@ troop.postpone(sntls, 'Documented', function () {
         self = base.extend();
 
     /**
+     * @name sntls.Documented.create
+     * @function
+     * @returns {sntls.Documented}
+     */
+
+    /**
      * Documented trait. Adds meta information to the class, including class name, namespace, and instance ID.
      * @class
      * @extends troop.Base
