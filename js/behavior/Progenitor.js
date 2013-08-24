@@ -33,11 +33,13 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
 
             /**
              * Retrieves a lineage by the specified name.
-             * @param {string} lineageName
+             * @param {string} [lineageName]
              * @returns {sntls.Lineage}
              */
             getLineage: function (lineageName) {
-                return this.lineages.getItem(lineageName);
+                return lineageName ?
+                    this.lineages.getItem(lineageName) :
+                    this.lineages.getFirstValue();
             },
 
             /**

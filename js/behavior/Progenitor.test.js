@@ -22,6 +22,19 @@
         equal(instance.lineages.getFirstValue().lineageName, 'foo', "Lineage name");
     });
 
+    test("Lineage getter", function () {
+        var instance = sntls.Progenitor.create()
+                .registerLineage('foo'),
+            lineage;
+
+        lineage = instance.getLineage('foo');
+
+        ok(lineage.isA(sntls.Lineage), "Lineage fetched");
+        equal(lineage.lineageName, 'foo', "Lineage name");
+        equal(typeof instance.getLineage('invalid'), 'undefined', "Invalid lineage name");
+        strictEqual(instance.getLineage(), lineage, "Default lineage name");
+    });
+
     test("Adding instance to lineage", function () {
         expect(1);
 
@@ -49,8 +62,8 @@
         result = parent.addChild('foo', child);
 
         strictEqual(result, parent, "Child addition is chainable");
-        ok(parent.getLineage('foo').isA(sntls.Lineage));
-        ok(child.getLineage('foo').isA(sntls.Lineage));
+        ok(parent.getLineage().isA(sntls.Lineage));
+        ok(child.getLineage().isA(sntls.Lineage));
     });
 
     test("Child removal", function () {
@@ -59,12 +72,12 @@
 
         parent.addChild('foo', child);
 
-        equal(parent.getLineage('foo').children.getKeyCount(), 1, "Child count before removal");
+        equal(parent.getLineage().children.getKeyCount(), 1, "Child count before removal");
 
         parent.removeChild('foo', child);
 
-        equal(parent.getLineage('foo').children.getKeyCount(), 0, "Child count after removal");
-        equal(typeof child.getLineage('foo').parent, 'undefined', "Parent reference on child");
+        equal(parent.getLineage().children.getKeyCount(), 0, "Child count after removal");
+        equal(typeof child.getLineage().parent, 'undefined', "Parent reference on child");
     });
 
     test("Parent assessment", function () {
