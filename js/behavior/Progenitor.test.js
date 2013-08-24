@@ -4,66 +4,47 @@
 
     module("Progenitor");
 
-    var MyProgenitor = troop.Base.extend()
-        .addTrait(sntls.Progenitor)
-        .extend('MyProgenitor')
-        .addMethods({
-            init: function () {
-                sntls.Progenitor.init.call(this);
+    test("Instantiation", function () {
+        var instance = sntls.Progenitor.create();
+        ok(instance.lineages.isA(sntls.Collection), "Lineages collection");
+    });
+
+    test("Lineage registration", function () {
+        var instance = sntls.Progenitor.create();
+
+        equal(instance.lineages.getKeyCount(), 0, "No lineages up front");
+
+        instance.registerLineage('foo');
+
+        equal(instance.lineages.getKeyCount(), 1, "Lineage count increased");
+        equal(instance.lineages.getFirstKey(), 'foo', "Lineage added");
+        ok(instance.lineages.getFirstValue().isA(sntls.Lineage), "Lineage added");
+        equal(instance.lineages.getFirstValue().lineageName, 'foo', "Lineage name");
+    });
+
+    test("Adding instance to lineage", function () {
+        expect(1);
+
+        var myParent = sntls.Progenitor.create()
+                .registerLineage('foo'),
+            myChild = sntls.Progenitor.create();
+
+        sntls.Lineage.addMocks({
+            setParent: function (parent) {
+                strictEqual(parent, myParent);
+                return this;
             }
         });
 
-    test("Instantiation", function () {
-        var myInstance = /** @type sntls.Progenitor */ MyProgenitor.create();
-        ok(myInstance.lineages.isA(sntls.Collection), "Lineages collection");
-        ok(myInstance.children.isA(sntls.Collection), "Children collection");
-    });
+        myChild.addToLineage('foo', myParent);
 
-    test("Adding to lineage", function () {
-        var parent = /** @type sntls.Progenitor */ MyProgenitor.create(),
-            child = /** @type sntls.Progenitor */ MyProgenitor.create();
-
-        equal(parent.lineages.getKeyCount(), 0, "No lineages up front");
-        equal(parent.children.getKeyCount(), 0, "No children up front");
-
-        parent.addToLineage('foo');
-
-        deepEqual(parent.lineages.getKeys(), ['foo'], "Lineage names");
-        ok(parent.lineages.getItem('foo').isA(sntls.Path), "Lineage is a path");
-        deepEqual(parent.lineages.getItem('foo').asArray, [parent.instanceId], "Specific lineage");
-
-        child.addToLineage('foo', parent);
-
-        deepEqual(child.lineages.getKeys(), ['foo'], "Lineage names");
-        ok(child.lineages.getItem('foo').isA(sntls.Path), "Lineage is a path");
-        deepEqual(child.lineages.getItem('foo').asArray, [parent.instanceId, child.instanceId], "Specific lineage");
-
-        equal(parent.children.getKeyCount(), 1, "Number of children on parent instance");
-        strictEqual(parent.children.getItem(child.instanceId), child, "Child assigned to parent");
-    });
-
-    test("Removal from lineage", function () {
-        var parent = /** @type sntls.Progenitor */ MyProgenitor.create()
-                .addToLineage('foo'),
-            child = /** @type sntls.Progenitor */ MyProgenitor.create()
-                .addToLineage('foo', parent);
-
-        deepEqual(parent.lineages.getItem('foo').asArray, [parent.instanceId], "Specific lineage");
-        equal(parent.children.getKeyCount(), 1, "Number of children before removal");
-
-        child.removeFromLineage('foo');
-
-        equal(parent.children.getKeyCount(), 0, "No children left after removal");
-
-        parent.removeFromLineage('foo');
-
-        equal(parent.lineages.getKeyCount(), 0, "No lineages after removal");
+        sntls.Lineage.removeMocks();
     });
 
     test("Parent assessment", function () {
-        var parent = /** @type sntls.Progenitor */ MyProgenitor.create()
+        var parent = sntls.Progenitor.create()
                 .addToLineage('foo'),
-            child = /** @type sntls.Progenitor */ MyProgenitor.create()
+            child = sntls.Progenitor.create()
                 .addToLineage('foo', parent);
 
         equal(typeof parent.getParent('foo'), 'undefined', "Ancestor");

@@ -6,12 +6,18 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
         self = base.extend(className);
 
     /**
+     * @name sntls.Progenitor.create
+     * @function
+     * @returns {sntls.Progenitor}
+     */
+
+    /**
      * Trait that adds parent-children relations to classes.
      * @class
      * @extends sntls.Managed
      */
     sntls.Progenitor = self
-        .addMethods(/** @lends sntls.Progenitor */{
+        .addMethods(/** @lends sntls.Progenitor# */{
             /**
              * @ignore
              */
@@ -23,12 +29,25 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                  * @type {sntls.Collection}
                  */
                 this.lineages = sntls.Collection.create();
+            },
 
-                /**
-                 * Child instances.
-                 * @type {sntls.Collection}
-                 */
-                this.children = sntls.Collection.create();
+            /**
+             * Retrieves a lineage by the specified name.
+             * @param {string} lineageName
+             * @returns {sntls.Lineage}
+             */
+            getLineage: function (lineageName) {
+                return this.lineages.getItem(lineageName);
+            },
+
+            /**
+             * Registers a lineage on the current instance.
+             * @param {string} lineageName
+             * @returns {sntls.Progenitor}
+             */
+            registerLineage: function (lineageName) {
+                this.lineages.setItem(lineageName, sntls.Lineage.create(lineageName, this));
+                return this;
             },
 
             /**
@@ -38,45 +57,16 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Progenitor}
              */
             addToLineage: function (lineageName, parent) {
-                var lineages = this.lineages,
-                    lineage = lineages.getItem(lineageName),
-                    parentLineage;
-
-                if (!lineage) {
-                    lineage = sntls.Path.create([this.instanceId]);
-                    lineages.setItem(lineageName, lineage);
+                // making sure lineage exists
+                if (!this.getLineage(lineageName)) {
+                    this.registerLineage(lineageName);
                 }
 
                 if (parent) {
-                    // extending parent's lineage
-                    parentLineage = parent.lineages.getItem(lineageName);
-                    if (parentLineage) {
-                        lineage.prepend(parentLineage);
-                    }
-
-                    // adding self to parent's children
-                    parent.children.setItem(this.instanceId, this);
+                    // adding instance to parent
+                    this.getLineage(lineageName)
+                        .setParent(parent);
                 }
-
-                return this;
-            },
-
-            /**
-             * Removes instance from lineage.
-             * @param {string} lineageName
-             * @returns {sntls.Progenitor}
-             */
-            removeFromLineage: function (lineageName) {
-                // parent-related operations must come before abandoning lineage altogether
-                var parent = this.getParent(lineageName);
-                if (parent) {
-                    // removing current instance from among parent's children
-                    // FIXME: bug prone if child is present on multiple lineages w/ same parent
-                    parent.children.deleteItem(this.instanceId);
-                }
-
-                // deleting current instance from lineage
-                this.lineages.deleteItem(lineageName);
 
                 return this;
             },
@@ -90,14 +80,10 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                 var lineage = lineageName ?
                         this.lineages.getItem(lineageName) :
                         this.lineages.getFirstValue(),
-                    parentInstanceId,
                     result;
 
                 if (lineage) {
-                    parentInstanceId = lineage.asArray[lineage.asArray.length - 2];
-                    if (parentInstanceId) {
-                        result = self.getInstanceById(parentInstanceId);
-                    }
+                    result = lineage.parent;
                 }
 
                 return result;
