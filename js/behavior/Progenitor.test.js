@@ -91,4 +91,94 @@
         equal(parent.getLineage().children.getKeyCount(), 0, "Child count after removal");
         equal(typeof child.getLineage().parent, 'undefined', "Parent reference on child");
     });
+
+    test("Child manipulation integration", function () {
+        var parent1 = sntls.Progenitor.create()
+                .addToLineage('foo'),
+            parent2 = sntls.Progenitor.create()
+                .addToLineage('foo'),
+            child1 = sntls.Progenitor.create()
+                .addToLineage('foo', parent1),
+            child2 = sntls.Progenitor.create()
+                .addToLineage('foo', parent1),
+            child3 = sntls.Progenitor.create()
+                .addToLineage('foo', parent1),
+            grandchild1 = sntls.Progenitor.create()
+                .addToLineage('foo', child1),
+            grandchild2 = sntls.Progenitor.create()
+                .addToLineage('foo', child1),
+            instances = sntls.Collection.create([
+                parent1,
+                parent2,
+                child1,
+                child2,
+                child3,
+                grandchild1,
+                grandchild2
+            ]);
+
+        deepEqual(
+            // lineage paths for all instances
+            instances
+                .callOnEachItem('getLineage')
+                .collectProperty('path')
+                .callOnEachItem('toString')
+                .getValues()
+                .sort(),
+            [
+                '' + parent1.instanceId,
+                '' + parent2.instanceId,
+                parent1.instanceId + '>' + child1.instanceId,
+                parent1.instanceId + '>' + child2.instanceId,
+                parent1.instanceId + '>' + child3.instanceId,
+                parent1.instanceId + '>' + child1.instanceId + '>' + grandchild1.instanceId,
+                parent1.instanceId + '>' + child1.instanceId + '>' + grandchild2.instanceId
+            ].sort(),
+            "Lineage paths before removal"
+        );
+
+        parent1.removeChild('foo', child1);
+
+        deepEqual(
+            // lineage paths for all instances
+            instances
+                .callOnEachItem('getLineage')
+                .collectProperty('path')
+                .callOnEachItem('toString')
+                .getValues()
+                .sort(),
+            [
+                '' + parent1.instanceId,
+                '' + parent2.instanceId,
+                '' + child1.instanceId,
+                parent1.instanceId + '>' + child2.instanceId,
+                parent1.instanceId + '>' + child3.instanceId,
+                child1.instanceId + '>' + grandchild1.instanceId,
+                child1.instanceId + '>' + grandchild2.instanceId
+            ].sort(),
+            "Lineage paths after removal"
+        );
+
+        parent2.addChild('foo', child1);
+
+        deepEqual(
+            // lineage paths for all instances
+            instances
+                .callOnEachItem('getLineage')
+                .collectProperty('path')
+                .callOnEachItem('toString')
+                .getValues()
+                .sort(),
+            [
+                '' + parent1.instanceId,
+                '' + parent2.instanceId,
+                parent2.instanceId + '>' + child1.instanceId,
+                parent1.instanceId + '>' + child2.instanceId,
+                parent1.instanceId + '>' + child3.instanceId,
+                parent2.instanceId + '>' + child1.instanceId + '>' + grandchild1.instanceId,
+                parent2.instanceId + '>' + child1.instanceId + '>' + grandchild2.instanceId
+            ].sort(),
+            "Lineage paths after adding to different parent"
+        );
+    });
 }());
