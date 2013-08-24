@@ -45,7 +45,7 @@
 
     test("Trimming", function () {
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
-            trimmedPath = originalPath.trim();
+            trimmedPath = originalPath.trimRight();
 
         strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
         deepEqual(
@@ -54,7 +54,7 @@
             "Trimmed path"
         );
 
-        originalPath.trim(2);
+        originalPath.trimRight(2);
         deepEqual(
             originalPath.asArray,
             ['test'],

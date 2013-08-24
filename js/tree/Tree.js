@@ -95,7 +95,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             setNode: function (path, value) {
-                var node = this.getSafeNode(path.clone().trim());
+                var node = this.getSafeNode(path.clone().trimRight());
                 node[path.getLastKey()] = value;
                 return this;
             },
@@ -110,7 +110,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {*}
              */
             getOrSetNode: function (path, generator, handler) {
-                var parentPath = path.clone().trim(),
+                var parentPath = path.clone().trimRight(),
                     targetParent = this.getSafeNode(parentPath),
                     targetKey = path.getLastKey(),
                     result;
@@ -134,7 +134,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetNode: function (path) {
-                var targetParent = this.getNode(path.clone().trim());
+                var targetParent = this.getNode(path.clone().trimRight());
 
                 if (targetParent instanceof Object) {
                     // concerns existing parent nodes only
@@ -152,7 +152,7 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetKey: function (path, splice, handler) {
-                var parentPath = path.clone().trim(),
+                var parentPath = path.clone().trimRight(),
                     targetParent = this.getNode(parentPath);
 
                 if (targetParent instanceof Object) {
