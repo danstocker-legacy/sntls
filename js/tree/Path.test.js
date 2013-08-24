@@ -43,7 +43,26 @@
         notStrictEqual(path.asArray, clonePath.asArray, "Clone's buffer is different from original");
     });
 
-    test("Trimming", function () {
+    test("Left trimming", function () {
+        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+            trimmedPath = originalPath.trimLeft();
+
+        strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
+        deepEqual(
+            trimmedPath.asArray,
+            ['originalPath', 'it', 'is'],
+            "Trimmed path"
+        );
+
+        originalPath.trimLeft(2);
+        deepEqual(
+            originalPath.asArray,
+            ['is'],
+            "Trimmed multiple keys"
+        );
+    });
+
+    test("Right trimming", function () {
         var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
             trimmedPath = originalPath.trimRight();
 

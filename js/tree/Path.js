@@ -100,6 +100,23 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
+             * Trims leading end of path. Alters path buffer!
+             * @example
+             * var p = sntls.Path.create('test>path>it>is');
+             * p.trimLeft().asArray // ['path', 'it', 'is']
+             * @param {number} [count=1] Number of keys to remove from path.
+             * @returns {sntls.Path}
+             */
+            trimLeft: function (count) {
+                if (typeof count === 'undefined' || count === 1) {
+                    this.asArray.shift();
+                } else {
+                    this.asArray = this.asArray.slice(count);
+                }
+                return this;
+            },
+
+            /**
              * Trims trailing end of path. Alters path buffer!
              * @example
              * var p = sntls.Path.create('test>path>it>is');
