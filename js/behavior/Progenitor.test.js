@@ -30,7 +30,7 @@
             myChild = sntls.Progenitor.create();
 
         sntls.Lineage.addMocks({
-            setParent: function (parent) {
+            addToParent: function (parent) {
                 strictEqual(parent, myParent);
                 return this;
             }

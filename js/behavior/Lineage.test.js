@@ -24,7 +24,7 @@
                 .registerLineage('foo'),
             childLineage = child.getLineage('foo');
 
-        childLineage.setParent(parent);
+        childLineage.addToParent(parent);
 
         var expectedChildren = {};
         expectedChildren[child.instanceId] = child;
@@ -46,7 +46,7 @@
         deepEqual(parentLineage.children.getKeyCount(), 1, "Parent's children count before removal");
         strictEqual(childLineage.parent, parent, "Parent reference before removal");
 
-        childLineage.removeParent();
+        childLineage.removeFromParent();
 
         deepEqual(childLineage.path.asArray, [child.instanceId], "Lineage path after removal");
         deepEqual(parentLineage.children.getKeyCount(), 0, "Parent's children count after removal");

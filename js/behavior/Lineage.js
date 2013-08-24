@@ -72,7 +72,7 @@ troop.postpone(sntls, 'Lineage', function () {
              * @param {sntls.Progenitor} parent
              * @returns {sntls.Lineage}
              */
-            setParent: function (parent) {
+            addToParent: function (parent) {
                 var parentLineage = parent.getLineage(this.lineageName);
 
                 if (parentLineage) {
@@ -97,7 +97,7 @@ troop.postpone(sntls, 'Lineage', function () {
              * Removes parent from current lineage and trims lineage path of all descendants.
              * @returns {sntls.Lineage}
              */
-            removeParent: function () {
+            removeFromParent: function () {
                 var parent = this.parent,
                     parentLineage,
                     parentLineageLength;

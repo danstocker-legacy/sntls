@@ -65,7 +65,7 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                 if (parent) {
                     // adding instance to parent
                     this.getLineage(lineageName)
-                        .setParent(parent);
+                        .addToParent(parent);
                 }
 
                 return this;
@@ -102,7 +102,7 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                     childLineage = child.getLineage(lineageName);
                     if (childLineage) {
                         // removing child from parent
-                        childLineage.removeParent();
+                        childLineage.removeFromParent();
                     }
                 }
 
