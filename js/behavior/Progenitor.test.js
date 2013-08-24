@@ -41,6 +41,32 @@
         sntls.Lineage.removeMocks();
     });
 
+    test("Child addition", function () {
+        var parent = sntls.Progenitor.create(),
+            child = sntls.Progenitor.create(),
+            result;
+
+        result = parent.addChild('foo', child);
+
+        strictEqual(result, parent, "Child addition is chainable");
+        ok(parent.getLineage('foo').isA(sntls.Lineage));
+        ok(child.getLineage('foo').isA(sntls.Lineage));
+    });
+
+    test("Child removal", function () {
+        var parent = sntls.Progenitor.create(),
+            child = sntls.Progenitor.create();
+
+        parent.addChild('foo', child);
+
+        equal(parent.getLineage('foo').children.getKeyCount(), 1, "Child count before removal");
+
+        parent.removeChild('foo', child);
+
+        equal(parent.getLineage('foo').children.getKeyCount(), 0, "Child count after removal");
+        equal(typeof child.getLineage('foo').parent, 'undefined', "Parent reference on child");
+    });
+
     test("Parent assessment", function () {
         var parent = sntls.Progenitor.create()
                 .addToLineage('foo'),

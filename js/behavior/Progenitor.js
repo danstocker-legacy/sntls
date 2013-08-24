@@ -72,6 +72,44 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             },
 
             /**
+             * Adds a child to the specified lineage.
+             * @param {string} lineageName
+             * @param {sntls.Progenitor} child
+             * @returns {sntls.Progenitor}
+             */
+            addChild: function (lineageName, child) {
+                if (!this.getLineage(lineageName)) {
+                    this.registerLineage(lineageName);
+                }
+
+                child.addToLineage(lineageName, this);
+
+                return this;
+            },
+
+            /**
+             * Removes child from the specified lineage.
+             * @param {string} lineageName
+             * @param {sntls.Progenitor} child
+             * @returns {sntls.Progenitor}
+             */
+            removeChild: function (lineageName, child) {
+                var lineage = this.getLineage(lineageName),
+                    childLineage;
+
+                if (lineage && lineage.children.getItem(child.instanceId)) {
+                    // child instance is in fact child on the specified lineage
+                    childLineage = child.getLineage(lineageName);
+                    if (childLineage) {
+                        // removing child from parent
+                        childLineage.removeParent();
+                    }
+                }
+
+                return this;
+            },
+
+            /**
              * Retrieves parent for the specified lineage.
              * @param {string} [lineageName] Lineage name. When omitted, resolves to first available lineage.
              * @returns {sntls.Managed}
