@@ -35,6 +35,18 @@
         strictEqual(instance.getLineage(), lineage, "Default lineage name");
     });
 
+    test("Parent getter", function () {
+        var parent = sntls.Progenitor.create()
+                .addToLineage('foo'),
+            child = sntls.Progenitor.create()
+                .addToLineage('foo', parent);
+
+        equal(typeof parent.getParent('foo'), 'undefined', "Ancestor");
+        equal(typeof child.getParent('invalid'), 'undefined', "Invalid lineage");
+        strictEqual(child.getParent('foo'), parent, "Lineage specified");
+        strictEqual(child.getParent(), parent, "Default lineage");
+    });
+
     test("Adding instance to lineage", function () {
         expect(1);
 
@@ -78,17 +90,5 @@
 
         equal(parent.getLineage().children.getKeyCount(), 0, "Child count after removal");
         equal(typeof child.getLineage().parent, 'undefined', "Parent reference on child");
-    });
-
-    test("Parent assessment", function () {
-        var parent = sntls.Progenitor.create()
-                .addToLineage('foo'),
-            child = sntls.Progenitor.create()
-                .addToLineage('foo', parent);
-
-        equal(typeof parent.getParent('foo'), 'undefined', "Ancestor");
-        equal(typeof child.getParent('invalid'), 'undefined', "Invalid lineage");
-        strictEqual(child.getParent('foo'), parent, "Lineage specified");
-        strictEqual(child.getParent(), parent, "Default lineage");
     });
 }());

@@ -43,6 +43,24 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             },
 
             /**
+             * Retrieves parent for the specified lineage.
+             * @param {string} [lineageName] Lineage name. When omitted, resolves to first available lineage.
+             * @returns {sntls.Managed}
+             */
+            getParent: function (lineageName) {
+                var lineage = lineageName ?
+                        this.lineages.getItem(lineageName) :
+                        this.lineages.getFirstValue(),
+                    result;
+
+                if (lineage) {
+                    result = lineage.parent;
+                }
+
+                return result;
+            },
+
+            /**
              * Registers a lineage on the current instance.
              * @param {string} lineageName
              * @returns {sntls.Progenitor}
@@ -109,24 +127,6 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                 }
 
                 return this;
-            },
-
-            /**
-             * Retrieves parent for the specified lineage.
-             * @param {string} [lineageName] Lineage name. When omitted, resolves to first available lineage.
-             * @returns {sntls.Managed}
-             */
-            getParent: function (lineageName) {
-                var lineage = lineageName ?
-                        this.lineages.getItem(lineageName) :
-                        this.lineages.getFirstValue(),
-                    result;
-
-                if (lineage) {
-                    result = lineage.parent;
-                }
-
-                return result;
             }
         });
 });
