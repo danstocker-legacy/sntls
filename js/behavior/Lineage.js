@@ -100,7 +100,7 @@ troop.postpone(sntls, 'Lineage', function () {
             },
 
             /**
-             * Removes parent from current lineage and trims lineage path of all descendants.
+             * Removes current lineage from parent and trims lineage path of all descendants.
              * @returns {sntls.Lineage}
              */
             removeFromParent: function () {

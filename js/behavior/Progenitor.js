@@ -32,7 +32,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             },
 
             /**
-             * Retrieves a lineage by the specified name.
+             * Retrieves lineage bearing the specified name, or the first available when none is specified.
+             * If the current instance is not on the specified lineage, returns `undefined`.
              * @param {string} [lineageName]
              * @returns {sntls.Lineage}
              */
@@ -45,8 +46,10 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             },
 
             /**
-             * Retrieves parent for the specified lineage.
+             * Retrieves parent for the specified lineage, or for the first available lineage when none is specified.
              * @param {string} [lineageName] Lineage name. When omitted, resolves to first available lineage.
+             * @example
+             * myProgenitor.getParent('widgets') // fetches parent for the 'widgets' lineage
              * @returns {sntls.Managed}
              */
             getParent: function (lineageName) {
@@ -103,6 +106,14 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * Adds current instance to a lineage as child of the specified parent.
              * @param {string} lineageName
              * @param {sntls.Progenitor} [parent]
+             * @example
+             * Widget = troop.Base.extend()
+             *   .addTrait(sntls.Progenitor)
+             *   .addMethods({init: function () {sntls.Progenitor.init.call(this);}});
+             * var parent = Widget.create()
+             *       .addToLineage('widgets'),
+             *     child = Widget.create()
+             *       .addToLineage('widgets', parent);
              * @returns {sntls.Progenitor}
              */
             addToLineage: function (lineageName, parent) {
@@ -124,6 +135,10 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * Adds a child to the specified lineage.
              * @param {string} lineageName
              * @param {sntls.Progenitor} child
+             * @example
+             * var parent = Widget.create(),
+             *     child = Widget.create();
+             * parent.addChild('widgets', child); // both parent & child will be on the 'widgets' lineage
              * @returns {sntls.Progenitor}
              */
             addChild: function (lineageName, child) {
@@ -161,7 +176,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             },
 
             /**
-             * Prepares instance for garbage collection.
+             * Prepares instance for garbage collection. Detaches instance from parents and children
+             * on all lineages it belongs to.
              * @returns {sntls.Progenitor}
              */
             destroy: function () {
