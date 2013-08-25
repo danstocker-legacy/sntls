@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: RecursiveTreeWalker</title>
+    <title>JSDoc: Class: Progenitor</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: RecursiveTreeWalker</h1>
+    <h1 class="page-title">Class: Progenitor</h1>
     
     
 
@@ -29,7 +29,7 @@
     <h2>
         <span class="ancestors"><a href="sntls.html">sntls</a>.</span>
     
-    RecursiveTreeWalker
+    Progenitor
     </h2>
     
 </header>  
@@ -40,7 +40,7 @@
     
     
     <div class="description">
-        Traverses tree recursively, according to a query expression.
+        Trait that adds parent-children relations to classes.
     </div>
     
 
@@ -73,7 +73,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 10
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 19
     </li></ul></dd>
     
     
@@ -101,7 +101,7 @@
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="sntls.TreeWalker.html">sntls.TreeWalker</a></li>
+            <li><a href="sntls.Managed.html">sntls.Managed</a></li>
         </ul>
     
     
@@ -119,15 +119,14 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="handler"><span class="type-signature"></span>handler<span class="type-signature"> :Function</span></h4>
+    <h4 class="name" id="instanceId"><span class="type-signature"></span>instanceId<span class="type-signature"> :number</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Handler to be called on each relevant node. Receives TreeWalker instance as context
-and current node as argument. Returning false interrupts traversal.
+        Instance ID.
     </div>
     
     
@@ -142,7 +141,7 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.TreeWalker.html#handler">sntls.TreeWalker#handler</a>
+        <a href="sntls.Managed.html#instanceId">sntls.Managed#instanceId</a>
     </li></dd>
     
     
@@ -159,7 +158,7 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TreeWalker.js.html">tree/TreeWalker.js</a>, line 26
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 57
     </li></ul></dd>
     
     
@@ -177,14 +176,14 @@ and current node as argument. Returning false interrupts traversal.
         
             
 <dt>
-    <h4 class="name" id="query"><span class="type-signature"></span>query<span class="type-signature"> :<a href="sntls.Query.html">sntls.Query</a></span></h4>
+    <h4 class="name" id="lineages"><span class="type-signature"></span>lineages<span class="type-signature"> :<a href="sntls.Collection.html">sntls.Collection</a></span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Query guiding the traversal.
+        Collection of lineages the current instance is a member of.
     </div>
     
     
@@ -211,7 +210,7 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 257
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 31
     </li></ul></dd>
     
     
@@ -235,93 +234,18 @@ and current node as argument. Returning false interrupts traversal.
         <dl>
             
 <dt>
-    <h4 class="name" id="_allIndicesOf"><span class="type-signature">&lt;private, static> </span>_allIndicesOf<span class="signature">(array, value)</span><span class="type-signature"> &rarr; {number[]}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Progenitor.html">sntls.Progenitor</a>}</span></h4>
     
     
 </dt>
 <dd>
     
     
-    <div class="description">
-        Gathers all indices of specified value from specified array.
-    </div>
-    
 
     
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>array</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Array.html">Array</a></span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -347,7 +271,7 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 31
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 8
     </li></ul></dd>
     
     
@@ -375,7 +299,7 @@ and current node as argument. Returning false interrupts traversal.
 	</dt>
 	<dd>
 		
-<span class="param-type">number[]</span>
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
 
 
 	</dd>
@@ -389,7 +313,7 @@ and current node as argument. Returning false interrupts traversal.
         
             
 <dt>
-    <h4 class="name" id="_getKeysByPattern"><span class="type-signature">&lt;private, static> </span>_getKeysByPattern<span class="signature">(node, pattern)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    <h4 class="name" id="addChild"><span class="type-signature"></span>addChild<span class="signature">(lineageName, child)</span><span class="type-signature"> &rarr; {<a href="sntls.Progenitor.html">sntls.Progenitor</a>}</span></h4>
     
     
 </dt>
@@ -397,8 +321,7 @@ and current node as argument. Returning false interrupts traversal.
     
     
     <div class="description">
-        Retrieves an array of keys from the node passed
-according to the given pattern.
+        Adds a child to the specified lineage.
     </div>
     
 
@@ -432,39 +355,36 @@ according to the given pattern.
 	
         <tr>
             
-                <td class="name"><code>node</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Node for which to obtain the keys.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>pattern</code></td>
+                <td class="name"><code>lineageName</code></td>
             
             
             <td class="type">
             
                 
 <span class="param-type">string</span>
-|
 
-<span class="param-type"><a href="sntls.QueryPattern.html">sntls.QueryPattern</a></span>
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>child</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
 
 
             
@@ -505,165 +425,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 87
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    Array of keys.
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">string[]</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_getKeysByValue"><span class="type-signature">&lt;private, static> </span>_getKeysByValue<span class="signature">(object, value)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Gathers all keys associated with specified value from specified object
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>object</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 47
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 144
     </li></ul></dd>
     
     
@@ -691,7 +453,7 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
-<span class="param-type">string[]</span>
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
 
 
 	</dd>
@@ -700,12 +462,19 @@ according to the given pattern.
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var parent = Widget.create(),
+    child = Widget.create();
+parent.addChild('widgets', child); // both parent & child will be on the 'widgets' lineage</code></pre>
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="_getKeysForObjectProperties"><span class="type-signature">&lt;private, static> </span>_getKeysForObjectProperties<span class="signature">(object)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    <h4 class="name" id="addToLineage"><span class="type-signature"></span>addToLineage<span class="signature">(lineageName, <span class="optional">parent</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Progenitor.html">sntls.Progenitor</a>}</span></h4>
     
     
 </dt>
@@ -713,138 +482,7 @@ according to the given pattern.
     
     
     <div class="description">
-        Retrieves keys that are associated with traversable values (objects).
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>object</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 66
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">string[]</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(handler, <span class="optional">query</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.RecursiveTreeWalker.html">sntls.RecursiveTreeWalker</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Instantiates class
+        Adds current instance to a lineage as child of the specified parent.
     </div>
     
 
@@ -880,13 +518,13 @@ according to the given pattern.
 	
         <tr>
             
-                <td class="name"><code>handler</code></td>
+                <td class="name"><code>lineageName</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
             
@@ -911,13 +549,13 @@ according to the given pattern.
 	
         <tr>
             
-                <td class="name"><code>query</code></td>
+                <td class="name"><code>parent</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type"><a href="sntls.Query.html">sntls.Query</a></span>
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
 
 
             
@@ -968,7 +606,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 8
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 119
     </li></ul></dd>
     
     
@@ -996,7 +634,106 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.RecursiveTreeWalker.html">sntls.RecursiveTreeWalker</a></span>
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>Widget = troop.Base.extend()
+  .addTrait(sntls.Progenitor)
+  .addMethods({init: function () {sntls.Progenitor.init.call(this);}});
+var parent = Widget.create()
+      .addToLineage('widgets'),
+    child = Widget.create()
+      .addToLineage('widgets', parent);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="addToRegistry"><span class="type-signature"></span>addToRegistry<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Managed.html">sntls.Managed</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adds instance to registry.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Managed.html#addToRegistry">sntls.Managed#addToRegistry</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Managed.js.html">behavior/Managed.js</a>, line 36
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Managed.html">sntls.Managed</a></span>
 
 
 	</dd>
@@ -1010,7 +747,7 @@ according to the given pattern.
         
             
 <dt>
-    <h4 class="name" id="_walk"><span class="type-signature">&lt;private> </span>_walk<span class="signature">(currentNode, queryPos, inSkipMode)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="destroy"><span class="type-signature"></span>destroy<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Progenitor.html">sntls.Progenitor</a>}</span></h4>
     
     
 </dt>
@@ -1018,7 +755,91 @@ according to the given pattern.
     
     
     <div class="description">
-        Traverses specified node recursively, according to the query assigned to the walker.
+        Prepares instance for garbage collection. Detaches instance from parents and children
+on all lineages it belongs to.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 183
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getChildren"><span class="type-signature"></span>getChildren<span class="signature">(<span class="optional">lineageName</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves children from the specified lineage or all lineages.
     </div>
     
 
@@ -1040,6 +861,8 @@ according to the given pattern.
 		<th>Type</th>
 		
 		
+		<th>Argument</th>
+		
 		
 		
 		
@@ -1052,69 +875,33 @@ according to the given pattern.
 	
         <tr>
             
-                <td class="name"><code>currentNode</code></td>
+                <td class="name"><code>lineageName</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">string</span>
 
 
             
             </td>
             
             
-            
-            
-            
-            <td class="description last">Node currently being traversed.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>queryPos</code></td>
-            
-            
-            <td class="type">
-            
+                <td class="attributes">
                 
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Position of current pattern in query.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>inSkipMode</code></td>
-            
-            
-            <td class="type">
-            
+                    &lt;optional><br>
                 
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-            
-            
+                    
+                
+                    
+                
+                </td>
             
             
             
-            <td class="description last">Whether traversal is in skip mode.</td>
+            
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -1145,77 +932,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 165
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.TreeWalker.html">sntls.TreeWalker</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Resets walker state
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.TreeWalker.html#reset">sntls.TreeWalker#reset</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TreeWalker.js.html">tree/TreeWalker.js</a>, line 51
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 75
     </li></ul></dd>
     
     
@@ -1243,7 +960,7 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.TreeWalker.html">sntls.TreeWalker</a></span>
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
 
 
 	</dd>
@@ -1257,7 +974,7 @@ according to the given pattern.
         
             
 <dt>
-    <h4 class="name" id="walk"><span class="type-signature"></span>walk<span class="signature">(node)</span><span class="type-signature"> &rarr; {<a href="sntls.RecursiveTreeWalker.html">sntls.RecursiveTreeWalker</a>}</span></h4>
+    <h4 class="name" id="getLineage"><span class="type-signature"></span>getLineage<span class="signature">(<span class="optional">lineageName</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Lineage.html">sntls.Lineage</a>}</span></h4>
     
     
 </dt>
@@ -1265,7 +982,299 @@ according to the given pattern.
     
     
     <div class="description">
-        Walks the specified node according to query
+        Retrieves lineage bearing the specified name, or the first available when none is specified.
+If the current instance is not on the specified lineage, returns `undefined`.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>lineageName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 40
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Lineage.html">sntls.Lineage</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getParent"><span class="type-signature"></span>getParent<span class="signature">(<span class="optional">lineageName</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Managed.html">sntls.Managed</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves parent for the specified lineage, or for the first available lineage when none is specified.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>lineageName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">Lineage name. When omitted, resolves to first available lineage.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 55
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Managed.html">sntls.Managed</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>myProgenitor.getParent('widgets') // fetches parent for the 'widgets' lineage</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="registerLineage"><span class="type-signature"></span>registerLineage<span class="signature">(lineageName)</span><span class="type-signature"> &rarr; {<a href="sntls.Progenitor.html">sntls.Progenitor</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Registers a lineage on the current instance.
     </div>
     
 
@@ -1299,13 +1308,13 @@ according to the given pattern.
 	
         <tr>
             
-                <td class="name"><code>node</code></td>
+                <td class="name"><code>lineageName</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">string</span>
 
 
             
@@ -1346,7 +1355,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 265
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 99
     </li></ul></dd>
     
     
@@ -1374,7 +1383,249 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.RecursiveTreeWalker.html">sntls.RecursiveTreeWalker</a></span>
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="removeChild"><span class="type-signature"></span>removeChild<span class="signature">(lineageName, child)</span><span class="type-signature"> &rarr; {<a href="sntls.Progenitor.html">sntls.Progenitor</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Removes child from the specified lineage.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>lineageName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>child</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Progenitor.js.html">behavior/Progenitor.js</a>, line 160
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Progenitor.html">sntls.Progenitor</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="removeFromRegistry"><span class="type-signature"></span>removeFromRegistry<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Managed.html">sntls.Managed</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Removes instance from registry.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Managed.html#removeFromRegistry">sntls.Managed#removeFromRegistry</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Managed.js.html">behavior/Managed.js</a>, line 45
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Managed.html">sntls.Managed</a></span>
 
 
 	</dd>
@@ -1407,7 +1658,7 @@ according to the given pattern.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:48 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:47 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

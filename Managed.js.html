@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: data/collections/DateCollection.js</title>
+    <title>JSDoc: Source: behavior/Managed.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: data/collections/DateCollection.js</h1>
+    <h1 class="page-title">Source: behavior/Managed.js</h1>
     
     
 
@@ -26,39 +26,83 @@
     <section>
         <article>
             <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
-troop.postpone(sntls, 'DateCollection', function () {
+troop.postpone(sntls, 'Managed', function (ns, className) {
     "use strict";
 
+    var base = sntls.Documented,
+        self = base.extend(className);
+
     /**
-     * @name sntls.DateCollection.create
+     * @name sntls.Managed.create
      * @function
-     * @param {object} [items] Initial contents.
-     * @returns {sntls.DateCollection}
+     * @returns {sntls.Managed}
      */
 
     /**
-     * General collection for managing multiple date objects.
-     * @class sntls.DateCollection
-     * @extends sntls.Collection
-     * @extends Date
-     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+     * Managed trait, extends `Documented` trait with a dynamic instance registry.
+     * @class
+     * @extends sntls.Documented
      */
-    sntls.DateCollection = sntls.Collection.of(Date);
+    sntls.Managed = self
+        .addPublic(/** @lends sntls.Managed */{
+            instanceRegistry: sntls.Collection.create()
+        })
+        .addMethods(/** @lends sntls.Managed# */{
+            /**
+             * @ignore
+             */
+            init: function () {
+                base.init.call(this);
+                this.addToRegistry();
+            },
+
+            /**
+             * Adds instance to registry.
+             * @returns {sntls.Managed}
+             */
+            addToRegistry: function () {
+                self.instanceRegistry.setItem(this.instanceId, this);
+                return this;
+            },
+
+            /**
+             * Removes instance from registry.
+             * @returns {sntls.Managed}
+             */
+            removeFromRegistry: function () {
+                self.instanceRegistry.deleteItem(this.instanceId);
+                return this;
+            },
+
+            /**
+             * Prepares instance for garbage collection. Call it before disposing of instance in order to avoid
+             * memory leaks.
+             * @example
+             * MyManaged = troop.Base.extend()
+             *   .addTrait(sntls.Managed)
+             *   .addMethods({
+             *       init: function () {sntls.Managed.init.call(this);}
+             *   });
+             * instance = MyManaged.create(); // instance will be added to registry
+             * instance.destroy(); // cleans up
+             * @returns {sntls.Managed}
+             */
+            destroy: function () {
+                this.removeFromRegistry();
+                return this;
+            },
+
+            /**
+             * Fetches instance by ID.
+             * @param {number|string} instanceId
+             * @returns {sntls.Managed}
+             * @memberOf sntls.Managed
+             */
+            getInstanceById: function (instanceId) {
+                return self.instanceRegistry.getItem(instanceId);
+            }
+        });
 });
-
-(function () {
-    "use strict";
-
-    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /**
-         * Reinterprets hash as date collection.
-         * @returns {sntls.DateCollection}
-         */
-        toDateCollection: function () {
-            return sntls.DateCollection.create(this.items);
-        }
-    });
-}());
 </code></pre>
         </article>
     </section>

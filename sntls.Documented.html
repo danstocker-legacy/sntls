@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: IterativeTreeWalker</title>
+    <title>JSDoc: Class: Documented</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: IterativeTreeWalker</h1>
+    <h1 class="page-title">Class: Documented</h1>
     
     
 
@@ -29,7 +29,7 @@
     <h2>
         <span class="ancestors"><a href="sntls.html">sntls</a>.</span>
     
-    IterativeTreeWalker
+    Documented
     </h2>
     
 </header>  
@@ -40,7 +40,7 @@
     
     
     <div class="description">
-        Traverses tree iteratively, touching all nodes within.
+        Documented trait. Adds meta information to the class, including class name, namespace, and instance ID.
     </div>
     
 
@@ -73,7 +73,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="IterativeTreeWalker.js.html">tree/IterativeTreeWalker.js</a>, line 7
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 19
     </li></ul></dd>
     
     
@@ -101,7 +101,7 @@
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="sntls.TreeWalker.html">sntls.TreeWalker</a></li>
+            <li>troop.Base</li>
         </ul>
     
     
@@ -119,16 +119,11 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="handler"><span class="type-signature"></span>handler<span class="type-signature"> :Function</span></h4>
+    <h4 class="name" id="className"><span class="type-signature">&lt;static> </span>className<span class="type-signature"> :string</span></h4>
     
     
 </dt>
 <dd>
-    
-    <div class="description">
-        Handler to be called on each relevant node. Receives TreeWalker instance as context
-and current node as argument. Returning false interrupts traversal.
-    </div>
     
     
     
@@ -139,11 +134,6 @@ and current node as argument. Returning false interrupts traversal.
     
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.TreeWalker.html#handler">sntls.TreeWalker#handler</a>
-    </li></dd>
     
     
     
@@ -159,7 +149,111 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TreeWalker.js.html">tree/TreeWalker.js</a>, line 26
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 43
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="nextInstanceId"><span class="type-signature">&lt;static> </span>nextInstanceId<span class="type-signature"> :number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Next instance ID.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 25
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="instanceId"><span class="type-signature"></span>instanceId<span class="type-signature"> :number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Instance ID.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 57
     </li></ul></dd>
     
     
@@ -183,7 +277,86 @@ and current node as argument. Returning false interrupts traversal.
         <dl>
             
 <dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(handler)</span><span class="type-signature"> &rarr; {<a href="sntls.IterativeTreeWalker.html">sntls.IterativeTreeWalker</a>}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Documented.html">sntls.Documented</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 8
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Documented.html">sntls.Documented</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="extend"><span class="type-signature">&lt;static> </span>extend<span class="signature">(className)</span><span class="type-signature"> &rarr; {<a href="sntls.Documented.html">sntls.Documented</a>}</span></h4>
     
     
 </dt>
@@ -191,7 +364,7 @@ and current node as argument. Returning false interrupts traversal.
     
     
     <div class="description">
-        Instantiates class
+        Extends class adding meta information.
     </div>
     
 
@@ -225,13 +398,13 @@ and current node as argument. Returning false interrupts traversal.
 	
         <tr>
             
-                <td class="name"><code>handler</code></td>
+                <td class="name"><code>className</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
             
@@ -241,7 +414,7 @@ and current node as argument. Returning false interrupts traversal.
             
             
             
-            <td class="description last"></td>
+            <td class="description last">Class name</td>
         </tr>
 	
 	
@@ -272,7 +445,7 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="IterativeTreeWalker.js.html">tree/IterativeTreeWalker.js</a>, line 5
+        <a href="Documented.js.html">behavior/Documented.js</a>, line 34
     </li></ul></dd>
     
     
@@ -300,227 +473,7 @@ and current node as argument. Returning false interrupts traversal.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.IterativeTreeWalker.html">sntls.IterativeTreeWalker</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.TreeWalker.html">sntls.TreeWalker</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Resets walker state
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.TreeWalker.html#reset">sntls.TreeWalker#reset</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="TreeWalker.js.html">tree/TreeWalker.js</a>, line 51
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="sntls.TreeWalker.html">sntls.TreeWalker</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="walk"><span class="type-signature"></span>walk<span class="signature">(node)</span><span class="type-signature"> &rarr; {<a href="sntls.IterativeTreeWalker.html">sntls.IterativeTreeWalker</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Traverses all enumerable nodes in object.
-Iterative implementation.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>node</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Object to be traversed.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="IterativeTreeWalker.js.html">tree/IterativeTreeWalker.js</a>, line 26
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="sntls.IterativeTreeWalker.html">sntls.IterativeTreeWalker</a></span>
+<span class="param-type"><a href="sntls.Documented.html">sntls.Documented</a></span>
 
 
 	</dd>

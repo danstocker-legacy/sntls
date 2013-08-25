@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: behavior/Progenitor.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: behavior/Progenitor.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
+troop.postpone(sntls, 'Progenitor', function (ns, className) {
+    "use strict";
+
+    var base = sntls.Managed,
+        self = base.extend(className);
+
+    /**
+     * @name sntls.Progenitor.create
+     * @function
+     * @returns {sntls.Progenitor}
+     */
+
+    /**
+     * Trait that adds parent-children relations to classes.
+     * @class
+     * @extends sntls.Managed
+     */
+    sntls.Progenitor = self
+        .addMethods(/** @lends sntls.Progenitor# */{
+            /**
+             * @ignore
+             */
+            init: function () {
+                base.init.call(this);
+
+                /**
+                 * Collection of lineages the current instance is a member of.
+                 * @type {sntls.Collection}
+                 */
+                this.lineages = sntls.Collection.create();
+            },
+
+            /**
+             * Retrieves lineage bearing the specified name, or the first available when none is specified.
+             * If the current instance is not on the specified lineage, returns `undefined`.
+             * @param {string} [lineageName]
+             * @returns {sntls.Lineage}
+             */
+            getLineage: function (lineageName) {
+                dessert.isStringOptional(lineageName, "Invalid lineage name");
+
+                return lineageName ?
+                    this.lineages.getItem(lineageName) :
+                    this.lineages.getFirstValue();
+            },
+
+            /**
+             * Retrieves parent for the specified lineage, or for the first available lineage when none is specified.
+             * @param {string} [lineageName] Lineage name. When omitted, resolves to first available lineage.
+             * @example
+             * myProgenitor.getParent('widgets') // fetches parent for the 'widgets' lineage
+             * @returns {sntls.Managed}
+             */
+            getParent: function (lineageName) {
+                dessert.isStringOptional(lineageName, "Invalid lineage name");
+
+                var lineage = lineageName ?
+                        this.lineages.getItem(lineageName) :
+                        this.lineages.getFirstValue(),
+                    result;
+
+                if (lineage) {
+                    result = lineage.parent;
+                }
+
+                return result;
+            },
+
+            /**
+             * Retrieves children from the specified lineage or all lineages.
+             * @param {string} [lineageName]
+             * @returns {sntls.Collection}
+             */
+            getChildren: function (lineageName) {
+                dessert.isStringOptional(lineageName, "Invalid lineage name");
+
+                var lineage;
+                if (lineageName) {
+                    // lineage specified
+                    lineage = this.getLineage(lineageName);
+                    if (lineage) {
+                        return lineage.children;
+                    } else {
+                        return sntls.Collection.create();
+                    }
+                } else {
+                    return this.lineages.toTree()
+                        .queryKeyValuePairsAsHash('|>children>items>|'.toQuery())
+                        .toCollection();
+                }
+            },
+
+            /**
+             * Registers a lineage on the current instance.
+             * @param {string} lineageName
+             * @returns {sntls.Progenitor}
+             */
+            registerLineage: function (lineageName) {
+                dessert.isString(lineageName, "Invalid lineage name");
+                this.lineages.setItem(lineageName, sntls.Lineage.create(lineageName, this));
+                return this;
+            },
+
+            /**
+             * Adds current instance to a lineage as child of the specified parent.
+             * @param {string} lineageName
+             * @param {sntls.Progenitor} [parent]
+             * @example
+             * Widget = troop.Base.extend()
+             *   .addTrait(sntls.Progenitor)
+             *   .addMethods({init: function () {sntls.Progenitor.init.call(this);}});
+             * var parent = Widget.create()
+             *       .addToLineage('widgets'),
+             *     child = Widget.create()
+             *       .addToLineage('widgets', parent);
+             * @returns {sntls.Progenitor}
+             */
+            addToLineage: function (lineageName, parent) {
+                // making sure lineage exists
+                if (!this.getLineage(lineageName)) {
+                    this.registerLineage(lineageName);
+                }
+
+                if (parent) {
+                    // adding instance to parent
+                    this.getLineage(lineageName)
+                        .addToParent(parent);
+                }
+
+                return this;
+            },
+
+            /**
+             * Adds a child to the specified lineage.
+             * @param {string} lineageName
+             * @param {sntls.Progenitor} child
+             * @example
+             * var parent = Widget.create(),
+             *     child = Widget.create();
+             * parent.addChild('widgets', child); // both parent & child will be on the 'widgets' lineage
+             * @returns {sntls.Progenitor}
+             */
+            addChild: function (lineageName, child) {
+                if (!this.getLineage(lineageName)) {
+                    this.registerLineage(lineageName);
+                }
+
+                child.addToLineage(lineageName, this);
+
+                return this;
+            },
+
+            /**
+             * Removes child from the specified lineage.
+             * @param {string} lineageName
+             * @param {sntls.Progenitor} child
+             * @returns {sntls.Progenitor}
+             */
+            removeChild: function (lineageName, child) {
+                dessert.isClass(child, "Invalid child");
+
+                var lineage = this.getLineage(lineageName),
+                    childLineage;
+
+                if (lineage && lineage.children.getItem(child.instanceId)) {
+                    // child instance is in fact child on the specified lineage
+                    childLineage = child.getLineage(lineageName);
+                    if (childLineage) {
+                        // removing child from parent
+                        childLineage.removeFromParent();
+                    }
+                }
+
+                return this;
+            },
+
+            /**
+             * Prepares instance for garbage collection. Detaches instance from parents and children
+             * on all lineages it belongs to.
+             * @returns {sntls.Progenitor}
+             */
+            destroy: function () {
+                var lineages = this.lineages,
+                    lineageNames = lineages.getKeys();
+
+                // removing current item from parents on all lineages
+                lineages
+                    .callOnEachItem('removeFromParent');
+
+                // removing all children from parent
+                lineages.toTree()
+                    .queryValuesAsHash([
+                        '|'.toQueryPattern(),
+                        'children', 'items', '|'.toQueryPattern(),
+                        'lineages', 'items', lineageNames].toQuery()
+                    )
+                    .toCollection()
+                    .callOnEachItem('removeFromParent');
+
+                // removing instance from registry
+                this.removeFromRegistry();
+
+                return this;
+            }
+        });
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:42 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

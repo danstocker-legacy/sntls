@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: data/collections/DateCollection.js</title>
+    <title>JSDoc: Source: behavior/Documented.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: data/collections/DateCollection.js</h1>
+    <h1 class="page-title">Source: behavior/Documented.js</h1>
     
     
 
@@ -26,39 +26,65 @@
     <section>
         <article>
             <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
-troop.postpone(sntls, 'DateCollection', function () {
+troop.postpone(sntls, 'Documented', function () {
     "use strict";
 
+    var base = troop.Base,
+        self = base.extend();
+
     /**
-     * @name sntls.DateCollection.create
+     * @name sntls.Documented.create
      * @function
-     * @param {object} [items] Initial contents.
-     * @returns {sntls.DateCollection}
+     * @returns {sntls.Documented}
      */
 
     /**
-     * General collection for managing multiple date objects.
-     * @class sntls.DateCollection
-     * @extends sntls.Collection
-     * @extends Date
-     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+     * Documented trait. Adds meta information to the class, including class name, namespace, and instance ID.
+     * @class
+     * @extends troop.Base
      */
-    sntls.DateCollection = sntls.Collection.of(Date);
+    sntls.Documented = self
+        .addPublic(/** @lends sntls.Documented */{
+            /**
+             * Next instance ID.
+             * @type {number}
+             */
+            nextInstanceId: 0
+        })
+        .addMethods(/** @lends sntls.Documented# */{
+            /**
+             * Extends class adding meta information.
+             * @param {string} className Class name
+             * @returns {sntls.Documented}
+             * @memberOf sntls.Documented
+             */
+            extend: function (className) {
+                dessert.isString(className, "Invalid class name");
+
+                var result = /** @type {sntls.Documented} */ base.extend.call(this);
+
+                result.addConstants(/** @lends sntls.Documented */{
+                    /**
+                     * @type {string}
+                     */
+                    className: className
+                });
+
+                return result;
+            },
+
+            /**
+             * @ignore
+             */
+            init: function () {
+                /**
+                 * Instance ID.
+                 * @type {number}
+                 */
+                this.instanceId = self.nextInstanceId++;
+            }
+        });
 });
-
-(function () {
-    "use strict";
-
-    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /**
-         * Reinterprets hash as date collection.
-         * @returns {sntls.DateCollection}
-         */
-        toDateCollection: function () {
-            return sntls.DateCollection.create(this.items);
-        }
-    });
-}());
 </code></pre>
         </article>
     </section>

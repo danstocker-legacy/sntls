@@ -857,7 +857,7 @@ keys are URI decoded or translated to the corresponding pattern object before be
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 124
+        <a href="Path.js.html">tree/Path.js</a>, line 141
     </li></ul></dd>
     
     
@@ -993,7 +993,7 @@ keys are URI decoded or translated to the corresponding pattern object before be
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 134
+        <a href="Path.js.html">tree/Path.js</a>, line 151
     </li></ul></dd>
     
     
@@ -1217,7 +1217,7 @@ keys are URI decoded or translated to the corresponding pattern object before be
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 171
+        <a href="Path.js.html">tree/Path.js</a>, line 188
     </li></ul></dd>
     
     
@@ -1538,7 +1538,7 @@ when A and B have a common base path and that base path is B.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 199
+        <a href="Path.js.html">tree/Path.js</a>, line 216
     </li></ul></dd>
     
     
@@ -1812,7 +1812,7 @@ p.isRelativeTo('foo.bar.hello') // false</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 147
+        <a href="Path.js.html">tree/Path.js</a>, line 164
     </li></ul></dd>
     
     
@@ -1954,7 +1954,7 @@ p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 157
+        <a href="Path.js.html">tree/Path.js</a>, line 174
     </li></ul></dd>
     
     
@@ -2085,7 +2085,169 @@ patterns converted back to their symbol form ('|', '\', '<', and '^').
         
             
 <dt>
-    <h4 class="name" id="trim"><span class="type-signature"></span>trim<span class="signature">(<span class="optional">count</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Path.html">sntls.Path</a>}</span></h4>
+    <h4 class="name" id="trimLeft"><span class="type-signature"></span>trimLeft<span class="signature">(<span class="optional">count</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Path.html">sntls.Path</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Trims leading end of path. Alters path buffer!
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>count</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+            
+            <td class="description last">Number of keys to remove from path.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Path.html#trimLeft">sntls.Path#trimLeft</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Path.js.html">tree/Path.js</a>, line 110
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Path.html">sntls.Path</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path>it>is');
+p.trimLeft().asArray // ['path', 'it', 'is']</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="trimRight"><span class="type-signature"></span>trimRight<span class="signature">(<span class="optional">count</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.Path.html">sntls.Path</a>}</span></h4>
     
     
 </dt>
@@ -2182,7 +2344,7 @@ patterns converted back to their symbol form ('|', '\', '<', and '^').
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.Path.html#trim">sntls.Path#trim</a>
+        <a href="sntls.Path.html#trimRight">sntls.Path#trimRight</a>
     </li></dd>
     
     
@@ -2199,7 +2361,7 @@ patterns converted back to their symbol form ('|', '\', '<', and '^').
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 110
+        <a href="Path.js.html">tree/Path.js</a>, line 127
     </li></ul></dd>
     
     
@@ -2239,7 +2401,7 @@ patterns converted back to their symbol form ('|', '\', '<', and '^').
         <h5>Example</h5>
         
     <pre class="prettyprint"><code>var p = sntls.Path.create('test>path>it>is');
-p.trim().asArray // ['test', 'path', 'it']</code></pre>
+p.trimRight().asArray // ['test', 'path', 'it']</code></pre>
 
     
 </dd>
@@ -2260,13 +2422,13 @@ p.trim().asArray // ['test', 'path', 'it']</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Aug 08 2013 10:30:24 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:47 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
