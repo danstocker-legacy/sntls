@@ -26,7 +26,7 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.6.2"
+        "troop"  : "~0.7.0"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",

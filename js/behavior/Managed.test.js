@@ -5,7 +5,10 @@
     module("Managed");
 
     var base = troop.Base.extend()
-            .addTrait(sntls.Managed),
+            .addTrait(sntls.Managed)
+            .addMethods({
+                init: function () {sntls.Managed.init.call(this);}
+            }),
         MyManaged = base
             .extend('MyManaged')
             .addMethods({

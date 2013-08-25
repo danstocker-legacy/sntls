@@ -13,7 +13,10 @@
 
         var MyDocumented = troop.Base.extend()
                 .addTrait(sntls.Documented)
-                .extend('MyDocumented'),
+                .extend('MyDocumented')
+                .addMethods({
+                    init: function () { sntls.Documented.init.call(this); }
+                }),
             nextInstanceId = sntls.Documented.nextInstanceId,
             myInstance;
 
