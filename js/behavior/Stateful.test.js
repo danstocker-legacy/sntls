@@ -53,7 +53,7 @@
                 .addStateLayer('layer', stateMatrix, 'closed')
                 .addMethods({
                     init: function () {
-                        this.initStateful();
+                        sntls.Stateful.init.call(this);
                     },
 
                     open: function () {
@@ -98,7 +98,7 @@
                 .addStateLayer('layer', stateMatrix, 'closed')
                 .addMethods({
                     init: function () {
-                        this.initStateful();
+                        sntls.Stateful.init.call(this);
                     },
 
                     open: function () {},

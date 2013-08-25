@@ -20,7 +20,7 @@ troop.postpone(sntls, 'Profiled', function (sntls) {
              * the current profiled object will add its own profile to this collection. When omitted, a new profile
              * collection will be created with one profile in it.
              */
-            initProfiled: function (profileId, profiles) {
+            init: function (profileId, profiles) {
                 dessert
                     .isString(profileId, "Invalid profile ID")
                     .isProfileCollectionOptional(profiles, "Invalid profile collection");

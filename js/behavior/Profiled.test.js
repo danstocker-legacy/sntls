@@ -9,7 +9,7 @@
                 .addTrait(sntls.Profiled)
                 .addMethods({
                     init: function () {
-                        this.initProfiled('foo');
+                        sntls.Profiled.init.call(this, 'foo');
                     }
                 }),
             myProfiled = myClass.create();
@@ -26,7 +26,7 @@
                 .addTrait(sntls.Profiled)
                 .addMethods({
                     init: function () {
-                        this.initProfiled('foo');
+                        sntls.Profiled.init.call(this, 'foo');
                     }
                 }),
             myProfiled = myClass.create();

@@ -15,7 +15,7 @@ troop.postpone(sntls, 'Stateful', function () {
              * Initializes stateful instance by assigning default states for each layer
              * as the current state.
              */
-            initStateful: function () {
+            init: function () {
                 /**
                  * Collection holding current state names for each state layer.
                  * Key: name of state layer, value: name of current state for that layer.
@@ -50,7 +50,7 @@ troop.postpone(sntls, 'Stateful', function () {
              *  )
              *  .addMethod({
              *      init: function () {
-             *          this.initStateful();
+             *          sntls.Stateful.init.call(this);
              *      },
              *      open: function () { alert("Opening..."); },
              *      close: function () { alert("Closing..."); }
