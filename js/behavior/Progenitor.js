@@ -61,6 +61,28 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
             },
 
             /**
+             * Retrieves children from the specified lineage or all lineages.
+             * @param {string} [lineageName]
+             * @returns {sntls.Collection}
+             */
+            getChildren: function (lineageName) {
+                var lineage;
+                if (lineageName) {
+                    // lineage specified
+                    lineage = this.getLineage(lineageName);
+                    if (lineage) {
+                        return lineage.children;
+                    } else {
+                        return sntls.Collection.create();
+                    }
+                } else {
+                    return this.lineages.toTree()
+                        .queryKeyValuePairsAsHash('|>children>items>|'.toQuery())
+                        .toCollection();
+                }
+            },
+
+            /**
              * Registers a lineage on the current instance.
              * @param {string} lineageName
              * @returns {sntls.Progenitor}
@@ -125,6 +147,34 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                         childLineage.removeFromParent();
                     }
                 }
+
+                return this;
+            },
+
+            /**
+             * Prepares instance for garbage collection.
+             * @returns {sntls.Progenitor}
+             */
+            destroy: function () {
+                var lineages = this.lineages,
+                    lineageNames = lineages.getKeys();
+
+                // removing current item from parents on all lineages
+                lineages
+                    .callOnEachItem('removeFromParent');
+
+                // removing all children from parent
+                lineages.toTree()
+                    .queryValuesAsHash([
+                        '|'.toQueryPattern(),
+                        'children', 'items', '|'.toQueryPattern(),
+                        'lineages', 'items', lineageNames].toQuery()
+                    )
+                    .toCollection()
+                    .callOnEachItem('removeFromParent');
+
+                // removing instance from registry
+                this.removeFromRegistry();
 
                 return this;
             }

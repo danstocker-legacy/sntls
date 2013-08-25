@@ -47,6 +47,37 @@
         strictEqual(child.getParent(), parent, "Default lineage");
     });
 
+    test("Children getter", function () {
+        var parent = sntls.Progenitor.create()
+                .addToLineage('foo')
+                .addToLineage('bar'),
+            child1 = sntls.Progenitor.create()
+                .addToLineage('foo', parent),
+            child2 = sntls.Progenitor.create()
+                .addToLineage('bar', parent),
+            child3 = sntls.Progenitor.create()
+                .addToLineage('bar', parent),
+            expected;
+
+        expected = {};
+        expected[child1.instanceId] = child1;
+
+        deepEqual(parent.getChildren('foo').items, expected, "Children for first lineage");
+
+        expected = {};
+        expected[child2.instanceId] = child2;
+        expected[child3.instanceId] = child3;
+
+        deepEqual(parent.getChildren('bar').items, expected, "Children for second lineage");
+
+        expected = {};
+        expected[child1.instanceId] = child1;
+        expected[child2.instanceId] = child2;
+        expected[child3.instanceId] = child3;
+
+        deepEqual(parent.getChildren().items, expected, "Children for all lineages");
+    });
+
     test("Adding instance to lineage", function () {
         expect(1);
 
@@ -180,5 +211,53 @@
             ].sort(),
             "Lineage paths after adding to different parent"
         );
+    });
+
+    test("Destroy", function () {
+        var parent1 = sntls.Progenitor.create()
+                .addToLineage('foo')
+                .addToLineage('bar'),
+            parent2 = sntls.Progenitor.create()
+                .addToLineage('baz'),
+            child1 = sntls.Progenitor.create()
+                .addToLineage('foo', parent1)
+                .addToLineage('baz', parent2),
+            child2 = sntls.Progenitor.create()
+                .addToLineage('bar', parent1),
+            child3 = sntls.Progenitor.create()
+                .addToLineage('bar', parent1)
+                .addToLineage('baz', parent2),
+            log = [];
+
+        sntls.Lineage.addMocks({
+            removeFromParent: function () {
+                log.push(['P', this.lineageName, this.instance.instanceId].join('.'));
+                return this;
+            }
+        });
+        sntls.Managed.addMocks({
+            removeFromRegistry: function () {
+                log.push(['R', this.instanceId].join('.'));
+                return this;
+            }
+        });
+
+        parent1.destroy();
+
+        deepEqual(
+            log.sort(),
+            [
+                'R.' + parent1.instanceId,
+                'P.foo.' + parent1.instanceId,
+                'P.bar.' + parent1.instanceId,
+                'P.foo.' + child1.instanceId,
+                'P.bar.' + child2.instanceId,
+                'P.bar.' + child3.instanceId
+            ].sort(),
+            "Removed instances"
+        );
+
+        sntls.Lineage.removeMocks();
+        sntls.Managed.removeMocks();
     });
 }());
