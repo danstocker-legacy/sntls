@@ -5,6 +5,14 @@
     module("Lineage");
 
     test("Instantiation", function () {
+        raises(function () {
+            sntls.Lineage.create(111, instance);
+        }, "Invalid lineage name");
+
+        raises(function () {
+            sntls.Lineage.create('foo', 'invalid');
+        }, "Invalid instance");
+
         var instance = sntls.Documented.create(),
             lineage = /** @type sntls.Lineage */ sntls.Lineage.create('foo', instance);
 
@@ -23,6 +31,10 @@
             child = sntls.Progenitor.create()
                 .registerLineage('foo'),
             childLineage = child.getLineage('foo');
+
+        raises(function () {
+            childLineage.addToParent('invalid');
+        }, "Invalid parent");
 
         childLineage.addToParent(parent);
 

@@ -23,6 +23,10 @@ troop.postpone(sntls, 'Lineage', function () {
              * @ignore
              */
             init: function (lineageName, instance) {
+                dessert
+                    .isString(lineageName, "Invalid lineage name")
+                    .isClass(instance, "Invalid instance");
+
                 /**
                  * Name of the lineage. Analogous to a family name.
                  * @type {string}
@@ -73,6 +77,8 @@ troop.postpone(sntls, 'Lineage', function () {
              * @returns {sntls.Lineage}
              */
             addToParent: function (parent) {
+                dessert.isClass(parent, "Invalid parent");
+
                 var parentLineage = parent.getLineage(this.lineageName);
 
                 if (parentLineage) {
