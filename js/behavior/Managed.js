@@ -6,7 +6,13 @@ troop.postpone(sntls, 'Managed', function (ns, className) {
         self = base.extend(className);
 
     /**
-     * Managed trait, extends the Documented trait with a controllable instance registry.
+     * @name sntls.Managed.create
+     * @function
+     * @returns {sntls.Managed}
+     */
+
+    /**
+     * Managed trait, extends `Documented` trait with a dynamic instance registry.
      * @class
      * @extends sntls.Documented
      */
@@ -42,7 +48,16 @@ troop.postpone(sntls, 'Managed', function (ns, className) {
             },
 
             /**
-             * Prepares instance for garbage collection.
+             * Prepares instance for garbage collection. Call it before disposing of instance in order to avoid
+             * memory leaks.
+             * @example
+             * MyManaged = troop.Base.extend()
+             *   .addTrait(sntls.Managed)
+             *   .addMethods({
+             *       init: function () {sntls.Managed.init.call(this);}
+             *   });
+             * instance = MyManaged.create(); // instance will be added to registry
+             * instance.destroy(); // cleans up
              * @returns {sntls.Managed}
              */
             destroy: function () {

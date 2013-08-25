@@ -24,11 +24,12 @@ troop.postpone(sntls, 'Documented', function () {
              */
             nextInstanceId: 0
         })
-        .addMethods(/** @lends sntls.Documented */{
+        .addMethods(/** @lends sntls.Documented# */{
             /**
              * Extends class adding meta information.
              * @param {string} className Class name
              * @returns {sntls.Documented}
+             * @memberOf sntls.Documented
              */
             extend: function (className) {
                 dessert.isString(className, "Invalid class name");
@@ -52,7 +53,6 @@ troop.postpone(sntls, 'Documented', function () {
                 /**
                  * Instance ID.
                  * @type {number}
-                 * @memberOf sntls.Documented#
                  */
                 this.instanceId = self.nextInstanceId++;
             }
