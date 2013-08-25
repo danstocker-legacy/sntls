@@ -37,6 +37,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Lineage}
              */
             getLineage: function (lineageName) {
+                dessert.isStringOptional(lineageName, "Invalid lineage name");
+
                 return lineageName ?
                     this.lineages.getItem(lineageName) :
                     this.lineages.getFirstValue();
@@ -48,6 +50,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Managed}
              */
             getParent: function (lineageName) {
+                dessert.isStringOptional(lineageName, "Invalid lineage name");
+
                 var lineage = lineageName ?
                         this.lineages.getItem(lineageName) :
                         this.lineages.getFirstValue(),
@@ -66,6 +70,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Collection}
              */
             getChildren: function (lineageName) {
+                dessert.isStringOptional(lineageName, "Invalid lineage name");
+
                 var lineage;
                 if (lineageName) {
                     // lineage specified
@@ -88,6 +94,7 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Progenitor}
              */
             registerLineage: function (lineageName) {
+                dessert.isString(lineageName, "Invalid lineage name");
                 this.lineages.setItem(lineageName, sntls.Lineage.create(lineageName, this));
                 return this;
             },
@@ -136,6 +143,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
              * @returns {sntls.Progenitor}
              */
             removeChild: function (lineageName, child) {
+                dessert.isClass(child, "Invalid child");
+
                 var lineage = this.getLineage(lineageName),
                     childLineage;
 

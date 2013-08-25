@@ -14,6 +14,10 @@
 
         equal(instance.lineages.getKeyCount(), 0, "No lineages up front");
 
+        raises(function () {
+            instance.registerLineage({});
+        }, "Invalid lineage name");
+
         instance.registerLineage('foo');
 
         equal(instance.lineages.getKeyCount(), 1, "Lineage count increased");
@@ -26,6 +30,10 @@
         var instance = sntls.Progenitor.create()
                 .registerLineage('foo'),
             lineage;
+
+        raises(function () {
+            instance.getLineage({});
+        }, "Invalid lineage name");
 
         lineage = instance.getLineage('foo');
 
@@ -40,6 +48,10 @@
                 .addToLineage('foo'),
             child = sntls.Progenitor.create()
                 .addToLineage('foo', parent);
+
+        raises(function () {
+            parent.getParent({});
+        }, "Invalid lineage name");
 
         equal(typeof parent.getParent('foo'), 'undefined', "Ancestor");
         equal(typeof child.getParent('invalid'), 'undefined', "Invalid lineage");
@@ -58,6 +70,10 @@
             child3 = sntls.Progenitor.create()
                 .addToLineage('bar', parent),
             expected;
+
+        raises(function () {
+            parent.getChildren({});
+        }, "Invalid lineage name");
 
         expected = {};
         expected[child1.instanceId] = child1;
@@ -116,6 +132,10 @@
         parent.addChild('foo', child);
 
         equal(parent.getLineage().children.getKeyCount(), 1, "Child count before removal");
+
+        raises(function () {
+            parent.removeChild('foo', {});
+        }, "Invalid child");
 
         parent.removeChild('foo', child);
 
