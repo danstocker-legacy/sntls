@@ -42,6 +42,15 @@ troop.postpone(sntls, 'Managed', function (ns, className) {
             },
 
             /**
+             * Prepares instance for garbage collection.
+             * @returns {sntls.Managed}
+             */
+            destroy: function () {
+                this.removeFromRegistry();
+                return this;
+            },
+
+            /**
              * Fetches instance by ID.
              * @param instanceId
              * @returns {sntls.Managed}

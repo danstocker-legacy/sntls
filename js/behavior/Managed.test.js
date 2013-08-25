@@ -56,4 +56,21 @@
 
         strictEqual(typeof sntls.Managed.getInstanceById(instanceId), 'undefined', "Fetches nothing");
     });
+
+    test("Destroy", function () {
+        expect(1);
+
+        var managed = sntls.Managed.create();
+
+        sntls.Managed.addMocks({
+            removeFromRegistry: function () {
+                ok(true, "Removal called");
+                return this;
+            }
+        });
+
+        managed.destroy();
+
+        sntls.Managed.removeMocks();
+    });
 }());
