@@ -84,7 +84,7 @@ troop.postpone(sntls, 'Profile', function () {
              * @returns {sntls.Profile}
              */
             reset: function (counterName) {
-                if (dessert.validators.isString(counterName)) {
+                if (counterName) {
                     delete this.counters[counterName];
                 } else {
                     this.counters = {};

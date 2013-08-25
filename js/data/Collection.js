@@ -38,8 +38,6 @@ troop.postpone(sntls, 'Collection', function () {
              * @memberOf sntls.Collection#
              */
             _genShortcut: function (methodName) {
-                dessert.isString(methodName, "Invalid method name");
-
                 /**
                  * @this {sntls.Collection} Collection instance.
                  */
