@@ -52,7 +52,7 @@ troop.postpone(sntls, 'Managed', function (ns, className) {
 
             /**
              * Fetches instance by ID.
-             * @param instanceId
+             * @param {number|string} instanceId
              * @returns {sntls.Managed}
              * @memberOf sntls.Managed
              */
