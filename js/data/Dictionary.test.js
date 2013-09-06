@@ -286,23 +286,13 @@
     });
 
     test("Clearing", function () {
-        expect(3);
-
         var dict = sntls.Dictionary.create({
             foo  : 'bar',
             hello: ['world', 'all']
         });
 
-        sntls.Hash.addMocks({
-            clear: function () {
-                ok(true, "Base clear called");
-            }
-        });
-
         dict.clear();
-        equal(dict.keyCount, 0, "Item count after emptying");
-        equal(dict.itemCount, 0, "Value count after emptying");
-
-        sntls.Hash.removeMocks();
+        equal(dict.keyCount, 0, "Key count after emptying");
+        equal(dict.itemCount, 0, "Item (KV pair) count after emptying");
     });
 }());

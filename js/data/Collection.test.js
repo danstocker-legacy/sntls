@@ -697,37 +697,6 @@
         );
     });
 
-    test("Clearing", function () {
-        expect(3);
-
-        var collection = sntls.Collection.create();
-
-        init(collection);
-
-        deepEqual(
-            collection.items,
-            {
-                'one'  : 'hello',
-                'two'  : 'world!',
-                'three': 5,
-                'four' : {},
-                'five' : true
-            },
-            "Collection before emptying"
-        );
-
-        sntls.Hash.addMocks({
-            clear: function () {
-                ok(true, "Base clear called");
-            }
-        });
-
-        collection.clear();
-        equal(collection.keyCount, 0, "Item count after emptying");
-
-        sntls.Hash.removeMocks();
-    });
-
     test("Sorted value extraction", function () {
         var collection = sntls.Collection.create();
 

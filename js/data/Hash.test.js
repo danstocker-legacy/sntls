@@ -166,11 +166,13 @@
         result = hash.clear();
         strictEqual(result, hash, "Clearing is chainable");
         deepEqual(hash.items, {}, "Object buffer emptied");
+        equal(hash.keyCount, 0, "Counter reset");
 
         hash = sntls.Hash.create(['foo', 'bar', 'hello', 'world']);
 
         hash.clear();
         deepEqual(hash.items, [], "Array buffer emptied");
+        equal(hash.keyCount, 0, "Counter reset");
     });
 
     test("Passing buffer to handler", function () {

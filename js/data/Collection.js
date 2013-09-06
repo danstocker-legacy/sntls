@@ -528,20 +528,6 @@ troop.postpone(sntls, 'Collection', function () {
             },
 
             /**
-             * Clears collection by removing all items and re-setting item count to zero.
-             * @returns {sntls.Collection}
-             */
-            clear: function () {
-                // clearing items buffer
-                base.clear.call(this);
-
-                // resetting counter
-                this.keyCount = 0;
-
-                return this;
-            },
-
-            /**
              * Iterates over collection items and calls the specified handler function on each, until
              * either the iteration completes of handler returns `false`.
              * Iteration order is non-deterministic.
@@ -800,6 +786,13 @@ troop.postpone(sntls, 'Collection', function () {
                     this :
                     self.create(resultItems);
             }
+
+            /**
+             * Clears the collection.
+             * @name sntls.Collection#clear
+             * @function
+             * @returns {sntls.Collection}
+             */
         });
 });
 

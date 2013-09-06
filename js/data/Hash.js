@@ -184,6 +184,7 @@ troop.postpone(sntls, 'Hash', function () {
              */
             clear: function () {
                 this.items = this.items instanceof Array ? [] : {};
+                this.keyCount = 0;
                 return this;
             },
 

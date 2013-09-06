@@ -262,8 +262,7 @@ troop.postpone(sntls, 'Dictionary', function () {
                 // clearing items buffer
                 base.clear.call(this);
 
-                // resetting counters
-                this.keyCount = 0;
+                // resetting item counter
                 this.itemCount = 0;
 
                 return this;
