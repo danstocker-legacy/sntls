@@ -191,8 +191,8 @@ troop.postpone(sntls, 'Progenitor', function (ns, className) {
                 // removing all children from parent
                 lineages.toTree()
                     .queryValuesAsHash([
-                        '|'.toQueryPattern(),
-                        'children', 'items', '|'.toQueryPattern(),
+                        '|'.toKeyValuePattern(),
+                        'children', 'items', '|'.toKeyValuePattern(),
                         'lineages', 'items', lineageNames].toQuery()
                     )
                     .toCollection()

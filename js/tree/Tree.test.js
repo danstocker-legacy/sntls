@@ -489,7 +489,8 @@
         );
 
         deepEqual(
-            tree.queryPathValuePairsAsHash(['\\'.toQueryPattern(), '1<2'.toQueryPattern().setValue(3)].toQuery()).items,
+            tree.queryPathValuePairsAsHash(['\\'.toKeyValuePattern(), '1<2'.toKeyValuePattern().setValue(3)
+            ].toQuery()).items,
             {
                 "foo>boo>2": 3
             },

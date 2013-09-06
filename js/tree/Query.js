@@ -3,7 +3,7 @@ troop.postpone(sntls, 'Query', function () {
     "use strict";
 
     var validators = dessert.validators,
-        QueryPattern = sntls.QueryPattern,
+        KeyValuePattern = sntls.KeyValuePattern,
         base = sntls.Path;
 
     /**
@@ -13,7 +13,7 @@ troop.postpone(sntls, 'Query', function () {
      * @name sntls.Query.create
      * @function
      * @param {Array|string} query Query in either string representation ('>'-separated, eg. "this>is>|>query")
-     * or array representation (eg. ['this', 'is', '|'.toQueryPattern(), 'path']). When query is given as string,
+     * or array representation (eg. ['this', 'is', '|'.toKeyValuePattern(), 'path']). When query is given as string,
      * keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.
      * @returns {sntls.Query}
      */
@@ -53,15 +53,15 @@ troop.postpone(sntls, 'Query', function () {
              * Pattern indicating skip mode. In skip mode, keys are skipped
              * in the path between the previous key and the nearest key matched
              * by the next pattern in the query.
-             * @type {sntls.QueryPattern}
+             * @type {sntls.KeyValuePattern}
              */
-            PATTERN_SKIP: QueryPattern.create(QueryPattern.SKIP_SYMBOL)
+            PATTERN_SKIP: KeyValuePattern.create(KeyValuePattern.SKIP_SYMBOL)
         })
         .addPrivateMethods(/** @lends sntls.Query */{
             /**
              * Prepares string query buffer for normalization.
              * @param {string} asString Array of strings
-             * @returns {string[]|sntls.QueryPattern[]}
+             * @returns {string[]|sntls.KeyValuePattern[]}
              * @private
              */
             _fromString: function (asString) {
@@ -71,13 +71,13 @@ troop.postpone(sntls, 'Query', function () {
 
                 for (i = 0; i < asArray.length; i++) {
                     pattern = asArray[i];
-                    if (pattern.indexOf(QueryPattern.SKIP_SYMBOL) === 0) {
+                    if (pattern.indexOf(KeyValuePattern.SKIP_SYMBOL) === 0) {
                         // special skipper case
                         result.push(this.PATTERN_SKIP);
                     } else if (this.RE_QUERY_TESTER.test(pattern)) {
                         // pattern is query expression (as in not key literal)
                         // creating pattern instance
-                        result.push(QueryPattern.create(pattern));
+                        result.push(KeyValuePattern.create(pattern));
                     } else {
                         // pattern is key literal
                         result.push(decodeURI(pattern));
@@ -91,8 +91,8 @@ troop.postpone(sntls, 'Query', function () {
              * Normalizes query buffer. Leaves key literals as they are,
              * converts array pattern expressions to actual pattern objects.
              * Makes sure skipper patterns all reference the same instance.
-             * @param {string[]|sntls.QueryPattern[]} asArray
-             * @returns {string[]|sntls.QueryPattern[]}
+             * @param {string[]|sntls.KeyValuePattern[]} asArray
+             * @returns {string[]|sntls.KeyValuePattern[]}
              * @private
              */
             _fromArray: function (asArray) {
@@ -106,8 +106,8 @@ troop.postpone(sntls, 'Query', function () {
                         result.push(pattern);
                     } else if (pattern instanceof Array) {
                         // array is turned into pattern instance
-                        result.push(QueryPattern.create(pattern));
-                    } else if (QueryPattern.isBaseOf(pattern)) {
+                        result.push(KeyValuePattern.create(pattern));
+                    } else if (KeyValuePattern.isBaseOf(pattern)) {
                         if (pattern.isSkipper()) {
                             // skipper patterns are substituted with constant
                             result.push(this.PATTERN_SKIP);
@@ -190,7 +190,7 @@ troop.postpone(sntls, 'Query', function () {
                         inSkipMode = true;
                         j++;
                     } else {
-                        if (QueryPattern.isBaseOf(currentPattern) && currentPattern.matchesKey(currentKey) ||
+                        if (KeyValuePattern.isBaseOf(currentPattern) && currentPattern.matchesKey(currentKey) ||
                             currentPattern === currentKey
                             ) {
                             // current key matches current pattern
@@ -218,7 +218,7 @@ troop.postpone(sntls, 'Query', function () {
              * Returns the string representation for the query, keys URI encoded and separated by '>',
              * patterns converted back to their symbol form ('|', '\', '<', and '^').
              * @example
-             * sntls.Query.create(['test^', '|'.toQueryPattern(), 'path']).toString() // "test%5E>|>path"
+             * sntls.Query.create(['test^', '|'.toKeyValuePattern(), 'path']).toString() // "test%5E>|>path"
              * @returns {string}
              */
             toString: function () {

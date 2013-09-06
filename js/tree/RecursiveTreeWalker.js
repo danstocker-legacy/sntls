@@ -80,7 +80,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * Retrieves an array of keys from the node passed
              * according to the given pattern.
              * @param {object} node Node for which to obtain the keys.
-             * @param {string|sntls.QueryPattern} pattern
+             * @param {string|sntls.KeyValuePattern} pattern
              * @returns {string[]} Array of keys.
              * @private
              */
@@ -131,7 +131,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                                 }
                             }
                         }
-                    } else if (descriptor.symbol === sntls.QueryPattern.WILDCARD_SYMBOL) {
+                    } else if (descriptor.symbol === sntls.KeyValuePattern.WILDCARD_SYMBOL) {
                         if (hOP.call(descriptor, 'value')) {
                             // there's a value specified within pattern
                             if (node instanceof Array) {

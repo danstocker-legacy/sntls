@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls */
-troop.postpone(sntls, 'QueryPattern', function () {
+troop.postpone(sntls, 'KeyValuePattern', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
@@ -7,24 +7,24 @@ troop.postpone(sntls, 'QueryPattern', function () {
 
     /**
      * Instantiates class
-     * @name sntls.QueryPattern.create
+     * @name sntls.KeyValuePattern.create
      * @function
      * @param {string|object} pattern
      * @example
-     * sntls.QueryPattern.create('|') // matches any key
-     * sntls.QueryPattern.create(['foo', 'bar']) // matches keys 'foo' and 'bar'
-     * sntls.QueryPattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' & 'bar'-'hello'
-     * @returns {sntls.QueryPattern}
+     * sntls.KeyValuePattern.create('|') // matches any key
+     * sntls.KeyValuePattern.create(['foo', 'bar']) // matches keys 'foo' and 'bar'
+     * sntls.KeyValuePattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' & 'bar'-'hello'
+     * @returns {sntls.KeyValuePattern}
      */
 
     /**
      * Single element in a query expression. A series of query patterns make
      * up a query, which then can be used to traverse tree structures with.
-     * @class sntls.QueryPattern
+     * @class sntls.KeyValuePattern
      * @extends troop.Base
      */
-    sntls.QueryPattern = troop.Base.extend()
-        .addConstants(/** @lends sntls.QueryPattern */{
+    sntls.KeyValuePattern = troop.Base.extend()
+        .addConstants(/** @lends sntls.KeyValuePattern */{
             /**
              * Separates keys from values in string pattern
              * @type {string}
@@ -55,7 +55,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
              */
             RE_SYMBOL_VALIDATOR: /\||\\/
         })
-        .addPrivateMethods(/** @lends sntls.QueryPattern */{
+        .addPrivateMethods(/** @lends sntls.KeyValuePattern */{
             /**
              * URI decodes all items of an array.
              * @param {string[]} strings Array of strings
@@ -132,7 +132,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
                 return result;
             }
         })
-        .addMethods(/** @lends sntls.QueryPattern# */{
+        .addMethods(/** @lends sntls.KeyValuePattern# */{
             /**
              * @param {string|object} pattern
              * @ignore
@@ -161,7 +161,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * Sets value on query pattern. Pattern with a value will only
              * match nodes with the specified value.
              * @param {*} value
-             * @returns {sntls.QueryPattern}
+             * @returns {sntls.KeyValuePattern}
              */
             setValue: function (value) {
                 var descriptor = this.descriptor;
@@ -251,40 +251,40 @@ troop.postpone(sntls, 'QueryPattern', function () {
         });
 });
 
-troop.postpone(sntls, 'QueryPatternCollection', function () {
+troop.postpone(sntls, 'KeyValuePatternCollection', function () {
     "use strict";
 
     /**
      * Instantiates class
-     * @name sntls.QueryPatternCollection.create
+     * @name sntls.KeyValuePatternCollection.create
      * @function
-     * @returns {sntls.QueryPatternCollection}
+     * @returns {sntls.KeyValuePatternCollection}
      */
 
     /**
-     * @name sntls.QueryPatternCollection#descriptor
+     * @name sntls.KeyValuePatternCollection#descriptor
      * @ignore
      */
 
     /**
-     * @class sntls.QueryPatternCollection
+     * @class sntls.KeyValuePatternCollection
      * @extends sntls.Collection
-     * @extends sntls.QueryPattern
+     * @extends sntls.KeyValuePattern
      */
-    sntls.QueryPatternCollection = sntls.Collection.of(sntls.QueryPattern);
+    sntls.KeyValuePatternCollection = sntls.Collection.of(sntls.KeyValuePattern);
 });
 
 (function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
-        isQueryPattern: function (expr) {
-            return sntls.QueryPattern.isBaseOf(expr);
+        isKeyValuePattern: function (expr) {
+            return sntls.KeyValuePattern.isBaseOf(expr);
         },
 
-        isQueryPatternOptional: function (expr) {
+        isKeyValuePatternOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   sntls.QueryPattern.isBaseOf(expr);
+                   sntls.KeyValuePattern.isBaseOf(expr);
         }
     });
 
@@ -292,11 +292,11 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Creates a new QueryPattern instance based on the current string.
-             * @returns {sntls.QueryPattern}
+             * Creates a new KeyValuePattern instance based on the current string.
+             * @returns {sntls.KeyValuePattern}
              */
-            toQueryPattern: function () {
-                return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+            toKeyValuePattern: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
         false, false, false
@@ -306,11 +306,11 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
         Array.prototype,
         /** @lends Array# */{
             /**
-             * Creates a new QueryPattern instance based on the current array.
-             * @returns {sntls.QueryPattern}
+             * Creates a new KeyValuePattern instance based on the current array.
+             * @returns {sntls.KeyValuePattern}
              */
-            toQueryPattern: function () {
-                return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+            toKeyValuePattern: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
         false, false, false

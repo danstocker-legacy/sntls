@@ -6,7 +6,7 @@
 
     test("URI decode", function () {
         deepEqual(
-            sntls.QueryPattern._encodeURI(['f|o', 'b<r']),
+            sntls.KeyValuePattern._encodeURI(['f|o', 'b<r']),
             ['f%7Co', 'b%3Cr'],
             "Query pattern encoded"
         );
@@ -14,7 +14,7 @@
 
     test("URI decode", function () {
         deepEqual(
-            sntls.QueryPattern._decodeURI(['f%7Co', 'b%3Cr']),
+            sntls.KeyValuePattern._decodeURI(['f%7Co', 'b%3Cr']),
             ['f|o', 'b<r'],
             "Query pattern decoded"
         );
@@ -22,13 +22,13 @@
 
     test("Pattern parsing", function () {
         equal(
-            sntls.QueryPattern._parseString('foo%5E'),
+            sntls.KeyValuePattern._parseString('foo%5E'),
             'foo^',
             "String literal pattern"
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('foo%5E<bar%5E'),
+            sntls.KeyValuePattern._parseString('foo%5E<bar%5E'),
             {
                 options: ['foo^', 'bar^']
             },
@@ -36,7 +36,7 @@
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('|'),
+            sntls.KeyValuePattern._parseString('|'),
             {
                 symbol: '|'
             },
@@ -44,7 +44,7 @@
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('\\'),
+            sntls.KeyValuePattern._parseString('\\'),
             {
                 symbol: '\\'
             },
@@ -52,7 +52,7 @@
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('foo%5E^bar%5E'),
+            sntls.KeyValuePattern._parseString('foo%5E^bar%5E'),
             {
                 key  : 'foo^',
                 value: 'bar^'
@@ -61,7 +61,7 @@
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('foo%5E<bar%5E^baz%5E'),
+            sntls.KeyValuePattern._parseString('foo%5E<bar%5E^baz%5E'),
             {
                 options: ['foo^', 'bar^'],
                 value  : 'baz^'
@@ -70,7 +70,7 @@
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('|^bar%5E'),
+            sntls.KeyValuePattern._parseString('|^bar%5E'),
             {
                 symbol: '|',
                 value : 'bar^'
@@ -79,7 +79,7 @@
         );
 
         deepEqual(
-            sntls.QueryPattern._parseString('\\^bar%5E'),
+            sntls.KeyValuePattern._parseString('\\^bar%5E'),
             {
                 symbol: '\\'
             },
@@ -92,21 +92,21 @@
             pattern;
 
         raises(function () {
-            sntls.QueryPattern.create(4);
+            sntls.KeyValuePattern.create(4);
         }, "Query pattern initialized w/ other than string, array, or object");
 
-        pattern = sntls.QueryPattern.create('|^foo');
+        pattern = sntls.KeyValuePattern.create('|^foo');
         deepEqual(
             pattern.descriptor,
-            sntls.QueryPattern._parseString('|^foo'),
+            sntls.KeyValuePattern._parseString('|^foo'),
             "Descriptor parsed from string"
         );
 
         descriptor = {symbol: '|', value: 'foo'};
-        pattern = sntls.QueryPattern.create(descriptor);
+        pattern = sntls.KeyValuePattern.create(descriptor);
         deepEqual(
             pattern.descriptor,
-            sntls.QueryPattern._parseString('|^foo'),
+            sntls.KeyValuePattern._parseString('|^foo'),
             "Descriptor supplied as object"
         );
         strictEqual(
@@ -115,10 +115,10 @@
             "Descriptor supplied as object"
         );
 
-        pattern = sntls.QueryPattern.create(['foo', 'bar']);
+        pattern = sntls.KeyValuePattern.create(['foo', 'bar']);
         deepEqual(
             pattern.descriptor,
-            sntls.QueryPattern._parseString('foo<bar'),
+            sntls.KeyValuePattern._parseString('foo<bar'),
             "Descriptor created from array"
         );
     });
@@ -127,23 +127,23 @@
         var pattern;
 
         if (troop.Feature.hasPropertyAttributes()) {
-            ok(!Array.prototype.propertyIsEnumerable('toQueryPattern'), "Array type converter is not enumerable");
-            ok(!String.prototype.propertyIsEnumerable('toQueryPattern'), "String type converter is not enumerable");
+            ok(!Array.prototype.propertyIsEnumerable('toKeyValuePattern'), "Array type converter is not enumerable");
+            ok(!String.prototype.propertyIsEnumerable('toKeyValuePattern'), "String type converter is not enumerable");
         }
 
-        pattern = '|'.toQueryPattern();
-        ok(pattern.isA(sntls.QueryPattern), "Type of converted value");
+        pattern = '|'.toKeyValuePattern();
+        ok(pattern.isA(sntls.KeyValuePattern), "Type of converted value");
         deepEqual(
             pattern.descriptor,
-            sntls.QueryPattern.create('|').descriptor,
+            sntls.KeyValuePattern.create('|').descriptor,
             "Pattern contents"
         );
 
-        pattern = ['foo', 'bar'].toQueryPattern();
-        ok(pattern.isA(sntls.QueryPattern), "Type of converted value");
+        pattern = ['foo', 'bar'].toKeyValuePattern();
+        ok(pattern.isA(sntls.KeyValuePattern), "Type of converted value");
         deepEqual(
             pattern.descriptor,
-            sntls.QueryPattern.create('foo<bar').descriptor,
+            sntls.KeyValuePattern.create('foo<bar').descriptor,
             "Pattern contents"
         );
     });
@@ -151,21 +151,21 @@
     test("Setting value", function () {
         var pattern;
 
-        pattern = '|'.toQueryPattern().setValue('foo');
+        pattern = '|'.toKeyValuePattern().setValue('foo');
         deepEqual(
             pattern.descriptor,
             {symbol: '|', value: 'foo'},
             "Value set on wildcard pattern"
         );
 
-        pattern = 'a<b'.toQueryPattern().setValue('foo');
+        pattern = 'a<b'.toKeyValuePattern().setValue('foo');
         deepEqual(
             pattern.descriptor,
             {options: ['a', 'b'], value: 'foo'},
             "Value set on options pattern"
         );
 
-        pattern = 'a'.toQueryPattern().setValue('foo');
+        pattern = 'a'.toKeyValuePattern().setValue('foo');
         deepEqual(
             pattern.descriptor,
             {key: 'a', value: 'foo'},
@@ -174,44 +174,44 @@
     });
 
     test("Skipper detection", function () {
-        ok(!sntls.QueryPattern.create('hello').isSkipper(), "Literal not skipper");
-        ok(sntls.QueryPattern.create('\\').isSkipper(), "Skipper");
+        ok(!sntls.KeyValuePattern.create('hello').isSkipper(), "Literal not skipper");
+        ok(sntls.KeyValuePattern.create('\\').isSkipper(), "Skipper");
     });
 
     test("Key match", function () {
-        ok(sntls.QueryPattern.create('hello').matchesKey('hello'), "Key matches string");
-        ok(!sntls.QueryPattern.create('foo').matchesKey('hello'), "Key doesn't match different string");
+        ok(sntls.KeyValuePattern.create('hello').matchesKey('hello'), "Key matches string");
+        ok(!sntls.KeyValuePattern.create('foo').matchesKey('hello'), "Key doesn't match different string");
 
-        ok(sntls.QueryPattern.create('|').matchesKey('hello'), "Key matches wildcard");
-        ok(!sntls.QueryPattern.create({}).matchesKey('hello'), "Key doesn't match unknown wildcard");
+        ok(sntls.KeyValuePattern.create('|').matchesKey('hello'), "Key matches wildcard");
+        ok(!sntls.KeyValuePattern.create({}).matchesKey('hello'), "Key doesn't match unknown wildcard");
 
-        ok(sntls.QueryPattern.create('|^foo').matchesKey('hello'), "Key matches value pattern");
+        ok(sntls.KeyValuePattern.create('|^foo').matchesKey('hello'), "Key matches value pattern");
 
-        ok(sntls.QueryPattern.create('hello<world').matchesKey('hello'), "Key matches choices");
-        ok(!sntls.QueryPattern.create('foo<bar').matchesKey('hello'), "Key doesn't match choices it's not in");
+        ok(sntls.KeyValuePattern.create('hello<world').matchesKey('hello'), "Key matches choices");
+        ok(!sntls.KeyValuePattern.create('foo<bar').matchesKey('hello'), "Key doesn't match choices it's not in");
     });
 
     test("String representation", function () {
         equal(
-            sntls.QueryPattern.create({symbol: '|', value: 'foo^'}).toString(),
+            sntls.KeyValuePattern.create({symbol: '|', value: 'foo^'}).toString(),
             '|^foo%5E',
             "Wildcard with value"
         );
 
         equal(
-            sntls.QueryPattern.create({symbol: '\\'}).toString(),
+            sntls.KeyValuePattern.create({symbol: '\\'}).toString(),
             '\\',
             "Skipper"
         );
 
         equal(
-            sntls.QueryPattern.create({options: ['foo^', 'bar^']}).toString(),
+            sntls.KeyValuePattern.create({options: ['foo^', 'bar^']}).toString(),
             'foo%5E<bar%5E',
             "Options"
         );
 
         equal(
-            sntls.QueryPattern.create({options: ['foo^', 'bar^'], value: 'baz^'}).toString(),
+            sntls.KeyValuePattern.create({options: ['foo^', 'bar^'], value: 'baz^'}).toString(),
             'foo%5E<bar%5E^baz%5E',
             "Options with value"
         );

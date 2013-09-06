@@ -145,43 +145,43 @@
             ];
 
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(hashNode, '|'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, '|'.toKeyValuePattern()),
             Object.keys(hashNode),
             "Wildcard pattern"
         );
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(hashNode, 'blah'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'blah'.toKeyValuePattern()),
             [],
             "String pattern"
         );
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(hashNode, 'foo<bar'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'foo<bar'.toKeyValuePattern()),
             ['foo'],
             "Array pattern"
         );
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(hashNode, '|^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, '|^world'.toKeyValuePattern()),
             ['hello'],
             "Value pattern w/ object"
         );
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(hashNode, 'hello^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'hello^world'.toKeyValuePattern()),
             ['hello'],
             "Value pattern w/ object"
         );
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(hashNode, 'hello<foo^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(hashNode, 'hello<foo^world'.toKeyValuePattern()),
             ['hello'],
             "Value pattern w/ object"
         );
 
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(arrayNode, '|'.toQueryPattern().setValue(1)),
+            RecursiveTreeWalker._getKeysByPattern(arrayNode, '|'.toKeyValuePattern().setValue(1)),
             [2],
             "Value pattern w/ array"
         );
         deepEqual(
-            RecursiveTreeWalker._getKeysByPattern(arrayNode, '|^world'.toQueryPattern()),
+            RecursiveTreeWalker._getKeysByPattern(arrayNode, '|^world'.toKeyValuePattern()),
             [0, 3],
             "Value pattern w/ array"
         );
@@ -262,7 +262,8 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\'.toQueryPattern(), '|'.toQueryPattern().setValue(3)].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\'.toKeyValuePattern(), '|'.toKeyValuePattern().setValue(3)
+            ].toQuery())
             .walk(node);
         deepEqual(
             result,
@@ -332,7 +333,8 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\'.toQueryPattern(), '|'.toQueryPattern().setValue(value)].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\'.toKeyValuePattern(), '|'.toKeyValuePattern().setValue(value)
+            ].toQuery())
             .walk(node);
 
         deepEqual(
@@ -432,7 +434,8 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, ['\\'.toQueryPattern(), '|'.toQueryPattern().setValue(3)].toQuery())
+        sntls.RecursiveTreeWalker.create(handler, ['\\'.toKeyValuePattern(), '|'.toKeyValuePattern().setValue(3)
+            ].toQuery())
             .walk(node);
         deepEqual(
             result,

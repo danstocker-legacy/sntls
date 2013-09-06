@@ -88,11 +88,11 @@
         equal(buffer[1], '|', "Expression as string treated as literal");
         deepEqual(buffer[2].descriptor.options, ['foo', 'bar'], "Array converted to options pattern");
 
-        buffer = Query._fromArray(['|'.toQueryPattern(), 'you<all'.toQueryPattern()]);
+        buffer = Query._fromArray(['|'.toKeyValuePattern(), 'you<all'.toKeyValuePattern()]);
         equal(buffer[0].descriptor.symbol, '|', "Wildcard already query pattern");
         deepEqual(buffer[1].descriptor.options, ['you', 'all'], "Options already query pattern");
 
-        buffer = Query._fromArray(['\\'.toQueryPattern()]);
+        buffer = Query._fromArray(['\\'.toKeyValuePattern()]);
         strictEqual(buffer[0], Query.PATTERN_SKIP, "Skipper pattern converted to common skipper instance");
     });
 
@@ -103,7 +103,7 @@
             sntls.Query.create(5);
         }, "Invalid query");
 
-        query = sntls.Query.create(['hello', '|'.toQueryPattern(), 'you<all'.toQueryPattern()]);
+        query = sntls.Query.create(['hello', '|'.toKeyValuePattern(), 'you<all'.toKeyValuePattern()]);
         equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
@@ -122,7 +122,7 @@
             ok(!String.prototype.propertyIsEnumerable('toQuery'), "String type converter is not enumerable");
         }
 
-        query = ['hello', '|'.toQueryPattern(), 'you<all'.toQueryPattern()].toQuery();
+        query = ['hello', '|'.toKeyValuePattern(), 'you<all'.toKeyValuePattern()].toQuery();
         equal(query.asArray[0], 'hello');
         equal(query.asArray[1].descriptor.symbol, '|');
         deepEqual(query.asArray[2].descriptor.options, ['you', 'all']);
@@ -157,7 +157,7 @@
         query = ['test', 'path', 'it', 'is'].toPathOrQuery();
         ok(!query.isA(sntls.Query), "Array path did not satisfy query conditions");
 
-        query = ['test', sntls.QueryPattern.create('|'), 'it', 'is'].toPathOrQuery();
+        query = ['test', sntls.KeyValuePattern.create('|'), 'it', 'is'].toPathOrQuery();
         ok(query.isA(sntls.Query), "Array path created Query instance");
     });
 
