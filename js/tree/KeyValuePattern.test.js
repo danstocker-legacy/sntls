@@ -128,7 +128,9 @@
 
         if (troop.Feature.hasPropertyAttributes()) {
             ok(!Array.prototype.propertyIsEnumerable('toKeyValuePattern'), "Array type converter is not enumerable");
+            ok(!Array.prototype.propertyIsEnumerable('toKVP'), "Array type converter is not enumerable");
             ok(!String.prototype.propertyIsEnumerable('toKeyValuePattern'), "String type converter is not enumerable");
+            ok(!String.prototype.propertyIsEnumerable('toKVP'), "String type converter is not enumerable");
         }
 
         pattern = '|'.toKeyValuePattern();
@@ -140,6 +142,22 @@
         );
 
         pattern = ['foo', 'bar'].toKeyValuePattern();
+        ok(pattern.isA(sntls.KeyValuePattern), "Type of converted value");
+        deepEqual(
+            pattern.descriptor,
+            sntls.KeyValuePattern.create('foo<bar').descriptor,
+            "Pattern contents"
+        );
+
+        pattern = '|'.toKVP();
+        ok(pattern.isA(sntls.KeyValuePattern), "Type of converted value");
+        deepEqual(
+            pattern.descriptor,
+            sntls.KeyValuePattern.create('|').descriptor,
+            "Pattern contents"
+        );
+
+        pattern = ['foo', 'bar'].toKVP();
         ok(pattern.isA(sntls.KeyValuePattern), "Type of converted value");
         deepEqual(
             pattern.descriptor,

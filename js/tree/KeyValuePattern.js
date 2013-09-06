@@ -297,6 +297,15 @@ troop.postpone(sntls, 'KeyValuePatternCollection', function () {
              */
             toKeyValuePattern: function () {
                 return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
+            },
+
+            /**
+             * Shorthand to String.prototype.toKeyValuePattern().
+             * Creates a new KeyValuePattern instance based on the current string.
+             * @returns {sntls.KeyValuePattern}
+             */
+            toKVP: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
         false, false, false
@@ -310,6 +319,15 @@ troop.postpone(sntls, 'KeyValuePatternCollection', function () {
              * @returns {sntls.KeyValuePattern}
              */
             toKeyValuePattern: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
+            },
+
+            /**
+             * Shorthand to Array.prototype.toKeyValuePattern().
+             * Creates a new KeyValuePattern instance based on the current array.
+             * @returns {sntls.KeyValuePattern}
+             */
+            toKVP: function () {
                 return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
