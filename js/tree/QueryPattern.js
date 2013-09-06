@@ -10,6 +10,10 @@ troop.postpone(sntls, 'QueryPattern', function () {
      * @name sntls.QueryPattern.create
      * @function
      * @param {string|object} pattern
+     * @example
+     * sntls.QueryPattern.create('|') // matches any key
+     * sntls.QueryPattern.create(['foo', 'bar']) // matches keys 'foo' and 'bar'
+     * sntls.QueryPattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' & 'bar'-'hello'
      * @returns {sntls.QueryPattern}
      */
 
