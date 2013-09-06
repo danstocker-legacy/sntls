@@ -89,8 +89,8 @@
         deepEqual(buffer[2].descriptor.options, ['foo', 'bar'], "Array converted to options pattern");
 
         buffer = Query._fromArray(['|'.toKeyValuePattern(), 'you<all'.toKeyValuePattern()]);
-        equal(buffer[0].descriptor.symbol, '|', "Wildcard already query pattern");
-        deepEqual(buffer[1].descriptor.options, ['you', 'all'], "Options already query pattern");
+        equal(buffer[0].descriptor.symbol, '|', "Wildcard already key-value pattern");
+        deepEqual(buffer[1].descriptor.options, ['you', 'all'], "Options already key-value pattern");
 
         buffer = Query._fromArray(['\\'.toKeyValuePattern()]);
         strictEqual(buffer[0], Query.PATTERN_SKIP, "Skipper pattern converted to common skipper instance");

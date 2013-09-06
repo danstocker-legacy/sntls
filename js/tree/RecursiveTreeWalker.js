@@ -167,7 +167,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     queryAsArray = this.query.asArray,
                     atLeafNode = typeof currentNode !== 'object', // we're at a leaf node
                     queryProcessed = queryPos >= queryAsArray.length, // no patterns left in query to process
-                    currentPattern = queryAsArray[queryPos], // current query pattern
+                    currentPattern = queryAsArray[queryPos], // current key-value pattern
                     currentKeys, // keys in node matching pattern
                     nextSkipMode, // skip mode for next level
                     nextQueryPos, // position of next pattern

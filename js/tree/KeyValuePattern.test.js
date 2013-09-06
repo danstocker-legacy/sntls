@@ -2,13 +2,13 @@
 (function () {
     "use strict";
 
-    module("Query Pattern");
+    module("Key-Value Pattern");
 
     test("URI decode", function () {
         deepEqual(
             sntls.KeyValuePattern._encodeURI(['f|o', 'b<r']),
             ['f%7Co', 'b%3Cr'],
-            "Query pattern encoded"
+            "Key-value pattern encoded"
         );
     });
 
@@ -16,7 +16,7 @@
         deepEqual(
             sntls.KeyValuePattern._decodeURI(['f%7Co', 'b%3Cr']),
             ['f|o', 'b<r'],
-            "Query pattern decoded"
+            "Key-value pattern decoded"
         );
     });
 
@@ -93,7 +93,7 @@
 
         raises(function () {
             sntls.KeyValuePattern.create(4);
-        }, "Query pattern initialized w/ other than string, array, or object");
+        }, "Key-value pattern initialized w/ other than string, array, or object");
 
         pattern = sntls.KeyValuePattern.create('|^foo');
         deepEqual(

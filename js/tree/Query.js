@@ -116,7 +116,7 @@ troop.postpone(sntls, 'Query', function () {
                             result.push(pattern);
                         }
                     } else {
-                        dessert.assert(false, "Invalid query pattern", pattern);
+                        dessert.assert(false, "Invalid key-value pattern", pattern);
                     }
                 }
 

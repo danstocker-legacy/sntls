@@ -18,7 +18,7 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
      */
 
     /**
-     * Single element in a query expression. A series of query patterns make
+     * Matches a key-value pair. A series of key-value patterns make
      * up a query, which then can be used to traverse tree structures with.
      * @class sntls.KeyValuePattern
      * @extends troop.Base
