@@ -8,6 +8,7 @@
         "hash",
         "dictionary",
         "collection",
+        "set",
         "list",
         "ordered list",
         "tree",

@@ -13,6 +13,7 @@ module.exports = function (grunt) {
             'js/data/JournalingCollection.js',
             'js/data/OrderedList.js',
             'js/data/OrderedStringList.js',
+            'js/data/Set.js',
             'js/tree/Path.js',
             'js/tree/KeyValuePattern.js',
             'js/tree/Query.js',
