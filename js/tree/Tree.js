@@ -203,8 +203,9 @@ troop.postpone(sntls, 'Tree', function () {
                     nextKey = asArray[i];
 
                     currentNodeSingle = sntls.Utils.isSingularObject(currentNode);
-                    if (currentNodeSingle) {
+                    if (currentNodeSingle && parentNode !== null) {
                         // current node has exactly one child
+                        // and is not root node
                         if (!parentNodeSingle) {
                             // ...but parent had more
                             // marking current node for deletion

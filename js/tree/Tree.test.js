@@ -162,7 +162,7 @@
     });
 
     test("Key deletion from object", function () {
-        expect(4);
+        expect(5);
 
         var tree = sntls.Tree.create({
                 foo: {
@@ -178,6 +178,10 @@
 
         strictEqual(result, tree, "Tree.unsetKey is chainable");
         deepEqual(tree.items, {foo: {}}, "Node removed");
+
+        tree.unsetKey('foo'.toPath());
+
+        deepEqual(tree.items, {}, "Tree completely emptied");
     });
 
     test("Key deletion from array", function () {
@@ -206,7 +210,7 @@
     });
 
     test("Path deletion in objects", function () {
-        expect(8);
+        expect(10);
 
         var tree = sntls.Tree.create({
                 a: {d: {}, e: {}, f: {
@@ -283,10 +287,26 @@
             },
             "Overreaching path not removed"
         );
+
+        tree
+            .unsetPath('c'.toPath())
+            .unsetPath('a>d'.toPath());
+        deepEqual(
+            tree.items,
+            {a: {e: {}}},
+            "Tree almost empty"
+        );
+
+        tree.unsetPath('a>e'.toPath());
+        deepEqual(
+            tree.items,
+            {},
+            "Tree completely emptied"
+        );
     });
 
     test("Path deletion in arrays", function () {
-        expect(10);
+        expect(12);
 
         var tree = sntls.Tree.create([
             [1, 2, 3],
@@ -360,6 +380,26 @@
                 [8]
             ],
             "Path spliced out from array"
+        );
+
+        tree
+            .unsetPath([1].toPath(), true)
+            .unsetPath([0, 0].toPath(), true)
+            .unsetPath([0, 0].toPath(), true);
+        deepEqual(
+            tree.items,
+            [
+                [3]
+            ],
+            "Almost empty"
+        );
+
+        tree
+            .unsetPath([0, 0].toPath(), true);
+        deepEqual(
+            tree.items,
+            [],
+            "Tree completely emptied"
         );
     });
 
