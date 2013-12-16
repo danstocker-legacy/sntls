@@ -406,7 +406,9 @@ troop.postpone(sntls, 'Collection', function () {
 
                 for (i = 0; i < itemKeys.length; i++) {
                     itemKey = itemKeys[i];
-                    resultItems[itemKey] = items[itemKey];
+                    if (items.hasOwnProperty(itemKey)) {
+                        resultItems[itemKey] = items[itemKey];
+                    }
                 }
 
                 return this.getBase().create(resultItems);

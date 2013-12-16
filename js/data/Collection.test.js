@@ -504,7 +504,7 @@
             collection.filterByKeys('foo', 'bar');
         }, "Invalid item names");
 
-        result = collection.filterByKeys(['one', 'three']);
+        result = collection.filterByKeys(['one', 'three', 'absent']);
 
         notStrictEqual(result.items, collection.items, "Different buffer");
 
@@ -522,7 +522,7 @@
         var collection = sntls.Collection.create(['foo', 'friend', 'field', 'boom', 'bar']),
             filtered;
 
-        filtered = collection.filterByKeys([1, 3]);
+        filtered = collection.filterByKeys([1, 3, 10]);
 
         ok(filtered.items instanceof Array, "Array type retained");
 
