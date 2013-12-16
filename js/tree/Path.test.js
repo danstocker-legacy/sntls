@@ -137,14 +137,17 @@
         /** @type sntls.Path */
         var path = sntls.Path.create('test>path>it>is');
 
-        equal(path.equals(sntls.Path.create('test>path>it>is')), true, "Matching path");
-        equal(path.equals(sntls.Path.create('path>it>is')), false, "Non-matching path");
+        ok(!path.equals(), "Not equal to undefined");
+        ok(!path.equals("string"), "Not equal to string");
 
-        equal(path.equals('test>path>it>is'.toPath()), true, "Matching string path");
-        equal(path.equals('path>it>is'.toPath()), false, "Non-matching string path");
+        ok(path.equals(sntls.Path.create('test>path>it>is')), "Matching path");
+        ok(!path.equals(sntls.Path.create('path>it>is')), "Non-matching path");
 
-        equal(path.equals(['test', 'path', 'it', 'is'].toPath()), true, "Matching array path");
-        equal(path.equals(['path', 'it', 'is'].toPath()), false, "Non-matching array path");
+        ok(path.equals('test>path>it>is'.toPath()), "Matching string path");
+        ok(!path.equals('path>it>is'.toPath()), "Non-matching string path");
+
+        ok(path.equals(['test', 'path', 'it', 'is'].toPath()), "Matching array path");
+        ok(!path.equals(['path', 'it', 'is'].toPath()), "Non-matching array path");
     });
 
     test("Relative paths", function () {

@@ -186,6 +186,10 @@ troop.postpone(sntls, 'Path', function () {
              * @returns {boolean}
              */
             equals: function (remotePath) {
+                if (!self.isBaseOf(remotePath)) {
+                    return false;
+                }
+
                 var currentArray = this.asArray,
                     remoteArray = remotePath.asArray,
                     i;
