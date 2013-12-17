@@ -406,7 +406,7 @@ troop.postpone(sntls, 'Collection', function () {
 
                 for (i = 0; i < itemKeys.length; i++) {
                     itemKey = itemKeys[i];
-                    if (items.hasOwnProperty(itemKey)) {
+                    if (hOP.call(items, itemKey)) {
                         resultItems[itemKey] = items[itemKey];
                     }
                 }
