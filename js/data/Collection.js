@@ -681,11 +681,14 @@ troop.postpone(sntls, 'Collection', function () {
                 var items = this.items,
                     keys = this.getKeys(),
                     resultItems = items instanceof Array ? [] : {},
-                    i, itemKey;
+                    i, itemKey, item;
 
                 for (i = 0; i < keys.length; i++) {
                     itemKey = keys[i];
-                    resultItems[itemKey] = items[itemKey][propertyName];
+                    item = items[itemKey];
+                    if (typeof item !== 'undefined' && item !== null) {
+                        resultItems[itemKey] = item[propertyName];
+                    }
                 }
 
                 return (subClass || self).create(resultItems);
