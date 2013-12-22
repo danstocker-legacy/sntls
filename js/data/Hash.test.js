@@ -23,6 +23,14 @@
         }, "Predefined items property on hash");
     });
 
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toHash();
+
+        ok(hash.isA(sntls.Hash), "Is hash");
+        strictEqual(hash.items, buffer, "Same buffer");
+    });
+
     test("Cloning hash", function () {
         var original = sntls.Hash.create({
                 foo  : 'bar',

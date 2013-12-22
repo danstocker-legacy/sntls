@@ -150,4 +150,18 @@ troop.postpone(sntls, 'StringDictionary', function () {
             return sntls.StringDictionary.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new StringDictionary instance based on the current array.
+             * @returns {sntls.StringDictionary}
+             */
+            toStringDictionary: function () {
+                return sntls.StringDictionary.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

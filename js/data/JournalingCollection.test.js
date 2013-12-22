@@ -1,4 +1,4 @@
-/*global sntls, module, test, ok, equal, deepEqual, raises, expect */
+/*global sntls, module, test, ok, equal, strictEqual, deepEqual, raises, expect */
 (function () {
     "use strict";
 
@@ -9,6 +9,14 @@
             collection = hash.toJournalingCollection();
 
         ok(collection.isA(sntls.JournalingCollection), "Hash converted to journaling collection");
+    });
+
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toJournalingCollection();
+
+        ok(hash.isA(sntls.JournalingCollection), "Is journaling collecton");
+        strictEqual(hash.items, buffer, "Same buffer");
     });
 
     test("Logging", function () {

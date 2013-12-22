@@ -800,4 +800,18 @@ troop.postpone(sntls, 'Collection', function () {
             }
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new Collection instance based on the current array.
+             * @returns {sntls.Collection}
+             */
+            toCollection: function () {
+                return sntls.Collection.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

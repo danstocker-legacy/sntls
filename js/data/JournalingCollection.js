@@ -121,4 +121,18 @@ troop.postpone(sntls, 'JournalingCollection', function () {
             return sntls.JournalingCollection.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new JournalingCollection instance based on the current array.
+             * @returns {sntls.JournalingCollection}
+             */
+            toJournalingCollection: function () {
+                return sntls.JournalingCollection.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

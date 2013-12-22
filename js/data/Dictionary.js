@@ -305,4 +305,18 @@ troop.postpone(sntls, 'Dictionary', function () {
             return sntls.Dictionary.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new Dictionary instance based on the current array.
+             * @returns {sntls.Dictionary}
+             */
+            toDictionary: function () {
+                return sntls.Dictionary.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

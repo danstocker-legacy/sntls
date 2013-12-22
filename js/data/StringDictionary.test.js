@@ -1,4 +1,4 @@
-/*global module, test, raises, ok, equal, deepEqual */
+/*global module, test, raises, ok, equal, strictEqual, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -12,6 +12,14 @@
             dict = hash.toStringDictionary();
 
         ok(dict.isA(sntls.StringDictionary), "Hash converted to string dictionary");
+    });
+
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toStringDictionary();
+
+        ok(hash.isA(sntls.StringDictionary), "Is string dictionary");
+        strictEqual(hash.items, buffer, "Same buffer");
     });
 
     test("Combine with", function () {

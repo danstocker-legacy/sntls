@@ -1,4 +1,4 @@
-/*global module, test, expect, raises, ok, equal, notStrictEqual, deepEqual */
+/*global module, test, expect, raises, ok, equal, notStrictEqual, strictEqual, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -36,6 +36,14 @@
 
         equal(typeof dict.keyCount, 'undefined', "Item count uninitialized in populated buffer");
         equal(typeof dict.itemCount, 'undefined', "Value count uninitialized in populated buffer");
+    });
+
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toDictionary();
+
+        ok(hash.isA(sntls.Dictionary), "Is dictionary");
+        strictEqual(hash.items, buffer, "Same buffer");
     });
 
     test("Single item addition", function () {

@@ -32,6 +32,14 @@
         ok(list.isA(sntls.OrderedList), "Hash converted to OrderedList");
     });
 
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toOrderedList();
+
+        ok(hash.isA(sntls.OrderedList), "Is ordered list");
+        strictEqual(hash.items, buffer, "Same buffer");
+    });
+
     test("Numeric search", function () {
         var orderedList = sntls.OrderedList.create([0, 1, 3, 5, 6, 9]);
         equal(orderedList.spliceIndexOf(4), 3, "Lower nearest hit");

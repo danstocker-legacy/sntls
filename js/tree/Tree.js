@@ -446,4 +446,18 @@ troop.postpone(sntls, 'Tree', function () {
             return sntls.Tree.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new Tree instance based on the current array.
+             * @returns {sntls.Tree}
+             */
+            toTree: function () {
+                return sntls.Tree.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

@@ -11,6 +11,14 @@
         ok(list.isA(sntls.OrderedStringList), "Hash converted to OrderedStringList");
     });
 
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toOrderedStringList();
+
+        ok(hash.isA(sntls.OrderedStringList), "Is ordered string list");
+        strictEqual(hash.items, buffer, "Same buffer");
+    });
+
     test("End value", function () {
         equal(sntls.OrderedStringList._getEndValue('hello'), 'hellp');
         equal(sntls.OrderedStringList._getEndValue('a'), 'b');

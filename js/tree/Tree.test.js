@@ -22,6 +22,14 @@
         ok(tree.isA(sntls.Tree), "Hash converted to Tree");
     });
 
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toTree();
+
+        ok(hash.isA(sntls.Tree), "Is tree");
+        strictEqual(hash.items, buffer, "Same buffer");
+    });
+
     test("Node retrieval", function () {
         var tree = sntls.Tree.create({
             foo: {

@@ -106,4 +106,18 @@ troop.postpone(sntls, 'OrderedStringList', function () {
             return sntls.OrderedStringList.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new OrderedStringList instance based on the current array.
+             * @returns {sntls.OrderedStringList}
+             */
+            toOrderedStringList: function () {
+                return sntls.OrderedStringList.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

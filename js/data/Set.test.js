@@ -1,4 +1,4 @@
-/*global module, test, raises, ok, equal, deepEqual, notDeepEqual */
+/*global module, test, raises, ok, equal, strictEqual, deepEqual, notDeepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -9,6 +9,14 @@
         var hash = sntls.Hash.create();
 
         ok(hash.toSet().isA(sntls.Set), "Converted to set");
+    });
+
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toSet();
+
+        ok(hash.isA(sntls.Set), "Is set");
+        strictEqual(hash.items, buffer, "Same buffer");
     });
 
     test("Intersection", function () {

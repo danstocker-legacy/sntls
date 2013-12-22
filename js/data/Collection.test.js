@@ -294,6 +294,14 @@
         equal(typeof collection.split, 'function', "String collection");
     });
 
+    test("Array conversion", function () {
+        var buffer = [1, 2, 3, 4],
+            hash = buffer.toCollection();
+
+        ok(hash.isA(sntls.Collection), "Is collection");
+        strictEqual(hash.items, buffer, "Same buffer");
+    });
+
     test("Building collection", function () {
         var collection = sntls.Collection.create();
 

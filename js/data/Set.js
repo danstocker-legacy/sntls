@@ -149,4 +149,18 @@ troop.postpone(sntls, 'Set', function () {
             return sntls.Set.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new Set instance based on the current array.
+             * @returns {sntls.Set}
+             */
+            toSet: function () {
+                return sntls.Set.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

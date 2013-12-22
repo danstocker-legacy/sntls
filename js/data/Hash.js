@@ -263,4 +263,18 @@ troop.postpone(sntls, 'Hash', function () {
                    sntls.Hash.isBaseOf(expr);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new Hash instance based on the current array.
+             * @returns {sntls.Hash}
+             */
+            toHash: function () {
+                return sntls.Hash.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

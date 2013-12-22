@@ -250,4 +250,18 @@ troop.postpone(sntls, 'OrderedList', function () {
             return sntls.OrderedList.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new OrderedList instance based on the current array.
+             * @returns {sntls.OrderedList}
+             */
+            toOrderedList: function () {
+                return sntls.OrderedList.create(this);
+            }
+        },
+        false, false, false
+    );
 }());
