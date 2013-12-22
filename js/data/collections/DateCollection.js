@@ -31,4 +31,18 @@ troop.postpone(sntls, 'DateCollection', function () {
             return sntls.DateCollection.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new DateCollection instance based on the current array.
+             * @returns {sntls.DateCollection}
+             */
+            toDateCollection: function () {
+                return sntls.DateCollection.create(this);
+            }
+        },
+        false, false, false
+    );
 }());

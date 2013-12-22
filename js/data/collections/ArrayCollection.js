@@ -31,4 +31,18 @@ troop.postpone(sntls, 'ArrayCollection', function () {
             return sntls.ArrayCollection.create(this.items);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new ArrayCollection instance based on the current array.
+             * @returns {sntls.ArrayCollection}
+             */
+            toArrayCollection: function () {
+                return sntls.ArrayCollection.create(this);
+            }
+        },
+        false, false, false
+    );
 }());
