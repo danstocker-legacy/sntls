@@ -217,6 +217,19 @@ troop.postpone(sntls, 'Query', function () {
             },
 
             /**
+             * Determines whether paths matched by current query may be roots of the specified path.
+             * @param {sntls.Path} relativePath
+             * @returns {boolean}
+             * @example
+             * 'foo>|>bar'.toQuery().isRootOf('foo>baz>bar>hello'.toPath()) // true
+             */
+            isRootOf: function (relativePath) {
+                return this.clone()
+                    .appendKey(this.PATTERN_SKIP)
+                    .matchesPath(relativePath);
+            },
+
+            /**
              * Returns the string representation for the query, keys URI encoded and separated by '>',
              * patterns converted back to their symbol form ('|', '\', '<', and '^').
              * @example

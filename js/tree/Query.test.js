@@ -70,6 +70,14 @@
         ok(query.matchesPath('hello>world>test>path>foo>bar'.toPath()), "Query matched");
     });
 
+    test("Root detection", function () {
+        var query = 'foo>|>bar'.toQuery();
+
+        ok(query.isRootOf('foo>baz>bar>hello'.toPath()), "Is root of matching relative path");
+        ok(query.isRootOf('foo>baz>bar'.toPath()), "Is root of exactly matching path");
+        ok(!query.isRootOf('foo>hello>world'.toPath()), "Not root of non-matching path");
+    });
+
     test("Initialization from string", function () {
         var Query = sntls.Query,
             buffer;
