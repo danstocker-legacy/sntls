@@ -1,4 +1,4 @@
-/*global module, test, expect, raises, ok, equal, deepEqual */
+/*global module, test, expect, raises, ok, equal, notStrictEqual, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -283,6 +283,18 @@
         equal(typeof dictionary.itemCount, 'undefined', "Key count uninitialized");
         equal(dictionary.getItemCount(), 3, "Counter ran");
         equal(dictionary.itemCount, 3, "Item count set after first call");
+    });
+
+    test("Cloning", function () {
+        var dictionary = sntls.Dictionary.create()
+                .addItem('foo', ["hello", "world"])
+                .addItem('bar', "baz"),
+            clone = dictionary.clone();
+
+        notStrictEqual(clone.items, dictionary.items, "Buffers not the same");
+        deepEqual(clone.items, dictionary.items, "Buffer contents are the same");
+        equal(clone.keyCount, dictionary.keyCount, "Key counts match");
+        equal(clone.itemCount, dictionary.itemCount, "Item counts match");
     });
 
     test("Clearing", function () {

@@ -255,6 +255,18 @@ troop.postpone(sntls, 'Dictionary', function () {
             },
 
             /**
+             * Clones dictionary.
+             * @returns {sntls.Dictionary}
+             */
+            clone: function () {
+                var result = /** @type {sntls.Dictionary} */base.clone.call(this);
+
+                result.itemCount = this.itemCount;
+
+                return result;
+            },
+
+            /**
              * Clears dictionary and resets counters.
              * @returns {sntls.Dictionary}
              */
