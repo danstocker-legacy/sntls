@@ -15,7 +15,7 @@ troop.postpone(sntls, 'Hash', function () {
 
     /**
      * General wrapper around objects to treat them as hash.
-     * Calling `Object.prototype` methods on hash objects is not viable as they may be
+     * Calling `Object.prototype` methods on hash objects is not safe as they may be
      * shadowed by user data, and such cases certainly lead the application to break.
      * Other `Hash`-based classes may delegate conversion methods to this class.
      * @class sntls.Hash
@@ -45,6 +45,34 @@ troop.postpone(sntls, 'Hash', function () {
                  * @type {number}
                  */
                 this.keyCount = items ? undefined : 0;
+            },
+
+            /**
+             * Retrieves item from the hash.
+             * @param {string} itemKey Item key.
+             * @returns {*} Item variable.
+             */
+            getItem: function (itemKey) {
+                return this.items[itemKey];
+            },
+
+            /**
+             * Clones hash. Creates an instance of the same class (for subclasses of `Hash`)
+             * and initializes it with a shallow copy of the current items buffer and item count.
+             * @returns {sntls.Hash} New hash with identical contents.
+             */
+            clone: function () {
+                var result = /** @type sntls.Hash */ this.getBase().create();
+
+                /**
+                 * Copying items and count
+                 * Other properties added by descendants
+                 * must be cloned in override methods
+                 */
+                result.items = sntls.Utils.shallowCopy(this.items);
+                result.keyCount = this.keyCount;
+
+                return result;
             },
 
             /**

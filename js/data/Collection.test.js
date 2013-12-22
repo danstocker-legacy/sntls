@@ -312,28 +312,6 @@
         equal(collection.items.otherItem, 'testValue', "String value stored in collection");
     });
 
-    test("Cloning collection", function () {
-        var original = sntls.Collection.create({
-                foo  : 'bar',
-                hello: 'world'
-            }),
-            clone = original.clone();
-
-        deepEqual(original.items, clone.items, "Clone has identical content");
-        equal(original.keyCount, clone.keyCount, "Original and clone counts match");
-        notStrictEqual(original, clone, "Original and clone different objects");
-        notStrictEqual(original.items, clone.items, "Original and clone items different objects");
-    });
-
-    test("Cloning with array buffer", function () {
-        var original = sntls.Collection.create(['foo', 'bar']),
-            clone = original.clone();
-
-        ok(clone.items instanceof Array, "Cloning retains array buffer type");
-
-        deepEqual(clone.items, ['foo', 'bar'], "Clone array buffer");
-    });
-
     test("Rebasing collection", function () {
         var original = sntls.Collection.create({foo: 'bar'}),
             rebased;

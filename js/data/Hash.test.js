@@ -1,4 +1,4 @@
-/*global module, test, expect, ok, raises, equal, strictEqual, deepEqual */
+/*global module, test, expect, ok, raises, equal, strictEqual, notStrictEqual, deepEqual */
 /*global sntls */
 (function () {
     "use strict";
@@ -21,6 +21,28 @@
         deepEqual(hash.items, {
             foo: 'bar'
         }, "Predefined items property on hash");
+    });
+
+    test("Cloning hash", function () {
+        var original = sntls.Hash.create({
+                foo  : 'bar',
+                hello: 'world'
+            }),
+            clone = original.clone();
+
+        deepEqual(original.items, clone.items, "Clone has identical content");
+        equal(original.keyCount, clone.keyCount, "Original and clone counts match");
+        notStrictEqual(original, clone, "Original and clone different objects");
+        notStrictEqual(original.items, clone.items, "Original and clone items different objects");
+    });
+
+    test("Cloning with array buffer", function () {
+        var original = sntls.Hash.create(['foo', 'bar']),
+            clone = original.clone();
+
+        ok(clone.items instanceof Array, "Cloning retains array buffer type");
+
+        deepEqual(clone.items, ['foo', 'bar'], "Clone array buffer");
     });
 
     test("Single key & value extraction", function () {

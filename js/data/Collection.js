@@ -175,18 +175,6 @@ troop.postpone(sntls, 'Collection', function () {
                 return specifiedCollection;
             },
 
-            //////////////////////////////
-            // Basic functions
-
-            /**
-             * Retrieves item from the collection.
-             * @param {string} itemKey Item key.
-             * @returns {*} Item variable.
-             */
-            getItem: function (itemKey) {
-                return this.items[itemKey];
-            },
-
             /**
              * Sets an item in the collection. Overwrites item if there is already one by the same item key.
              * Increments counter for new items.
@@ -229,25 +217,6 @@ troop.postpone(sntls, 'Collection', function () {
                 }
 
                 return this;
-            },
-
-            /**
-             * Clones collection. Creates an instance of the same class (for subclasses of `Collection`)
-             * and initializes it with a shallow copy of the current items buffer and item count.
-             * @returns {sntls.Collection} New collection with identical contents.
-             */
-            clone: function () {
-                var result = /** @type sntls.Collection */ this.getBase().create();
-
-                /**
-                 * Copying items and count
-                 * Other properties added by descendants
-                 * must be cloned in override methods
-                 */
-                result.items = sntls.Utils.shallowCopy(this.items);
-                result.keyCount = this.keyCount;
-
-                return result;
             },
 
             /**
