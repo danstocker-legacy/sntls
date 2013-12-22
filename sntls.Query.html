@@ -130,7 +130,7 @@ There are three symbols that match keys:
         <dl>
             
 <dt>
-    <h4 class="name" id="PATTERN_SKIP"><span class="type-signature">&lt;static> </span>PATTERN_SKIP<span class="type-signature"> :<a href="sntls.QueryPattern.html">sntls.QueryPattern</a></span></h4>
+    <h4 class="name" id="PATTERN_SKIP"><span class="type-signature">&lt;static> </span>PATTERN_SKIP<span class="type-signature"> :<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a></span></h4>
     
     
 </dt>
@@ -352,7 +352,7 @@ contains query patterns.
         <dl>
             
 <dt>
-    <h4 class="name" id="_fromArray"><span class="type-signature">&lt;private, static> </span>_fromArray<span class="signature">(asArray)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>.&lt;string>|<a href="Array.html">Array</a>.&lt;<a href="sntls.QueryPattern.html">sntls.QueryPattern</a>>}</span></h4>
+    <h4 class="name" id="_fromArray"><span class="type-signature">&lt;private, static> </span>_fromArray<span class="signature">(asArray)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>.&lt;string>|<a href="Array.html">Array</a>.&lt;<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>>}</span></h4>
     
     
 </dt>
@@ -405,7 +405,7 @@ Makes sure skipper patterns all reference the same instance.
 <span class="param-type"><a href="Array.html">Array</a>.&lt;string></span>
 |
 
-<span class="param-type"><a href="Array.html">Array</a>.&lt;<a href="sntls.QueryPattern.html">sntls.QueryPattern</a>></span>
+<span class="param-type"><a href="Array.html">Array</a>.&lt;<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>></span>
 
 
             
@@ -477,7 +477,7 @@ Makes sure skipper patterns all reference the same instance.
 <span class="param-type"><a href="Array.html">Array</a>.&lt;string></span>
 |
 
-<span class="param-type"><a href="Array.html">Array</a>.&lt;<a href="sntls.QueryPattern.html">sntls.QueryPattern</a>></span>
+<span class="param-type"><a href="Array.html">Array</a>.&lt;<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>></span>
 
 
 	</dd>
@@ -491,7 +491,7 @@ Makes sure skipper patterns all reference the same instance.
         
             
 <dt>
-    <h4 class="name" id="_fromString"><span class="type-signature">&lt;private, static> </span>_fromString<span class="signature">(asString)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>.&lt;string>|<a href="Array.html">Array</a>.&lt;<a href="sntls.QueryPattern.html">sntls.QueryPattern</a>>}</span></h4>
+    <h4 class="name" id="_fromString"><span class="type-signature">&lt;private, static> </span>_fromString<span class="signature">(asString)</span><span class="type-signature"> &rarr; {<a href="Array.html">Array</a>.&lt;string>|<a href="Array.html">Array</a>.&lt;<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>>}</span></h4>
     
     
 </dt>
@@ -611,7 +611,7 @@ Makes sure skipper patterns all reference the same instance.
 <span class="param-type"><a href="Array.html">Array</a>.&lt;string></span>
 |
 
-<span class="param-type"><a href="Array.html">Array</a>.&lt;<a href="sntls.QueryPattern.html">sntls.QueryPattern</a>></span>
+<span class="param-type"><a href="Array.html">Array</a>.&lt;<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>></span>
 
 
 	</dd>
@@ -689,7 +689,7 @@ Constructs query instance and populates it with query information. Keys in the q
             
             
             <td class="description last">Query in either string representation ('>'-separated, eg. "this>is>|>query")
-or array representation (eg. ['this', 'is', '|'.toQueryPattern(), 'path']). When query is given as string,
+or array representation (eg. ['this', 'is', '|'.toKeyValuePattern(), 'path']). When query is given as string,
 keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.</td>
         </tr>
 	
@@ -1538,7 +1538,7 @@ when A and B have a common base path and that base path is B.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 216
+        <a href="Path.js.html">tree/Path.js</a>, line 220
     </li></ul></dd>
     
     
@@ -1580,6 +1580,142 @@ when A and B have a common base path and that base path is B.
     <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
 p.isRelativeTo('foo') // true
 p.isRelativeTo('foo.bar.hello') // false</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="isRootOf"><span class="type-signature"></span>isRootOf<span class="signature">(relativePath)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Determines whether paths matched by current query may be roots of the specified path.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>relativePath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="sntls.Path.html">sntls.Path</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Query.js.html">tree/Query.js</a>, line 226
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>'foo>|>bar'.toQuery().isRootOf('foo>baz>bar>hello'.toPath()) // true</code></pre>
 
     
 </dd>
@@ -2038,7 +2174,7 @@ patterns converted back to their symbol form ('|', '\', '<', and '^').
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 224
+        <a href="Query.js.html">tree/Query.js</a>, line 239
     </li></ul></dd>
     
     
@@ -2077,7 +2213,7 @@ patterns converted back to their symbol form ('|', '\', '<', and '^').
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>sntls.Query.create(['test^', '|'.toQueryPattern(), 'path']).toString() // "test%5E>|>path"</code></pre>
+    <pre class="prettyprint"><code>sntls.Query.create(['test^', '|'.toKeyValuePattern(), 'path']).toString() // "test%5E>|>path"</code></pre>
 
     
 </dd>
@@ -2422,13 +2558,13 @@ p.trimRight().asArray // ['test', 'path', 'it']</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:47 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 22 2013 10:37:03 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

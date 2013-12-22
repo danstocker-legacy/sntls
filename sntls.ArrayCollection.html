@@ -184,6 +184,65 @@ especially in `Hash`-based subclasses.
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="keyCount"><span class="type-signature"></span>keyCount<span class="type-signature"> :number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Tracks number of distinct keys in the hash. Uninitialized until first queried.
+(by either `.getKeys()` or `.getKeyCount()`), therefore it is safer to use its getter
+method. Should not be modified externally.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="sntls.Collection.html#keyCount">sntls.Collection#keyCount</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 47
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
         </dl>
     
     
@@ -567,7 +626,7 @@ encouraged after calling this method.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 265
+        <a href="Collection.js.html">data/Collection.js</a>, line 234
     </li></ul></dd>
     
     
@@ -718,7 +777,7 @@ The rest of the arguments are forwarded to the method calls.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 775
+        <a href="Collection.js.html">data/Collection.js</a>, line 735
     </li></ul></dd>
     
     
@@ -864,7 +923,7 @@ Changes the current hash instance!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 157
+        <a href="Hash.js.html">data/Hash.js</a>, line 185
     </li></ul></dd>
     
     
@@ -919,7 +978,7 @@ Changes the current hash instance!
     
     
     <div class="description">
-        Clears collection by removing all items and re-setting item count to zero.
+        Clears the collection.
     </div>
     
 
@@ -957,7 +1016,7 @@ Changes the current hash instance!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 534
+        <a href="Collection.js.html">data/Collection.js</a>, line 764
     </li></ul></dd>
     
     
@@ -999,7 +1058,7 @@ Changes the current hash instance!
         
             
 <dt>
-    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
     
     
 </dt>
@@ -1007,7 +1066,7 @@ Changes the current hash instance!
     
     
     <div class="description">
-        Clones collection. Creates an instance of the same class (for subclasses of `Collection`)
+        Clones hash. Creates an instance of the same class (for subclasses of `Hash`)
 and initializes it with a shallow copy of the current items buffer and item count.
     </div>
     
@@ -1046,7 +1105,7 @@ and initializes it with a shallow copy of the current items buffer and item coun
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 239
+        <a href="Hash.js.html">data/Hash.js</a>, line 64
     </li></ul></dd>
     
     
@@ -1067,7 +1126,7 @@ and initializes it with a shallow copy of the current items buffer and item coun
     
             
 <div class="param-desc">
-    New collection with identical contents.
+    New hash with identical contents.
 </div>
 
 
@@ -1078,7 +1137,7 @@ and initializes it with a shallow copy of the current items buffer and item coun
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+<span class="param-type"><a href="sntls.Hash.html">sntls.Hash</a></span>
 
 
 	</dd>
@@ -1231,7 +1290,7 @@ saves a function call on each item.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 690
+        <a href="Collection.js.html">data/Collection.js</a>, line 647
     </li></ul></dd>
     
     
@@ -1422,7 +1481,7 @@ saves a function call on each item.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 756
+        <a href="Collection.js.html">data/Collection.js</a>, line 716
     </li></ul></dd>
     
     
@@ -1558,7 +1617,7 @@ saves a function call on each item.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 220
+        <a href="Collection.js.html">data/Collection.js</a>, line 208
     </li></ul></dd>
     
     
@@ -1695,7 +1754,7 @@ present in the collection will be included in the results, too, as undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 400
+        <a href="Collection.js.html">data/Collection.js</a>, line 369
     </li></ul></dd>
     
     
@@ -1835,7 +1894,7 @@ present in the collection will be included in the results, too, as undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 420
+        <a href="Collection.js.html">data/Collection.js</a>, line 391
     </li></ul></dd>
     
     
@@ -1975,7 +2034,7 @@ present in the collection will be included in the results, too, as undefined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 429
+        <a href="Collection.js.html">data/Collection.js</a>, line 400
     </li></ul></dd>
     
     
@@ -2172,7 +2231,7 @@ included in the result, false if not. (In reality and truthy or falsy value will
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 477
+        <a href="Collection.js.html">data/Collection.js</a>, line 448
     </li></ul></dd>
     
     
@@ -2327,7 +2386,7 @@ checked against.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 442
+        <a href="Collection.js.html">data/Collection.js</a>, line 413
     </li></ul></dd>
     
     
@@ -2531,7 +2590,7 @@ as the rest of its arguments.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 561
+        <a href="Collection.js.html">data/Collection.js</a>, line 518
     </li></ul></dd>
     
     
@@ -2770,7 +2829,7 @@ an integer, the same way as in `Array.sort()`</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 593
+        <a href="Collection.js.html">data/Collection.js</a>, line 550
     </li></ul></dd>
     
     
@@ -2867,7 +2926,7 @@ of `.getFirstValue()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 57
+        <a href="Hash.js.html">data/Hash.js</a>, line 85
     </li></ul></dd>
     
     
@@ -2964,7 +3023,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 111
+        <a href="Hash.js.html">data/Hash.js</a>, line 139
     </li></ul></dd>
     
     
@@ -3021,7 +3080,7 @@ of `.getFirstKey()`.
     
     
     <div class="description">
-        Retrieves item from the collection.
+        Retrieves item from the hash.
     </div>
     
 
@@ -3107,7 +3166,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 186
+        <a href="Hash.js.html">data/Hash.js</a>, line 55
     </li></ul></dd>
     
     
@@ -3199,7 +3258,7 @@ of `.getFirstKey()`.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 97
+        <a href="Hash.js.html">data/Hash.js</a>, line 125
     </li></ul></dd>
     
     
@@ -3294,7 +3353,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 73
+        <a href="Hash.js.html">data/Hash.js</a>, line 101
     </li></ul></dd>
     
     
@@ -3382,7 +3441,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 86
+        <a href="Hash.js.html">data/Hash.js</a>, line 114
     </li></ul></dd>
     
     
@@ -3526,7 +3585,7 @@ array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 327
+        <a href="Collection.js.html">data/Collection.js</a>, line 296
     </li></ul></dd>
     
     
@@ -3672,7 +3731,7 @@ c.getKeysByPrefix('fo'); // ['foo', 'force']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 351
+        <a href="Collection.js.html">data/Collection.js</a>, line 320
     </li></ul></dd>
     
     
@@ -3816,7 +3875,7 @@ array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 368
+        <a href="Collection.js.html">data/Collection.js</a>, line 337
     </li></ul></dd>
     
     
@@ -3962,7 +4021,7 @@ c.getKeysByRegExp(/^..r/); // ['bar', 'force']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 390
+        <a href="Collection.js.html">data/Collection.js</a>, line 359
     </li></ul></dd>
     
     
@@ -4120,7 +4179,7 @@ an integer, the same way as in `Array.sort()`</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 506
+        <a href="Collection.js.html">data/Collection.js</a>, line 477
     </li></ul></dd>
     
     
@@ -4279,7 +4338,7 @@ an integer, the same way as in `Array.sort()`</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 526
+        <a href="Collection.js.html">data/Collection.js</a>, line 497
     </li></ul></dd>
     
     
@@ -4375,7 +4434,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 127
+        <a href="Hash.js.html">data/Hash.js</a>, line 155
     </li></ul></dd>
     
     
@@ -4463,7 +4522,7 @@ in the resulting array is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 145
+        <a href="Hash.js.html">data/Hash.js</a>, line 173
     </li></ul></dd>
     
     
@@ -4737,7 +4796,7 @@ Takes conflicting values and the mapped key associated with them.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 624
+        <a href="Collection.js.html">data/Collection.js</a>, line 581
     </li></ul></dd>
     
     
@@ -4970,7 +5029,7 @@ to return the mapped item value for the new collection.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 662
+        <a href="Collection.js.html">data/Collection.js</a>, line 619
     </li></ul></dd>
     
     
@@ -5165,7 +5224,7 @@ the conflicting item, and is expected to return a collection item.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 293
+        <a href="Collection.js.html">data/Collection.js</a>, line 262
     </li></ul></dd>
     
     
@@ -5408,7 +5467,7 @@ should be the owner (instance or class) of the method. Set to the collection ins
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 721
+        <a href="Collection.js.html">data/Collection.js</a>, line 681
     </li></ul></dd>
     
     
@@ -5646,7 +5705,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 198
+        <a href="Hash.js.html">data/Hash.js</a>, line 227
     </li></ul></dd>
     
     
@@ -5879,7 +5938,7 @@ should be the owner (instance or class) of the method.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 214
+        <a href="Hash.js.html">data/Hash.js</a>, line 243
     </li></ul></dd>
     
     
@@ -6038,7 +6097,7 @@ Increments counter for new items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 201
+        <a href="Collection.js.html">data/Collection.js</a>, line 189
     </li></ul></dd>
     
     
@@ -6134,6 +6193,94 @@ coll.get('foo'); // "bar"</code></pre>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="ArrayCollection.js.html">data/collections/ArrayCollection.js</a>, line 30
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.ArrayCollection.html">sntls.ArrayCollection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toArrayCollection"><span class="type-signature"></span>toArrayCollection<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.ArrayCollection.html">sntls.ArrayCollection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new ArrayCollection instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toArrayCollection">Array#toArrayCollection</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ArrayCollection.js.html">data/collections/ArrayCollection.js</a>, line 42
     </li></ul></dd>
     
     
@@ -6281,7 +6428,95 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Collection.js.html">data/Collection.js</a>, line 826
+        <a href="Collection.js.html">data/Collection.js</a>, line 793
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Collection.html">sntls.Collection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toCollection"><span class="type-signature"></span>toCollection<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Collection.html">sntls.Collection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new Collection instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toCollection">Array#toCollection</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Collection.js.html">data/Collection.js</a>, line 811
     </li></ul></dd>
     
     
@@ -6411,6 +6646,94 @@ coll.get('foo'); // "bar"</code></pre>
         
             
 <dt>
+    <h4 class="name" id="toDateCollection"><span class="type-signature"></span>toDateCollection<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.DateCollection.html">sntls.DateCollection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new DateCollection instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toDateCollection">Array#toDateCollection</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="DateCollection.js.html">data/collections/DateCollection.js</a>, line 42
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.DateCollection.html">sntls.DateCollection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="toDictionary"><span class="type-signature"></span>toDictionary<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Dictionary.html">sntls.Dictionary</a>}</span></h4>
     
     
@@ -6457,7 +6780,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 293
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 304
     </li></ul></dd>
     
     
@@ -6486,6 +6809,182 @@ coll.get('foo'); // "bar"</code></pre>
 	<dd>
 		
 <span class="param-type"><a href="sntls.Dictionary.html">sntls.Dictionary</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toDictionary"><span class="type-signature"></span>toDictionary<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Dictionary.html">sntls.Dictionary</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new Dictionary instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toDictionary">Array#toDictionary</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Dictionary.js.html">data/Dictionary.js</a>, line 316
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Dictionary.html">sntls.Dictionary</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toHash"><span class="type-signature"></span>toHash<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new Hash instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toHash">Array#toHash</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Hash.js.html">data/Hash.js</a>, line 274
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Hash.html">sntls.Hash</a></span>
 
 
 	</dd>
@@ -6587,6 +7086,271 @@ coll.get('foo'); // "bar"</code></pre>
         
             
 <dt>
+    <h4 class="name" id="toJournalingCollection"><span class="type-signature"></span>toJournalingCollection<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new JournalingCollection instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toJournalingCollection">Array#toJournalingCollection</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 132
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toKeyValuePattern"><span class="type-signature"></span>toKeyValuePattern<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new KeyValuePattern instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toKeyValuePattern">Array#toKeyValuePattern</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 321
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toKVP"><span class="type-signature"></span>toKVP<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Shorthand to Array.prototype.toKeyValuePattern().
+Creates a new KeyValuePattern instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toKVP">Array#toKVP</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 330
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="toOrderedList"><span class="type-signature"></span>toOrderedList<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
     
     
@@ -6634,6 +7398,94 @@ coll.get('foo'); // "bar"</code></pre>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="OrderedList.js.html">data/OrderedList.js</a>, line 249
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.OrderedList.html">sntls.OrderedList</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toOrderedList"><span class="type-signature"></span>toOrderedList<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new OrderedList instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toOrderedList">Array#toOrderedList</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 261
     </li></ul></dd>
     
     
@@ -6763,6 +7615,94 @@ coll.get('foo'); // "bar"</code></pre>
         
             
 <dt>
+    <h4 class="name" id="toOrderedStringList"><span class="type-signature"></span>toOrderedStringList<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedStringList.html">sntls.OrderedStringList</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new OrderedStringList instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toOrderedStringList">Array#toOrderedStringList</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 117
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.OrderedStringList.html">sntls.OrderedStringList</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="toPath"><span class="type-signature"></span>toPath<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Path.html">sntls.Path</a>}</span></h4>
     
     
@@ -6809,7 +7749,7 @@ coll.get('foo'); // "bar"</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 283
+        <a href="Path.js.html">tree/Path.js</a>, line 297
     </li></ul></dd>
     
     
@@ -6898,7 +7838,7 @@ actual contents of the array.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 314
+        <a href="Query.js.html">tree/Query.js</a>, line 329
     </li></ul></dd>
     
     
@@ -6986,7 +7926,7 @@ actual contents of the array.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Query.js.html">tree/Query.js</a>, line 305
+        <a href="Query.js.html">tree/Query.js</a>, line 320
     </li></ul></dd>
     
     
@@ -7028,7 +7968,7 @@ actual contents of the array.
         
             
 <dt>
-    <h4 class="name" id="toQueryPattern"><span class="type-signature"></span>toQueryPattern<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.QueryPattern.html">sntls.QueryPattern</a>}</span></h4>
+    <h4 class="name" id="toSet"><span class="type-signature"></span>toSet<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Set.html">sntls.Set</a>}</span></h4>
     
     
 </dt>
@@ -7036,7 +7976,7 @@ actual contents of the array.
     
     
     <div class="description">
-        Creates a new QueryPattern instance based on the current array.
+        Reinterprets hash as a string dictionary.
     </div>
     
 
@@ -7057,7 +7997,7 @@ actual contents of the array.
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Array.html#toQueryPattern">Array#toQueryPattern</a>
+        <a href="sntls.Collection.html#toSet">sntls.Collection#toSet</a>
     </li></dd>
     
     
@@ -7074,7 +8014,7 @@ actual contents of the array.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="QueryPattern.js.html">tree/QueryPattern.js</a>, line 308
+        <a href="Set.js.html">data/Set.js</a>, line 149
     </li></ul></dd>
     
     
@@ -7102,7 +8042,95 @@ actual contents of the array.
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.QueryPattern.html">sntls.QueryPattern</a></span>
+<span class="param-type"><a href="sntls.Set.html">sntls.Set</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toSet"><span class="type-signature"></span>toSet<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Set.html">sntls.Set</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new Set instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toSet">Array#toSet</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Set.js.html">data/Set.js</a>, line 161
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Set.html">sntls.Set</a></span>
 
 
 	</dd>
@@ -7163,6 +8191,94 @@ actual contents of the array.
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="StringCollection.js.html">data/collections/StringCollection.js</a>, line 30
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.StringCollection.html">sntls.StringCollection</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toStringCollection"><span class="type-signature"></span>toStringCollection<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.StringCollection.html">sntls.StringCollection</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new StringCollection instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toStringCollection">Array#toStringCollection</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="StringCollection.js.html">data/collections/StringCollection.js</a>, line 42
     </li></ul></dd>
     
     
@@ -7292,6 +8408,94 @@ actual contents of the array.
         
             
 <dt>
+    <h4 class="name" id="toStringDictionary"><span class="type-signature"></span>toStringDictionary<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.StringDictionary.html">sntls.StringDictionary</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new StringDictionary instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toStringDictionary">Array#toStringDictionary</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="StringDictionary.js.html">data/StringDictionary.js</a>, line 161
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.StringDictionary.html">sntls.StringDictionary</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="toTree"><span class="type-signature"></span>toTree<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Tree.html">sntls.Tree</a>}</span></h4>
     
     
@@ -7338,7 +8542,95 @@ actual contents of the array.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 444
+        <a href="Tree.js.html">tree/Tree.js</a>, line 445
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.Tree.html">sntls.Tree</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="toTree"><span class="type-signature"></span>toTree<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Tree.html">sntls.Tree</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates a new Tree instance based on the current array.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Array.html#toTree">Array#toTree</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Tree.js.html">tree/Tree.js</a>, line 457
     </li></ul></dd>
     
     
@@ -7393,13 +8685,13 @@ actual contents of the array.
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:43 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 22 2013 10:36:58 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

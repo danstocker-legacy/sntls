@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: tree/QueryPattern.js</title>
+    <title>JSDoc: Source: tree/KeyValuePattern.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: tree/QueryPattern.js</h1>
+    <h1 class="page-title">Source: tree/KeyValuePattern.js</h1>
     
     
 
@@ -26,7 +26,7 @@
     <section>
         <article>
             <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
-troop.postpone(sntls, 'QueryPattern', function () {
+troop.postpone(sntls, 'KeyValuePattern', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
@@ -34,20 +34,24 @@ troop.postpone(sntls, 'QueryPattern', function () {
 
     /**
      * Instantiates class
-     * @name sntls.QueryPattern.create
+     * @name sntls.KeyValuePattern.create
      * @function
      * @param {string|object} pattern
-     * @returns {sntls.QueryPattern}
+     * @example
+     * sntls.KeyValuePattern.create('|') // matches any key
+     * sntls.KeyValuePattern.create(['foo', 'bar']) // matches keys 'foo' and 'bar'
+     * sntls.KeyValuePattern.create('foo&lt;bar^hello') // matches KV pairs 'foo'-'hello' & 'bar'-'hello'
+     * @returns {sntls.KeyValuePattern}
      */
 
     /**
-     * Single element in a query expression. A series of query patterns make
+     * Matches a key-value pair. A series of key-value patterns make
      * up a query, which then can be used to traverse tree structures with.
-     * @class sntls.QueryPattern
+     * @class sntls.KeyValuePattern
      * @extends troop.Base
      */
-    sntls.QueryPattern = troop.Base.extend()
-        .addConstants(/** @lends sntls.QueryPattern */{
+    sntls.KeyValuePattern = troop.Base.extend()
+        .addConstants(/** @lends sntls.KeyValuePattern */{
             /**
              * Separates keys from values in string pattern
              * @type {string}
@@ -78,7 +82,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
              */
             RE_SYMBOL_VALIDATOR: /\||\\/
         })
-        .addPrivateMethods(/** @lends sntls.QueryPattern */{
+        .addPrivateMethods(/** @lends sntls.KeyValuePattern */{
             /**
              * URI decodes all items of an array.
              * @param {string[]} strings Array of strings
@@ -155,7 +159,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
                 return result;
             }
         })
-        .addMethods(/** @lends sntls.QueryPattern# */{
+        .addMethods(/** @lends sntls.KeyValuePattern# */{
             /**
              * @param {string|object} pattern
              * @ignore
@@ -184,7 +188,7 @@ troop.postpone(sntls, 'QueryPattern', function () {
              * Sets value on query pattern. Pattern with a value will only
              * match nodes with the specified value.
              * @param {*} value
-             * @returns {sntls.QueryPattern}
+             * @returns {sntls.KeyValuePattern}
              */
             setValue: function (value) {
                 var descriptor = this.descriptor;
@@ -274,40 +278,40 @@ troop.postpone(sntls, 'QueryPattern', function () {
         });
 });
 
-troop.postpone(sntls, 'QueryPatternCollection', function () {
+troop.postpone(sntls, 'KeyValuePatternCollection', function () {
     "use strict";
 
     /**
      * Instantiates class
-     * @name sntls.QueryPatternCollection.create
+     * @name sntls.KeyValuePatternCollection.create
      * @function
-     * @returns {sntls.QueryPatternCollection}
+     * @returns {sntls.KeyValuePatternCollection}
      */
 
     /**
-     * @name sntls.QueryPatternCollection#descriptor
+     * @name sntls.KeyValuePatternCollection#descriptor
      * @ignore
      */
 
     /**
-     * @class sntls.QueryPatternCollection
+     * @class sntls.KeyValuePatternCollection
      * @extends sntls.Collection
-     * @extends sntls.QueryPattern
+     * @extends sntls.KeyValuePattern
      */
-    sntls.QueryPatternCollection = sntls.Collection.of(sntls.QueryPattern);
+    sntls.KeyValuePatternCollection = sntls.Collection.of(sntls.KeyValuePattern);
 });
 
 (function () {
     "use strict";
 
     dessert.addTypes(/** @lends dessert */{
-        isQueryPattern: function (expr) {
-            return sntls.QueryPattern.isBaseOf(expr);
+        isKeyValuePattern: function (expr) {
+            return sntls.KeyValuePattern.isBaseOf(expr);
         },
 
-        isQueryPatternOptional: function (expr) {
+        isKeyValuePatternOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   sntls.QueryPattern.isBaseOf(expr);
+                   sntls.KeyValuePattern.isBaseOf(expr);
         }
     });
 
@@ -315,11 +319,20 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * Creates a new QueryPattern instance based on the current string.
-             * @returns {sntls.QueryPattern}
+             * Creates a new KeyValuePattern instance based on the current string.
+             * @returns {sntls.KeyValuePattern}
              */
-            toQueryPattern: function () {
-                return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+            toKeyValuePattern: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
+            },
+
+            /**
+             * Shorthand to String.prototype.toKeyValuePattern().
+             * Creates a new KeyValuePattern instance based on the current string.
+             * @returns {sntls.KeyValuePattern}
+             */
+            toKVP: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
         false, false, false
@@ -329,11 +342,20 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
         Array.prototype,
         /** @lends Array# */{
             /**
-             * Creates a new QueryPattern instance based on the current array.
-             * @returns {sntls.QueryPattern}
+             * Creates a new KeyValuePattern instance based on the current array.
+             * @returns {sntls.KeyValuePattern}
              */
-            toQueryPattern: function () {
-                return /** @type {sntls.QueryPattern} */ sntls.QueryPattern.create(this);
+            toKeyValuePattern: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
+            },
+
+            /**
+             * Shorthand to Array.prototype.toKeyValuePattern().
+             * Creates a new KeyValuePattern instance based on the current array.
+             * @returns {sntls.KeyValuePattern}
+             */
+            toKVP: function () {
+                return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
         false, false, false
@@ -349,13 +371,13 @@ troop.postpone(sntls, 'QueryPatternCollection', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:42 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 22 2013 10:36:58 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

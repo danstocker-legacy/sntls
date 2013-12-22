@@ -42,7 +42,7 @@ troop.postpone(sntls, 'Hash', function () {
 
     /**
      * General wrapper around objects to treat them as hash.
-     * Calling `Object.prototype` methods on hash objects is not viable as they may be
+     * Calling `Object.prototype` methods on hash objects is not safe as they may be
      * shadowed by user data, and such cases certainly lead the application to break.
      * Other `Hash`-based classes may delegate conversion methods to this class.
      * @class sntls.Hash
@@ -72,6 +72,34 @@ troop.postpone(sntls, 'Hash', function () {
                  * @type {number}
                  */
                 this.keyCount = items ? undefined : 0;
+            },
+
+            /**
+             * Retrieves item from the hash.
+             * @param {string} itemKey Item key.
+             * @returns {*} Item variable.
+             */
+            getItem: function (itemKey) {
+                return this.items[itemKey];
+            },
+
+            /**
+             * Clones hash. Creates an instance of the same class (for subclasses of `Hash`)
+             * and initializes it with a shallow copy of the current items buffer and item count.
+             * @returns {sntls.Hash} New hash with identical contents.
+             */
+            clone: function () {
+                var result = /** @type sntls.Hash */ this.getBase().create();
+
+                /**
+                 * Copying items and count
+                 * Other properties added by descendants
+                 * must be cloned in override methods
+                 */
+                result.items = sntls.Utils.shallowCopy(this.items);
+                result.keyCount = this.keyCount;
+
+                return result;
             },
 
             /**
@@ -211,6 +239,7 @@ troop.postpone(sntls, 'Hash', function () {
              */
             clear: function () {
                 this.items = this.items instanceof Array ? [] : {};
+                this.keyCount = 0;
                 return this;
             },
 
@@ -261,6 +290,20 @@ troop.postpone(sntls, 'Hash', function () {
                    sntls.Hash.isBaseOf(expr);
         }
     });
+
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
+            /**
+             * Creates a new Hash instance based on the current array.
+             * @returns {sntls.Hash}
+             */
+            toHash: function () {
+                return sntls.Hash.create(this);
+            }
+        },
+        false, false, false
+    );
 }());
 </code></pre>
         </article>
@@ -272,13 +315,13 @@ troop.postpone(sntls, 'Hash', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.QueryPattern.html">QueryPattern</a></li><li><a href="sntls.QueryPatternCollection.html">QueryPatternCollection</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Aug 25 2013 23:10:42 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 22 2013 10:36:58 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
