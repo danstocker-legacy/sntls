@@ -159,6 +159,15 @@
         ok(!root.isRelativeTo(path), "Root is not relative to path");
     });
 
+    test("Matching", function () {
+        var root = sntls.Path.create('test>path'),
+            path = sntls.Path.create('test>path>it>is');
+
+        ok(root.matchesPath(root), "Path matches itself");
+        ok(root.matchesPath(path), "Path matches relative path");
+        ok(!path.matchesPath(root), "Path does not match paths it's relative to");
+    });
+
     test("String conversion", function () {
         var path = 'test>path>hello>world'.toPath();
 

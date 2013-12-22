@@ -238,6 +238,16 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
+             * Path A matches path B when B is relative to A, ie. A is root of B.
+             * @param {sntls.Path} relativePath
+             * @returns {boolean}
+             */
+            matchesPath: function (relativePath) {
+                dessert.isPath(relativePath, "Invalid relative path");
+                return relativePath.isRelativeTo(this);
+            },
+
+            /**
              * Returns the string representation for the path, keys URI encoded and separated by '>'.
              * @example
              * sntls.Path.create(['test^', 'path']).toString() // "test%5E>path"
