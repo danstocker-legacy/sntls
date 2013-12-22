@@ -15,6 +15,7 @@ troop.postpone(sntls, 'Set', function () {
      */
 
     /**
+     * Hash-based structure for performing standard set operations such as union, intersection, and difference.
      * @class
      * @extends sntls.Hash
      */
