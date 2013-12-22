@@ -238,12 +238,12 @@ troop.postpone(sntls, 'Path', function () {
             },
 
             /**
-             * Path A matches path B when B is relative to A, ie. A is root of B.
+             * Determines whether current path is root of specified path.
              * @param {sntls.Path} relativePath
              * @returns {boolean}
              */
-            matchesPath: function (relativePath) {
-                dessert.isPath(relativePath, "Invalid relative path");
+            isRootOf: function (relativePath) {
+                dessert.isPath(relativePath, "Invalid path");
                 return relativePath.isRelativeTo(this);
             },
 
