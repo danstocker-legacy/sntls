@@ -181,7 +181,9 @@ troop.postpone(sntls, 'Query', function () {
                     j = 0, currentPattern,
                     inSkipMode = false;
 
-                while (i < pathAsArray.length && j < queryAsArray.length) {
+                // loop goes on until both query and path reached their ends
+                // or a hard key mismatch is encountered
+                while (i < pathAsArray.length || j < queryAsArray.length) {
                     currentKey = pathAsArray[i];
                     currentPattern = queryAsArray[j];
 
@@ -199,7 +201,7 @@ troop.postpone(sntls, 'Query', function () {
                             j++;
                         } else if (!inSkipMode) {
                             // current key does not match current pattern and not in skip mode
-                            // matching failed
+                            // hard key mismatch -> matching failed
                             return false;
                         }
 

@@ -53,7 +53,11 @@
         ok(!query.matchesPath('test>path'.toPath()), "Query w/ skipping at start not matched by path");
 
         query = 'test>path>\\'.toQuery();
+        ok(query.matchesPath('test>path'.toPath()), "Query w/ skipping at end matched by path");
         ok(query.matchesPath('test>path>foo>bar'.toPath()), "Query w/ skipping at end matched by path");
+
+        query = 'test>path>\\>\\'.toQuery();
+        ok(query.matchesPath('test>path'.toPath()), "Query w/ double skipping at end matched by path");
     });
 
     test("Complex query matching", function () {
