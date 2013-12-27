@@ -109,7 +109,7 @@ troop.postpone(sntls, 'JournalingCollection', function () {
         });
 });
 
-(function () {
+troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
@@ -121,6 +121,10 @@ troop.postpone(sntls, 'JournalingCollection', function () {
             return sntls.JournalingCollection.create(this.items);
         }
     });
+});
+
+(function () {
+    "use strict";
 
     troop.Properties.addProperties.call(
         Array.prototype,

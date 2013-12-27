@@ -19,7 +19,7 @@ troop.postpone(sntls, 'DateCollection', function () {
     sntls.DateCollection = sntls.Collection.of(Date);
 });
 
-(function () {
+troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
@@ -31,6 +31,10 @@ troop.postpone(sntls, 'DateCollection', function () {
             return sntls.DateCollection.create(this.items);
         }
     });
+});
+
+(function () {
+    "use strict";
 
     troop.Properties.addProperties.call(
         Array.prototype,

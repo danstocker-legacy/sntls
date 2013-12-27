@@ -19,7 +19,7 @@ troop.postpone(sntls, 'StringCollection', function () {
     sntls.StringCollection = sntls.Collection.of(String);
 });
 
-(function () {
+troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
@@ -31,6 +31,10 @@ troop.postpone(sntls, 'StringCollection', function () {
             return sntls.StringCollection.create(this.items);
         }
     });
+});
+
+(function () {
+    "use strict";
 
     troop.Properties.addProperties.call(
         Array.prototype,

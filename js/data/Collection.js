@@ -770,19 +770,8 @@ troop.postpone(sntls, 'Collection', function () {
         });
 });
 
-(function () {
+troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
-
-    dessert.addTypes(/** @lends dessert */{
-        isCollection: function (expr) {
-            return sntls.Collection.isPrototypeOf(expr);
-        },
-
-        isCollectionOptional: function (expr) {
-            return typeof expr === 'undefined' ||
-                   sntls.Collection.isPrototypeOf(expr);
-        }
-    });
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
@@ -798,6 +787,21 @@ troop.postpone(sntls, 'Collection', function () {
             } else {
                 return sntls.Collection.create(this.items);
             }
+        }
+    });
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        isCollection: function (expr) {
+            return sntls.Collection.isPrototypeOf(expr);
+        },
+
+        isCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   sntls.Collection.isPrototypeOf(expr);
         }
     });
 

@@ -94,7 +94,7 @@ troop.postpone(sntls, 'OrderedStringList', function () {
         });
 });
 
-(function () {
+troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
@@ -106,6 +106,10 @@ troop.postpone(sntls, 'OrderedStringList', function () {
             return sntls.OrderedStringList.create(this.items);
         }
     });
+});
+
+(function () {
+    "use strict";
 
     troop.Properties.addProperties.call(
         Array.prototype,

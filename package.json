@@ -1,6 +1,6 @@
 {
     "name"           : "sntls",
-    "version"        : "0.16.0",
+    "version"        : "0.16.1",
     "description"    : "Essential data structures and behaviors",
     "keywords"       : [
         "tools",
@@ -27,7 +27,7 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.7.1"
+        "troop"  : "~0.7.2"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",

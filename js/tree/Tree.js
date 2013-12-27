@@ -423,6 +423,20 @@ troop.postpone(sntls, 'Tree', function () {
         });
 });
 
+troop.amendPostponed(sntls, 'Hash', function () {
+    "use strict";
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * Reinterprets hash as a tree.
+         * @returns {sntls.Tree}
+         */
+        toTree: function () {
+            return sntls.Tree.create(this.items);
+        }
+    });
+});
+
 (function () {
     "use strict";
 
@@ -434,16 +448,6 @@ troop.postpone(sntls, 'Tree', function () {
         isTreeOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    sntls.Tree.isBaseOf(expr);
-        }
-    });
-
-    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /**
-         * Reinterprets hash as a tree.
-         * @returns {sntls.Tree}
-         */
-        toTree: function () {
-            return sntls.Tree.create(this.items);
         }
     });
 

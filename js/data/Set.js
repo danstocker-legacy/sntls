@@ -127,6 +127,20 @@ troop.postpone(sntls, 'Set', function () {
         });
 });
 
+troop.amendPostponed(sntls, 'Hash', function () {
+    "use strict";
+
+    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
+        /**
+         * Reinterprets hash as a string dictionary.
+         * @returns {sntls.Set}
+         */
+        toSet: function () {
+            return sntls.Set.create(this.items);
+        }
+    });
+});
+
 (function () {
     "use strict";
 
@@ -138,16 +152,6 @@ troop.postpone(sntls, 'Set', function () {
         isSetOptional: function (expr) {
             return typeof expr === 'undefined' ||
                    sntls.Set.isBaseOf(expr);
-        }
-    });
-
-    sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /**
-         * Reinterprets hash as a string dictionary.
-         * @returns {sntls.Set}
-         */
-        toSet: function () {
-            return sntls.Set.create(this.items);
         }
     });
 
