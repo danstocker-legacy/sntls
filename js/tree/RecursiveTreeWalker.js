@@ -260,21 +260,20 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         }
                     }
 
-                    if (this.isTerminated) {
-                        // ending terminated traversal
-                        return false;
-                    }
-
                     // reverting traversal state for this level
                     this.currentPath.asArray.pop();
 
-                    if (currentResult === true && isMarked) {
+                    if (this.isTerminated) {
+                        // ending terminated traversal
+                        return false;
+                    } else if (currentResult === true && isMarked) {
                         // current node is under a marked one
-                        // no need to check the rest of the current keys
+                        // no need to check the rest of current keys
                         return true;
+                    } else {
+                        // aggregating result for current keys
+                        result = result || currentResult;
                     }
-
-                    result = result || currentResult;
                 }
 
                 return result;
