@@ -49,6 +49,12 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
              */
             SKIP_SYMBOL: '\\',
 
+            /** @type {string} */
+            MARKER_BRACKET: '[',
+
+            /** @type {string} */
+            MARKER_CURLY: '{',
+
             /**
              * Extracts markers and content from the string representation of a
              * key value pattern. There are two markers: the bracket and curly brace.
@@ -93,6 +99,22 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
                     result.push(decodeURI(strings[i]));
                 }
                 return result;
+            },
+
+            /**
+             * Expands descriptor from string to object when necesary.
+             * @private
+             */
+            _expandDescriptor: function () {
+                var descriptor = this.descriptor;
+
+                if (typeof descriptor === 'string') {
+                    // descriptor is simple string
+                    // transforming descriptor to object with key wrapped inside
+                    this.descriptor = {
+                        key: descriptor
+                    };
+                }
             },
 
             /**
@@ -185,18 +207,11 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
              * @returns {sntls.KeyValuePattern}
              */
             setValue: function (value) {
-                var descriptor = this.descriptor;
-
-                if (typeof descriptor === 'string') {
-                    // descriptor is simple string
-                    // transforming descriptor to object with key wrapped inside
-                    descriptor = this.descriptor = {
-                        key: descriptor
-                    };
-                }
+                // making sure descriptor is object
+                this._expandDescriptor();
 
                 // adding value to descriptor
-                descriptor.value = value;
+                this.descriptor.value = value;
 
                 return this;
             },
@@ -215,6 +230,26 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
              */
             getMarker: function () {
                 return this.descriptor.marker;
+            },
+
+            /**
+             * Sets pattern marker.
+             * @param {string} marker Left marker boundary. Either '[' or '{'.
+             * @returns {sntls.KeyValuePattern}
+             */
+            setMarker: function (marker) {
+                dessert.assert(
+                    marker === this.MARKER_BRACKET || marker === this.MARKER_CURLY,
+                    "Invalid marker"
+                );
+
+                // making sure descriptor is object
+                this._expandDescriptor();
+
+                // adding marker to descriptor
+                this.descriptor.marker = marker;
+
+                return this;
             },
 
             /**

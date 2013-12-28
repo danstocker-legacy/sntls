@@ -237,6 +237,29 @@
         equal('{hello}'.toKVP().getMarker(), '{', "Curly brace");
     });
 
+    test("Marker setter", function () {
+        var kvp = 'hello'.toKVP(),
+            result;
+
+        equal(kvp.descriptor, 'hello', "String descriptor");
+
+        raises(function () {
+            kvp.setMarker();
+        }, "Invalid marker");
+
+        raises(function () {
+            kvp.setMarker('foo');
+        }, "Invalid marker");
+
+        result = kvp.setMarker('[');
+
+        strictEqual(result, kvp, "Is chainable");
+        deepEqual(kvp.descriptor, {
+            key   : 'hello',
+            marker: '['
+        });
+    });
+
     test("Key match", function () {
         ok(sntls.KeyValuePattern.create('hello').matchesKey('hello'), "Key matches string");
         ok(!sntls.KeyValuePattern.create('foo').matchesKey('hello'), "Key doesn't match different string");
