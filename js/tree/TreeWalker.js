@@ -42,6 +42,21 @@ troop.postpone(sntls, 'TreeWalker', function () {
                  * @type {sntls.Path}
                  */
                 this.currentPath = undefined;
+
+                /**
+                 * Tells whether traversal is terminated.
+                 * @type {boolean}
+                 */
+                this.isTerminated = false;
+            },
+
+            /**
+             * Sets termination flag.
+             * @returns {sntls.TreeWalker}
+             */
+            terminateTraversal: function () {
+                this.isTerminated = true;
+                return this;
             },
 
             /**
@@ -52,6 +67,7 @@ troop.postpone(sntls, 'TreeWalker', function () {
                 this.currentKey = undefined;
                 this.currentNode = undefined;
                 this.currentPath = undefined;
+                this.isTerminated = false;
                 return this;
             }
         });

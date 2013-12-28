@@ -169,8 +169,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {number} queryPos Position of current pattern in query.
              * @param {boolean} inSkipMode Whether traversal is in skip mode.
              * @param {boolean} isMarked Whether current node is under a marked node.
-             * @returns {boolean|undefined} Return value `true` indicates that there was a match, `false` that
-             * traversal was stopped; `undefined` for any other case.
+             * @returns {boolean} Indicates whether there were any matching nodes under the current node.
              * @memberOf sntls.RecursiveTreeWalker#
              * @private
              */
@@ -183,22 +182,26 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     currentMarked = sntls.KeyValuePattern.isBaseOf(currentPattern) &&
                                     currentPattern.getMarker() === this.RETURN_MARKER,
                     currentKeys, // keys in node matching pattern
-                    currentResult,
+                    i, currentKey, // identifies key in currentKeys
+                    currentResult, // result of walking node under current key
                     nextSkipMode, // skip mode for next level
-                    nextQueryPos, // position of next pattern
-                    i, currentKey,
-                    result;
+                    nextQueryPos, // position of next pattern in query
+                    result = false;
 
                 if (queryProcessed) {
                     // end of query reached
                     if (!inSkipMode || atLeafNode) {
                         // not in skip mode (any node will be returned), or,
                         // in skip mode and leaf node reached (last pattern in query was skip)
-                        return isMarked ?
-                            // handler is not called for matching nodes under a marked node
-                            true :
-                            // calling handler for current node
-                            this.handler.call(this, currentNode) !== false;
+                        // handler only called for matching nodes not under marked node
+                        if (!isMarked && this.handler.call(this, currentNode) === false) {
+                            // handler returned false =>
+                            // terminating traversal
+                            this.terminateTraversal();
+                        }
+
+                        // signaling matching path
+                        return true;
                     } else {
                         // in skip mode and not at leaf node
                         // keeping (pseudo-) pattern
@@ -207,7 +210,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 } else if (atLeafNode) {
                     // leaf node reached but query not done
                     // ignoring such leaf nodes
-                    return undefined;
+                    return false;
                 }
 
                 if (currentPattern === PATTERN_SKIP) {
@@ -249,14 +252,17 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     // walking next level
                     currentResult = this._walk(this.currentNode, nextQueryPos, nextSkipMode, isMarked || currentMarked);
 
+                    // TODO: optimize for earliest exit
                     if (currentResult === true && currentMarked) {
                         // there was a match below the current node and current node is marked
                         // calling handler on current (marked) node
-                        currentResult = this.handler.call(this, this.currentNode);
+                        if (this.handler.call(this, this.currentNode) === false) {
+                            this.terminateTraversal();
+                        }
                     }
 
-                    if (currentResult === false) {
-                        // walking returned false, terminating traversal
+                    if (this.isTerminated) {
+                        // ending terminated traversal
                         return false;
                     }
 
