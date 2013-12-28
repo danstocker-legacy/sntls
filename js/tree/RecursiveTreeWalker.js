@@ -20,6 +20,15 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
      * @extends sntls.TreeWalker
      */
     sntls.RecursiveTreeWalker = base.extend()
+        .addConstants(/** @lends sntls.RecursiveTreeWalker */{
+            /**
+             * Key-value pair marker character for marking return value.
+             * Queries will collect leaf nodes unless there's a kvp in the query is marked like this.
+             * @example
+             * '\\>{world}>\\>|^foo'.toQuery() // query would retrieve "world" nodes w/ "foo" leaf nodes under it
+             */
+            RETURN_MARKER: '{'
+        })
         .addPrivateMethods(/** @lends sntls.RecursiveTreeWalker */{
             /**
              * Gathers all indices of specified value from specified array.
@@ -159,27 +168,37 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * @param {*} currentNode Node currently being traversed.
              * @param {number} queryPos Position of current pattern in query.
              * @param {boolean} inSkipMode Whether traversal is in skip mode.
+             * @param {boolean} isMarked Whether current node is under a marked node.
+             * @returns {boolean|undefined} Return value `true` indicates that there was a match, `false` that
+             * traversal was stopped; `undefined` for any other case.
              * @memberOf sntls.RecursiveTreeWalker#
              * @private
              */
-            _walk: function (currentNode, queryPos, inSkipMode) {
+            _walk: function (currentNode, queryPos, inSkipMode, isMarked) {
                 var PATTERN_SKIP = sntls.Query.PATTERN_SKIP,
                     queryAsArray = this.query.asArray,
                     atLeafNode = typeof currentNode !== 'object', // we're at a leaf node
                     queryProcessed = queryPos >= queryAsArray.length, // no patterns left in query to process
                     currentPattern = queryAsArray[queryPos], // current key-value pattern
+                    currentMarked = sntls.KeyValuePattern.isBaseOf(currentPattern) &&
+                                    currentPattern.getMarker() === this.RETURN_MARKER,
                     currentKeys, // keys in node matching pattern
+                    currentResult,
                     nextSkipMode, // skip mode for next level
                     nextQueryPos, // position of next pattern
-                    i, currentKey;
+                    i, currentKey,
+                    result;
 
                 if (queryProcessed) {
                     // end of query reached
                     if (!inSkipMode || atLeafNode) {
                         // not in skip mode (any node will be returned), or,
                         // in skip mode and leaf node reached (last pattern in query was skip)
-                        // calling handler
-                        return this.handler.call(this, currentNode);
+                        return isMarked ?
+                            // handler is not called for matching nodes under a marked node
+                            true :
+                            // calling handler for current node
+                            this.handler.call(this, currentNode) !== false;
                     } else {
                         // in skip mode and not at leaf node
                         // keeping (pseudo-) pattern
@@ -188,7 +207,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 } else if (atLeafNode) {
                     // leaf node reached but query not done
                     // ignoring such leaf nodes
-                    return true;
+                    return undefined;
                 }
 
                 if (currentPattern === PATTERN_SKIP) {
@@ -228,15 +247,26 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     this.currentPath.asArray.push(currentKey);
 
                     // walking next level
-                    if (this._walk(this.currentNode, nextQueryPos, nextSkipMode) === false) {
+                    currentResult = this._walk(this.currentNode, nextQueryPos, nextSkipMode, isMarked || currentMarked);
+
+                    if (currentResult === true && currentMarked) {
+                        // there was a match below the current node and current node is marked
+                        // calling handler on current (marked) node
+                        currentResult = this.handler.call(this, this.currentNode);
+                    }
+
+                    if (currentResult === false) {
+                        // walking returned false, terminating traversal
                         return false;
                     }
 
                     // reverting traversal state for this level
                     this.currentPath.asArray.pop();
+
+                    result = result || currentResult;
                 }
 
-                return true;
+                return result;
             }
         })
         .addMethods(/** @lends sntls.RecursiveTreeWalker# */{
@@ -267,7 +297,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 this.currentPath = sntls.Path.create([]);
 
                 // walking node
-                this._walk(node, 0, false);
+                this._walk(node, 0, false, false);
 
                 // traversal finished, resetting traversal state
                 this.reset();

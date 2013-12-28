@@ -390,6 +390,36 @@
         );
     });
 
+    test("Walking with marked node", function () {
+        var node = {
+                foo: {
+                    hello: 1
+                },
+                bar: {
+                    hello: 2
+                },
+                baz: {
+                    world: 3
+                }
+            },
+            result = [],
+            handler = function () {
+                result.push(this.currentPath.toString());
+            };
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '{|}>hello'.toQuery())
+            .walk(node);
+        deepEqual(
+            result,
+            [
+                'foo',
+                'bar'
+            ],
+            "All marked nodes collected"
+        );
+    });
+
     test("Walking state", function () {
         var node = {
                 hello: "world",
