@@ -393,13 +393,22 @@
     test("Walking with marked node", function () {
         var node = {
                 foo: {
-                    hello: 1
+                    a: 'hello',
+                    b: 'world',
+                    c: 'foo',
+                    d: 'hello',
+                    e: 'hello',
+                    f: 'hello'
                 },
                 bar: {
-                    hello: 2
+                    b: 'hello',
+                    a: 'bar',
+                    c: 'earth',
+                    z: 'hello'
                 },
                 baz: {
-                    world: 3
+                    c: 3,
+                    d: 5
                 }
             },
             result = [],
@@ -408,7 +417,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, '{|}>hello'.toQuery())
+        sntls.RecursiveTreeWalker.create(handler, '{|}>|^hello'.toQuery())
             .walk(node);
         deepEqual(
             result,

@@ -252,7 +252,6 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     // walking next level
                     currentResult = this._walk(this.currentNode, nextQueryPos, nextSkipMode, isMarked || currentMarked);
 
-                    // TODO: optimize for earliest exit
                     if (currentResult === true && currentMarked) {
                         // there was a match below the current node and current node is marked
                         // calling handler on current (marked) node
@@ -268,6 +267,12 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
                     // reverting traversal state for this level
                     this.currentPath.asArray.pop();
+
+                    if (currentResult === true && isMarked) {
+                        // current node is under a marked one
+                        // no need to check the rest of the current keys
+                        return true;
+                    }
 
                     result = result || currentResult;
                 }
