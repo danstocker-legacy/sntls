@@ -420,11 +420,108 @@
         sntls.RecursiveTreeWalker.create(handler, '{|}>|^hello'.toQuery())
             .walk(node);
         deepEqual(
-            result,
+            result.sort(),
             [
                 'foo',
                 'bar'
-            ],
+            ].sort(),
+            "All marked nodes collected"
+        );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '|>{|^hello}'.toQuery())
+            .walk(node);
+        deepEqual(
+            result.sort(),
+            [
+                'foo>a',
+                'foo>d',
+                'foo>e',
+                'foo>f',
+                'bar>b',
+                'bar>z'
+            ].sort(),
+            "All marked (leaf) nodes collected"
+        );
+    });
+
+    test("Walking with multiple marked nodes", function () {
+        var node = {
+                foo: {
+                    one  : {
+                        a: 'hello',
+                        b: 'world'
+                    },
+                    two  : {
+                        c: 'foo',
+                        d: 'hello',
+                        e: 'hello'
+                    },
+                    three: {
+                        f: 'hello'
+                    }
+                },
+                bar: {
+                    one: {
+                        b: 'hello'
+                    },
+                    two: {
+                        a: 'bar',
+                        c: 'earth',
+                        z: 'hello'
+                    }
+                },
+                baz: {
+                    c: 3,
+                    d: 5
+                }
+            },
+            result = [],
+            handler = function () {
+                result.push(this.currentPath.toString());
+            };
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '{|}>|>|^hello'.toQuery())
+            .walk(node);
+        deepEqual(
+            result.sort(),
+            [
+                "foo",
+                "bar"
+            ].sort(),
+            "higher nodes collected"
+        );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '|>{|}>|^hello'.toQuery())
+            .walk(node);
+        deepEqual(
+            result.sort(),
+            [
+                "foo>one",
+                "foo>two",
+                "foo>three",
+                "bar>one",
+                "bar>two"
+            ].sort(),
+            "higher nodes collected"
+        );
+
+        result = [];
+        sntls.RecursiveTreeWalker.create(handler, '{|}>{|}>|^hello'.toQuery())
+            .walk(node);
+        deepEqual(
+            result.sort(),
+            [
+                "foo>one",
+                "foo>two",
+                "foo>three",
+                "foo",
+                "bar>one",
+                "bar>two",
+                "bar"
+            ].sort(),
             "All marked nodes collected"
         );
     });

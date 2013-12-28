@@ -266,8 +266,9 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     if (this.isTerminated) {
                         // ending terminated traversal
                         return false;
-                    } else if (currentResult === true && isMarked) {
-                        // current node is under a marked one
+                    } else if (currentResult === true && isMarked && !currentMarked) {
+                        // current node is under a marked one but it is not a marked one itself
+                        // (for marked nodes all current keys must be walked)
                         // no need to check the rest of current keys
                         return true;
                     } else {
