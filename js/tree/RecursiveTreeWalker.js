@@ -250,10 +250,16 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                     this.currentPath.asArray.push(currentKey);
 
                     // walking next level
+                    // changes traversal state!
                     currentResult = this._walk(this.currentNode, nextQueryPos, nextSkipMode, isMarked || currentMarked);
 
                     if (currentResult === true && currentMarked) {
                         // there was a match below the current node and current node is marked
+
+                        // restoring traversal state for handler
+                        this.currentKey = currentKey;
+                        this.currentNode = currentNode[currentKey];
+
                         // calling handler on current (marked) node
                         if (this.handler.call(this, this.currentNode) === false) {
                             this.terminateTraversal();

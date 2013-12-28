@@ -411,28 +411,51 @@
                     d: 5
                 }
             },
-            result = [],
-            handler = function () {
-                result.push(this.currentPath.toString());
+            paths = [],
+            values = [],
+            handler = function (node) {
+                values.push(node);
+                paths.push(this.currentPath.toString());
             };
 
-        result = [];
+        paths = [];
+        values = [];
         sntls.RecursiveTreeWalker.create(handler, '{|}>|^hello'.toQuery())
             .walk(node);
         deepEqual(
-            result.sort(),
+            paths.sort(),
             [
                 'foo',
                 'bar'
             ].sort(),
+            "All marked paths collected"
+        );
+        deepEqual(
+            values,
+            [
+                {
+                    a: 'hello',
+                    b: 'world',
+                    c: 'foo',
+                    d: 'hello',
+                    e: 'hello',
+                    f: 'hello'
+                },
+                {
+                    b: 'hello',
+                    a: 'bar',
+                    c: 'earth',
+                    z: 'hello'
+                }
+            ],
             "All marked nodes collected"
         );
 
-        result = [];
+        paths = [];
         sntls.RecursiveTreeWalker.create(handler, '|>{|^hello}'.toQuery())
             .walk(node);
         deepEqual(
-            result.sort(),
+            paths.sort(),
             [
                 'foo>a',
                 'foo>d',
