@@ -31,6 +31,7 @@ troop.postpone(sntls, 'Query', function () {
      * - '\' skips all keys until next pattern in the query is matched. Eg. 'hello>\>world' would match
      * 'hello>people>of>the>world' as well as 'hello>world', but not 'hello>all'.
      * - '^value' is ignored.
+     * On top of that, individual key-value patterns may be marked as return values by placing them inside curly braces.
      * @class sntls.Query
      * @extends sntls.Path
      */

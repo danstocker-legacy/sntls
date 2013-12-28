@@ -20,6 +20,8 @@
         ok(!sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>|^hello>baz'), "Not query b/c value pattern is not last");
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo^bar'), "Specific key/value pair under root");
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('|^bar'));
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>{|}>baz'), "Query with marked kv pattern");
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>[|]>baz'), "Query with marked kv pattern");
     });
 
     test("Matching query to path", function () {
