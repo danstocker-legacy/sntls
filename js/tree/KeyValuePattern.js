@@ -52,8 +52,24 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
             /**
              * Validates a symbol
              * @type {RegExp}
+             * @deprecated
              */
-            RE_SYMBOL_VALIDATOR: /\||\\/
+            RE_SYMBOL_VALIDATOR: /\||\\/,
+
+            /**
+             * Extracts markers and content from the string representation of a
+             * key value pattern. There are two markers: the bracket and curly brace.
+             * A marker is valid when and only when the first and last character is a
+             * boundary character, and no boundary characters can be found inside the
+             * KVP contents. Does not check for validity otherwise.
+             * Markers have no meaning on their own. Their meaning is inferred by the
+             * mechanism that uses them, eg. tree traversal.
+             * @example
+             * "{hello^world}"
+             * "[|]"
+             * @type {RegExp}
+             */
+            RE_MARKER_EXTRACTOR: /\[([^\[\]]*)\]|{([^{}]*)}|.*/
         })
         .addPrivateMethods(/** @lends sntls.KeyValuePattern */{
             /**
@@ -93,7 +109,14 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
              * @private
              */
             _parseString: function (pattern) {
-                var keyValue = pattern.split(this.KEY_VALUE_SEPARATOR),
+                var markerDescriptor = pattern.match(this.RE_MARKER_EXTRACTOR),
+                    content = markerDescriptor[2] || markerDescriptor[1] || markerDescriptor[0],
+                    marker = markerDescriptor[2] || markerDescriptor[1] ?
+                        // pattern is marked, taking first character as marker
+                        pattern[0] :
+                        // pattern is unmarked
+                        undefined,
+                    keyValue = content.split(this.KEY_VALUE_SEPARATOR),
                     key = keyValue[0],
                     result;
 
@@ -113,14 +136,19 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
                     result = {
                         options: this._decodeURI(key.split(this.OPTION_SEPARATOR))
                     };
-                } else if (keyValue.length === 1) {
+                } else if (keyValue.length === 1 && !marker) {
                     // string literal key, no value
                     return decodeURI(key);
                 } else {
-                    // string literal key, has value
+                    // string literal key, has value or marker
                     result = {
                         key: decodeURI(key)
                     };
+                }
+
+                if (marker) {
+                    // adding marker
+                    result.marker = marker;
                 }
 
                 // processing value part of pattern
@@ -186,6 +214,14 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
              */
             isSkipper: function () {
                 return this.descriptor.symbol === this.SKIP_SYMBOL;
+            },
+
+            /**
+             * Returns marker for key value pattern instance.
+             * @returns {string}
+             */
+            getMarker: function () {
+                return this.descriptor.marker;
             },
 
             /**

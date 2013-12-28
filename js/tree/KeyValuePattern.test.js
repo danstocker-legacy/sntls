@@ -28,11 +28,29 @@
         );
 
         deepEqual(
+            sntls.KeyValuePattern._parseString('{foo%5E}'),
+            {
+                key   : 'foo^',
+                marker: '{'
+            },
+            "Marked string literal pattern"
+        );
+
+        deepEqual(
             sntls.KeyValuePattern._parseString('foo%5E<bar%5E'),
             {
                 options: ['foo^', 'bar^']
             },
             "Optional keys pattern"
+        );
+
+        deepEqual(
+            sntls.KeyValuePattern._parseString('[foo%5E<bar%5E]'),
+            {
+                options: ['foo^', 'bar^'],
+                marker : '['
+            },
+            "Marked optional keys pattern"
         );
 
         deepEqual(
@@ -44,11 +62,28 @@
         );
 
         deepEqual(
+            sntls.KeyValuePattern._parseString('[|]'),
+            {
+                symbol: '|',
+                marker: '['
+            },
+            "Marked wildcard pattern"
+        );
+
+        deepEqual(
             sntls.KeyValuePattern._parseString('\\'),
             {
                 symbol: '\\'
             },
             "Skip pattern"
+        );
+
+        deepEqual(
+            sntls.KeyValuePattern._parseString('{\\}'),
+            {
+                symbol: '\\'
+            },
+            "Marked skip pattern (invalid)"
         );
 
         deepEqual(
@@ -194,6 +229,12 @@
     test("Skipper detection", function () {
         ok(!sntls.KeyValuePattern.create('hello').isSkipper(), "Literal not skipper");
         ok(sntls.KeyValuePattern.create('\\').isSkipper(), "Skipper");
+    });
+
+    test("Marker retrieval", function () {
+        ok(!'hello'.toKVP().getMarker(), "No marker");
+        equal('[hello]'.toKVP().getMarker(), '[', "Bracket");
+        equal('{hello}'.toKVP().getMarker(), '{', "Curly brace");
     });
 
     test("Key match", function () {
