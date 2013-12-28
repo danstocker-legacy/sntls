@@ -50,13 +50,6 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
             SKIP_SYMBOL: '\\',
 
             /**
-             * Validates a symbol
-             * @type {RegExp}
-             * @deprecated
-             */
-            RE_SYMBOL_VALIDATOR: /\||\\/,
-
-            /**
              * Extracts markers and content from the string representation of a
              * key value pattern. There are two markers: the bracket and curly brace.
              * A marker is valid when and only when the first and last character is a
