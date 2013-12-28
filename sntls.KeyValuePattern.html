@@ -172,6 +172,102 @@ up a query, which then can be used to traverse tree structures with.
         
             
 <dt>
+    <h4 class="name" id="MARKER_BRACKET"><span class="type-signature">&lt;static> </span>MARKER_BRACKET<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 53
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="MARKER_CURLY"><span class="type-signature">&lt;static> </span>MARKER_CURLY<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 56
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="OPTION_SEPARATOR"><span class="type-signature">&lt;static> </span>OPTION_SEPARATOR<span class="type-signature"> :string</span></h4>
     
     
@@ -224,14 +320,20 @@ up a query, which then can be used to traverse tree structures with.
         
             
 <dt>
-    <h4 class="name" id="RE_SYMBOL_VALIDATOR"><span class="type-signature">&lt;static> </span>RE_SYMBOL_VALIDATOR<span class="type-signature"> :RegExp</span></h4>
+    <h4 class="name" id="RE_MARKER_EXTRACTOR"><span class="type-signature">&lt;static> </span>RE_MARKER_EXTRACTOR<span class="type-signature"> :RegExp</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Validates a symbol
+        Extracts markers and content from the string representation of a
+key value pattern. There are two markers: the bracket and curly brace.
+A marker is valid when and only when the first and last character is a
+boundary character, and no boundary characters can be found inside the
+KVP contents. Does not check for validity otherwise.
+Markers have no meaning on their own. Their meaning is inferred by the
+mechanism that uses them, eg. tree traversal.
     </div>
     
     
@@ -258,7 +360,7 @@ up a query, which then can be used to traverse tree structures with.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 56
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 71
     </li></ul></dd>
     
     
@@ -270,6 +372,12 @@ up a query, which then can be used to traverse tree structures with.
 </dl>
 
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>"{hello^world}"
+"[|]"</code></pre>
+
     
 </dd>
 
@@ -414,7 +522,7 @@ up a query, which then can be used to traverse tree structures with.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 145
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 188
     </li></ul></dd>
     
     
@@ -527,7 +635,7 @@ up a query, which then can be used to traverse tree structures with.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 80
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 95
     </li></ul></dd>
     
     
@@ -662,7 +770,7 @@ up a query, which then can be used to traverse tree structures with.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 65
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 80
     </li></ul></dd>
     
     
@@ -701,6 +809,71 @@ up a query, which then can be used to traverse tree structures with.
 </dl>
 
         
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_expandDescriptor"><span class="type-signature">&lt;private, static> </span>_expandDescriptor<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Expands descriptor from string to object when necesary.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 108
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
     
     
 </dd>
@@ -797,7 +970,7 @@ up a query, which then can be used to traverse tree structures with.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 95
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 126
     </li></ul></dd>
     
     
@@ -983,6 +1156,89 @@ sntls.KeyValuePattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' 
         
             
 <dt>
+    <h4 class="name" id="getMarker"><span class="type-signature"></span>getMarker<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Returns marker for key value pattern instance.
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 231
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="isSkipper"><span class="type-signature"></span>isSkipper<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
@@ -1024,7 +1280,7 @@ sntls.KeyValuePattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 187
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 223
     </li></ul></dd>
     
     
@@ -1155,7 +1411,7 @@ sntls.KeyValuePattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 196
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 260
     </li></ul></dd>
     
     
@@ -1184,6 +1440,137 @@ sntls.KeyValuePattern.create('foo<bar^hello') // matches KV pairs 'foo'-'hello' 
 	<dd>
 		
 <span class="param-type">boolean</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setMarker"><span class="type-signature"></span>setMarker<span class="signature">(marker)</span><span class="type-signature"> &rarr; {<a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets pattern marker.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>marker</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Left marker boundary. Either '[' or '{'.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 240
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="sntls.KeyValuePattern.html">sntls.KeyValuePattern</a></span>
 
 
 	</dd>
@@ -1287,7 +1674,7 @@ match nodes with the specified value.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 166
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 209
     </li></ul></dd>
     
     
@@ -1370,7 +1757,7 @@ match nodes with the specified value.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 222
+        <a href="KeyValuePattern.js.html">tree/KeyValuePattern.js</a>, line 286
     </li></ul></dd>
     
     
@@ -1431,7 +1818,7 @@ match nodes with the specified value.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Dec 22 2013 10:37:00 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Dec 28 2013 20:45:20 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
