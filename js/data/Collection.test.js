@@ -378,7 +378,7 @@
     });
 
     test("Merging with conflict", function () {
-        expect(6);
+        expect(7);
 
         var collection1 = sntls.Collection.create({
                 foo  : 'bar',
@@ -403,6 +403,7 @@
         );
 
         merged = collection1.mergeWith(collection2, function (leftCollection, rightCollection, itemName) {
+            notStrictEqual(leftCollection, rightCollection);
             ok(leftCollection.isA(sntls.Collection));
             ok(rightCollection.isA(sntls.Collection));
             return rightCollection.items[itemName];

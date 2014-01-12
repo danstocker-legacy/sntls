@@ -265,7 +265,8 @@ troop.postpone(sntls, 'Collection', function () {
                     .isFunctionOptional(conflictResolver, "Invalid conflict resolver callback")
                     .assert(collection.isA(this.getBase()), "Collection types do not match");
 
-                var result = this.clone(),
+                var that = this,
+                    result = this.clone(),
                     resultItems = result.items;
 
                 collection.forEachItem(function (item, itemKey) {
@@ -273,7 +274,7 @@ troop.postpone(sntls, 'Collection', function () {
                         result.setItem(itemKey, item);
                     } else if (conflictResolver) {
                         // resolving conflict with supplied function
-                        result.setItem(itemKey, conflictResolver(this, collection, itemKey));
+                        result.setItem(itemKey, conflictResolver(that, collection, itemKey));
                     }
                 });
 
