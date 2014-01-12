@@ -134,6 +134,12 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetNode: function (path) {
+                if (!path.asArray.length) {
+                    // empty path equivalent to clear
+                    this.clear();
+                    return this;
+                }
+
                 var targetParent = this.getNode(path.clone().trimRight());
 
                 if (targetParent instanceof Object) {
@@ -152,6 +158,12 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetKey: function (path, splice, handler) {
+                if (!path.asArray.length) {
+                    // empty path equivalent to clear
+                    this.clear();
+                    return this;
+                }
+
                 var parentPath = path.clone().trimRight(),
                     targetParent = this.getNode(parentPath);
 
@@ -186,6 +198,12 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             unsetPath: function (path, splice, handler) {
+                if (!path.asArray.length) {
+                    // empty path equivalent to clear
+                    this.clear();
+                    return this;
+                }
+
                 var asArray = path.asArray,
                     parentNode = null, // parent node of current node
                     parentNodeSingle, // whether parent node has one child
@@ -244,6 +262,22 @@ troop.postpone(sntls, 'Tree', function () {
                     // calling handler with affected path
                     handler(asArray.slice(0, targetLevel).toPath(), currentNode);
                 }
+
+                return this;
+            },
+
+            /**
+             * Moves node from one path to another.
+             * @param {sntls.Path} fromPath
+             * @param {sntls.Path} toPath
+             * @returns {sntls.Tree}
+             */
+            moveNode: function (fromPath, toPath) {
+                var node = this.getNode(fromPath);
+
+                this
+                    .unsetNode(fromPath)
+                    .setNode(toPath, node);
 
                 return this;
             },

@@ -167,6 +167,10 @@
 
         strictEqual(result, tree, "Tree.unsetNode is chainable");
         deepEqual(tree.items, {foo: {bar: undefined}}, "Node annulled");
+
+        tree.unsetNode([].toPath());
+
+        deepEqual(tree.items, {}, "Root node annulled");
     });
 
     test("Key deletion from object", function () {
@@ -188,6 +192,18 @@
         deepEqual(tree.items, {foo: {}}, "Node removed");
 
         tree.unsetKey('foo'.toPath());
+
+        deepEqual(tree.items, {}, "Tree completely emptied");
+    });
+
+    test("Empty key deletion", function () {
+        var tree = sntls.Tree.create({
+            foo: {
+                bar: "Hello world!"
+            }
+        });
+
+        tree.unsetKey([].toPath());
 
         deepEqual(tree.items, {}, "Tree completely emptied");
     });
@@ -313,6 +329,18 @@
         );
     });
 
+    test("Path deletion w/ empty path", function () {
+        var tree = sntls.Tree.create({
+            foo: {
+                bar: "Hello world!"
+            }
+        });
+
+        tree.unsetPath([].toPath());
+
+        deepEqual(tree.items, {}, "Tree completely emptied");
+    });
+
     test("Path deletion in arrays", function () {
         expect(12);
 
@@ -409,6 +437,49 @@
             [],
             "Tree completely emptied"
         );
+    });
+
+    test("Moving node", function () {
+        var tree;
+
+        function getTree() {
+            return sntls.Tree.create({
+                foo: {
+                    bar: "Hello world!"
+                }
+            });
+        }
+
+        tree = getTree();
+        tree.moveNode('foo'.toPath(), 'baz'.toPath());
+        deepEqual(tree.items, {
+            foo: undefined,
+            baz: {
+                bar: "Hello world!"
+            }
+        }, "Moved to sibling node");
+
+        tree = getTree();
+        tree.moveNode('foo'.toPath(), 'foo>baz'.toPath());
+        deepEqual(tree.items, {
+            foo: {
+                baz: {
+                    bar: "Hello world!"
+                }
+            }
+        }, "Moved to inner node");
+
+        tree = getTree();
+        tree.moveNode([].toPath(), 'documents>baz'.toPath());
+        deepEqual(tree.items, {
+            documents: {
+                baz: {
+                    foo: {
+                        bar: "Hello world!"
+                    }
+                }
+            }
+        }, "Root moved to inner node");
     });
 
     test("Recursive traversal", function () {
