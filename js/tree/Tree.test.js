@@ -197,13 +197,17 @@
     });
 
     test("Empty key deletion", function () {
+        expect(2);
+
         var tree = sntls.Tree.create({
             foo: {
                 bar: "Hello world!"
             }
         });
 
-        tree.unsetKey([].toPath());
+        tree.unsetKey([].toPath(), false, function (path) {
+            deepEqual(path.asArray, [], "Affected path");
+        });
 
         deepEqual(tree.items, {}, "Tree completely emptied");
     });
@@ -330,13 +334,17 @@
     });
 
     test("Path deletion w/ empty path", function () {
+        expect(2);
+
         var tree = sntls.Tree.create({
             foo: {
                 bar: "Hello world!"
             }
         });
 
-        tree.unsetPath([].toPath());
+        tree.unsetPath([].toPath(), false, function (path) {
+            deepEqual(path.asArray, [], "Affected path");
+        });
 
         deepEqual(tree.items, {}, "Tree completely emptied");
     });

@@ -161,6 +161,12 @@ troop.postpone(sntls, 'Tree', function () {
                 if (!path.asArray.length) {
                     // empty path equivalent to clear
                     this.clear();
+
+                    if (handler) {
+                        // root node changed, calling handler
+                        handler(path);
+                    }
+
                     return this;
                 }
 
@@ -201,6 +207,12 @@ troop.postpone(sntls, 'Tree', function () {
                 if (!path.asArray.length) {
                     // empty path equivalent to clear
                     this.clear();
+
+                    if (handler) {
+                        // root node changed, calling handler
+                        handler(path);
+                    }
+
                     return this;
                 }
 
