@@ -182,9 +182,9 @@ troop.postpone(sntls, 'Query', function () {
                     j = 0, currentPattern,
                     inSkipMode = false;
 
-                // loop goes on until both query and path reached their ends
+                // loop goes on until path is fully processed
                 // or a hard key mismatch is encountered
-                while (i < pathAsArray.length || j < queryAsArray.length) {
+                while (i < pathAsArray.length) {
                     currentKey = pathAsArray[i];
                     currentPattern = queryAsArray[j];
 
@@ -208,6 +208,15 @@ troop.postpone(sntls, 'Query', function () {
 
                         // proceeding to next key in path
                         i++;
+                    }
+                }
+
+                if (j < queryAsArray.length) {
+                    // if path reached its end but the query hasn't
+                    // seeing if remaining key-value patterns are just skippers
+                    while (queryAsArray[j] === this.PATTERN_SKIP) {
+                        // skippers at end are allowed
+                        j++;
                     }
                 }
 

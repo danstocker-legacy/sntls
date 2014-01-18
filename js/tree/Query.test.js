@@ -30,6 +30,12 @@
         query = 'test>path>foo'.toQuery();
         ok(query.matchesPath('test>path>foo'.toPath()), "Static query matched by path");
         ok(!query.matchesPath('test>path>bar'.toPath()), "Static query not matched by path");
+        ok(!query.matchesPath('test>path'.toPath()), "Path shorter than query");
+
+        query = 'test>path>|'.toQuery();
+        ok(!query.matchesPath('test>path>foo>bar'.toPath()), "Path longer than query");
+        ok(query.matchesPath('test>path>foo'.toPath()), "Query w/ wildcard at end matched by path");
+        ok(!query.matchesPath('test>path'.toPath()), "Path shorter than query");
 
         query = 'test>|>foo'.toQuery();
         ok(query.matchesPath('test>path>foo'.toPath()), "Query w/ wildcard matched by path");
@@ -64,6 +70,11 @@
 
     test("Complex query matching", function () {
         var query;
+
+        query = 'test>path>|>\\'.toQuery();
+        ok(query.matchesPath('test>path>foo>bar'.toPath()), "Query matched");
+        ok(query.matchesPath('test>path>foo'.toPath()), "Query matched");
+        ok(!query.matchesPath('test>path'.toPath()), "Path shorter than query");
 
         query = 'test>\\>|>path>|>foo>\\'.toQuery();
         ok(query.matchesPath('test>hello>path>world>foo>some>more>keys'.toPath()), "Query matched");
