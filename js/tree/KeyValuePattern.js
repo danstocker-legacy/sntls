@@ -280,6 +280,17 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
             },
 
             /**
+             * Determines whether pattern matches specified value.
+             * @param {*} value
+             * @returns {boolean}
+             */
+            matchesValue: function (value) {
+                var descriptor = this.descriptor;
+                return typeof descriptor.value === 'undefined' ||
+                       descriptor.value === value;
+            },
+
+            /**
              * Creates string representation of pattern
              * @returns {string}
              */

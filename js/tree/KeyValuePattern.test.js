@@ -260,17 +260,24 @@
         });
     });
 
-    test("Key match", function () {
-        ok(sntls.KeyValuePattern.create('hello').matchesKey('hello'), "Key matches string");
-        ok(!sntls.KeyValuePattern.create('foo').matchesKey('hello'), "Key doesn't match different string");
+    test("Matching keys", function () {
+        ok('hello'.toKVP().matchesKey('hello'), "should pass on exact key match");
+        ok(!'foo'.toKVP().matchesKey('hello'), "should fail on literal mismatch");
 
-        ok(sntls.KeyValuePattern.create('|').matchesKey('hello'), "Key matches wildcard");
-        ok(!sntls.KeyValuePattern.create({}).matchesKey('hello'), "Key doesn't match unknown wildcard");
+        ok('|'.toKVP().matchesKey('hello'), "should pass on normal string key on a wildcard");
+        ok('|'.toKVP().matchesKey(''), "should pass on empty string key on a wildcard");
+        ok(!sntls.KeyValuePattern.create({}).matchesKey('hello'), "should fail on any value for custom empty descriptor");
 
-        ok(sntls.KeyValuePattern.create('|^foo').matchesKey('hello'), "Key matches value pattern");
+        ok('|^foo'.toKVP().matchesKey('hello'), "should pass when key part of KVP is wildcard");
 
-        ok(sntls.KeyValuePattern.create('hello<world').matchesKey('hello'), "Key matches choices");
-        ok(!sntls.KeyValuePattern.create('foo<bar').matchesKey('hello'), "Key doesn't match choices it's not in");
+        ok('hello<world'.toKVP().matchesKey('hello'), "should pass on matching key options");
+        ok(!'foo<bar'.toKVP().matchesKey('hello'), "should fail on no matching options");
+    });
+
+    test("Matching value", function () {
+        ok('hello'.toKVP().matchesValue('world'), "should pass on any value when no value is specified");
+        ok('hello^world'.toKVP().matchesValue('world'), "should pass on exact value match");
+        ok(!'hello^world'.toKVP().matchesValue('all'), "should fail on value mismatch");
     });
 
     test("String representation", function () {
