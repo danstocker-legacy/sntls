@@ -144,7 +144,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                             if (node instanceof Array) {
                                 // obtaining all matching indices from array
                                 result = this._allIndicesOf(node, descriptor.value);
-                            } else {
+                            } else if (node instanceof Object) {
                                 // obtaining all matching keys from object
                                 result = this._getKeysByValue(node, descriptor.value);
                             }
@@ -159,16 +159,34 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             },
 
             /**
+             * Calls handler after creating snapshot of traversal state.
+             * @param {string[]} currentPath
+             * @param {*} currentNode
+             * @private
+             */
+            _callHandler: function (currentPath, currentNode) {
+                // creating snapshot of state
+                this.currentKey = currentPath[currentPath.length - 1];
+                this.currentNode = currentNode;
+                this.currentPath = currentPath.toPath();
+
+                if (this.handler.call(this, currentNode) === false) {
+                    this.terminateTraversal();
+                }
+            },
+
+            /**
              * Traverses a set of keys under the specified parent node.
-             * @param {number[]} parentPath
+             * @param {string[]} parentPath
              * @param {*} parentNode
              * @param {sntls.Set} keySet
              * @param {number} queryPos Position of the current KPV in the query.
              * @param {boolean} isInSkipMode
+             * @param {boolean} hasMarkedParent
              * @returns {boolean} Whether there was a hit under the current parentNode
              * @private
              */
-            _traverseKeys: function (parentPath, parentNode, keySet, queryPos, isInSkipMode) {
+            _traverseKeys: function (parentPath, parentNode, keySet, queryPos, isInSkipMode, hasMarkedParent) {
                 var currentKeys = keySet.getKeys(),
                     result = false,
                     i, currentKey, currentNode;
@@ -180,7 +198,13 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
                     currentKey = currentKeys[i];
                     currentNode = parentNode[currentKey];
-                    result = this._walk(parentPath.concat(currentKey), currentNode, queryPos, isInSkipMode) || result;
+                    result = this._walk(
+                        parentPath.concat(currentKey),
+                        currentNode,
+                        queryPos,
+                        isInSkipMode,
+                        hasMarkedParent
+                    ) || result;
                 }
 
                 return result;
@@ -188,41 +212,35 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
             /**
              * Traverses specified node recursively, according to the query assigned to the walker.
-             * @param {number[]} currentPath
+             * @param {string[]} currentPath
              * @param {*} currentNode
              * @param {number} queryPos Position of the current KPV in the query.
              * @param {boolean} isInSkipMode
+             * @param {boolean} isUnderMarkedNode
              * @returns {boolean} Indicates whether there were any matching nodes under the current node.
              * @memberOf sntls.RecursiveTreeWalker#
              * @private
              */
-            _walk: function (currentPath, currentNode, queryPos, isInSkipMode) {
+            _walk: function (currentPath, currentNode, queryPos, isInSkipMode, isUnderMarkedNode) {
                 var queryAsArray = this.query.asArray,
                     currentKvp = queryAsArray[queryPos],
                     result = false;
 
-                console.log("entering path", JSON.stringify(currentPath), "skip mode", isInSkipMode);
-
                 if (currentKvp === sntls.Query.PATTERN_SKIP) {
-                    console.log("turning skip mode on");
+                    // current pattern is skipper
+                    // setting skip mode on, and moving on to next KVP in query
                     isInSkipMode = true;
                     queryPos++;
                     currentKvp = queryAsArray[queryPos];
                 }
 
                 if (queryPos >= queryAsArray.length) {
-                    console.log("*** query done, calling handler with", JSON.stringify(currentNode));
-
                     // query is done;
                     // by the time we get here, all preceding query patterns have been matched
 
-                    // creating snapshot of state
-                    this.currentKey = currentPath[currentPath.length - 1];
-                    this.currentNode = currentNode;
-                    this.currentPath = currentPath.toPath();
-
-                    if (this.handler.call(this, currentNode) === false) {
-                        this.terminateTraversal();
+                    if (!isUnderMarkedNode) {
+                        // not under marked node, so current match can be registered
+                        this._callHandler(currentPath, currentNode);
                     }
 
                     // indicating match
@@ -230,23 +248,50 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 }
 
                 var matchingKeySet = sntls.Set.create(this._getKeysByPattern(currentNode, currentKvp)),
-                    objectKeySet,
-                    traversableKeySet;
-
-                console.log("matching keys", matchingKeySet.getKeys());
+                    parentKvp = queryAsArray[queryPos - 1],
+                    hasMarkedParent = sntls.KeyValuePattern.isBaseOf(parentKvp) &&
+                                      parentKvp.getMarker() === this.RETURN_MARKER;
 
                 if (matchingKeySet.getKeyCount()) {
-                    result = this._traverseKeys(currentPath, currentNode, matchingKeySet, queryPos + 1, false) || result;
+                    // there is at leas one matching key in the current node
+
+                    // traversing matching properties
+                    result = this._traverseKeys(
+                        currentPath,
+                        currentNode,
+                        matchingKeySet,
+                        queryPos + 1,   // goes on to next KVP
+                        false,          // matching key resets skip mode
+                        hasMarkedParent || isUnderMarkedNode
+                    ) || result;
                 }
 
+                var objectKeySet,
+                    traversableKeySet;
+
                 if (isInSkipMode) {
+                    // we're in skip mode so rest of the keys under the current node must be traversed
+
+                    // obtaining keys for properties that can be traversed
                     objectKeySet = sntls.Set.create(this._getKeysForObjectProperties(currentNode));
                     traversableKeySet = matchingKeySet.subtractFrom(objectKeySet);
-                    console.log("traversable keys", traversableKeySet.getKeys());
 
                     if (traversableKeySet.getKeyCount()) {
-                        result = this._traverseKeys(currentPath, currentNode, traversableKeySet, queryPos, true) || result;
+                        result = this._traverseKeys(
+                            currentPath,
+                            currentNode,
+                            traversableKeySet,
+                            queryPos,   // continues to look for current KVP
+                            true,       // keeps skip mode switched on
+                            hasMarkedParent || isUnderMarkedNode
+                        ) || result;
                     }
+                }
+
+                if (hasMarkedParent && result) {
+                    // there was a hit under the current node,
+                    // and immediate parent is marked for return
+                    this._callHandler(currentPath, currentNode);
                 }
 
                 return result;
@@ -280,7 +325,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 this.currentPath = sntls.Path.create([]);
 
                 // walking node
-                this._walk([], node, 0, false);
+                this._walk([], node, 0, false, false);
 
                 // traversal finished, resetting traversal state
                 this.reset();

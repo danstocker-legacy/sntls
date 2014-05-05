@@ -408,8 +408,7 @@
 
         paths = [];
         values = [];
-        sntls.RecursiveTreeWalker.create(handler, '{|}>|^hello'.toQuery())
-            .walk(node);
+        sntls.RecursiveTreeWalker.create(handler, '{|}>|^hello'.toQuery()).walk(node);
         deepEqual(
             paths.sort(),
             [
@@ -440,8 +439,7 @@
         );
 
         paths = [];
-        sntls.RecursiveTreeWalker.create(handler, '|>{|^hello}'.toQuery())
-            .walk(node);
+        sntls.RecursiveTreeWalker.create(handler, '|>{|^hello}'.toQuery()).walk(node);
         deepEqual(
             paths.sort(),
             [
@@ -493,8 +491,7 @@
             };
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, '{|}>|>|^hello'.toQuery())
-            .walk(node);
+        sntls.RecursiveTreeWalker.create(handler, '{|}>|>|^hello'.toQuery()).walk(node);
         deepEqual(
             result.sort(),
             [
@@ -505,8 +502,7 @@
         );
 
         result = [];
-        sntls.RecursiveTreeWalker.create(handler, '|>{|}>|^hello'.toQuery())
-            .walk(node);
+        sntls.RecursiveTreeWalker.create(handler, '|>{|}>|^hello'.toQuery()).walk(node);
         deepEqual(
             result.sort(),
             [
