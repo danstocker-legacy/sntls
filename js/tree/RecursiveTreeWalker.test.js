@@ -44,7 +44,7 @@
 
         // TODO: Revisit this. Is this necessary?
         walker = /** @type {sntls.RecursiveTreeWalker} */ sntls.RecursiveTreeWalker.create(handler);
-        equal(walker.query.toString(), '\\', "should set skipper as default query");
+        equal(walker.query.toString(), '\\>"', "should set skip-until-leaf-node as default query");
     });
 
     test("Gathering indices by value from Array", function () {
@@ -210,12 +210,10 @@
                 result.push(node);
             };
 
-        sntls.RecursiveTreeWalker.create(handler, 'foo>baz>\\'.toQuery()).walk(node);
+        sntls.RecursiveTreeWalker.create(handler, 'foo>baz>\\>"'.toQuery()).walk(node);
         deepEqual(
             result,
-            [
-                {1: 1, 2: {foo: "bar"}, 3: 3}
-            ],
+            [1, 3, "bar"],
             "should hit nodes matching query up until skipper"
         );
     });
@@ -227,7 +225,9 @@
             };
 
         sntls.RecursiveTreeWalker.create(handler).walk(node);
-        deepEqual(result, [node], "should hit root node only");
+        deepEqual(result,
+            ["world", "woohoo", "hello again", 3, 1, 3, "bar", "what", "cow"],
+            "should hit root node only");
     });
 
     test("Walking tree with skipping until value match", function () {

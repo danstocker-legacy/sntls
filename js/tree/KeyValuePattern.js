@@ -44,6 +44,12 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
             WILDCARD_SYMBOL: '|',
 
             /**
+             * Symbol matching primitive types (non-objects).
+             * @type {string}
+             */
+            PRIMITIVE_SYMBOL: '"',
+
+            /**
              * Symbol indication skip mode during traversal
              * @type {string}
              */
@@ -141,7 +147,8 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
                     return {
                         symbol: key
                     };
-                } else if (key === this.WILDCARD_SYMBOL) {
+                } else if (key === this.WILDCARD_SYMBOL ||
+                           key === this.PRIMITIVE_SYMBOL) {
                     // key is a wildcard symbol, matching any key
                     result = {
                         symbol: key
@@ -267,7 +274,8 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
                     // descriptor is object, properties tell about match
                     if (hOP.call(descriptor, 'symbol')) {
                         // descriptor is wildcard object
-                        return descriptor.symbol === this.WILDCARD_SYMBOL;
+                        return descriptor.symbol === this.WILDCARD_SYMBOL ||
+                               descriptor.symbol === this.PRIMITIVE_SYMBOL;
                     } else if (hOP.call(descriptor, 'options')) {
                         // descriptor is list of options
                         return descriptor.options.indexOf(key) > -1;
@@ -286,8 +294,18 @@ troop.postpone(sntls, 'KeyValuePattern', function () {
              */
             matchesValue: function (value) {
                 var descriptor = this.descriptor;
-                return typeof descriptor.value === 'undefined' ||
-                       descriptor.value === value;
+
+                if (descriptor.symbol === this.PRIMITIVE_SYMBOL) {
+                    // descriptor expects a primitive type value
+                    return typeof value !== 'object';
+                } else if (typeof descriptor.value !== 'undefined') {
+                    // there is a literal value specified in the descriptor
+                    // matching against descriptor's value
+                    return descriptor.value === value;
+                } else {
+                    // no value specified in descriptor
+                    return true;
+                }
             },
 
             /**

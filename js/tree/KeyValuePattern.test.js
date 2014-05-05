@@ -156,6 +156,12 @@
             sntls.KeyValuePattern._parseString('foo<bar'),
             "Descriptor created from array"
         );
+
+        deepEqual(
+            sntls.KeyValuePattern._parseString('"'),
+            {symbol: '"'},
+            "Descriptor created from array"
+        );
     });
 
     test("Type conversion", function () {
@@ -274,10 +280,18 @@
         ok(!'foo<bar'.toKVP().matchesKey('hello'), "should fail on no matching options");
     });
 
-    test("Matching value", function () {
+    test("Matching value against literal value pattern", function () {
         ok('hello'.toKVP().matchesValue('world'), "should pass on any value when no value is specified");
         ok('hello^world'.toKVP().matchesValue('world'), "should pass on exact value match");
         ok(!'hello^world'.toKVP().matchesValue('all'), "should fail on value mismatch");
+    });
+
+    test("Matching value against primitive pattern", function () {
+        ok('"'.toKVP().matchesValue('world'), "should pass on string value");
+        ok('"'.toKVP().matchesValue(1), "should pass on numeric value");
+        ok('"'.toKVP().matchesValue(true), "should pass on boolean value");
+        ok(!'"'.toKVP().matchesValue(null), "should fail on null");
+        ok(!'"'.toKVP().matchesValue({}), "should fail on non-primitive values");
     });
 
     test("String representation", function () {

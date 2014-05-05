@@ -571,24 +571,24 @@
         );
 
         deepEqual(
-            tree.queryKeysAsHash('foo>baz>\\'.toQuery()).items,
-            ["1", "foo", "3"],
+            tree.queryKeysAsHash('foo>baz>\\>"'.toQuery()).items,
+            ["1", "3", "foo"],
             "Keys queried w/ skipper as last pattern"
         );
 
         deepEqual(
-            tree.queryPathsAsHash('foo>baz>\\'.toQuery())
+            tree.queryPathsAsHash('foo>baz>\\>"'.toQuery())
                 .toCollection()
                 .mapValues(function (item) {
                     return item.toString();
                 })
                 .getValues(),
-            ["foo>baz>1", "foo>baz>2>foo", "foo>baz>3"],
+            ["foo>baz>1", "foo>baz>3", "foo>baz>2>foo"],
             "Paths queried"
         );
 
         deepEqual(
-            tree.queryKeyValuePairsAsHash('foo>baz>\\'.toQuery()).items,
+            tree.queryKeyValuePairsAsHash('foo>baz>\\>"'.toQuery()).items,
             {
                 1  : 1,
                 foo: "bar",
@@ -598,7 +598,7 @@
         );
 
         deepEqual(
-            tree.queryPathValuePairsAsHash('foo>baz>\\'.toQuery()).items,
+            tree.queryPathValuePairsAsHash('foo>baz>\\>"'.toQuery()).items,
             {
                 "foo>baz>1"    : 1,
                 "foo>baz>2>foo": "bar",

@@ -22,6 +22,7 @@
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('|^bar'));
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>{|}>baz'), "Query with marked kv pattern");
         ok(sntls.Query.RE_QUERY_VALIDATOR.test('foo>bar>[|]>baz'), "Query with marked kv pattern");
+        ok(sntls.Query.RE_QUERY_VALIDATOR.test('\\>"'));
     });
 
     test("Matching query to path", function () {
@@ -65,6 +66,9 @@
         ok(query.matchesPath('test>path>foo>bar'.toPath()), "Query w/ skipping at end matched by path");
 
         query = 'test>path>\\>\\'.toQuery();
+        ok(query.matchesPath('test>path'.toPath()), "Query w/ double skipping at end matched by path");
+
+        query = 'test>\\>"'.toQuery();
         ok(query.matchesPath('test>path'.toPath()), "Query w/ double skipping at end matched by path");
     });
 

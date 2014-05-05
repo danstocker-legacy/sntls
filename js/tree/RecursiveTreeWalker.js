@@ -86,6 +86,25 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             },
 
             /**
+             * Retrieves keys for properties with primitive values.
+             * @param {object} object
+             * @returns {object}
+             * @private
+             */
+            _getKeysForPrimitiveValues: function (object) {
+                var result = {},
+                    keys = Object.keys(object),
+                    i, key;
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    if (typeof object[key] !== 'object') {
+                        result[key] = true;
+                    }
+                }
+                return result;
+            },
+
+            /**
              * Retrieves an array of keys from the node passed
              * according to the given pattern.
              * @param {object} node Node for which to obtain the keys.
@@ -152,6 +171,9 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                             // wildcard pattern
                             result = node;
                         }
+                    } else if (descriptor.symbol === sntls.KeyValuePattern.PRIMITIVE_SYMBOL) {
+                        // obtaining all matching keys from object
+                        result = this._getKeysForPrimitiveValues(node, descriptor.value);
                     }
                 }
 
@@ -312,7 +334,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                  * Query guiding the traversal.
                  * @type {sntls.Query}
                  */
-                this.query = query || '\\'.toQuery();
+                this.query = query || '\\>"'.toQuery();
             },
 
             /**
