@@ -34,14 +34,14 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * Gathers all indices of specified value from specified array.
              * @param {Array} array
              * @param {*} value
-             * @returns {number[]}
+             * @returns {object}
              * @private
              */
             _allIndicesOf: function (array, value) {
-                var result = [],
+                var result = {},
                     nextIndex = -1;
                 while ((nextIndex = array.indexOf(value, nextIndex + 1)) > -1) {
-                    result.push(nextIndex);
+                    result[nextIndex] = true;
                 }
                 return result;
             },
@@ -50,17 +50,17 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * Gathers all keys associated with specified value from specified object
              * @param {object} object
              * @param {*} value
-             * @returns {string[]}
+             * @returns {object}
              * @private
              */
             _getKeysByValue: function (object, value) {
-                var result = [],
+                var result = {},
                     keys = Object.keys(object),
                     i, key;
                 for (i = 0; i < keys.length; i++) {
                     key = keys[i];
                     if (object[key] === value) {
-                        result.push(key);
+                        result[key] = true;
                     }
                 }
                 return result;
@@ -69,17 +69,17 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
             /**
              * Retrieves keys that are associated with traversable values (objects).
              * @param {object} object
-             * @returns {string[]}
+             * @returns {object}
              * @private
              */
             _getKeysForObjectProperties: function (object) {
-                var result = [],
+                var result = {},
                     keys = Object.keys(object),
                     i, key;
                 for (i = 0; i < keys.length; i++) {
                     key = keys[i];
                     if (object[key] instanceof Object) {
-                        result.push(key);
+                        result[key] = true;
                     }
                 }
                 return result;
@@ -90,22 +90,19 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
              * according to the given pattern.
              * @param {object} node Node for which to obtain the keys.
              * @param {string|sntls.KeyValuePattern} pattern
-             * @returns {string[]} Array of keys.
+             * @returns {object} Lookup of suitable keys
              * @private
              */
             _getKeysByPattern: function (node, pattern) {
                 var descriptor = pattern.descriptor,
-                    result,
+                    result = {},
                     i, key;
 
                 if (typeof pattern === 'string') {
                     // pattern is key literal
                     if (hOP.call(node, pattern)) {
                         // key is present in node
-                        result = [pattern];
-                    } else {
-                        // key is not present in node
-                        result = [];
+                        result[pattern] = true;
                     }
                 } else if (descriptor instanceof Object) {
                     if (typeof descriptor.key === 'string') {
@@ -113,21 +110,22 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                         key = descriptor.key;
                         if (hOP.call(descriptor, 'value')) {
                             // descriptor has both key and value specified
-                            result = descriptor.value === node[key] ? [key] : [];
+                            if (descriptor.value === node[key]) {
+                                result[key] = true;
+                            }
                         } else {
                             // descriptor has only key specified
-                            result = [key];
+                            result[key] = true;
                         }
                     } else if (descriptor.options instanceof Array) {
                         // obtaining enumerated keys that are actually present in node
-                        result = [];
                         if (hOP.call(descriptor, 'value')) {
                             // value also expected to be matched
                             for (i = 0; i < descriptor.options.length; i++) {
                                 key = descriptor.options[i];
                                 if (node[key] === descriptor.value) {
                                     // key present in node with specified value assigned
-                                    result.push(key);
+                                    result[key] = true;
                                 }
                             }
                         } else {
@@ -136,7 +134,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                                 key = descriptor.options[i];
                                 if (hOP.call(node, key)) {
                                     // key present in node
-                                    result.push(key);
+                                    result[key] = true;
                                 }
                             }
                         }
@@ -152,12 +150,37 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                             }
                         } else {
                             // wildcard pattern
-                            result = Object.keys(node);
+                            result = node;
                         }
                     }
-                } else {
-                    // descriptor is unrecognizable
-                    result = [];
+                }
+
+                return result;
+            },
+
+            /**
+             * Traverses a set of keys under the specified parent node.
+             * @param {number[]} parentPath
+             * @param {*} parentNode
+             * @param {sntls.Set} keySet
+             * @param {number} queryPos Position of the current KPV in the query.
+             * @param {boolean} isInSkipMode
+             * @returns {boolean} Whether there was a hit under the current parentNode
+             * @private
+             */
+            _traverseKeys: function (parentPath, parentNode, keySet, queryPos, isInSkipMode) {
+                var currentKeys = keySet.getKeys(),
+                    result = false,
+                    i, currentKey, currentNode;
+
+                for (i = 0; i < currentKeys.length; i++) {
+                    if (this.isTerminated) {
+                        break;
+                    }
+
+                    currentKey = currentKeys[i];
+                    currentNode = parentNode[currentKey];
+                    result = this._walk(parentPath.concat(currentKey), currentNode, queryPos, isInSkipMode) || result;
                 }
 
                 return result;
@@ -165,121 +188,64 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
 
             /**
              * Traverses specified node recursively, according to the query assigned to the walker.
-             * @param {*} currentNode Node currently being traversed.
-             * @param {number} queryPos Position of current pattern in query.
-             * @param {boolean} inSkipMode Whether traversal is in skip mode.
-             * @param {boolean} isMarked Whether current node is under a marked node.
+             * @param {number[]} currentPath
+             * @param {*} currentNode
+             * @param {number} queryPos Position of the current KPV in the query.
+             * @param {boolean} isInSkipMode
              * @returns {boolean} Indicates whether there were any matching nodes under the current node.
              * @memberOf sntls.RecursiveTreeWalker#
              * @private
              */
-            _walk: function (currentNode, queryPos, inSkipMode, isMarked) {
-                var PATTERN_SKIP = sntls.Query.PATTERN_SKIP,
-                    queryAsArray = this.query.asArray,
-                    atLeafNode = typeof currentNode !== 'object', // we're at a leaf node
-                    queryProcessed = queryPos >= queryAsArray.length, // no patterns left in query to process
-                    currentPattern = queryAsArray[queryPos], // current key-value pattern
-                    currentMarked = sntls.KeyValuePattern.isBaseOf(currentPattern) &&
-                                    currentPattern.getMarker() === this.RETURN_MARKER,
-                    currentKeys, // keys in node matching pattern
-                    i, currentKey, // identifies key in currentKeys
-                    currentResult, // result of walking node under current key
-                    nextSkipMode, // skip mode for next level
-                    nextQueryPos, // position of next pattern in query
+            _walk: function (currentPath, currentNode, queryPos, isInSkipMode) {
+                var queryAsArray = this.query.asArray,
+                    currentKvp = queryAsArray[queryPos],
                     result = false;
 
-                if (queryProcessed) {
-                    // end of query reached
-                    if (!inSkipMode || atLeafNode) {
-                        // not in skip mode (any node will be returned), or,
-                        // in skip mode and leaf node reached (last pattern in query was skip)
-                        // handler only called for matching nodes not under marked node
-                        if (!isMarked && this.handler.call(this, currentNode) === false) {
-                            // handler returned false =>
-                            // terminating traversal
-                            this.terminateTraversal();
-                        }
+                console.log("entering path", JSON.stringify(currentPath), "skip mode", isInSkipMode);
 
-                        // signaling matching path
-                        return true;
-                    } else {
-                        // in skip mode and not at leaf node
-                        // keeping (pseudo-) pattern
-                        currentPattern = PATTERN_SKIP;
-                    }
-                } else if (atLeafNode) {
-                    // leaf node reached but query not done
-                    // ignoring such leaf nodes
-                    return false;
+                if (currentKvp === sntls.Query.PATTERN_SKIP) {
+                    console.log("turning skip mode on");
+                    isInSkipMode = true;
+                    queryPos++;
+                    currentKvp = queryAsArray[queryPos];
                 }
 
-                if (currentPattern === PATTERN_SKIP) {
-                    // pattern indicates skip mode
-                    currentKeys = Object.keys(currentNode); // all keys are considered
-                    nextSkipMode = true; // skip mode is ON for subsequent levels
-                    nextQueryPos = queryPos + 1;
-                } else {
-                    // other patterns expressing single or multiple key match
-                    // obtaining keys from node matching pattern
-                    currentKeys = this._getKeysByPattern(currentNode, currentPattern);
-                    if (inSkipMode) {
-                        if (!currentKeys.length) {
-                            // no keys matched pattern, must skip to next level
-                            nextSkipMode = inSkipMode; // skip mode remains ON
-                            nextQueryPos = queryPos; // same pattern will be used on next level
-                            currentKeys = this._getKeysForObjectProperties(currentNode); // keys to all object type properties
-                        } else {
-                            // at least one key matched pattern, ending skip mode
-                            nextSkipMode = false; // switching skip mode OFF
-                            nextQueryPos = queryPos + 1;
-                        }
-                    } else {
-                        // not in skip mode, current
-                        nextSkipMode = inSkipMode; // skip mode remains OFF
-                        nextQueryPos = queryPos + 1;
+                if (queryPos >= queryAsArray.length) {
+                    console.log("*** query done, calling handler with", JSON.stringify(currentNode));
+
+                    // query is done;
+                    // by the time we get here, all preceding query patterns have been matched
+
+                    // creating snapshot of state
+                    this.currentKey = currentPath[currentPath.length - 1];
+                    this.currentNode = currentNode;
+                    this.currentPath = currentPath.toPath();
+
+                    if (this.handler.call(this, currentNode) === false) {
+                        this.terminateTraversal();
                     }
+
+                    // indicating match
+                    return true;
                 }
 
-                // iterating over node keys and traversing sub-nodes
-                for (i = 0; i < currentKeys.length; i++) {
-                    currentKey = currentKeys[i];
+                var matchingKeySet = sntls.Set.create(this._getKeysByPattern(currentNode, currentKvp)),
+                    objectKeySet,
+                    traversableKeySet;
 
-                    // preparing traversal state for next level
-                    this.currentKey = currentKey;
-                    this.currentNode = currentNode[currentKey];
-                    this.currentPath.asArray.push(currentKey);
+                console.log("matching keys", matchingKeySet.getKeys());
 
-                    // walking next level
-                    // changes traversal state!
-                    currentResult = this._walk(this.currentNode, nextQueryPos, nextSkipMode, isMarked || currentMarked);
+                if (matchingKeySet.getKeyCount()) {
+                    result = this._traverseKeys(currentPath, currentNode, matchingKeySet, queryPos + 1, false) || result;
+                }
 
-                    if (currentResult === true && currentMarked) {
-                        // there was a match below the current node and current node is marked
+                if (isInSkipMode) {
+                    objectKeySet = sntls.Set.create(this._getKeysForObjectProperties(currentNode));
+                    traversableKeySet = matchingKeySet.subtractFrom(objectKeySet);
+                    console.log("traversable keys", traversableKeySet.getKeys());
 
-                        // restoring traversal state for handler
-                        this.currentKey = currentKey;
-                        this.currentNode = currentNode[currentKey];
-
-                        // calling handler on current (marked) node
-                        if (this.handler.call(this, this.currentNode) === false) {
-                            this.terminateTraversal();
-                        }
-                    }
-
-                    // reverting traversal state for this level
-                    this.currentPath.asArray.pop();
-
-                    if (this.isTerminated) {
-                        // ending terminated traversal
-                        return false;
-                    } else if (currentResult === true && isMarked && !currentMarked) {
-                        // current node is under a marked one but it is not a marked one itself
-                        // (for marked nodes all current keys must be walked)
-                        // no need to check the rest of current keys
-                        return true;
-                    } else {
-                        // aggregating result for current keys
-                        result = result || currentResult;
+                    if (traversableKeySet.getKeyCount()) {
+                        result = this._traverseKeys(currentPath, currentNode, traversableKeySet, queryPos, true) || result;
                     }
                 }
 
@@ -314,7 +280,7 @@ troop.postpone(sntls, 'RecursiveTreeWalker', function () {
                 this.currentPath = sntls.Path.create([]);
 
                 // walking node
-                this._walk(node, 0, false, false);
+                this._walk([], node, 0, false);
 
                 // traversal finished, resetting traversal state
                 this.reset();
