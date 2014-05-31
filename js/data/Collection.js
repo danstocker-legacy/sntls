@@ -761,13 +761,6 @@ troop.postpone(sntls, 'Collection', function () {
                     this :
                     self.create(resultItems);
             }
-
-            /**
-             * Clears the collection.
-             * @name sntls.Collection#clear
-             * @function
-             * @returns {sntls.Collection}
-             */
         });
 });
 
