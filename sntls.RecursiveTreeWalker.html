@@ -326,7 +326,7 @@ and current node as argument. Returning false interrupts traversal.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 304
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 337
     </li></ul></dd>
     
     
@@ -350,7 +350,7 @@ and current node as argument. Returning false interrupts traversal.
         <dl>
             
 <dt>
-    <h4 class="name" id="_allIndicesOf"><span class="type-signature">&lt;private, static> </span>_allIndicesOf<span class="signature">(array, value)</span><span class="type-signature"> &rarr; {number[]}</span></h4>
+    <h4 class="name" id="_allIndicesOf"><span class="type-signature">&lt;private, static> </span>_allIndicesOf<span class="signature">(array, value)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -490,7 +490,7 @@ and current node as argument. Returning false interrupts traversal.
 	</dt>
 	<dd>
 		
-<span class="param-type">number[]</span>
+<span class="param-type">object</span>
 
 
 	</dd>
@@ -504,7 +504,143 @@ and current node as argument. Returning false interrupts traversal.
         
             
 <dt>
-    <h4 class="name" id="_getKeysByPattern"><span class="type-signature">&lt;private, static> </span>_getKeysByPattern<span class="signature">(node, pattern)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    <h4 class="name" id="_callHandler"><span class="type-signature">&lt;private, static> </span>_callHandler<span class="signature">(currentPath, currentNode)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Calls handler after creating snapshot of traversal state.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>currentPath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string[]</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>currentNode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 189
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_getKeysByPattern"><span class="type-signature">&lt;private, static> </span>_getKeysByPattern<span class="signature">(node, pattern)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -620,7 +756,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 96
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 115
     </li></ul></dd>
     
     
@@ -641,7 +777,7 @@ according to the given pattern.
     
             
 <div class="param-desc">
-    Array of keys.
+    Lookup of suitable keys
 </div>
 
 
@@ -652,7 +788,7 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
-<span class="param-type">string[]</span>
+<span class="param-type">object</span>
 
 
 	</dd>
@@ -666,7 +802,7 @@ according to the given pattern.
         
             
 <dt>
-    <h4 class="name" id="_getKeysByValue"><span class="type-signature">&lt;private, static> </span>_getKeysByValue<span class="signature">(object, value)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    <h4 class="name" id="_getKeysByValue"><span class="type-signature">&lt;private, static> </span>_getKeysByValue<span class="signature">(object, value)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -806,7 +942,7 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
-<span class="param-type">string[]</span>
+<span class="param-type">object</span>
 
 
 	</dd>
@@ -820,7 +956,7 @@ according to the given pattern.
         
             
 <dt>
-    <h4 class="name" id="_getKeysForObjectProperties"><span class="type-signature">&lt;private, static> </span>_getKeysForObjectProperties<span class="signature">(object)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
+    <h4 class="name" id="_getKeysForObjectProperties"><span class="type-signature">&lt;private, static> </span>_getKeysForObjectProperties<span class="signature">(object)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -937,7 +1073,388 @@ according to the given pattern.
 	</dt>
 	<dd>
 		
+<span class="param-type">object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_getKeysForPrimitiveValues"><span class="type-signature">&lt;private, static> </span>_getKeysForPrimitiveValues<span class="signature">(object)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Retrieves keys for properties with primitive values.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 94
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_traverseKeys"><span class="type-signature">&lt;private, static> </span>_traverseKeys<span class="signature">(parentPath, parentNode, keySet, queryPos, isInSkipMode, hasMarkedParent)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Traverses a set of keys under the specified parent node.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>parentPath</code></td>
+            
+            
+            <td class="type">
+            
+                
 <span class="param-type">string[]</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>parentNode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>keySet</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="sntls.Set.html">sntls.Set</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>queryPos</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Position of the current KPV in the query.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>isInSkipMode</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>hasMarkedParent</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 211
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Whether there was a hit under the current parentNode
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
 
 
 	</dd>
@@ -1125,7 +1642,7 @@ according to the given pattern.
         
             
 <dt>
-    <h4 class="name" id="_walk"><span class="type-signature">&lt;private> </span>_walk<span class="signature">(currentNode, queryPos, inSkipMode, isMarked)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="_walk"><span class="type-signature">&lt;private> </span>_walk<span class="signature">(currentPath, currentNode, queryPos, isInSkipMode, isUnderMarkedNode)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
@@ -1167,6 +1684,29 @@ according to the given pattern.
 	
         <tr>
             
+                <td class="name"><code>currentPath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string[]</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
                 <td class="name"><code>currentNode</code></td>
             
             
@@ -1183,7 +1723,7 @@ according to the given pattern.
             
             
             
-            <td class="description last">Node currently being traversed.</td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -1206,14 +1746,14 @@ according to the given pattern.
             
             
             
-            <td class="description last">Position of current pattern in query.</td>
+            <td class="description last">Position of the current KPV in the query.</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>inSkipMode</code></td>
+                <td class="name"><code>isInSkipMode</code></td>
             
             
             <td class="type">
@@ -1229,14 +1769,14 @@ according to the given pattern.
             
             
             
-            <td class="description last">Whether traversal is in skip mode.</td>
+            <td class="description last"></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>isMarked</code></td>
+                <td class="name"><code>isUnderMarkedNode</code></td>
             
             
             <td class="type">
@@ -1252,7 +1792,7 @@ according to the given pattern.
             
             
             
-            <td class="description last">Whether current node is under a marked node.</td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -1283,7 +1823,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 176
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 246
     </li></ul></dd>
     
     
@@ -1594,7 +2134,7 @@ according to the given pattern.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 312
+        <a href="RecursiveTreeWalker.js.html">tree/RecursiveTreeWalker.js</a>, line 345
     </li></ul></dd>
     
     
@@ -1655,7 +2195,7 @@ according to the given pattern.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jan 12 2014 13:06:01 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat May 31 2014 08:18:27 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>
