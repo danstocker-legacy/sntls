@@ -1,6 +1,3 @@
-/**
- * General Utilities
- */
 /*global dessert, troop, sntls */
 troop.postpone(sntls, 'Utils', function () {
     "use strict";
