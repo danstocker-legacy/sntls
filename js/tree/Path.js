@@ -68,7 +68,15 @@ troop.postpone(sntls, 'Path', function () {
 
                 // array representation is expected to be used more often
                 if (path instanceof Array) {
-                    asArray = path;
+                    asArray = path.map(function (key) {
+                        switch (typeof key) {
+                        case 'undefined':
+                        case 'string':
+                            return key;
+                        default:
+                            return String(key);
+                        }
+                    });
                 } else if (validators.isString(path)) {
                     asArray = this._decodeURI(path.split(this.PATH_SEPARATOR));
                 } else {

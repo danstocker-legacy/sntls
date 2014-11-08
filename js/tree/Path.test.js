@@ -15,8 +15,13 @@
     });
 
     test("Initialized by array", function () {
-        var path = sntls.Path.create(['test', 'path', 'it', 'is']);
-        deepEqual(path.asArray, ['test', 'path', 'it', 'is'], "Array representation");
+        var path;
+
+        path = sntls.Path.create(['test', 'path', 'it', 'is']);
+        deepEqual(path.asArray, ['test', 'path', 'it', 'is'], "should preserve string keys");
+
+        path = sntls.Path.create(['test', 1, undefined, true]);
+        deepEqual(path.asArray, ['test', '1', undefined, 'true'], "should convert all non-strings except undefined");
     });
 
     test("Key retrieval", function () {
