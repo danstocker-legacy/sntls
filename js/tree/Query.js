@@ -38,17 +38,19 @@ troop.postpone(sntls, 'Query', function () {
     sntls.Query = base.extend()
         .addConstants(/** @lends sntls.Query */{
             /**
-             * Regular expression that tests whether string
-             * contains query patterns.
+             * Regular expression that tests whether string contains query patterns.
+             * Should include all special KeyValuePattern characters.
              * @type {RegExp}
              */
-            RE_QUERY_TESTER: /<|\^|\||\\|"/,
-
-            /**
-             * Regular expression validating a query expression
-             * @type {RegExp}
-             */
-            RE_QUERY_VALIDATOR: /^(>?(\||\\|[^<>\^\|\\]*|(<?[^<>\^\|\\]*)+)(\^[^<>\^\|\\]*$)?)+$/,
+            RE_QUERY_TESTER: new RegExp([
+                '\\' + sntls.KeyValuePattern.OPTION_SEPARATOR,
+                '\\' + sntls.KeyValuePattern.KEY_VALUE_SEPARATOR,
+                '\\' + sntls.KeyValuePattern.WILDCARD_SYMBOL,
+                '\\' + sntls.KeyValuePattern.PRIMITIVE_SYMBOL,
+                '\\' + sntls.KeyValuePattern.SKIP_SYMBOL,
+                '\\' + sntls.KeyValuePattern.MARKER_BRACKET,
+                '\\' + sntls.KeyValuePattern.MARKER_CURLY
+            ].join('|')),
 
             /**
              * Pattern indicating skip mode. In skip mode, keys are skipped
