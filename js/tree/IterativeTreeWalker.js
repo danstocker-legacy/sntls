@@ -24,11 +24,14 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
              * @returns {sntls.IterativeTreeWalker}
              */
             walk: function (node) {
+                // reference to path
+                this.currentPath = sntls.Path.create([]);
+
                 var keysStack = [Object.keys(node)], // stack of keys associated with each node on current path
                     indexStack = [0], // stack of key indexes on current path
                     nodeStack = [node], // stack of nodes on current path
 
-                    currentPath = [], // key stack, ie. traversal path, calculated
+                    currentPath = this.currentPath.asArray, // key stack, ie. traversal path, calculated
 
                     currentDepth, // current traversal depth
                     currentParent, // the node we're currently IN (current parent node)
@@ -36,9 +39,6 @@ troop.postpone(sntls, 'IterativeTreeWalker', function () {
                     currentIndex, // index of key in current parent node
                     currentKey, // key of node we're AT
                     currentNode; // node we're currently AT
-
-                // reference to path
-                this.currentPath = sntls.Path.create(currentPath);
 
                 for (; ;) {
                     // determining where we are

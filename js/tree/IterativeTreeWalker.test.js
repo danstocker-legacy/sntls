@@ -26,7 +26,7 @@
 
         walker = sntls.IterativeTreeWalker
             .create(function () {
-                paths.push(this.currentPath.asArray.join('.'));
+                paths.push(this.currentPath.toString());
                 keys.push(this.currentKey);
             })
             .walk(obj);
@@ -41,11 +41,11 @@
             [
                 'hello',
                 'foo',
-                'foo.bar',
-                'foo.boo',
-                'foo.boo.1',
+                'foo>bar',
+                'foo>boo',
+                'foo>boo>1',
                 'moo',
-                'moo.says'
+                'moo>says'
             ],
             "Paths traversed during full traversal"
         );
@@ -56,7 +56,7 @@
         // setting up traversal to stop at key '1'
         sntls.IterativeTreeWalker
             .create(function () {
-                paths.push(this.currentPath.asArray.join('.'));
+                paths.push(this.currentPath.toString());
                 if (this.currentKey === '1') {
                     return false;
                 }
@@ -69,9 +69,9 @@
             [
                 'hello',
                 'foo',
-                'foo.bar',
-                'foo.boo',
-                'foo.boo.1'
+                'foo>bar',
+                'foo>boo',
+                'foo>boo>1'
             ],
             "Paths traversed during terminated traversal"
         );
