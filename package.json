@@ -1,6 +1,6 @@
 {
     "name"           : "sntls",
-    "version"        : "0.17.0",
+    "version"        : "0.17.1",
     "description"    : "Essential data structures and behaviors",
     "keywords"       : [
         "tools",
@@ -19,7 +19,7 @@
         "behaviors"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
-    "copyright"      : "Copyright (c) 2012-2013 Dan Stocker",
+    "copyright"      : "Copyright (c) 2012-2014 Dan Stocker",
     "license"        : "MIT",
     "repository"     : {
         "type": "git",
@@ -39,7 +39,7 @@
         "grunt-contrib-copy"  : "~0.4.1",
         "grunt-jsdoc"         : "~0.3.3",
         "grunt-regex-replace" : "~0.2.5",
-        "common-gruntfile"    : "git://github.com/danstocker/common-gruntfile.git#0.1.5",
+        "common-gruntfile"    : "git://github.com/danstocker/common-gruntfile.git#0.1.7",
         "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz"
     },
     "files"          : [
