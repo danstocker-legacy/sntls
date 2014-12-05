@@ -17,6 +17,13 @@
         deepEqual(orderedList.items, [1, 2, 3, 4], "should sort buffer contents in ascending order");
     });
 
+    test("Instantiation descending order", function () {
+        var items = [2, 3, 1, 4],
+            orderedList = sntls.OrderedList.create(items, true);
+        strictEqual(orderedList.items, items, "should retain original buffer");
+        deepEqual(orderedList.items, [4, 3, 2, 1], "should sort buffer contents in descending order");
+    });
+
     test("Conversion from Hash", function () {
         var hash, list;
 
@@ -40,7 +47,7 @@
         strictEqual(hash.items, buffer, "should retain original array as buffer");
     });
 
-    test("Numeric search", function () {
+    test("Numeric search in ascending order", function () {
         var orderedList = sntls.OrderedList.create([0, 1, 3, 5, 6, 9]);
         equal(orderedList.spliceIndexOf(4), 3, "should return index of upper closest item for no exact hit");
         equal(orderedList.spliceIndexOf(6), 4, "should return index of specified value on exact hit");
@@ -48,6 +55,16 @@
         equal(orderedList.spliceIndexOf(9), 5, "should return last index for upper extreme");
         equal(orderedList.spliceIndexOf(-4), 0, "should return 0 for lower out-of-bounds");
         equal(orderedList.spliceIndexOf(100), 6, "should return length for upper out-of-bounds");
+    });
+
+    test("Numeric search in descending order", function () {
+        var orderedList = sntls.OrderedList.create([9, 6, 5, 3, 1, 0], true);
+        equal(orderedList.spliceIndexOf(4), 3, "should return index of lower closest item for no exact hit");
+        equal(orderedList.spliceIndexOf(6), 1, "should return index of specified value on exact hit");
+        equal(orderedList.spliceIndexOf(0), 5, "should return last index for lower extreme");
+        equal(orderedList.spliceIndexOf(9), 0, "should return 0 for upper extreme");
+        equal(orderedList.spliceIndexOf(-4), 6, "should return length  for lower out-of-bounds");
+        equal(orderedList.spliceIndexOf(100), 0, "should return 0 for upper out-of-bounds");
     });
 
     test("Numeric search in 1-item list", function () {
@@ -62,7 +79,7 @@
         equal(orderedList.spliceIndexOf(4), 0, "should return 0 for upper out-of-bounds");
     });
 
-    test("String search", function () {
+    test("String search in ascending order", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
         equal(orderedList.spliceIndexOf('hell'), 2, "should return index of upper closest item for no exact hit");
         equal(orderedList.spliceIndexOf('hew'), 3, "should return index of upper closest item for no exact hit");
@@ -73,6 +90,17 @@
         equal(orderedList.spliceIndexOf('wound'), 6, "should return length for upper out-of-bounds");
     });
 
+    test("String search in descending order", function () {
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true);
+        equal(orderedList.spliceIndexOf('hell'), 4, "should return index of lower closest item for no exact hit");
+        equal(orderedList.spliceIndexOf('hew'), 3, "should return index of lower closest item for no exact hit");
+        equal(orderedList.spliceIndexOf('hello'), 3, "should return index of specified value on exact hit");
+        equal(orderedList.spliceIndexOf('bar'), 5, "should return last index for lower extreme");
+        equal(orderedList.spliceIndexOf('world'), 0, "should return 0 for upper extreme");
+        equal(orderedList.spliceIndexOf('ant'), 6, "should return length for lower out-of-bounds");
+        equal(orderedList.spliceIndexOf('wound'), 0, "should return 0 for upper out-of-bounds");
+    });
+
     test("Search with repeating items", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "foo", "foo", "hello", "hello", "world"]);
         equal(orderedList.spliceIndexOf('foo'), 1, "should return index of first matching item");
@@ -81,7 +109,7 @@
         equal(orderedList.spliceIndexOf('hello!'), 6, "should return index of upper closest item for non-exact hit");
     });
 
-    test("Range retrieval", function () {
+    test("Range retrieval in ascending order", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]);
 
         deepEqual(
@@ -112,6 +140,16 @@
             orderedList.getRange("ant", "hell"),
             ["bar", "foo"],
             "should include all items from upper bound for out-of bounds lower bound"
+        );
+    });
+
+    test("Range retrieval in descending order", function () {
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true);
+
+        deepEqual(
+            orderedList.getRange("lorem", "bar"),
+            ["lorem", "ipsum", "hello", "foo"],
+            "should include matching upper bound but exclude matching lower bound"
         );
     });
 
@@ -167,7 +205,7 @@
         );
     });
 
-    test("Item addition", function () {
+    test("Item addition in ascending order", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
             result;
 
@@ -190,6 +228,20 @@
         );
     });
 
+    test("Item addition in descending order", function () {
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true),
+            result;
+
+        result = orderedList.addItem('hell');
+
+        equal(result, 4, "should return index of insertion");
+        deepEqual(
+            orderedList.items,
+            ["world", "lorem", "ipsum", "hello", "hell", "foo", "bar"],
+            "should insert item at the correct index"
+        );
+    });
+
     test("Multiple item addition", function () {
         var orderedList = sntls.OrderedList.create(),
             result;
@@ -204,7 +256,7 @@
         );
     });
 
-    test("Item removal", function () {
+    test("Item removal in ascending order", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
             result;
 
@@ -227,6 +279,20 @@
         );
     });
 
+    test("Item removal in descending order", function () {
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true),
+            result;
+
+        result = orderedList.removeItem('hello');
+
+        equal(result, 3, "should return index of removed item");
+        deepEqual(
+            orderedList.items,
+            ["world", "lorem", "ipsum", "foo", "bar"],
+            "should remove specified item from buffer"
+        );
+    });
+
     test("Multiple item removal", function () {
         var orderedList = sntls.OrderedList.create(['ahoy', 'a', 'b', 'cool', 'c']),
             result;
@@ -241,7 +307,7 @@
         );
     });
 
-    test("Range removal", function () {
+    test("Range removal in ascending order", function () {
         var orderedList = sntls.OrderedList.create(["bar", "foo", "hello", "ipsum", "lorem", "world"]),
             result;
 
@@ -263,13 +329,27 @@
             "should remove specified range from buffer"
         );
 
-        orderedList.removeRange("ipsum", "lorem");
+        result = orderedList.removeRange("ipsum", "lorem");
 
         equal(result, 1, "should return index of first removed item");
         deepEqual(
             orderedList.items,
             ["bar", "lorem", "world"],
             "should remove all items form (included) start to end (excluded) of range"
+        );
+    });
+
+    test("Range removal in descending order", function () {
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true),
+            result;
+
+        result = orderedList.removeRange("in", "foo");
+
+        equal(result, 3, "should return index of first removed item");
+        deepEqual(
+            orderedList.items,
+            ["world", "lorem", "ipsum", "foo", "bar"],
+            "should remove specified range from buffer"
         );
     });
 }());

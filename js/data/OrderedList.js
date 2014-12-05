@@ -10,6 +10,7 @@ troop.postpone(sntls, 'OrderedList', function () {
      * @name sntls.OrderedList.create
      * @function
      * @param {string[]|number[]} [items] Initial values: array of strings or numbers.
+     * @param {boolean} [reversed=false] Whether order is reversed.
      * @returns {sntls.OrderedList}
      */
 
@@ -21,29 +22,99 @@ troop.postpone(sntls, 'OrderedList', function () {
     sntls.OrderedList = base.extend()
         .addPrivateMethods(/** @lends sntls.OrderedList */{
             /**
-             * Compares numbers. To be supplied to Array.sort().
+             * Compares numbers in ascending order. To be supplied to Array.sort().
              * @private
              */
-            _compareNumbers: function (a, b) {
+            _compareAscending: function (a, b) {
                 return a > b ? 1 : a < b ? -1 : 0;
+            },
+
+            /**
+             * Compares numbers in descending order. To be supplied to Array.sort().
+             * @private
+             */
+            _compareDescending: function (a, b) {
+                return b > a ? 1 : b < a ? -1 : 0;
+            },
+
+            /**
+             * Gets splice index for ascending order.
+             * @param {string|number} value
+             * @param {number} start
+             * @param {number} end
+             * @returns {number}
+             * @private
+             */
+            _spliceIndexOfAsc: function (value, start, end) {
+                var items = this.items,
+                    medianPos = Math.floor((start + end) / 2), // position of the median within range
+                    medianValue = items[medianPos]; // median value within range
+
+                if (items[start] >= value) {
+                    // out of range hit
+                    return start;
+                } else if (end - start <= 1) {
+                    // between two adjacent values
+                    return end;
+                } else if (medianValue >= value) {
+                    // narrowing range to lower half
+                    return this._spliceIndexOfAsc(value, start, medianPos);
+                } else if (medianValue < value) {
+                    // narrowing range to upper half
+                    return this._spliceIndexOfAsc(value, medianPos, end);
+                }
+
+                // default index, should never be reached
+                return -1;
+            },
+
+            /**
+             * Gets splice index for descending order.
+             * Same as sntls.OrderedList#_spliceIndexOfAsc but with value comparisons flipped.
+             * @param {string|number} value
+             * @param {number} start
+             * @param {number} end
+             * @returns {number}
+             * @private
+             * @see sntls.OrderedList#_spliceIndexOfAsc
+             */
+            _spliceIndexOfDesc: function (value, start, end) {
+                var items = this.items,
+                    medianPos = Math.floor((start + end) / 2), // position of the median within range
+                    medianValue = items[medianPos]; // median value within range
+
+                if (items[start] <= value) {
+                    // out of range hit
+                    return start;
+                } else if (end - start <= 1) {
+                    // between two adjacent values
+                    return end;
+                } else if (medianValue <= value) {
+                    // narrowing range to lower half
+                    return this._spliceIndexOfDesc(value, start, medianPos);
+                } else if (medianValue > value) {
+                    // narrowing range to upper half
+                    return this._spliceIndexOfDesc(value, medianPos, end);
+                }
+
+                // default index, should never be reached
+                return -1;
             }
         })
         .addMethods(/** @lends sntls.OrderedList# */{
             /**
-             * @param {string[]|number[]} [items] Initial values
+             * @param {string[]|number[]} [items]
+             * @param {boolean} [reversed=false]
              * @ignore
              */
-            init: function (items) {
+            init: function (items, reversed) {
                 dessert.isArrayOptional(items, "Invalid items");
 
                 // preparing items buffer
                 items = items || [];
                 if (items.length) {
                     // sorting items
-                    items.sort(typeof items[0] === 'number' ?
-                        this._compareNumbers :
-                        undefined
-                    );
+                    items.sort(reversed ? this._compareDescending : this._compareAscending);
                 }
 
                 /**
@@ -52,6 +123,12 @@ troop.postpone(sntls, 'OrderedList', function () {
                  */
 
                 base.init.call(this, items);
+
+                /**
+                 * Whether order is reversed.
+                 * @type {boolean}
+                 */
+                this.reversed = !!reversed;
             },
 
             //////////////////////////////
@@ -72,32 +149,12 @@ troop.postpone(sntls, 'OrderedList', function () {
              * @returns {number}
              */
             spliceIndexOf: function (value, start, end) {
-                var items = this.items,
-                    medianPos, // position of the median within range
-                    medianValue; // median value within range
-
                 start = start || 0;
-                end = end || items.length;
+                end = end || this.items.length;
 
-                medianPos = Math.floor((start + end) / 2);
-                medianValue = items[medianPos];
-
-                if (items[start] >= value) {
-                    // out of range hit
-                    return start;
-                } else if (end - start <= 1) {
-                    // between two adjacent values
-                    return end;
-                } else if (medianValue >= value) {
-                    // narrowing range to lower half
-                    return this.spliceIndexOf(value, start, medianPos);
-                } else if (medianValue < value) {
-                    // narrowing range to upper half
-                    return this.spliceIndexOf(value, medianPos, end);
-                }
-
-                // default index, should never be reached
-                return -1;
+                return this.reversed ?
+                    this._spliceIndexOfDesc(value, start, end) :
+                    this._spliceIndexOfAsc(value, start, end);
             },
 
             /**
