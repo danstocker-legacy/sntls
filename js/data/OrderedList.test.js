@@ -5,9 +5,18 @@
     module("Ordered List");
 
     test("Instantiation w/o items", function () {
+        raises(function () {
+            sntls.OrderedList.create('foo');
+        }, "should raise exception on invalid arguments");
+
+        raises(function () {
+            sntls.OrderedList.create([], 'foo');
+        }, "should raise exception on invalid arguments");
+
         var orderedList = sntls.OrderedList.create();
-        ok(orderedList.items instanceof Array, "Items array created");
-        equal(orderedList.items.length, 0, "New items array is empty");
+        ok(orderedList.items instanceof Array, "should add array buffer");
+        equal(orderedList.items.length, 0, "should initialize array buffer to empty");
+        equal(orderedList.orderType, orderedList.orderTypes.ascending, "should set default orderType property");
     });
 
     test("Instantiation ascending order", function () {
@@ -15,13 +24,15 @@
             orderedList = sntls.OrderedList.create(items);
         strictEqual(orderedList.items, items, "should retain original buffer");
         deepEqual(orderedList.items, [1, 2, 3, 4], "should sort buffer contents in ascending order");
+        equal(orderedList.orderType, orderedList.orderTypes.ascending, "should set default orderType property");
     });
 
     test("Instantiation descending order", function () {
         var items = [2, 3, 1, 4],
-            orderedList = sntls.OrderedList.create(items, true);
+            orderedList = sntls.OrderedList.create(items, 'descending');
         strictEqual(orderedList.items, items, "should retain original buffer");
         deepEqual(orderedList.items, [4, 3, 2, 1], "should sort buffer contents in descending order");
+        equal(orderedList.orderType, orderedList.orderTypes.descending, "should set orderType to descending");
     });
 
     test("Conversion from Hash", function () {
@@ -37,14 +48,21 @@
         list = hash.toOrderedList();
 
         ok(list.isA(sntls.OrderedList), "should return OrderedList instance");
+
+        list = hash.toOrderedList(sntls.OrderedList.orderTypes.descending);
+        equal(list.orderType, sntls.OrderedList.orderTypes.descending, "should set specified order type");
     });
 
     test("Conversion from Array", function () {
         var buffer = [1, 2, 3, 4],
-            hash = buffer.toOrderedList();
+            list;
 
-        ok(hash.isA(sntls.OrderedList), "should return OrderedList");
-        strictEqual(hash.items, buffer, "should retain original array as buffer");
+        list = buffer.toOrderedList();
+        ok(list.isA(sntls.OrderedList), "should return OrderedList");
+        strictEqual(list.items, buffer, "should retain original array as buffer");
+
+        list = list.toOrderedList(sntls.OrderedList.orderTypes.descending);
+        equal(list.orderType, sntls.OrderedList.orderTypes.descending, "should set specified order type");
     });
 
     test("Numeric search in ascending order", function () {
@@ -58,7 +76,7 @@
     });
 
     test("Numeric search in descending order", function () {
-        var orderedList = sntls.OrderedList.create([9, 6, 5, 3, 1, 0], true);
+        var orderedList = sntls.OrderedList.create([9, 6, 5, 3, 1, 0], 'descending');
         equal(orderedList.spliceIndexOf(4), 3, "should return index of lower closest item for no exact hit");
         equal(orderedList.spliceIndexOf(6), 1, "should return index of specified value on exact hit");
         equal(orderedList.spliceIndexOf(0), 5, "should return last index for lower extreme");
@@ -91,7 +109,7 @@
     });
 
     test("String search in descending order", function () {
-        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true);
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], 'descending');
         equal(orderedList.spliceIndexOf('hell'), 4, "should return index of lower closest item for no exact hit");
         equal(orderedList.spliceIndexOf('hew'), 3, "should return index of lower closest item for no exact hit");
         equal(orderedList.spliceIndexOf('hello'), 3, "should return index of specified value on exact hit");
@@ -144,7 +162,7 @@
     });
 
     test("Range retrieval in descending order", function () {
-        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true);
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], 'descending');
 
         deepEqual(
             orderedList.getRange("lorem", "bar"),
@@ -229,7 +247,7 @@
     });
 
     test("Item addition in descending order", function () {
-        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true),
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], 'descending'),
             result;
 
         result = orderedList.addItem('hell');
@@ -280,7 +298,7 @@
     });
 
     test("Item removal in descending order", function () {
-        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true),
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], 'descending'),
             result;
 
         result = orderedList.removeItem('hello');
@@ -340,7 +358,7 @@
     });
 
     test("Range removal in descending order", function () {
-        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], true),
+        var orderedList = sntls.OrderedList.create(["world", "lorem", "ipsum", "hello", "foo", "bar"], 'descending'),
             result;
 
         result = orderedList.removeRange("in", "foo");
@@ -351,5 +369,14 @@
             ["world", "lorem", "ipsum", "foo", "bar"],
             "should remove specified range from buffer"
         );
+    });
+
+    test("Cloning", function () {
+        var orderedList = ["world", "lorem", "ipsum", "hello", "foo", "bar"].toOrderedList('descending'),
+            cloneOrderedList = orderedList.clone();
+
+        deepEqual(cloneOrderedList.items, orderedList.items, "should set items buffer in clone");
+        equal(cloneOrderedList.keyCount, orderedList.keyCount, "should set item count in clone");
+        equal(cloneOrderedList.orderType, orderedList.orderType, "should set order type");
     });
 }());

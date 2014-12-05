@@ -10,7 +10,7 @@ troop.postpone(sntls, 'OrderedList', function () {
      * @name sntls.OrderedList.create
      * @function
      * @param {string[]|number[]} [items] Initial values: array of strings or numbers.
-     * @param {boolean} [reversed=false] Whether order is reversed.
+     * @param {string} [orderType='ascending'] Order type. Either 'ascending' or 'descending'.
      * @returns {sntls.OrderedList}
      */
 
@@ -20,10 +20,21 @@ troop.postpone(sntls, 'OrderedList', function () {
      * @extends sntls.Hash
      */
     sntls.OrderedList = base.extend()
-        .addPrivateMethods(/** @lends sntls.OrderedList */{
+        .addConstants(/** @lends sntls.OrderedList */{
+            /**
+             * @type {object}
+             * @constant
+             */
+            orderTypes: {
+                ascending : 'ascending',
+                descending: 'descending'
+            }
+        })
+        .addPrivateMethods(/** @lends sntls.OrderedList# */{
             /**
              * Compares numbers in ascending order. To be supplied to Array.sort().
              * @private
+             * @memberOf sntls.OrderedList
              */
             _compareAscending: function (a, b) {
                 return a > b ? 1 : a < b ? -1 : 0;
@@ -32,6 +43,7 @@ troop.postpone(sntls, 'OrderedList', function () {
             /**
              * Compares numbers in descending order. To be supplied to Array.sort().
              * @private
+             * @memberOf sntls.OrderedList
              */
             _compareDescending: function (a, b) {
                 return b > a ? 1 : b < a ? -1 : 0;
@@ -104,17 +116,21 @@ troop.postpone(sntls, 'OrderedList', function () {
         .addMethods(/** @lends sntls.OrderedList# */{
             /**
              * @param {string[]|number[]} [items]
-             * @param {boolean} [reversed=false]
+             * @param {boolean} [orderType='ascending']
              * @ignore
              */
-            init: function (items, reversed) {
-                dessert.isArrayOptional(items, "Invalid items");
+            init: function (items, orderType) {
+                dessert
+                    .isArrayOptional(items, "Invalid items")
+                    .isOrderTypeOptional(orderType, "Invalid order type");
 
                 // preparing items buffer
                 items = items || [];
                 if (items.length) {
                     // sorting items
-                    items.sort(reversed ? this._compareDescending : this._compareAscending);
+                    items.sort(orderType === this.orderTypes.descending ?
+                        this._compareDescending :
+                        this._compareAscending);
                 }
 
                 /**
@@ -125,10 +141,10 @@ troop.postpone(sntls, 'OrderedList', function () {
                 base.init.call(this, items);
 
                 /**
-                 * Whether order is reversed.
-                 * @type {boolean}
+                 * Whether list is ordered ascending or descending.
+                 * @type {string}
                  */
-                this.reversed = !!reversed;
+                this.orderType = orderType || this.orderTypes.ascending;
             },
 
             //////////////////////////////
@@ -152,9 +168,17 @@ troop.postpone(sntls, 'OrderedList', function () {
                 start = start || 0;
                 end = end || this.items.length;
 
-                return this.reversed ?
-                    this._spliceIndexOfDesc(value, start, end) :
-                    this._spliceIndexOfAsc(value, start, end);
+                var orderTypes = this.orderTypes;
+
+                switch (this.orderType) {
+                case orderTypes.descending:
+                    return this._spliceIndexOfDesc(value, start, end);
+                case orderTypes.ascending:
+                    return this._spliceIndexOfAsc(value, start, end);
+                default:
+                    // should not be reached - order is either ascending or descending
+                    return -1;
+                }
             },
 
             /**
@@ -285,6 +309,19 @@ troop.postpone(sntls, 'OrderedList', function () {
                 } else {
                     return -1;
                 }
+            },
+
+            /**
+             * Clones OrderedList instance, setting the correct orderType property.
+             * @returns {sntls.OrderedList}
+             */
+            clone: function () {
+                var result = base.clone.call(this);
+
+                // copying over order type
+                result.orderType = this.orderType;
+
+                return result;
             }
 
             /**
@@ -301,11 +338,12 @@ troop.amendPostponed(sntls, 'Hash', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
-         * Reinterprets hash as an ordered list.
+         * Converts Hash to OrderedList instance.
+         * @param {string} [orderType='ascending']
          * @returns {sntls.OrderedList}
          */
-        toOrderedList: function () {
-            return sntls.OrderedList.create(this.items);
+        toOrderedList: function (orderType) {
+            return sntls.OrderedList.create(this.items, orderType);
         }
     });
 });
@@ -313,15 +351,28 @@ troop.amendPostponed(sntls, 'Hash', function () {
 (function () {
     "use strict";
 
+    dessert.addTypes(/** @lends dessert */{
+        /** @param {string} expr */
+        isOrderType: function (expr) {
+            return expr && sntls.OrderedList.orderTypes[expr] === expr;
+        },
+
+        /** @param {string} [expr] */
+        isOrderTypeOptional: function (expr) {
+            return sntls.OrderedList.orderTypes[expr] === expr;
+        }
+    });
+
     troop.Properties.addProperties.call(
         Array.prototype,
         /** @lends Array# */{
             /**
              * Creates a new OrderedList instance based on the current array.
+             * @param {string} [orderType='ascending']
              * @returns {sntls.OrderedList}
              */
-            toOrderedList: function () {
-                return sntls.OrderedList.create(this);
+            toOrderedList: function (orderType) {
+                return sntls.OrderedList.create(this, orderType);
             }
         },
         false, false, false
