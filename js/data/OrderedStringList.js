@@ -6,7 +6,8 @@ troop.postpone(sntls, 'OrderedStringList', function () {
      * Instantiates class.
      * @name sntls.OrderedStringList.create
      * @function
-     * @param {string[]} [items] Initial values
+     * @param {string[]} [items] Initial values. Array of strings.
+     * @param {string} [orderType='ascending'] Order type. Either 'ascending' or 'descending'.
      * @returns {sntls.OrderedStringList}
      */
 
