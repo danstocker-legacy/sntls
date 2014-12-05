@@ -224,9 +224,10 @@ troop.postpone(sntls, 'OrderedList', function () {
 
                 if (length > 0) {
                     this.items.splice(startIndex, length);
+                    return startIndex;
+                } else {
+                    return -1;
                 }
-
-                return startIndex;
             }
 
             /**
