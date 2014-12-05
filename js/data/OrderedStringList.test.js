@@ -4,19 +4,27 @@
 
     module("Ordered String List");
 
-    test("Type conversion", function () {
+    test("Conversion from Hash", function () {
         var hash = sntls.Hash.create([]),
             list = hash.toOrderedStringList();
 
         ok(list.isA(sntls.OrderedStringList), "Hash converted to OrderedStringList");
+
+        list = hash.toOrderedStringList(sntls.OrderedList.orderTypes.descending);
+        equal(list.orderType, sntls.OrderedList.orderTypes.descending,
+            "should set orderType property to the specified value");
     });
 
-    test("Array conversion", function () {
+    test("Conversion from Array", function () {
         var buffer = [1, 2, 3, 4],
-            hash = buffer.toOrderedStringList();
+            list = buffer.toOrderedStringList();
 
-        ok(hash.isA(sntls.OrderedStringList), "Is ordered string list");
-        strictEqual(hash.items, buffer, "Same buffer");
+        ok(list.isA(sntls.OrderedStringList), "Is ordered string list");
+        strictEqual(list.items, buffer, "Same buffer");
+
+        list = buffer.toOrderedStringList(sntls.OrderedList.orderTypes.descending);
+        equal(list.orderType, sntls.OrderedList.orderTypes.descending,
+            "should set orderType property to the specified value");
     });
 
     test("End value", function () {

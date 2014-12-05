@@ -99,11 +99,12 @@ troop.amendPostponed(sntls, 'Hash', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
-         * Reinterprets hash as ordered string list.
+         * Converts Hash to OrderedStringList instance.
+         * @param {string} [orderType='ascending']
          * @returns {sntls.OrderedStringList}
          */
-        toOrderedStringList: function () {
-            return sntls.OrderedStringList.create(this.items);
+        toOrderedStringList: function (orderType) {
+            return sntls.OrderedStringList.create(this.items, orderType);
         }
     });
 });
@@ -116,10 +117,11 @@ troop.amendPostponed(sntls, 'Hash', function () {
         /** @lends Array# */{
             /**
              * Creates a new OrderedStringList instance based on the current array.
+             * @param {string} [orderType='ascending']
              * @returns {sntls.OrderedStringList}
              */
-            toOrderedStringList: function () {
-                return sntls.OrderedStringList.create(this);
+            toOrderedStringList: function (orderType) {
+                return sntls.OrderedStringList.create(this, orderType);
             }
         },
         false, false, false
