@@ -89,7 +89,7 @@
 
     test("String prefix search as hash", function () {
         var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert",
-                "item"], true),
+                "item"]),
             result;
 
         result = orderedStringList.getRangeByPrefixAsHash("a");
