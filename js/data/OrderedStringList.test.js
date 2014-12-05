@@ -8,7 +8,7 @@
         var hash = sntls.Hash.create([]),
             list = hash.toOrderedStringList();
 
-        ok(list.isA(sntls.OrderedStringList), "Hash converted to OrderedStringList");
+        ok(list.isA(sntls.OrderedStringList), "should return OrderedStringList instance");
 
         list = hash.toOrderedStringList(sntls.OrderedList.orderTypes.descending);
         equal(list.orderType, sntls.OrderedList.orderTypes.descending,
@@ -19,8 +19,8 @@
         var buffer = [1, 2, 3, 4],
             list = buffer.toOrderedStringList();
 
-        ok(list.isA(sntls.OrderedStringList), "Is ordered string list");
-        strictEqual(list.items, buffer, "Same buffer");
+        ok(list.isA(sntls.OrderedStringList), "should return OrderedStringList instance");
+        strictEqual(list.items, buffer, "should retain original buffer");
 
         list = buffer.toOrderedStringList(sntls.OrderedList.orderTypes.descending);
         equal(list.orderType, sntls.OrderedList.orderTypes.descending,
@@ -28,44 +28,46 @@
     });
 
     test("End value", function () {
-        equal(sntls.OrderedStringList._getEndValue('hello'), 'hellp');
-        equal(sntls.OrderedStringList._getEndValue('a'), 'b');
+        equal(sntls.OrderedStringList._getEndValue('hello'), 'hellp', "should return string with last char changed");
+        equal(sntls.OrderedStringList._getEndValue('a'), 'b', "should return next character for single char string");
     });
 
     test("Next value", function () {
-        equal(sntls.OrderedStringList._getNextValue('hello'), 'hello' + String.fromCharCode(0));
+        equal(sntls.OrderedStringList._getNextValue('hello'), 'hello' + String.fromCharCode(0),
+            "should append 0 character code to specified string");
     });
 
     test("String prefix search", function () {
-        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert",
-            "item"]);
+        var orderedStringList = sntls.OrderedStringList.create([
+            "animal", "apple", "ant", "bar", "insect", "insert", "item"
+        ]);
 
         raises(function () {
             orderedStringList.getRangeByPrefix("");
-        }, "Empty prefix raises exception");
+        }, "should raise exception on empty string argument");
 
         deepEqual(
             orderedStringList.getRangeByPrefix("a"),
             ["animal", "ant", "apple"],
-            "Prefix 'a'"
+            "should return strings matching prefix"
         );
 
         deepEqual(
             orderedStringList.getRangeByPrefix("an"),
             ["animal", "ant"],
-            "Prefix 'an'"
+            "should return strings matching prefix"
         );
 
         deepEqual(
             orderedStringList.getRangeByPrefix("i"),
             ["insect", "insert", "item"],
-            "Prefix 'i'"
+            "should return strings matching prefix"
         );
 
         deepEqual(
             orderedStringList.getRangeByPrefix("ins"),
             ["insect", "insert"],
-            "Prefix 'ins'"
+            "should return strings matching prefix"
         );
     });
 
@@ -75,7 +77,7 @@
         deepEqual(
             orderedStringList.getRangeByPrefix("car", true),
             ["career", "carpet"],
-            "All items coming after but matching 'car'"
+            "should return strings matching prefix, except the prefix itself"
         );
     });
 
@@ -85,27 +87,28 @@
         deepEqual(
             orderedStringList.getRangeByPrefix('car', false, 1),
             ["car", "career", "carpet"],
-            "Skipped first item in results"
+            "should return results with correct offset"
         );
 
         deepEqual(
             orderedStringList.getRangeByPrefix('car', false, 1, 2),
             ["car", "career"],
-            "Skipped first item and fetched 2 in results"
+            "should return results with correct offset and limit"
         );
     });
 
     test("String prefix search as hash", function () {
-        var orderedStringList = sntls.OrderedStringList.create(["animal", "apple", "ant", "bar", "insect", "insert",
-                "item"]),
+        var orderedStringList = sntls.OrderedStringList.create([
+                "animal", "apple", "ant", "bar", "insect", "insert", "item"
+            ]),
             result;
 
         result = orderedStringList.getRangeByPrefixAsHash("a");
-        ok(result.isA(sntls.Hash), "Hash returned");
+        ok(result.isA(sntls.Hash), "should return Hash instance");
         deepEqual(
             result.items,
             ["animal", "ant", "apple"],
-            "Search results extracted from hash"
+            "should return items matching prefix"
         );
     });
 
@@ -117,7 +120,7 @@
         deepEqual(
             orderedStringList.items,
             ["animal", "apple", "apple", "apple", "fruit"],
-            "Removing non-existent doesn't change items"
+            "should not alter buffer when value is not present"
         );
 
         orderedStringList.removeEvery("animal");
@@ -125,7 +128,7 @@
         deepEqual(
             orderedStringList.items,
             ["apple", "apple", "apple", "fruit"],
-            "Removing single occurrence"
+            "should remove specified single element"
         );
 
         orderedStringList.removeEvery("apple");
@@ -133,7 +136,7 @@
         deepEqual(
             orderedStringList.items,
             ["fruit"],
-            "Removing multiple occurrences"
+            "should remove all occurrences of specified value"
         );
 
         orderedStringList.removeEvery("fruit");
@@ -141,7 +144,7 @@
         deepEqual(
             orderedStringList.items,
             [],
-            "Removing last value(s)"
+            "should leave empty buffer after removing last item"
         );
     });
 }());
