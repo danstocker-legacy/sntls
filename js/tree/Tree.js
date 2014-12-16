@@ -232,6 +232,12 @@ troop.postpone(sntls, 'Tree', function () {
                 for (i = 0; i < asArray.length; i++) {
                     nextKey = asArray[i];
 
+                    if (typeof currentNode === 'undefined') {
+                        // current node is undefined
+                        // breaking target search
+                        break;
+                    }
+
                     currentNodeSingle = sntls.Utils.isSingularObject(currentNode);
                     if (currentNodeSingle && parentNode !== null) {
                         // current node has exactly one child

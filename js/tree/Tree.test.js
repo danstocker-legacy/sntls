@@ -238,7 +238,7 @@
     });
 
     test("Path deletion in objects", function () {
-        expect(10);
+        expect(12);
 
         var tree = sntls.Tree.create({
                 a: {d: {}, e: {}, f: {
@@ -252,6 +252,32 @@
                 c: {}
             }),
             result;
+
+        tree.unsetPath('foo>bar>baz'.toPath());
+        deepEqual(tree.items, {
+            a: {d: {}, e: {}, f: {
+                g: {}, h: {
+                    i: {j: {k: {l: {
+                        n: {o: "p"}
+                    }, m         : {}}}}
+                }
+            }},
+            b: {},
+            c: {}
+        }, "should leave contents intact when attempting to delete an absent path");
+
+        tree.unsetPath('a>f>foo>bar'.toPath());
+        deepEqual(tree.items, {
+            a: {d: {}, e: {}, f: {
+                g: {}, h: {
+                    i: {j: {k: {l: {
+                        n: {o: "p"}
+                    }, m         : {}}}}
+                }
+            }},
+            b: {},
+            c: {}
+        }, "should leave contents intact when attempting to delete a partially absent path");
 
         result = tree.unsetPath('a>f>h>i>j>k>l>n>o'.toPath());
         strictEqual(result, tree, "Tree.unsetPath is chainable");
@@ -494,7 +520,8 @@
         expect(3);
 
         var tree = sntls.Tree.create({}),
-            handler = function () {};
+            handler = function () {
+            };
 
         sntls.RecursiveTreeWalker.addMocks({
             init: function (h, query) {
@@ -516,7 +543,8 @@
         expect(2);
 
         var tree = sntls.Tree.create({}),
-            handler = function () {};
+            handler = function () {
+            };
 
         sntls.IterativeTreeWalker.addMocks({
             init: function (h) {
