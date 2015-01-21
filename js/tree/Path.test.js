@@ -23,6 +23,7 @@
 
         ok(sntls.Path.isBaseOf(path), "should return Path instance");
         deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "should set path buffer");
+        deepEqual('test%5E>path'.toPath().asArray, ['test^', 'path'], "should URI decode path keys");
     });
 
     test("Conversion from array", function () {
@@ -32,152 +33,135 @@
         deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "should set path buffer");
     });
 
-    test("Key retrieval", function () {
+    test("Last key retrieval", function () {
         var path = 'test>path>it>is'.toPath();
-        equal(path.getLastKey(), 'is', "Last key");
-    });
-
-    test("Serialization", function () {
-        var path;
-
-        path = ['test', 'path', 'it', 'is'].toPath();
-        equal(path.toString(), 'test>path>it>is', "Serialized path");
-
-        path = ['test>', 'path', 'it', 'is'].toPath();
-        equal(path.toString(), 'test%3E>path>it>is', "Serialized path");
+        equal(path.getLastKey(), 'is', "should return last key from path buffer");
     });
 
     test("Cloning", function () {
         var path = 'test>path>it>is'.toPath(),
             clonePath = path.clone();
 
-        deepEqual(path.asArray, clonePath.asArray, "Path buffers represent the same path");
-        notStrictEqual(path, clonePath, "Clone is different from original");
-        notStrictEqual(path.asArray, clonePath.asArray, "Clone's buffer is different from original");
+        ok(clonePath.isA(sntls.Path), "should return Path instance");
+        deepEqual(path.asArray, clonePath.asArray, "should copy path buffer");
+        notStrictEqual(path, clonePath, "should return different Path instance than original");
+        notStrictEqual(path.asArray, clonePath.asArray, "should set different path buffer than original");
     });
 
     test("Left trimming", function () {
         var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             trimmedPath = originalPath.trimLeft();
 
-        strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
+        strictEqual(originalPath, trimmedPath, "should return self");
         deepEqual(
             trimmedPath.asArray,
             ['originalPath', 'it', 'is'],
-            "Trimmed path"
-        );
+            "should remove leftmost key from path buffer when no count is specified");
 
         originalPath.trimLeft(2);
         deepEqual(
             originalPath.asArray,
             ['is'],
-            "Trimmed multiple keys"
-        );
+            "should remove specified number of keys from left");
     });
 
     test("Right trimming", function () {
         var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             trimmedPath = originalPath.trimRight();
 
-        strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
+        strictEqual(originalPath, trimmedPath, "should return self");
         deepEqual(
             trimmedPath.asArray,
             ['test', 'originalPath', 'it'],
-            "Trimmed path"
-        );
+            "should remove rightmost key from path buffer when no count is specified");
 
         originalPath.trimRight(2);
         deepEqual(
             originalPath.asArray,
             ['test'],
-            "Trimmed multiple keys"
-        );
+            "should remove specified number of keys from right");
     });
 
     test("Appending", function () {
         var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             appendedPath = originalPath.append('foo>bar'.toPath());
 
-        strictEqual(originalPath, appendedPath, "Appending returns new Path");
-
+        strictEqual(originalPath, appendedPath, "should return self");
         deepEqual(
             appendedPath.asArray,
             ['test', 'originalPath', 'it', 'is', 'foo', 'bar'],
-            "Appended path"
-        );
+            "should append specified path");
     });
 
     test("Appending key", function () {
         var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             appendedPath = originalPath.appendKey('foo');
 
-        strictEqual(originalPath, appendedPath, "Appending returns new Path");
-
+        strictEqual(originalPath, appendedPath, "should return self");
         deepEqual(
             appendedPath.asArray,
             ['test', 'originalPath', 'it', 'is', 'foo'],
-            "Appended path"
-        );
+            "should append specified key to path buffer");
     });
 
     test("Prepending", function () {
         var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             prependedPath = originalPath.prepend('foo>bar'.toPath());
 
-        strictEqual(originalPath, prependedPath, "Prepending returns new Path");
-
+        strictEqual(originalPath, prependedPath, "should return self");
         deepEqual(
             prependedPath.asArray,
             ['foo', 'bar', 'test', 'originalPath', 'it', 'is'],
-            "Prepended path"
-        );
+            "should prepend specified path");
     });
 
     test("Prepending key", function () {
         var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             prependedPath = originalPath.prependKey('foo');
 
-        strictEqual(originalPath, prependedPath, "Prepending returns new Path");
-
+        strictEqual(originalPath, prependedPath, "should return self");
         deepEqual(
             prependedPath.asArray,
             ['foo', 'test', 'originalPath', 'it', 'is'],
-            "Prepended path"
-        );
+            "should prepend specified key to path buffer");
     });
 
-    test("Equality", function () {
+    test("Equality tester", function () {
         /** @type sntls.Path */
         var path = 'test>path>it>is'.toPath();
 
-        ok(!path.equals(), "Not equal to undefined");
-        ok(!path.equals("string"), "Not equal to string");
+        ok(!path.equals(), "should return false on passing undefined");
+        ok(!path.equals("string"), "should return false on passing non-Path instance");
 
-        ok(path.equals('test>path>it>is'.toPath()), "Matching path");
-        ok(!path.equals('path>it>is'.toPath()), "Non-matching path");
-
-        ok(path.equals('test>path>it>is'.toPath()), "Matching string path");
-        ok(!path.equals('path>it>is'.toPath()), "Non-matching string path");
-
-        ok(path.equals(['test', 'path', 'it', 'is'].toPath()), "Matching array path");
-        ok(!path.equals(['path', 'it', 'is'].toPath()), "Non-matching array path");
+        ok(path.equals('test>path>it>is'.toPath()), "should return true on matching Path");
+        ok(!path.equals('path>it>is'.toPath()), "should return false on non-matching Path");
     });
 
-    test("Relative paths", function () {
+    test("Relative path tester", function () {
         var root = 'test>path'.toPath(),
             path = 'test>path>it>is'.toPath();
 
-        ok(path.isRelativeTo(root), "Path is relative to root");
-        ok(root.isRelativeTo(root.clone()), "Root is relative to itself");
-        ok(!root.isRelativeTo(path), "Root is not relative to path");
+        ok(path.isRelativeTo(root), "should return true on passing root path");
+        ok(root.isRelativeTo(root.clone()), "should return true on passing self");
+        ok(!root.isRelativeTo(path), "should return false on non-root path");
     });
 
-    test("Root paths", function () {
+    test("Root tester", function () {
         var root = 'test>path'.toPath(),
             path = 'test>path>it>is'.toPath();
 
-        ok(root.isRootOf(root), "Path is root of itself");
-        ok(root.isRootOf(path), "Path is root of relative path");
-        ok(!path.isRootOf(root), "Path is not root of paths it's relative to");
+        ok(root.isRootOf(root), "should return true on passing self");
+        ok(root.isRootOf(path), "should return true on correct relative path");
+        ok(!path.isRootOf(root), "should return false non-relative path");
+    });
+
+    test("Serialization", function () {
+        var path;
+
+        path = ['test', 'path', 'it', 'is'].toPath();
+        equal(path.toString(), 'test>path>it>is', "should return path in string format");
+
+        path = ['test>', 'path', 'it', 'is'].toPath();
+        equal(path.toString(), 'test%3E>path>it>is', "should URI encode keys");
     });
 }());
