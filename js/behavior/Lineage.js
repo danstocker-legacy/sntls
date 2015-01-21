@@ -44,7 +44,7 @@ troop.postpone(sntls, 'Lineage', function () {
                  * the parent's path with the current successor's instance ID.
                  * @type {sntls.Path}
                  */
-                this.path = sntls.Path.create([instance.instanceId]);
+                this.path = sntls.Path.create([instance.instanceId].toPathArray());
 
                 /**
                  * Reference to the parent. Set only when the specified parent is part of the same lineage.

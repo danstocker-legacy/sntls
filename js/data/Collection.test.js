@@ -6,14 +6,16 @@
 
     test("Object method names", function () {
         deepEqual(
-            sntls.Collection._getObjectMethodNames({foo: function () {}, bar: "hello"}),
+            sntls.Collection._getObjectMethodNames({foo: function () {
+            }, bar                                     : "hello"}),
             ['foo'],
             "Gets method names from object (ES5)"
         );
 
         // adding user-defined, enumerable method to built-in type
         // _getObjectMethodNames should retrieve those AND built-in method names
-        Boolean.prototype.sntlsTest = function () {};
+        Boolean.prototype.sntlsTest = function () {
+        };
 
         if (!troop.Feature.hasPropertyAttributes()) {
             deepEqual(
@@ -29,11 +31,13 @@
     test("Class method names", function () {
         var MyClass = troop.Base.extend()
             .addMethods({
-                foo: function () {}
+                foo: function () {
+                }
             })
             .extend()
             .addMethods({
-                bar: function () {}
+                bar: function () {
+                }
             });
 
         deepEqual(
@@ -144,7 +148,8 @@
         var result = [],
             MyClass = troop.Base.extend()
                 .addMethods({
-                    init: function () {},
+                    init: function () {
+                    },
                     foo : function () {
                         result.push('foo');
                     }
@@ -231,7 +236,9 @@
     test("Specified extended collection", function () {
         var ExtendedCollection = sntls.Collection.extend()
                 .addMethods({
-                    foo: function () {return "bar";}
+                    foo: function () {
+                        return "bar";
+                    }
                 }),
             ExtendedStringCollection = ExtendedCollection.of(String),
             stringData = {
@@ -996,7 +1003,11 @@
     test("Creating new instance for each", function () {
         expect(4);
 
-        var collection = sntls.Collection.create(['foo>bar', 'hello>world', 'one>two>three']),
+        var collection = sntls.Collection.create([
+                ['foo', 'bar'],
+                ['hello', 'world'],
+                ['one', 'two', 'three']
+            ]),
             result;
 
         collection.addMocks({

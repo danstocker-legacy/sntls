@@ -315,8 +315,8 @@ troop.postpone(sntls, 'Query', function () {
              */
             toPathOrQuery: function () {
                 return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
-                    sntls.Query.create(this) :
-                    sntls.Path.create(this);
+                    this.toQuery() :
+                    this.toPath();
             }
         },
         false, false, false
