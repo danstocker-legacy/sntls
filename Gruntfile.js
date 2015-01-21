@@ -5,7 +5,8 @@ module.exports = function (grunt) {
     var params = {
         files: [
             'js/namespace.js',
-            'js/Utils.js',
+            'js/utils/Utils.js',
+            'js/utils/Array.js',
             'js/data/Hash.js',
             'js/data/Dictionary.js',
             'js/data/StringDictionary.js',

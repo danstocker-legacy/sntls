@@ -4,43 +4,51 @@
 
     module("Path");
 
-    test("Initialized by string", function () {
-        var path;
+    test("Instantiation", function () {
+        raises(function () {
+            sntls.Path.create();
+        }, "should raise exception on missing argument");
 
-        path = sntls.Path.create('test>path>it>is');
-        deepEqual(path.asArray, ['test', 'path', 'it', 'is'], "Array representation");
+        raises(function () {
+            sntls.Path.create('foo');
+        }, "should raise exception on invalid argument");
 
-        path = sntls.Path.create('te%3Est>path>it>is');
-        deepEqual(path.asArray, ['te>st', 'path', 'it', 'is'], "Array representation w/ encode");
+        var path = sntls.Path.create(['test', 'path', 'it', 'is']);
+
+        deepEqual(path.asArray, ['test', 'path', 'it', 'is'], "should preserve string keys");
     });
 
-    test("Initialized by array", function () {
-        var path;
+    test("Conversion from string", function () {
+        var path = 'test>path>hello>world'.toPath();
 
-        path = sntls.Path.create(['test', 'path', 'it', 'is']);
-        deepEqual(path.asArray, ['test', 'path', 'it', 'is'], "should preserve string keys");
+        ok(sntls.Path.isBaseOf(path), "should return Path instance");
+        deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "should set path buffer");
+    });
 
-        path = sntls.Path.create(['test', 1, undefined, true]);
-        deepEqual(path.asArray, ['test', '1', undefined, 'true'], "should convert all non-strings except undefined");
+    test("Conversion from array", function () {
+        var path = ['test', 'path', 'hello', 'world'].toPath();
+
+        ok(sntls.Path.isBaseOf(path), "should return Path instance");
+        deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "should set path buffer");
     });
 
     test("Key retrieval", function () {
-        var path = sntls.Path.create('test>path>it>is');
+        var path = 'test>path>it>is'.toPath();
         equal(path.getLastKey(), 'is', "Last key");
     });
 
     test("Serialization", function () {
         var path;
 
-        path = sntls.Path.create(['test', 'path', 'it', 'is']);
+        path = ['test', 'path', 'it', 'is'].toPath();
         equal(path.toString(), 'test>path>it>is', "Serialized path");
 
-        path = sntls.Path.create(['test>', 'path', 'it', 'is']);
+        path = ['test>', 'path', 'it', 'is'].toPath();
         equal(path.toString(), 'test%3E>path>it>is', "Serialized path");
     });
 
     test("Cloning", function () {
-        var path = sntls.Path.create('test>path>it>is'),
+        var path = 'test>path>it>is'.toPath(),
             clonePath = path.clone();
 
         deepEqual(path.asArray, clonePath.asArray, "Path buffers represent the same path");
@@ -49,7 +57,7 @@
     });
 
     test("Left trimming", function () {
-        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+        var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             trimmedPath = originalPath.trimLeft();
 
         strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
@@ -68,7 +76,7 @@
     });
 
     test("Right trimming", function () {
-        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+        var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             trimmedPath = originalPath.trimRight();
 
         strictEqual(originalPath, trimmedPath, "Trimming returns new Path");
@@ -87,7 +95,7 @@
     });
 
     test("Appending", function () {
-        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+        var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             appendedPath = originalPath.append('foo>bar'.toPath());
 
         strictEqual(originalPath, appendedPath, "Appending returns new Path");
@@ -100,7 +108,7 @@
     });
 
     test("Appending key", function () {
-        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+        var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             appendedPath = originalPath.appendKey('foo');
 
         strictEqual(originalPath, appendedPath, "Appending returns new Path");
@@ -113,7 +121,7 @@
     });
 
     test("Prepending", function () {
-        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+        var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             prependedPath = originalPath.prepend('foo>bar'.toPath());
 
         strictEqual(originalPath, prependedPath, "Prepending returns new Path");
@@ -126,7 +134,7 @@
     });
 
     test("Prepending key", function () {
-        var originalPath = sntls.Path.create(['test', 'originalPath', 'it', 'is']),
+        var originalPath = ['test', 'originalPath', 'it', 'is'].toPath(),
             prependedPath = originalPath.prependKey('foo');
 
         strictEqual(originalPath, prependedPath, "Prepending returns new Path");
@@ -140,13 +148,13 @@
 
     test("Equality", function () {
         /** @type sntls.Path */
-        var path = sntls.Path.create('test>path>it>is');
+        var path = 'test>path>it>is'.toPath();
 
         ok(!path.equals(), "Not equal to undefined");
         ok(!path.equals("string"), "Not equal to string");
 
-        ok(path.equals(sntls.Path.create('test>path>it>is')), "Matching path");
-        ok(!path.equals(sntls.Path.create('path>it>is')), "Non-matching path");
+        ok(path.equals('test>path>it>is'.toPath()), "Matching path");
+        ok(!path.equals('path>it>is'.toPath()), "Non-matching path");
 
         ok(path.equals('test>path>it>is'.toPath()), "Matching string path");
         ok(!path.equals('path>it>is'.toPath()), "Non-matching string path");
@@ -156,8 +164,8 @@
     });
 
     test("Relative paths", function () {
-        var root = sntls.Path.create('test>path'),
-            path = sntls.Path.create('test>path>it>is');
+        var root = 'test>path'.toPath(),
+            path = 'test>path>it>is'.toPath();
 
         ok(path.isRelativeTo(root), "Path is relative to root");
         ok(root.isRelativeTo(root.clone()), "Root is relative to itself");
@@ -165,25 +173,11 @@
     });
 
     test("Root paths", function () {
-        var root = sntls.Path.create('test>path'),
-            path = sntls.Path.create('test>path>it>is');
+        var root = 'test>path'.toPath(),
+            path = 'test>path>it>is'.toPath();
 
         ok(root.isRootOf(root), "Path is root of itself");
         ok(root.isRootOf(path), "Path is root of relative path");
         ok(!path.isRootOf(root), "Path is not root of paths it's relative to");
-    });
-
-    test("String conversion", function () {
-        var path = 'test>path>hello>world'.toPath();
-
-        ok(sntls.Path.isBaseOf(path), "Path type");
-        deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "Path contents");
-    });
-
-    test("Array conversion", function () {
-        var path = ['test', 'path', 'hello', 'world'].toPath();
-
-        ok(sntls.Path.isBaseOf(path), "Path type");
-        deepEqual(path.asArray, ['test', 'path', 'hello', 'world'], "Path contents");
     });
 }());

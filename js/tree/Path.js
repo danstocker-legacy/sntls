@@ -27,63 +27,13 @@ troop.postpone(sntls, 'Path', function () {
         .addConstants(/** @lends sntls.Path */{
             PATH_SEPARATOR: '>'
         })
-        .addPrivateMethods(/** @lends sntls.Path */{
-            /**
-             * URI encodes all items of an array.
-             * @param {string[]} asArray Array of plain strings
-             * @returns {string[]} Array of URI-encoded strings
-             * @private
-             */
-            _encodeURI: function (asArray) {
-                var result = [],
-                    i;
-                for (i = 0; i < asArray.length; i++) {
-                    result.push(encodeURI(asArray[i]));
-                }
-                return result;
-            },
-
-            /**
-             * URI decodes all items of an array.
-             * @param {string[]} asArray Array of URI-encoded strings
-             * @returns {string[]} Array of plain strings
-             * @private
-             */
-            _decodeURI: function (asArray) {
-                var result = [],
-                    i;
-                for (i = 0; i < asArray.length; i++) {
-                    result.push(decodeURI(asArray[i]));
-                }
-                return result;
-            }
-        })
         .addMethods(/** @lends sntls.Path# */{
             /**
-             * @param {string|string[]} path Path in string or array representation
+             * @param {string[]} asArray Path in string or array representation
              * @ignore
              */
-            init: function (path) {
-                var asArray;
-
-                // array representation is expected to be used more often
-                if (path instanceof Array) {
-                    asArray = path
-                        .map(function (key) {
-                            switch (typeof key) {
-                            case 'undefined':
-                            case 'string':
-                            case 'object':
-                                return key;
-                            default:
-                                return String(key);
-                            }
-                        });
-                } else if (validators.isString(path)) {
-                    asArray = this._decodeURI(path.split(this.PATH_SEPARATOR));
-                } else {
-                    dessert.assert(false, "Invalid path");
-                }
+            init: function (asArray) {
+                dessert.isArray(asArray, "Invalid path array");
 
                 /**
                  * Path in array representation. Keys are unencoded. Not to be modified externally.
@@ -264,7 +214,7 @@ troop.postpone(sntls, 'Path', function () {
              * @returns {string}
              */
             toString: function () {
-                return this._encodeURI(this.asArray).join(this.PATH_SEPARATOR);
+                return this.asArray.toUriEncoded().join(this.PATH_SEPARATOR);
             }
         });
 });
@@ -291,7 +241,8 @@ troop.postpone(sntls, 'Path', function () {
              * @returns {sntls.Path}
              */
             toPath: function () {
-                return sntls.Path.create(this);
+                var Path = sntls.Path;
+                return Path.create(this.split(Path.PATH_SEPARATOR).toUriDecoded());
             }
         },
         false, false, false

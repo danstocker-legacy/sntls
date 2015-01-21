@@ -4,22 +4,6 @@
 
     module("Key-Value Pattern");
 
-    test("URI decode", function () {
-        deepEqual(
-            sntls.KeyValuePattern._encodeURI(['f|o', 'b<r']),
-            ['f%7Co', 'b%3Cr'],
-            "Key-value pattern encoded"
-        );
-    });
-
-    test("URI decode", function () {
-        deepEqual(
-            sntls.KeyValuePattern._decodeURI(['f%7Co', 'b%3Cr']),
-            ['f|o', 'b<r'],
-            "Key-value pattern decoded"
-        );
-    });
-
     test("Pattern parsing", function () {
         equal(
             sntls.KeyValuePattern._parseString('foo%5E'),
