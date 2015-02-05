@@ -2,8 +2,7 @@
 troop.postpone(sntls, 'Path', function () {
     "use strict";
 
-    var validators = dessert.validators,
-        base = troop.Base,
+    var base = troop.Base,
         self = base.extend();
 
     /**
@@ -11,9 +10,7 @@ troop.postpone(sntls, 'Path', function () {
      * Constructs path instance and populates it with path information. Keys are assumed to be URI-encoded.
      * @name sntls.Path.create
      * @function
-     * @param {string|string[]} path Path in either string representation ('>'-separated, eg. "this>is>a>path")
-     * or array representation (eg. ['this', 'is', 'a', 'path']). When path is given as string,
-     * keys are URI decoded before adding them to the internal buffer.
+     * @param {string[]} path Path in array representation (eg. ['this', 'is', 'a', 'path']).
      * @returns {sntls.Path}
      */
 
@@ -62,7 +59,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Trims leading end of path. Alters path buffer!
              * @example
-             * var p = sntls.Path.create('test>path>it>is');
+             * var p = 'test>path>it>is'.toPath();
              * p.trimLeft().asArray // ['path', 'it', 'is']
              * @param {number} [count=1] Number of keys to remove from path.
              * @returns {sntls.Path}
@@ -79,7 +76,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Trims trailing end of path. Alters path buffer!
              * @example
-             * var p = sntls.Path.create('test>path>it>is');
+             * var p = 'test>path>it>is'.toPath();
              * p.trimRight().asArray // ['test', 'path', 'it']
              * @param {number} [count=1] Number of keys to remove from path.
              * @returns {sntls.Path}
@@ -116,7 +113,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Prepends the current path with the specified path. Alters path buffer!
              * @example
-             * var p = sntls.Path.create('test>path');
+             * var p = 'test>path'.toPath();
              * p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']
              * @param {sntls.Path} path Path to be prepended to the current path.
              * @returns {sntls.Path}
@@ -139,7 +136,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Checks whether current path and specified path are identical by value.
              * @example
-             * var p = sntls.Path.create('foo>bar');
+             * var p = 'foo>bar'.toPath();
              * p.equal('foo.bar') // true
              * p.equal('hello.world') // false
              * @param {sntls.Path} remotePath Remote path
@@ -171,7 +168,7 @@ troop.postpone(sntls, 'Path', function () {
              * Checks whether current path is relative to the specified root path. Path A is relative to B
              * when A and B have a common base path and that base path is B.
              * @example
-             * var p = sntls.Path.create('foo>bar');
+             * var p = 'foo>bar'.toPath();
              * p.isRelativeTo('foo') // true
              * p.isRelativeTo('foo.bar.hello') // false
              * @param {sntls.Path} rootPath
@@ -210,7 +207,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Returns the string representation for the path, keys URI encoded and separated by '>'.
              * @example
-             * sntls.Path.create(['test^', 'path']).toString() // "test%5E>path"
+             * ['test^', 'path'].toPath().toString() // "test%5E>path"
              * @returns {string}
              */
             toString: function () {
@@ -238,6 +235,7 @@ troop.postpone(sntls, 'Path', function () {
         /** @lends String# */{
             /**
              * Creates a new Path instance based on the current string.
+             * Individual keys will be URI decoded.
              * @returns {sntls.Path}
              */
             toPath: function () {
