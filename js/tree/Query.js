@@ -2,8 +2,7 @@
 troop.postpone(sntls, 'Query', function () {
     "use strict";
 
-    var validators = dessert.validators,
-        KeyValuePattern = sntls.KeyValuePattern,
+    var KeyValuePattern = sntls.KeyValuePattern,
         base = sntls.Path;
 
     /**
@@ -12,9 +11,8 @@ troop.postpone(sntls, 'Query', function () {
      * (except for pattern objects) are assumed to be URI-encoded.
      * @name sntls.Query.create
      * @function
-     * @param {Array|string} query Query in either string representation ('>'-separated, eg. "this>is>|>query")
-     * or array representation (eg. ['this', 'is', '|'.toKeyValuePattern(), 'path']). When query is given as string,
-     * keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.
+     * @param {Array} query Query in array representation (eg. ['this', 'is', '|'.toKeyValuePattern(), 'path']).
+     * All patterns should be converted to KeyValuePattern instance.
      * @returns {sntls.Query}
      */
 
@@ -60,14 +58,14 @@ troop.postpone(sntls, 'Query', function () {
              */
             PATTERN_SKIP: KeyValuePattern.create(KeyValuePattern.SKIP_SYMBOL)
         })
-        .addPrivateMethods(/** @lends sntls.Query */{
+        .addMethods(/** @lends sntls.Query# */{
             /**
              * Prepares string query buffer for normalization.
              * @param {string} asString Array of strings
              * @returns {string[]|sntls.KeyValuePattern[]}
-             * @private
+             * @memberOf sntls.Query
              */
-            _fromString: function (asString) {
+            stringToQueryArray: function (asString) {
                 var asArray = asString.split(this.PATH_SEPARATOR),
                     result = [],
                     i, pattern;
@@ -96,9 +94,9 @@ troop.postpone(sntls, 'Query', function () {
              * Makes sure skipper patterns all reference the same instance.
              * @param {string[]|sntls.KeyValuePattern[]} asArray
              * @returns {string[]|sntls.KeyValuePattern[]}
-             * @private
+             * @memberOf sntls.Query
              */
-            _fromArray: function (asArray) {
+            arrayToQueryArray: function (asArray) {
                 var result = [],
                     i, pattern;
 
@@ -124,27 +122,6 @@ troop.postpone(sntls, 'Query', function () {
                 }
 
                 return result;
-            }
-        })
-        .addMethods(/** @lends sntls.Query# */{
-            /**
-             * @param {Array|string} patterns
-             * @ignore
-             */
-            init: function (patterns) {
-                var asArray;
-
-                if (validators.isString(patterns)) {
-                    // splitting string input
-                    asArray = this._fromString(patterns);
-                } else if (patterns instanceof Array) {
-                    asArray = this._fromArray(patterns);
-                } else {
-                    dessert.assert(false, "Invalid query", patterns);
-                }
-
-                // calling base w/ normalized array buffer
-                base.init.call(this, asArray);
             },
 
             /**
@@ -302,10 +279,12 @@ troop.postpone(sntls, 'Query', function () {
         /** @lends String# */{
             /**
              * Creates a new Query instance based on the current string.
+             * Keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.
              * @returns {sntls.Query}
              */
             toQuery: function () {
-                return /** @type {sntls.Query} */ sntls.Query.create(this);
+                var Query = sntls.Query;
+                return /** @type {sntls.Query} */ Query.create(Query.stringToQueryArray(this));
             },
 
             /**
@@ -314,6 +293,7 @@ troop.postpone(sntls, 'Query', function () {
              * @returns {sntls.Path}
              */
             toPathOrQuery: function () {
+                var Query = sntls.Query;
                 return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
                     this.toQuery() :
                     this.toPath();
@@ -330,7 +310,8 @@ troop.postpone(sntls, 'Query', function () {
              * @returns {sntls.Query}
              */
             toQuery: function () {
-                return /** @type {sntls.Query} */ sntls.Query.create(this);
+                var Query = sntls.Query;
+                return /** @type {sntls.Query} */ Query.create(Query.arrayToQueryArray(this));
             },
 
             /**
@@ -340,8 +321,8 @@ troop.postpone(sntls, 'Query', function () {
              */
             toPathOrQuery: function () {
                 return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
-                    sntls.Query.create(this) :
-                    sntls.Path.create(this);
+                    this.toQuery() :
+                    this.toPath();
             }
         },
         false, false, false
