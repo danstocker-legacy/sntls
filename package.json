@@ -13,13 +13,10 @@
         "ordered list",
         "tree",
         "traversal",
-        "journaling",
-        "profile",
-        "stateful",
         "behaviors"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
-    "copyright"      : "Copyright (c) 2012-2014 Dan Stocker",
+    "copyright"      : "Copyright (c) 2012-2015 Dan Stocker",
     "license"        : "MIT",
     "repository"     : {
         "type": "git",
@@ -27,7 +24,7 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.7.2 || ~0.8.0"
+        "troop"  : "~0.8.0"
     },
     "devDependencies": {
         "phil"                : "~0.2.3",
