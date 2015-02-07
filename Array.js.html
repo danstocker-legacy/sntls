@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: behavior/Managed.js</title>
+    <title>JSDoc: Source: utils/Array.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: behavior/Managed.js</h1>
+    <h1 class="page-title">Source: utils/Array.js</h1>
     
     
 
@@ -25,84 +25,65 @@
     
     <section>
         <article>
-            <pre class="prettyprint source"><code>/*global dessert, troop, sntls */
-troop.postpone(sntls, 'Managed', function (ns, className) {
+            <pre class="prettyprint source"><code>(function () {
     "use strict";
 
-    var base = sntls.Documented,
-        self = base.extend(className);
-
-    /**
-     * @name sntls.Managed.create
-     * @function
-     * @returns {sntls.Managed}
-     */
-
-    /**
-     * Managed trait, extends `Documented` trait with a dynamic instance registry.
-     * @class
-     * @extends sntls.Documented
-     */
-    sntls.Managed = self
-        .addPublic(/** @lends sntls.Managed */{
-            instanceRegistry: sntls.Collection.create()
-        })
-        .addMethods(/** @lends sntls.Managed# */{
+    troop.Properties.addProperties.call(
+        Array.prototype,
+        /** @lends Array# */{
             /**
-             * @ignore
+             * Creates a new array based on the contents of the current array, so that the new array
+             * will stringify everything that is not: undefined, string, or object.
+             * @returns {Array}
              */
-            init: function () {
-                base.init.call(this);
-                this.addToRegistry();
+            toPathArray: function () {
+                var result = [],
+                    i, item;
+                for (i = 0; i &lt; this.length; i++) {
+                    item = this[i];
+                    switch (typeof item) {
+                    case 'undefined':
+                    case 'string':
+                    case 'object':
+                        result.push(item);
+                        break;
+                    default:
+                        result.push(String(item));
+                        break;
+                    }
+                }
+                return result;
             },
 
             /**
-             * Adds instance to registry.
-             * @returns {sntls.Managed}
+             * URI encodes all items of an array.
+             * @returns {string[]} Array of URI-encoded strings
              */
-            addToRegistry: function () {
-                self.instanceRegistry.setItem(this.instanceId, this);
-                return this;
+            toUriEncoded: function () {
+                var result = [],
+                    i;
+                for (i = 0; i &lt; this.length; i++) {
+                    result.push(encodeURI(this[i]));
+                }
+                return result;
             },
 
             /**
-             * Removes instance from registry.
-             * @returns {sntls.Managed}
+             * URI decodes all items of an array.
+             * @returns {string[]} Array of plain strings
              */
-            removeFromRegistry: function () {
-                self.instanceRegistry.deleteItem(this.instanceId);
-                return this;
-            },
-
-            /**
-             * Prepares instance for garbage collection. Call it before disposing of instance in order to avoid
-             * memory leaks.
-             * @example
-             * MyManaged = troop.Base.extend()
-             *   .addTrait(sntls.Managed)
-             *   .addMethods({
-             *       init: function () {sntls.Managed.init.call(this);}
-             *   });
-             * instance = MyManaged.create(); // instance will be added to registry
-             * instance.destroy(); // cleans up
-             * @returns {sntls.Managed}
-             */
-            destroy: function () {
-                this.removeFromRegistry();
-                return this;
-            },
-
-            /**
-             * Fetches instance by ID.
-             * @param {number|string} instanceId
-             * @returns {sntls.Managed}
-             * @memberOf sntls.Managed
-             */
-            getInstanceById: function (instanceId) {
-                return self.instanceRegistry.getItem(instanceId);
+            toUriDecoded: function () {
+                var result = [],
+                    i;
+                for (i = 0; i &lt; this.length; i++) {
+                    result.push(decodeURI(this[i]));
+                }
+                return result;
             }
-        });
-});
+        },
+        false, false, false
+    );
+}());
 </code></pre>
         </article>
     </section>

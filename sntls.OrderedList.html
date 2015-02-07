@@ -119,6 +119,54 @@
         <dl>
             
 <dt>
+    <h4 class="name" id="orderTypes"><span class="type-signature">&lt;static, constant> </span>orderTypes<span class="type-signature"> :object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 28
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="items"><span class="type-signature"></span>items<span class="type-signature"> :<a href="Array.html">Array</a>.&lt;string>|<a href="Array.html">Array</a>.&lt;number></span></h4>
     
     
@@ -149,7 +197,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 49
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 136
     </li></ul></dd>
     
     
@@ -223,6 +271,58 @@ method. Should not be modified externally.
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="orderType"><span class="type-signature"></span>orderType<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Whether list is ordered ascending or descending.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 147
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
         </dl>
     
     
@@ -232,7 +332,7 @@ method. Should not be modified externally.
         <dl>
             
 <dt>
-    <h4 class="name" id="_compareNumbers"><span class="type-signature">&lt;private, static> </span>_compareNumbers<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_compareAscending"><span class="type-signature">&lt;private, static> </span>_compareAscending<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -240,7 +340,7 @@ method. Should not be modified externally.
     
     
     <div class="description">
-        Compares numbers. To be supplied to Array.sort().
+        Compares numbers in ascending order. To be supplied to Array.sort().
     </div>
     
 
@@ -273,7 +373,7 @@ method. Should not be modified externally.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 27
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 39
     </li></ul></dd>
     
     
@@ -297,7 +397,72 @@ method. Should not be modified externally.
         
             
 <dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(<span class="optional">items</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
+    <h4 class="name" id="_compareDescending"><span class="type-signature">&lt;private, static> </span>_compareDescending<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Compares numbers in descending order. To be supplied to Array.sort().
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 48
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(<span class="optional">items</span>, <span class="optional">orderType</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
     
     
 </dt>
@@ -331,6 +496,8 @@ Sets the list up with initial items.
 		<th>Argument</th>
 		
 		
+		
+		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -370,8 +537,51 @@ Sets the list up with initial items.
             
             
             
+                <td class="default">
+                
+                </td>
+            
             
             <td class="description last">Initial values: array of strings or numbers.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>orderType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    'ascending'
+                
+                </td>
+            
+            
+            <td class="description last">Order type. Either 'ascending' or 'descending'.</td>
         </tr>
 	
 	
@@ -431,6 +641,374 @@ Sets the list up with initial items.
 	<dd>
 		
 <span class="param-type"><a href="sntls.OrderedList.html">sntls.OrderedList</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_spliceIndexOfAsc"><span class="type-signature">&lt;private> </span>_spliceIndexOfAsc<span class="signature">(value, start, end)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Gets splice index for ascending order.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 60
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_spliceIndexOfDesc"><span class="type-signature">&lt;private> </span>_spliceIndexOfDesc<span class="signature">(value, start, end)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Gets splice index for descending order.
+Same as sntls.OrderedList#_spliceIndexOfAsc but with value comparisons flipped.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 93
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="sntls.OrderedList.html#_spliceIndexOfAsc">sntls.OrderedList#_spliceIndexOfAsc</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
 
 
 	</dd>
@@ -536,7 +1114,7 @@ Sets the list up with initial items.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 153
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 234
     </li></ul></dd>
     
     
@@ -682,7 +1260,7 @@ ol.items // ['a', 'b', 'c']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 164
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 245
     </li></ul></dd>
     
     
@@ -907,7 +1485,7 @@ Changes the current hash instance!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 232
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 327
     </li></ul></dd>
     
     
@@ -949,7 +1527,7 @@ Changes the current hash instance!
         
             
 <dt>
-    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.Hash.html">sntls.Hash</a>}</span></h4>
+    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
     
     
 </dt>
@@ -957,8 +1535,7 @@ Changes the current hash instance!
     
     
     <div class="description">
-        Clones hash. Creates an instance of the same class (for subclasses of `Hash`)
-and initializes it with a shallow copy of the current items buffer and item count.
+        Clones OrderedList instance, setting the correct orderType property.
     </div>
     
 
@@ -977,11 +1554,6 @@ and initializes it with a shallow copy of the current items buffer and item coun
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.Hash.html#clone">sntls.Hash#clone</a>
-    </li></dd>
-    
     
     
     
@@ -996,7 +1568,7 @@ and initializes it with a shallow copy of the current items buffer and item coun
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Hash.js.html">data/Hash.js</a>, line 64
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 318
     </li></ul></dd>
     
     
@@ -1016,10 +1588,6 @@ and initializes it with a shallow copy of the current items buffer and item coun
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    New hash with identical contents.
-</div>
-
 
 
 <dl>
@@ -1028,7 +1596,7 @@ and initializes it with a shallow copy of the current items buffer and item coun
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="sntls.Hash.html">sntls.Hash</a></span>
+<span class="param-type"><a href="sntls.OrderedList.html">sntls.OrderedList</a></span>
 
 
 	</dd>
@@ -1878,7 +2446,7 @@ is not deterministic.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 116
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 197
     </li></ul></dd>
     
     
@@ -2156,7 +2724,7 @@ ol.getRange('foo', 'fun') // ['foo']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 135
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 216
     </li></ul></dd>
     
     
@@ -2952,7 +3520,7 @@ Returns -1 when the value is not present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 184
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 265
     </li></ul></dd>
     
     
@@ -3098,7 +3666,7 @@ ol.items // ['a', 'c']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 203
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 284
     </li></ul></dd>
     
     
@@ -3260,7 +3828,7 @@ Neither `startValue` nor `endValue` has to be present in the list.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 220
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 301
     </li></ul></dd>
     
     
@@ -3492,7 +4060,7 @@ but no information is given whether the value is present in the list or not.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 74
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 167
     </li></ul></dd>
     
     
@@ -3954,7 +4522,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
         
             
 <dt>
-    <h4 class="name" id="toJournalingCollection"><span class="type-signature"></span>toJournalingCollection<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a>}</span></h4>
+    <h4 class="name" id="toOrderedList"><span class="type-signature"></span>toOrderedList<span class="signature">(<span class="optional">orderType</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
     
     
 </dt>
@@ -3962,7 +4530,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     
     <div class="description">
-        Reinterprets hash as a journaling collection.
+        Converts Hash to OrderedList instance.
     </div>
     
 
@@ -3971,93 +4539,73 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     
     
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-    
-    
-    
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="sntls.Hash.html#toJournalingCollection">sntls.Hash#toJournalingCollection</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="JournalingCollection.js.html">data/JournalingCollection.js</a>, line 120
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
+<table class="params">
+    <thead>
+	<tr>
 		
-<span class="param-type"><a href="sntls.JournalingCollection.html">sntls.JournalingCollection</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
             
-<dt>
-    <h4 class="name" id="toOrderedList"><span class="type-signature"></span>toOrderedList<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedList.html">sntls.OrderedList</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Reinterprets hash as an ordered list.
-    </div>
-    
+                <td class="name"><code>orderType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
-    
-    
-    
-    
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    'ascending'
+                
+                </td>
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -4088,7 +4636,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 249
+        <a href="OrderedList.js.html">data/OrderedList.js</a>, line 345
     </li></ul></dd>
     
     
@@ -4130,7 +4678,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
         
             
 <dt>
-    <h4 class="name" id="toOrderedStringList"><span class="type-signature"></span>toOrderedStringList<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedStringList.html">sntls.OrderedStringList</a>}</span></h4>
+    <h4 class="name" id="toOrderedStringList"><span class="type-signature"></span>toOrderedStringList<span class="signature">(<span class="optional">orderType</span>)</span><span class="type-signature"> &rarr; {<a href="sntls.OrderedStringList.html">sntls.OrderedStringList</a>}</span></h4>
     
     
 </dt>
@@ -4138,7 +4686,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     
     <div class="description">
-        Reinterprets hash as ordered string list.
+        Converts Hash to OrderedStringList instance.
     </div>
     
 
@@ -4146,6 +4694,74 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>orderType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    'ascending'
+                
+                </td>
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -4176,7 +4792,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 105
+        <a href="OrderedStringList.js.html">data/OrderedStringList.js</a>, line 107
     </li></ul></dd>
     
     
@@ -4528,7 +5144,7 @@ ol.spliceIndexOf('fun') // 3</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Tree.js.html">tree/Tree.js</a>, line 480
+        <a href="Tree.js.html">tree/Tree.js</a>, line 486
     </li></ul></dd>
     
     
@@ -4583,13 +5199,13 @@ ol.spliceIndexOf('fun') // 3</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat May 31 2014 08:18:25 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 07 2015 14:31:12 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -29,8 +29,7 @@
 troop.postpone(sntls, 'Path', function () {
     "use strict";
 
-    var validators = dessert.validators,
-        base = troop.Base,
+    var base = troop.Base,
         self = base.extend();
 
     /**
@@ -38,9 +37,7 @@ troop.postpone(sntls, 'Path', function () {
      * Constructs path instance and populates it with path information. Keys are assumed to be URI-encoded.
      * @name sntls.Path.create
      * @function
-     * @param {string|string[]} path Path in either string representation ('>'-separated, eg. "this>is>a>path")
-     * or array representation (eg. ['this', 'is', 'a', 'path']). When path is given as string,
-     * keys are URI decoded before adding them to the internal buffer.
+     * @param {string[]} path Path in array representation (eg. ['this', 'is', 'a', 'path']).
      * @returns {sntls.Path}
      */
 
@@ -54,53 +51,13 @@ troop.postpone(sntls, 'Path', function () {
         .addConstants(/** @lends sntls.Path */{
             PATH_SEPARATOR: '>'
         })
-        .addPrivateMethods(/** @lends sntls.Path */{
-            /**
-             * URI encodes all items of an array.
-             * @param {string[]} asArray Array of plain strings
-             * @returns {string[]} Array of URI-encoded strings
-             * @private
-             */
-            _encodeURI: function (asArray) {
-                var result = [],
-                    i;
-                for (i = 0; i &lt; asArray.length; i++) {
-                    result.push(encodeURI(asArray[i]));
-                }
-                return result;
-            },
-
-            /**
-             * URI decodes all items of an array.
-             * @param {string[]} asArray Array of URI-encoded strings
-             * @returns {string[]} Array of plain strings
-             * @private
-             */
-            _decodeURI: function (asArray) {
-                var result = [],
-                    i;
-                for (i = 0; i &lt; asArray.length; i++) {
-                    result.push(decodeURI(asArray[i]));
-                }
-                return result;
-            }
-        })
         .addMethods(/** @lends sntls.Path# */{
             /**
-             * @param {string|string[]} path Path in string or array representation
+             * @param {string[]} asArray Path in string or array representation
              * @ignore
              */
-            init: function (path) {
-                var asArray;
-
-                // array representation is expected to be used more often
-                if (path instanceof Array) {
-                    asArray = path;
-                } else if (validators.isString(path)) {
-                    asArray = this._decodeURI(path.split(this.PATH_SEPARATOR));
-                } else {
-                    dessert.assert(false, "Invalid path");
-                }
+            init: function (asArray) {
+                dessert.isArray(asArray, "Invalid path array");
 
                 /**
                  * Path in array representation. Keys are unencoded. Not to be modified externally.
@@ -129,7 +86,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Trims leading end of path. Alters path buffer!
              * @example
-             * var p = sntls.Path.create('test>path>it>is');
+             * var p = 'test>path>it>is'.toPath();
              * p.trimLeft().asArray // ['path', 'it', 'is']
              * @param {number} [count=1] Number of keys to remove from path.
              * @returns {sntls.Path}
@@ -146,7 +103,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Trims trailing end of path. Alters path buffer!
              * @example
-             * var p = sntls.Path.create('test>path>it>is');
+             * var p = 'test>path>it>is'.toPath();
              * p.trimRight().asArray // ['test', 'path', 'it']
              * @param {number} [count=1] Number of keys to remove from path.
              * @returns {sntls.Path}
@@ -183,7 +140,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Prepends the current path with the specified path. Alters path buffer!
              * @example
-             * var p = sntls.Path.create('test>path');
+             * var p = 'test>path'.toPath();
              * p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']
              * @param {sntls.Path} path Path to be prepended to the current path.
              * @returns {sntls.Path}
@@ -206,7 +163,7 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Checks whether current path and specified path are identical by value.
              * @example
-             * var p = sntls.Path.create('foo>bar');
+             * var p = 'foo>bar'.toPath();
              * p.equal('foo.bar') // true
              * p.equal('hello.world') // false
              * @param {sntls.Path} remotePath Remote path
@@ -238,7 +195,7 @@ troop.postpone(sntls, 'Path', function () {
              * Checks whether current path is relative to the specified root path. Path A is relative to B
              * when A and B have a common base path and that base path is B.
              * @example
-             * var p = sntls.Path.create('foo>bar');
+             * var p = 'foo>bar'.toPath();
              * p.isRelativeTo('foo') // true
              * p.isRelativeTo('foo.bar.hello') // false
              * @param {sntls.Path} rootPath
@@ -277,11 +234,11 @@ troop.postpone(sntls, 'Path', function () {
             /**
              * Returns the string representation for the path, keys URI encoded and separated by '>'.
              * @example
-             * sntls.Path.create(['test^', 'path']).toString() // "test%5E>path"
+             * ['test^', 'path'].toPath().toString() // "test%5E>path"
              * @returns {string}
              */
             toString: function () {
-                return this._encodeURI(this.asArray).join(this.PATH_SEPARATOR);
+                return this.asArray.toUriEncoded().join(this.PATH_SEPARATOR);
             }
         });
 });
@@ -305,10 +262,12 @@ troop.postpone(sntls, 'Path', function () {
         /** @lends String# */{
             /**
              * Creates a new Path instance based on the current string.
+             * Individual keys will be URI decoded.
              * @returns {sntls.Path}
              */
             toPath: function () {
-                return sntls.Path.create(this);
+                var Path = sntls.Path;
+                return Path.create(this.split(Path.PATH_SEPARATOR).toUriDecoded());
             }
         },
         false, false, false
@@ -338,13 +297,13 @@ troop.postpone(sntls, 'Path', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat May 31 2014 08:18:21 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 07 2015 14:31:09 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

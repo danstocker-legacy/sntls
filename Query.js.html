@@ -29,8 +29,7 @@
 troop.postpone(sntls, 'Query', function () {
     "use strict";
 
-    var validators = dessert.validators,
-        KeyValuePattern = sntls.KeyValuePattern,
+    var KeyValuePattern = sntls.KeyValuePattern,
         base = sntls.Path;
 
     /**
@@ -39,9 +38,8 @@ troop.postpone(sntls, 'Query', function () {
      * (except for pattern objects) are assumed to be URI-encoded.
      * @name sntls.Query.create
      * @function
-     * @param {Array|string} query Query in either string representation ('>'-separated, eg. "this>is>|>query")
-     * or array representation (eg. ['this', 'is', '|'.toKeyValuePattern(), 'path']). When query is given as string,
-     * keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.
+     * @param {Array} query Query in array representation (eg. ['this', 'is', '|'.toKeyValuePattern(), 'path']).
+     * All patterns should be converted to KeyValuePattern instance.
      * @returns {sntls.Query}
      */
 
@@ -65,17 +63,19 @@ troop.postpone(sntls, 'Query', function () {
     sntls.Query = base.extend()
         .addConstants(/** @lends sntls.Query */{
             /**
-             * Regular expression that tests whether string
-             * contains query patterns.
+             * Regular expression that tests whether string contains query patterns.
+             * Should include all special KeyValuePattern characters.
              * @type {RegExp}
              */
-            RE_QUERY_TESTER: /&lt;|\^|\||\\|"/,
-
-            /**
-             * Regular expression validating a query expression
-             * @type {RegExp}
-             */
-            RE_QUERY_VALIDATOR: /^(>?(\||\\|[^&lt;>\^\|\\]*|(&lt;?[^&lt;>\^\|\\]*)+)(\^[^&lt;>\^\|\\]*$)?)+$/,
+            RE_QUERY_TESTER: new RegExp([
+                '\\' + sntls.KeyValuePattern.OPTION_SEPARATOR,
+                '\\' + sntls.KeyValuePattern.KEY_VALUE_SEPARATOR,
+                '\\' + sntls.KeyValuePattern.WILDCARD_SYMBOL,
+                '\\' + sntls.KeyValuePattern.PRIMITIVE_SYMBOL,
+                '\\' + sntls.KeyValuePattern.SKIP_SYMBOL,
+                '\\' + sntls.KeyValuePattern.MARKER_BRACKET,
+                '\\' + sntls.KeyValuePattern.MARKER_CURLY
+            ].join('|')),
 
             /**
              * Pattern indicating skip mode. In skip mode, keys are skipped
@@ -85,14 +85,14 @@ troop.postpone(sntls, 'Query', function () {
              */
             PATTERN_SKIP: KeyValuePattern.create(KeyValuePattern.SKIP_SYMBOL)
         })
-        .addPrivateMethods(/** @lends sntls.Query */{
+        .addMethods(/** @lends sntls.Query# */{
             /**
              * Prepares string query buffer for normalization.
              * @param {string} asString Array of strings
              * @returns {string[]|sntls.KeyValuePattern[]}
-             * @private
+             * @memberOf sntls.Query
              */
-            _fromString: function (asString) {
+            stringToQueryArray: function (asString) {
                 var asArray = asString.split(this.PATH_SEPARATOR),
                     result = [],
                     i, pattern;
@@ -121,9 +121,9 @@ troop.postpone(sntls, 'Query', function () {
              * Makes sure skipper patterns all reference the same instance.
              * @param {string[]|sntls.KeyValuePattern[]} asArray
              * @returns {string[]|sntls.KeyValuePattern[]}
-             * @private
+             * @memberOf sntls.Query
              */
-            _fromArray: function (asArray) {
+            arrayToQueryArray: function (asArray) {
                 var result = [],
                     i, pattern;
 
@@ -149,27 +149,6 @@ troop.postpone(sntls, 'Query', function () {
                 }
 
                 return result;
-            }
-        })
-        .addMethods(/** @lends sntls.Query# */{
-            /**
-             * @param {Array|string} patterns
-             * @ignore
-             */
-            init: function (patterns) {
-                var asArray;
-
-                if (validators.isString(patterns)) {
-                    // splitting string input
-                    asArray = this._fromString(patterns);
-                } else if (patterns instanceof Array) {
-                    asArray = this._fromArray(patterns);
-                } else {
-                    dessert.assert(false, "Invalid query", patterns);
-                }
-
-                // calling base w/ normalized array buffer
-                base.init.call(this, asArray);
             },
 
             /**
@@ -327,10 +306,12 @@ troop.postpone(sntls, 'Query', function () {
         /** @lends String# */{
             /**
              * Creates a new Query instance based on the current string.
+             * Keys are URI decoded or translated to the corresponding pattern object before being added to the internal buffer.
              * @returns {sntls.Query}
              */
             toQuery: function () {
-                return /** @type {sntls.Query} */ sntls.Query.create(this);
+                var Query = sntls.Query;
+                return /** @type {sntls.Query} */ Query.create(Query.stringToQueryArray(this));
             },
 
             /**
@@ -339,9 +320,10 @@ troop.postpone(sntls, 'Query', function () {
              * @returns {sntls.Path}
              */
             toPathOrQuery: function () {
+                var Query = sntls.Query;
                 return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
-                    sntls.Query.create(this) :
-                    sntls.Path.create(this);
+                    this.toQuery() :
+                    this.toPath();
             }
         },
         false, false, false
@@ -355,7 +337,8 @@ troop.postpone(sntls, 'Query', function () {
              * @returns {sntls.Query}
              */
             toQuery: function () {
-                return /** @type {sntls.Query} */ sntls.Query.create(this);
+                var Query = sntls.Query;
+                return /** @type {sntls.Query} */ Query.create(Query.arrayToQueryArray(this));
             },
 
             /**
@@ -365,8 +348,8 @@ troop.postpone(sntls, 'Query', function () {
              */
             toPathOrQuery: function () {
                 return /** @type {sntls.Path} */ validators.isQueryExpression(this) ?
-                    sntls.Query.create(this) :
-                    sntls.Path.create(this);
+                    this.toQuery() :
+                    this.toPath();
             }
         },
         false, false, false
@@ -382,13 +365,13 @@ troop.postpone(sntls, 'Query', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat May 31 2014 08:18:21 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 07 2015 14:31:09 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

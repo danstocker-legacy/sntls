@@ -74,7 +74,7 @@ subsequent key corresponding to a property in the next child node.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 11
+        <a href="Path.js.html">tree/Path.js</a>, line 10
     </li></ul></dd>
     
     
@@ -154,7 +154,7 @@ subsequent key corresponding to a property in the next child node.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 82
+        <a href="Path.js.html">tree/Path.js</a>, line 39
     </li></ul></dd>
     
     
@@ -176,276 +176,6 @@ subsequent key corresponding to a property in the next child node.
         <h3 class="subsection-title">Methods</h3>
         
         <dl>
-            
-<dt>
-    <h4 class="name" id="_decodeURI"><span class="type-signature">&lt;private, static> </span>_decodeURI<span class="signature">(asArray)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        URI decodes all items of an array.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>asArray</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string[]</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Array of URI-encoded strings</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 52
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    Array of plain strings
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">string[]</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_encodeURI"><span class="type-signature">&lt;private, static> </span>_encodeURI<span class="signature">(asArray)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        URI encodes all items of an array.
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>asArray</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string[]</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Array of plain strings</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 37
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    Array of URI-encoded strings
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">string[]</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
             
 <dt>
     <h4 class="name" id="create"><span class="type-signature">&lt;static> </span>create<span class="signature">(path)</span><span class="type-signature"> &rarr; {<a href="sntls.Path.html">sntls.Path</a>}</span></h4>
@@ -497,10 +227,7 @@ Constructs path instance and populates it with path information. Keys are assume
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type"><a href="Array.html">Array</a>.&lt;string></span>
+<span class="param-type">string[]</span>
 
 
             
@@ -510,9 +237,7 @@ Constructs path instance and populates it with path information. Keys are assume
             
             
             
-            <td class="description last">Path in either string representation ('>'-separated, eg. "this>is>a>path")
-or array representation (eg. ['this', 'is', 'a', 'path']). When path is given as string,
-keys are URI decoded before adding them to the internal buffer.</td>
+            <td class="description last">Path in array representation (eg. ['this', 'is', 'a', 'path']).</td>
         </tr>
 	
 	
@@ -543,7 +268,7 @@ keys are URI decoded before adding them to the internal buffer.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 9
+        <a href="Path.js.html">tree/Path.js</a>, line 8
     </li></ul></dd>
     
     
@@ -674,7 +399,7 @@ keys are URI decoded before adding them to the internal buffer.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 141
+        <a href="Path.js.html">tree/Path.js</a>, line 98
     </li></ul></dd>
     
     
@@ -805,7 +530,7 @@ keys are URI decoded before adding them to the internal buffer.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 151
+        <a href="Path.js.html">tree/Path.js</a>, line 108
     </li></ul></dd>
     
     
@@ -888,7 +613,7 @@ keys are URI decoded before adding them to the internal buffer.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 98
+        <a href="Path.js.html">tree/Path.js</a>, line 55
     </li></ul></dd>
     
     
@@ -1019,7 +744,7 @@ keys are URI decoded before adding them to the internal buffer.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 188
+        <a href="Path.js.html">tree/Path.js</a>, line 145
     </li></ul></dd>
     
     
@@ -1058,7 +783,7 @@ keys are URI decoded before adding them to the internal buffer.</td>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
+    <pre class="prettyprint"><code>var p = 'foo>bar'.toPath();
 p.equal('foo.bar') // true
 p.equal('hello.world') // false</code></pre>
 
@@ -1109,7 +834,7 @@ p.equal('hello.world') // false</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 89
+        <a href="Path.js.html">tree/Path.js</a>, line 46
     </li></ul></dd>
     
     
@@ -1241,7 +966,7 @@ when A and B have a common base path and that base path is B.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 220
+        <a href="Path.js.html">tree/Path.js</a>, line 177
     </li></ul></dd>
     
     
@@ -1280,7 +1005,7 @@ when A and B have a common base path and that base path is B.
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var p = sntls.Path.create('foo>bar');
+    <pre class="prettyprint"><code>var p = 'foo>bar'.toPath();
 p.isRelativeTo('foo') // true
 p.isRelativeTo('foo.bar.hello') // false</code></pre>
 
@@ -1379,7 +1104,7 @@ p.isRelativeTo('foo.bar.hello') // false</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 245
+        <a href="Path.js.html">tree/Path.js</a>, line 202
     </li></ul></dd>
     
     
@@ -1510,7 +1235,7 @@ p.isRelativeTo('foo.bar.hello') // false</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 164
+        <a href="Path.js.html">tree/Path.js</a>, line 121
     </li></ul></dd>
     
     
@@ -1549,7 +1274,7 @@ p.isRelativeTo('foo.bar.hello') // false</code></pre>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path');
+    <pre class="prettyprint"><code>var p = 'test>path'.toPath();
 p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
 
     
@@ -1647,7 +1372,7 @@ p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 174
+        <a href="Path.js.html">tree/Path.js</a>, line 131
     </li></ul></dd>
     
     
@@ -1730,7 +1455,7 @@ p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 256
+        <a href="Path.js.html">tree/Path.js</a>, line 213
     </li></ul></dd>
     
     
@@ -1769,7 +1494,7 @@ p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>sntls.Path.create(['test^', 'path']).toString() // "test%5E>path"</code></pre>
+    <pre class="prettyprint"><code>['test^', 'path'].toPath().toString() // "test%5E>path"</code></pre>
 
     
 </dd>
@@ -1886,7 +1611,7 @@ p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 110
+        <a href="Path.js.html">tree/Path.js</a>, line 67
     </li></ul></dd>
     
     
@@ -1925,7 +1650,7 @@ p.prepend('foo.bar').asArray // ['foo', 'bar', 'test', 'path']</code></pre>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path>it>is');
+    <pre class="prettyprint"><code>var p = 'test>path>it>is'.toPath();
 p.trimLeft().asArray // ['path', 'it', 'is']</code></pre>
 
     
@@ -2043,7 +1768,7 @@ p.trimLeft().asArray // ['path', 'it', 'is']</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Path.js.html">tree/Path.js</a>, line 127
+        <a href="Path.js.html">tree/Path.js</a>, line 84
     </li></ul></dd>
     
     
@@ -2082,7 +1807,7 @@ p.trimLeft().asArray // ['path', 'it', 'is']</code></pre>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var p = sntls.Path.create('test>path>it>is');
+    <pre class="prettyprint"><code>var p = 'test>path>it>is'.toPath();
 p.trimRight().asArray // ['test', 'path', 'it']</code></pre>
 
     
@@ -2104,13 +1829,13 @@ p.trimRight().asArray // ['test', 'path', 'it']</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat May 31 2014 08:18:26 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 07 2015 14:31:13 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

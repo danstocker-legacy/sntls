@@ -37,6 +37,7 @@ troop.postpone(sntls, 'OrderedList', function () {
      * @name sntls.OrderedList.create
      * @function
      * @param {string[]|number[]} [items] Initial values: array of strings or numbers.
+     * @param {string} [orderType='ascending'] Order type. Either 'ascending' or 'descending'.
      * @returns {sntls.OrderedList}
      */
 
@@ -46,31 +47,117 @@ troop.postpone(sntls, 'OrderedList', function () {
      * @extends sntls.Hash
      */
     sntls.OrderedList = base.extend()
-        .addPrivateMethods(/** @lends sntls.OrderedList */{
+        .addConstants(/** @lends sntls.OrderedList */{
             /**
-             * Compares numbers. To be supplied to Array.sort().
+             * @type {object}
+             * @constant
+             */
+            orderTypes: {
+                ascending : 'ascending',
+                descending: 'descending'
+            }
+        })
+        .addPrivateMethods(/** @lends sntls.OrderedList# */{
+            /**
+             * Compares numbers in ascending order. To be supplied to Array.sort().
+             * @private
+             * @memberOf sntls.OrderedList
+             */
+            _compareAscending: function (a, b) {
+                return a > b ? 1 : a &lt; b ? -1 : 0;
+            },
+
+            /**
+             * Compares numbers in descending order. To be supplied to Array.sort().
+             * @private
+             * @memberOf sntls.OrderedList
+             */
+            _compareDescending: function (a, b) {
+                return b > a ? 1 : b &lt; a ? -1 : 0;
+            },
+
+            /**
+             * Gets splice index for ascending order.
+             * @param {string|number} value
+             * @param {number} start
+             * @param {number} end
+             * @returns {number}
              * @private
              */
-            _compareNumbers: function (a, b) {
-                return a > b ? 1 : a &lt; b ? -1 : 0;
+            _spliceIndexOfAsc: function (value, start, end) {
+                var items = this.items,
+                    medianPos = Math.floor((start + end) / 2), // position of the median within range
+                    medianValue = items[medianPos]; // median value within range
+
+                if (items[start] >= value) {
+                    // out of range hit
+                    return start;
+                } else if (end - start &lt;= 1) {
+                    // between two adjacent values
+                    return end;
+                } else if (medianValue >= value) {
+                    // narrowing range to lower half
+                    return this._spliceIndexOfAsc(value, start, medianPos);
+                } else if (medianValue &lt; value) {
+                    // narrowing range to upper half
+                    return this._spliceIndexOfAsc(value, medianPos, end);
+                }
+
+                // default index, should never be reached
+                return -1;
+            },
+
+            /**
+             * Gets splice index for descending order.
+             * Same as sntls.OrderedList#_spliceIndexOfAsc but with value comparisons flipped.
+             * @param {string|number} value
+             * @param {number} start
+             * @param {number} end
+             * @returns {number}
+             * @private
+             * @see sntls.OrderedList#_spliceIndexOfAsc
+             */
+            _spliceIndexOfDesc: function (value, start, end) {
+                var items = this.items,
+                    medianPos = Math.floor((start + end) / 2), // position of the median within range
+                    medianValue = items[medianPos]; // median value within range
+
+                if (items[start] &lt;= value) {
+                    // out of range hit
+                    return start;
+                } else if (end - start &lt;= 1) {
+                    // between two adjacent values
+                    return end;
+                } else if (medianValue &lt;= value) {
+                    // narrowing range to lower half
+                    return this._spliceIndexOfDesc(value, start, medianPos);
+                } else if (medianValue > value) {
+                    // narrowing range to upper half
+                    return this._spliceIndexOfDesc(value, medianPos, end);
+                }
+
+                // default index, should never be reached
+                return -1;
             }
         })
         .addMethods(/** @lends sntls.OrderedList# */{
             /**
-             * @param {string[]|number[]} [items] Initial values
+             * @param {string[]|number[]} [items]
+             * @param {boolean} [orderType='ascending']
              * @ignore
              */
-            init: function (items) {
-                dessert.isArrayOptional(items, "Invalid items");
+            init: function (items, orderType) {
+                dessert
+                    .isArrayOptional(items, "Invalid items")
+                    .isOrderTypeOptional(orderType, "Invalid order type");
 
                 // preparing items buffer
                 items = items || [];
                 if (items.length) {
                     // sorting items
-                    items.sort(typeof items[0] === 'number' ?
-                        this._compareNumbers :
-                        undefined
-                    );
+                    items.sort(orderType === this.orderTypes.descending ?
+                        this._compareDescending :
+                        this._compareAscending);
                 }
 
                 /**
@@ -79,6 +166,12 @@ troop.postpone(sntls, 'OrderedList', function () {
                  */
 
                 base.init.call(this, items);
+
+                /**
+                 * Whether list is ordered ascending or descending.
+                 * @type {string}
+                 */
+                this.orderType = orderType || this.orderTypes.ascending;
             },
 
             //////////////////////////////
@@ -99,32 +192,20 @@ troop.postpone(sntls, 'OrderedList', function () {
              * @returns {number}
              */
             spliceIndexOf: function (value, start, end) {
-                var items = this.items,
-                    medianPos, // position of the median within range
-                    medianValue; // median value within range
-
                 start = start || 0;
-                end = end || items.length;
+                end = end || this.items.length;
 
-                medianPos = Math.floor((start + end) / 2);
-                medianValue = items[medianPos];
+                var orderTypes = this.orderTypes;
 
-                if (items[start] >= value) {
-                    // out of range hit
-                    return start;
-                } else if (end - start &lt;= 1) {
-                    // between two adjacent values
-                    return end;
-                } else if (medianValue >= value) {
-                    // narrowing range to lower half
-                    return this.spliceIndexOf(value, start, medianPos);
-                } else if (medianValue &lt; value) {
-                    // narrowing range to upper half
-                    return this.spliceIndexOf(value, medianPos, end);
+                switch (this.orderType) {
+                case orderTypes.descending:
+                    return this._spliceIndexOfDesc(value, start, end);
+                case orderTypes.ascending:
+                    return this._spliceIndexOfAsc(value, start, end);
+                default:
+                    // should not be reached - order is either ascending or descending
+                    return -1;
                 }
-
-                // default index, should never be reached
-                return -1;
             },
 
             /**
@@ -251,9 +332,23 @@ troop.postpone(sntls, 'OrderedList', function () {
 
                 if (length > 0) {
                     this.items.splice(startIndex, length);
+                    return startIndex;
+                } else {
+                    return -1;
                 }
+            },
 
-                return startIndex;
+            /**
+             * Clones OrderedList instance, setting the correct orderType property.
+             * @returns {sntls.OrderedList}
+             */
+            clone: function () {
+                var result = base.clone.call(this);
+
+                // copying over order type
+                result.orderType = this.orderType;
+
+                return result;
             }
 
             /**
@@ -270,11 +365,12 @@ troop.amendPostponed(sntls, 'Hash', function () {
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
         /**
-         * Reinterprets hash as an ordered list.
+         * Converts Hash to OrderedList instance.
+         * @param {string} [orderType='ascending']
          * @returns {sntls.OrderedList}
          */
-        toOrderedList: function () {
-            return sntls.OrderedList.create(this.items);
+        toOrderedList: function (orderType) {
+            return sntls.OrderedList.create(this.items, orderType);
         }
     });
 });
@@ -282,15 +378,28 @@ troop.amendPostponed(sntls, 'Hash', function () {
 (function () {
     "use strict";
 
+    dessert.addTypes(/** @lends dessert */{
+        /** @param {string} expr */
+        isOrderType: function (expr) {
+            return expr && sntls.OrderedList.orderTypes[expr] === expr;
+        },
+
+        /** @param {string} [expr] */
+        isOrderTypeOptional: function (expr) {
+            return sntls.OrderedList.orderTypes[expr] === expr;
+        }
+    });
+
     troop.Properties.addProperties.call(
         Array.prototype,
         /** @lends Array# */{
             /**
              * Creates a new OrderedList instance based on the current array.
+             * @param {string} [orderType='ascending']
              * @returns {sntls.OrderedList}
              */
-            toOrderedList: function () {
-                return sntls.OrderedList.create(this);
+            toOrderedList: function (orderType) {
+                return sntls.OrderedList.create(this, orderType);
             }
         },
         false, false, false
@@ -306,13 +415,13 @@ troop.amendPostponed(sntls, 'Hash', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.JournalingCollection.html">JournalingCollection</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Lineage.html">Lineage</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Profile.html">Profile</a></li><li><a href="sntls.ProfileCollection.html">ProfileCollection</a></li><li><a href="sntls.Profiled.html">Profiled</a></li><li><a href="sntls.Progenitor.html">Progenitor</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.Stateful.html">Stateful</a></li><li><a href="sntls.StateMatrix.html">StateMatrix</a></li><li><a href="sntls.StateMatrixCollection.html">StateMatrixCollection</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="sntls.ArrayCollection.html">ArrayCollection</a></li><li><a href="sntls.Collection.html">Collection</a></li><li><a href="sntls.DateCollection.html">DateCollection</a></li><li><a href="sntls.Dictionary.html">Dictionary</a></li><li><a href="sntls.Documented.html">Documented</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.IterativeTreeWalker.html">IterativeTreeWalker</a></li><li><a href="sntls.KeyValuePattern.html">KeyValuePattern</a></li><li><a href="sntls.KeyValuePatternCollection.html">KeyValuePatternCollection</a></li><li><a href="sntls.Managed.html">Managed</a></li><li><a href="sntls.OrderedList.html">OrderedList</a></li><li><a href="sntls.OrderedStringList.html">OrderedStringList</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="sntls.Query.html">Query</a></li><li><a href="sntls.RecursiveTreeWalker.html">RecursiveTreeWalker</a></li><li><a href="sntls.Set.html">Set</a></li><li><a href="sntls.StringCollection.html">StringCollection</a></li><li><a href="sntls.StringDictionary.html">StringDictionary</a></li><li><a href="sntls.Tree.html">Tree</a></li><li><a href="sntls.TreeWalker.html">TreeWalker</a></li><li><a href="sntls.Utils.html">Utils</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat May 31 2014 08:18:21 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Feb 07 2015 14:31:09 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
