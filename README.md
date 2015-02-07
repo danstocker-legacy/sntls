@@ -3,11 +3,13 @@ Sntls
 
 *Pronounced: "Essentials"*
 
-A collection of general purpose classes and behaviors (class traits) such as collections, dictionaries, trees, ordered lists, profiling, stateful objects, etc. The purpose of **Sntls** is to turn routines performed on multitudes (of data entries or class instances) into a series of linear transformations, akin to the CQS style of jQuery. The goal of Sntls is to make such complex transformations easy to follow and modify.
+A collection of general purpose classes and behaviors (class traits) such as collections, dictionaries, trees, ordered lists, etc. The purpose of **Sntls** is to turn routines performed on multitudes (of data entries or class instances) into a series of linear transformations, akin to the CQS style of jQuery. The goal of Sntls is to make such complex transformations easy to follow and modify.
 
 [Wiki](https://github.com/danstocker/sntls/wiki)
 
 [Reference](http://danstocker.github.io/sntls/)
+
+[Npm package](https://www.npmjs.com/package/sntls)
 
 Examples
 --------
