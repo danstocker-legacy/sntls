@@ -11,7 +11,6 @@ module.exports = function (grunt) {
             'js/data/Dictionary.js',
             'js/data/StringDictionary.js',
             'js/data/Collection.js',
-            'js/data/JournalingCollection.js',
             'js/data/OrderedList.js',
             'js/data/OrderedStringList.js',
             'js/data/Set.js',
