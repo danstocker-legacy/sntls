@@ -1,3 +1,4 @@
+/*global troop */
 (function () {
     "use strict";
 
