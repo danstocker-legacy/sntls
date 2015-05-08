@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls, sntls */
-/*global window */
+/*jshint browser:true, node:true */
 troop.postpone(sntls, 'Debouncer', function () {
     "use strict";
 
@@ -29,7 +29,7 @@ troop.postpone(sntls, 'Debouncer', function () {
              * @private
              */
             _setTimeoutProxy: function (func, delay) {
-                return window.setTimeout(func, delay);
+                return setTimeout(func, delay);
             },
 
             /**
@@ -37,7 +37,7 @@ troop.postpone(sntls, 'Debouncer', function () {
              * @private
              */
             _clearTimeoutProxy: function (timer) {
-                return window.clearTimeout(timer);
+                return clearTimeout(timer);
             }
         })
         .addMethods(/** @lends sntls.Debouncer# */{
