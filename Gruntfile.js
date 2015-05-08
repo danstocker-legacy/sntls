@@ -7,6 +7,7 @@ module.exports = function (grunt) {
             'js/namespace.js',
             'js/utils/Utils.js',
             'js/utils/Array.js',
+            'js/utils/Debouncer.js',
             'js/data/Hash.js',
             'js/data/Dictionary.js',
             'js/data/StringDictionary.js',
