@@ -183,12 +183,15 @@ troop.postpone(sntls, 'Hash', function () {
              * @returns {sntls.Hash}
              */
             changeBufferTypeTo: function (bufferType) {
-                if (!this.items instanceof bufferType) {
+                var items = this.items;
+
+                if (items instanceof Array && bufferType === Array ||
+                    !(items instanceof Array) && bufferType === Object
+                    ) {
                     return this;
                 }
 
-                var items = this.items,
-                    buffer = bufferType === Array ? [] : {},
+                var buffer = bufferType === Array ? [] : {},
                     keys = Object.keys(items),
                     i, key;
 
