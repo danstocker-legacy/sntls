@@ -92,14 +92,14 @@ troop.postpone(sntls, 'Debouncer', function () {
                     args = slice.call(arguments, 1);
 
                 this.debounceTimer = this._setTimeoutProxy(function () {
-                    var result = that.originalFunction.apply(that, args);
-
-                    // resolving returned promise
-                    that.debounceDeferred.resolve(result);
+                    var debounceDeferred = that.debounceDeferred;
 
                     // clearing debouncer state
                     that.debounceTimer = undefined;
                     that.debounceDeferred = undefined;
+
+                    // calling original function and fulfilling promise
+                    debounceDeferred.resolve(that.originalFunction.apply(that, args));
                 }, delay);
 
                 return this.debounceDeferred.promise;

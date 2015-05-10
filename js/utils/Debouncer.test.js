@@ -46,6 +46,10 @@
             var args = Array.prototype.slice.call(arguments);
             deepEqual(args, ['world'],
                 "should call debounced method eventually and pass arguments of last call");
+            equal(typeof debouncer.debounceTimer, 'undefined',
+                "should clear debounceTimer before calling original function");
+            equal(typeof debouncer.debounceDeferred, 'undefined',
+                "should clear debounceDeferred before calling original function");
             return result;
         }
 
@@ -61,10 +65,6 @@
                 ok(true, "should resolve promise for last call");
                 strictEqual(value, result,
                     "should resolve with value returned by original function");
-                equal(typeof debouncer.debounceTimer, 'undefined',
-                    "should clear debounceTimer");
-                equal(typeof debouncer.debounceDeferred, 'undefined',
-                    "should clear debounceDeferred");
             })
             .then(function () {
                 start();
