@@ -19,6 +19,12 @@ var dessert = dessert || require('dessert');
 var troop = troop || require('troop');
 
 /**
+ * @namespace
+ * @see https://github.com/kriskowal/q
+ */
+var Q = Q || require('q', 'Q');
+
+/**
  * Native string class.
  * @name String
  * @class

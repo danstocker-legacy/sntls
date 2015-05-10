@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, sntls */
+/*global dessert, troop, Q, sntls */
 /*jshint browser:true, node:true */
 troop.postpone(sntls, 'Debouncer', function () {
     "use strict";
@@ -15,8 +15,9 @@ troop.postpone(sntls, 'Debouncer', function () {
      */
 
     /**
-     * De-bounces a function. Calls to the specified function via .runDebounced will be rejected
-     * by each subsequent call being made within the specified time frame.
+     * De-bounces a function. Calls to the specified function via .runDebounced will be ignored
+     * and replaced by subsequent calls being made within the specified time frame.
+     * When no new calls were made in the specified time frame, the last call will go through.
      * @class
      * @extends troop.Base
      */
@@ -48,33 +49,60 @@ troop.postpone(sntls, 'Debouncer', function () {
             init: function (originalFunction) {
                 dessert.isFunction(originalFunction, "Invalid original function");
 
-                /** @type {function} */
+                /**
+                 * Function to be de-bounced.
+                 * @type {function}
+                 */
                 this.originalFunction = originalFunction;
 
-                /** @type {number} */
+                /**
+                 * Internal timer identifier for the de-bounce process.
+                 * @type {number}
+                 */
                 this.debounceTimer = undefined;
+
+                /**
+                 * Internal deferred object that gets resolved when the de-bounce sequence completes.
+                 * @type {Q.Deferred}
+                 */
+                this.debounceDeferred = undefined;
             },
 
             /**
-             * @param {number} delay
-             * @returns {sntls.Debouncer}
+             * Runs the original function de-bounced with the specified delay.
+             * @param {number} [delay]
+             * @returns {Q.Promise}
              */
             runDebounced: function (delay) {
+                delay = delay || 0;
+
                 var debounceTimer = this.debounceTimer;
 
                 if (debounceTimer) {
+                    // clearing previous timeout
                     this._clearTimeoutProxy(debounceTimer);
+                }
+
+                if (!this.debounceDeferred) {
+                    // creating deferred object for new debounce sequence
+                    this.debounceDeferred = Q.defer();
                 }
 
                 var that = this,
                     args = slice.call(arguments, 1);
 
                 this.debounceTimer = this._setTimeoutProxy(function () {
-                    that.originalFunction.apply(that, args);
+                    var result = that.originalFunction.apply(that, args);
+
+                    // resolving returned promise
+                    that.debounceDeferred.resolve(result);
+
+                    // clearing debouncer state
                     that.debounceTimer = undefined;
+                    that.debounceDeferred = undefined;
                 }, delay);
 
-                return this;
+                return this.debounceDeferred.promise;
             }
         });
 });

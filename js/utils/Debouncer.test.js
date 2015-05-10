@@ -1,5 +1,5 @@
 /*global dessert, troop, sntls, sntls */
-/*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
+/*global module, test, asyncTest, start, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
 
@@ -21,7 +21,10 @@
 
         strictEqual(debounced.originalFunction, originalFunction, "should set originalFunction property to argument");
         ok(debounced.hasOwnProperty('debounceTimer'), "should add debounceTimer property");
-        equal(typeof debounced.debounceTimer, 'undefined', "should set debounceTimer property to undefined");
+        equal(typeof debounced.debounceTimer, 'undefined',
+            "should set debounceTimer property to undefined");
+        equal(typeof debounced.debounceDeferred, 'undefined',
+            "should set debounceDeferred property to undefined");
     });
 
     test("Conversion from function", function () {
@@ -34,34 +37,37 @@
         strictEqual(debouncer.originalFunction, foo, "should set originalFunction property");
     });
 
-    test("Method invocation", function () {
-        expect(5);
+    asyncTest("Debounced call", function () {
+        expect(6);
 
-        var args = [];
+        var result = {};
 
         function foo() {
-            args = Array.prototype.slice.call(arguments);
+            var args = Array.prototype.slice.call(arguments);
+            deepEqual(args, ['world'],
+                "should call debounced method eventually and pass arguments of last call");
+            return result;
         }
 
-        var debounced = sntls.Debouncer.create(foo);
+        var debouncer = foo.toDebouncer();
 
-        debounced.debounceTimer = 5;
+        debouncer.runDebounced(100, 'hello')
+            .then(function () {
+                ok(true, "should resolve promise for skipped call");
+            });
 
-        debounced.addMocks({
-            _clearTimeoutProxy: function (timer) {
-                equal(timer, 5, "should clear timeout when timer is set");
-            },
-
-            _setTimeoutProxy: function (func, delay) {
-                equal(delay, 100, "should pass delay to setTimeout");
-                func();
-                return 10;
-            }
-        });
-
-        strictEqual(debounced.runDebounced(100, 'hello'), debounced, "should be chainable");
-
-        equal(debounced.debounceTimer, 10, "should set new timer");
-        deepEqual(args, ['hello'], "should pass arguments to debounced method");
+        debouncer.runDebounced(200, 'world')
+            .then(function (value) {
+                ok(true, "should resolve promise for last call");
+                strictEqual(value, result,
+                    "should resolve with value returned by original function");
+                equal(typeof debouncer.debounceTimer, 'undefined',
+                    "should clear debounceTimer");
+                equal(typeof debouncer.debounceDeferred, 'undefined',
+                    "should clear debounceDeferred");
+            })
+            .then(function () {
+                start();
+            });
     });
 }());
