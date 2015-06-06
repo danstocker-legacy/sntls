@@ -4,13 +4,16 @@
 
     module("Utils");
 
-    test("Object property count", function () {
-        ok(sntls.Utils.isEmptyObject({}), "Empty object");
-        ok(!sntls.Utils.isEmptyObject({foo: "bar"}), "Non-empty object");
+    test("Empty object tester", function () {
+        ok(sntls.Utils.isEmptyObject({}), "should return true for empty object");
+        ok(!sntls.Utils.isEmptyObject({foo: "bar"}), "should return false for non-empty object");
+    });
 
-        ok(sntls.Utils.isSingularObject({foo: "bar"}), "Singular object");
-        ok(!sntls.Utils.isSingularObject({}), "Non-singular object (too few)");
-        ok(!sntls.Utils.isSingularObject({foo: "bar", hello: "world"}), "Non-singular object (too many)");
+    test("Singular object tester", function () {
+        ok(sntls.Utils.isSingularObject({foo: "bar"}), "should return true for singular object");
+        ok(!sntls.Utils.isSingularObject({}), "should return false for empty object");
+        ok(!sntls.Utils.isSingularObject({foo: "bar", hello: "world"}),
+            "should return false for object with more than 1 properties");
     });
 
     test("Shallow copy", function () {
