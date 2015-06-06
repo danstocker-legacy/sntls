@@ -51,20 +51,22 @@ troop.postpone(sntls, 'Utils', function () {
              * @returns {object|Array} shallow copy of original
              */
             shallowCopy: function (original) {
-                if (dessert.validators.isArray(original)) {
-                    // shorthand for arrays
-                    return original.concat([]);
-                }
-
-                dessert.isObject(original, "Invalid copy source object");
-
-                var propertyNames = Object.getOwnPropertyNames(original),
+                var propertyNames,
                     i, propertyName,
-                    result = {};
+                    result;
 
-                for (i = 0; i < propertyNames.length; i++) {
-                    propertyName = propertyNames[i];
-                    result[propertyName] = original[propertyName];
+                if (original instanceof Array) {
+                    // shorthand for arrays
+                    result = original.concat([]);
+                } else if (typeof original === 'object') {
+                    propertyNames = Object.getOwnPropertyNames(original);
+                    result = {};
+                    for (i = 0; i < propertyNames.length; i++) {
+                        propertyName = propertyNames[i];
+                        result[propertyName] = original[propertyName];
+                    }
+                } else {
+                    result = original;
                 }
 
                 return result;

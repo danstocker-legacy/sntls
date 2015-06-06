@@ -23,11 +23,11 @@
             copyObject = sntls.Utils.shallowCopy(originalObject),
             copyArray = sntls.Utils.shallowCopy(originalArray);
 
-        deepEqual(copyArray, originalArray, "Arrays identical by value");
-        deepEqual(copyObject, originalObject, "Objects identical by value");
-        notStrictEqual(copyArray, originalArray, "Arrays not identical by reference");
-        notStrictEqual(copyObject, originalObject, "Objects not identical by reference");
-        strictEqual(copyArray[0], originalArray[0], "Array items identical by reference");
-        strictEqual(copyObject.foo, originalObject.foo, "Object properties identical by reference");
+        equal(sntls.Utils.shallowCopy(undefined), undefined, "should return undefined for undefined");
+        equal(sntls.Utils.shallowCopy(5), 5, "should return original for primitive");
+        notStrictEqual(copyArray, originalArray, "should return different array instance for array");
+        deepEqual(copyArray, originalArray, "should return array with identical contents for array");
+        notStrictEqual(copyObject, originalObject, "should return different object instance for object");
+        deepEqual(copyObject, originalObject, "should return object with identical contents for object");
     });
 }());
