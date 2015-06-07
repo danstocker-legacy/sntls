@@ -2,7 +2,8 @@
 troop.postpone(sntls, 'Tree', function () {
     "use strict";
 
-    var Hash = sntls.Hash;
+    var hop = Object.prototype.hasOwnProperty,
+        Hash = sntls.Hash;
 
     /**
      * Instantiates class
@@ -218,29 +219,32 @@ troop.postpone(sntls, 'Tree', function () {
             unsetKey: function (path, splice, handler) {
                 if (!path.asArray.length) {
                     // empty path equivalent to clear
-                    this.clear();
-
-                    if (handler) {
-                        handler(path, this.items);
-                    }
-
+                    this.clear(handler && function (items) {
+                        handler(path, items);
+                    });
                     return this;
                 }
 
                 var parentPath = path.clone().trimRight(),
-                    targetParent = this.getNode(parentPath);
+                    propertyName = path.getLastKey(),
+                    targetParent = this.getNode(parentPath),
+                    changed = false;
 
                 if (targetParent instanceof Object) {
                     // concerns existing parent nodes only
                     if (splice && targetParent instanceof Array) {
                         // removing marked node by splicing it out of array
                         targetParent.splice(path.getLastKey(), 1);
+                        changed = true;
                     } else {
                         // deleting marked node
-                        delete targetParent[path.getLastKey()];
+                        if (hop.call(targetParent, propertyName)) {
+                            delete targetParent[propertyName];
+                            changed = true;
+                        }
                     }
 
-                    if (handler) {
+                    if (changed && handler) {
                         handler(parentPath, targetParent);
                     }
                 }

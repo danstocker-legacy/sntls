@@ -262,19 +262,20 @@
         expect(4);
 
         var tree = sntls.Tree.create({
-                foo: {
-                    bar: "Hello world!"
-                }
-            }),
-            result;
-
-        result = tree.unsetKey('foo>bar'.toPath(), false, function (path, value) {
-            equal(path.toString(), 'foo', "should pass affected path to handler");
-            deepEqual(value, {}, "should pass parent node (after) to handler");
+            foo: {
+                bar: "Hello world!"
+            }
         });
 
-        strictEqual(result, tree, "should be chainable");
+        strictEqual(tree.unsetKey('foo>bar'.toPath(), false, function (path, value) {
+            equal(path.toString(), 'foo', "should pass affected path to handler");
+            deepEqual(value, {}, "should pass parent node (after) to handler");
+        }), tree, "should be chainable");
         deepEqual(tree.items, {foo: {}}, "should remove specified key");
+
+        tree.unsetKey('foo>bar'.toPath(), false, function () {
+            ok(false, "should NOT invoke handler for absent key");
+        });
     });
 
     test("Key-deleting entire tree", function () {
@@ -291,7 +292,11 @@
             strictEqual(value, tree.items, "should pass tree buffer as value");
         });
 
-        deepEqual(tree.items, {}, "Tree completely emptied");
+        deepEqual(tree.items, {}, "should set buffer to empty object");
+
+        tree.unsetKey([].toPath(), false, function () {
+            ok(false, "should NOT invoke handler for buffer that's already empty");
+        });
     });
 
     test("Key deletion from array", function () {
