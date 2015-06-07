@@ -1,6 +1,6 @@
 {
     "name"           : "sntls",
-    "version"        : "0.20.2",
+    "version"        : "0.20.3",
     "description"    : "Essential tools, data structures, and behaviors",
     "keywords"       : [
         "tools",

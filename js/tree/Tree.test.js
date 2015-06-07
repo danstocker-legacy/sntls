@@ -174,7 +174,7 @@
     });
 
     test("Key deletion from object", function () {
-        expect(5);
+        expect(4);
 
         var tree = sntls.Tree.create({
                 foo: {
@@ -184,20 +184,16 @@
             result;
 
         result = tree.unsetKey('foo>bar'.toPath(), false, function (path, value) {
-            equal(path.toString(), 'foo>bar', "Affected path");
-            equal(typeof value, 'undefined', "Affected value undefined");
+            equal(path.toString(), 'foo', "should pass affected path to handler");
+            deepEqual(value, {}, "should pass parent node (after) to handler");
         });
 
-        strictEqual(result, tree, "Tree.unsetKey is chainable");
-        deepEqual(tree.items, {foo: {}}, "Node removed");
-
-        tree.unsetKey('foo'.toPath());
-
-        deepEqual(tree.items, {}, "Tree completely emptied");
+        strictEqual(result, tree, "should be chainable");
+        deepEqual(tree.items, {foo: {}}, "should remove specified key");
     });
 
-    test("Empty key deletion", function () {
-        expect(2);
+    test("Key-deleting entire tree", function () {
+        expect(3);
 
         var tree = sntls.Tree.create({
             foo: {
@@ -205,36 +201,34 @@
             }
         });
 
-        tree.unsetKey([].toPath(), false, function (path) {
-            deepEqual(path.asArray, [], "Affected path");
+        tree.unsetKey([].toPath(), false, function (path, value) {
+            deepEqual(path.asArray, [], "should pass empty path to handler");
+            strictEqual(value, tree.items, "should pass tree buffer as value");
         });
 
         deepEqual(tree.items, {}, "Tree completely emptied");
     });
 
     test("Key deletion from array", function () {
-        expect(7);
-
         var tree = sntls.Tree.create({
             foo: {
                 bar: ['hello', 'all', 'the', 'world']
             }
         });
 
-        tree.unsetKey('foo>bar>2'.toPath(), false, function (path, value) {
-            equal(path.toString(), 'foo>bar>2', "Affected path");
-            equal(typeof value, 'undefined', "Affected value undefined");
-        });
-        deepEqual(tree.items, {foo: {bar: ['hello', 'all', undefined, 'world']}}, "Node deleted");
-
-        tree.unsetKey('foo>bar>2'.toPath(), true, function (path, value) {
-            equal(path.toString(), 'foo>bar', "Affected path");
-            deepEqual(value, ['hello', 'all', 'world'], "Affected value undefined");
-        });
-        deepEqual(tree.items, {foo: {bar: ['hello', 'all', 'world']}}, "Node spliced out");
+        tree.unsetKey('foo>bar>2'.toPath(), false);
+        deepEqual(tree.items, {
+            foo: {
+                bar: ['hello', 'all', undefined, 'world']
+            }
+        }, "should delete specified node when splice argument is false");
 
         tree.unsetKey('foo>bar>2'.toPath(), true);
-        deepEqual(tree.items, {foo: {bar: ['hello', 'all']}}, "Node spliced out");
+        deepEqual(tree.items, {
+            foo: {
+                bar: ['hello', 'all', 'world']
+            }
+        }, "should splice node out when splice argument is true");
     });
 
     test("Path deletion in objects", function () {
@@ -296,32 +290,32 @@
         });
 
         deepEqual(tree.items, {
-                a: {d: {}, e: {}, f: {
-                    g: {}
-                }},
-                b: {},
-                c: {}
-            }, "should remove specified path");
+            a: {d: {}, e: {}, f: {
+                g: {}
+            }},
+            b: {},
+            c: {}
+        }, "should remove specified path");
 
         tree.unsetPath('a>f>g'.toPath());
 
         deepEqual(tree.items, {
-                a: {d: {}, e: {}},
-                b: {},
-                c: {}
-            }, "should remove specified path");
+            a: {d: {}, e: {}},
+            b: {},
+            c: {}
+        }, "should remove specified path");
 
         tree.unsetPath('b'.toPath());
         deepEqual(tree.items, {
-                a: {d: {}, e: {}},
-                c: {}
-            }, "should remove path ending in non-singular node");
+            a: {d: {}, e: {}},
+            c: {}
+        }, "should remove path ending in non-singular node");
 
         tree.unsetPath('a>e>foo'.toPath());
         deepEqual(tree.items, {
-                a: {d: {}, e: {}},
-                c: {}
-            }, "should not remove overreaching node");
+            a: {d: {}, e: {}},
+            c: {}
+        }, "should not remove overreaching node");
 
         tree
             .unsetPath('c'.toPath())

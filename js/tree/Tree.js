@@ -8,7 +8,7 @@ troop.postpone(sntls, 'Tree', function () {
      * Instantiates class
      * @name sntls.Tree.create
      * @function
-     * @param {object} items
+     * @param {object} [items]
      * @returns {sntls.Tree}
      */
 
@@ -163,8 +163,7 @@ troop.postpone(sntls, 'Tree', function () {
                     this.clear();
 
                     if (handler) {
-                        // root node changed, calling handler
-                        handler(path);
+                        handler(path, this.items);
                     }
 
                     return this;
@@ -178,17 +177,13 @@ troop.postpone(sntls, 'Tree', function () {
                     if (splice && targetParent instanceof Array) {
                         // removing marked node by splicing it out of array
                         targetParent.splice(path.getLastKey(), 1);
-                        if (handler) {
-                            // entire parent changed
-                            handler(parentPath, targetParent);
-                        }
                     } else {
                         // deleting marked node
                         delete targetParent[path.getLastKey()];
-                        if (handler) {
-                            // only leaf node changed
-                            handler(path);
-                        }
+                    }
+
+                    if (handler) {
+                        handler(parentPath, targetParent);
                     }
                 }
 
