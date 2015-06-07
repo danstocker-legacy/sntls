@@ -154,15 +154,14 @@ troop.postpone(sntls, 'Tree', function () {
                             node[key] = value[key];
                         }
                     }
+
+                    if (changed && handler) {
+                        handler(path, node);
+                    }
                 } else if (value !== node) {
                     // node is either undefined or primitive
                     // replacing node
-                    this.setNode(path, value);
-                    changed = true;
-                }
-
-                if (changed && handler) {
-                    handler();
+                    this.setNode(path, value, handler);
                 }
 
                 return this;

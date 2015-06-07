@@ -120,7 +120,7 @@
     });
 
     test("Appending object to object", function () {
-        expect(3);
+        expect(4);
 
         var tree = sntls.Tree.create();
 
@@ -130,8 +130,12 @@
 
         strictEqual(tree.appendNode('foo>bar'.toPath(), {
             hi: 'all'
-        }, function () {
-            ok(true, "should invoke handler");
+        }, function (path, afterNode) {
+            ok(path.equals('foo>bar'.toPath()), "should pass affected path to handler");
+            deepEqual(afterNode, {
+                hello: 'world',
+                hi   : 'all'
+            }, "should pass after node to handler");
         }), tree, "should be chainable");
 
         deepEqual(tree.items, {
@@ -151,12 +155,14 @@
     });
 
     test("Appending array to array", function () {
-        expect(2);
+        expect(3);
 
         var tree = sntls.Tree.create()
             .setNode('foo>bar'.toPath(), [ 'hello', 'world' ])
-            .appendNode('foo>bar'.toPath(), [ 'hi', 'all' ], function () {
-                ok(true, "should invoke handler");
+            .appendNode('foo>bar'.toPath(), [ 'hi', 'all' ], function (path, afterNode) {
+                ok(path.equals('foo>bar'.toPath()), "should pass affected path to handler");
+                deepEqual(afterNode, [ 'hello', 'world', 'hi', 'all' ],
+                    "should pass after node to handler");
             });
 
         deepEqual(tree.items, {
@@ -171,14 +177,16 @@
     });
 
     test("Appending object to array", function () {
-        expect(2);
+        expect(3);
 
         var tree = sntls.Tree.create()
             .setNode('foo>bar'.toPath(), [ 'hello', 'world' ])
             .appendNode('foo>bar'.toPath(), {
                 'hi': 'all'
-            }, function () {
-                ok(true, "should invoke handler");
+            }, function (path, afterNode) {
+                ok(path.equals('foo>bar'.toPath()), "should pass affected path to handler");
+                deepEqual(afterNode, [ 'hello', 'world', {'hi': 'all'} ],
+                    "should pass after node to handler");
             });
 
         deepEqual(tree.items, {
@@ -189,12 +197,13 @@
     });
 
     test("Appending value to primitive", function () {
-        expect(2);
+        expect(3);
 
         var tree = sntls.Tree.create()
             .setNode('foo>bar'.toPath(), 'hello')
-            .appendNode('foo>bar'.toPath(), 'hi', function () {
-                ok(true, "should invoke handler");
+            .appendNode('foo>bar'.toPath(), 'hi', function (path, afterNode) {
+                ok(path.equals('foo>bar'.toPath()), "should pass affected path to handler");
+                equal(afterNode, 'hi', "should pass after node to handler");
             });
 
         deepEqual(tree.items, {
