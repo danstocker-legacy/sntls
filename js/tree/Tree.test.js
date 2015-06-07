@@ -113,6 +113,8 @@
     });
 
     test("Appending object to object", function () {
+        expect(3);
+
         var tree = sntls.Tree.create();
 
         tree.setNode('foo>bar'.toPath(), {
@@ -121,6 +123,8 @@
 
         strictEqual(tree.appendNode('foo>bar'.toPath(), {
             hi: 'all'
+        }, function () {
+            ok(true, "should invoke handler");
         }), tree, "should be chainable");
 
         deepEqual(tree.items, {
@@ -131,25 +135,43 @@
                 }
             }
         }, "should append node");
+
+        tree.appendNode('foo>bar'.toPath(), {
+            hi: 'all'
+        }, function () {
+            ok(false, "should NOT invoke handler on appending identical key-value pairs");
+        });
     });
 
     test("Appending array to array", function () {
+        expect(2);
+
         var tree = sntls.Tree.create()
             .setNode('foo>bar'.toPath(), [ 'hello', 'world' ])
-            .appendNode('foo>bar'.toPath(), [ 'hi', 'all' ]);
+            .appendNode('foo>bar'.toPath(), [ 'hi', 'all' ], function () {
+                ok(true, "should invoke handler");
+            });
 
         deepEqual(tree.items, {
             foo: {
                 bar: [ 'hello', 'world', 'hi', 'all' ]
             }
         }, "should concatenate specified value node");
+
+        tree.appendNode('foo>bar'.toPath(), [], function () {
+            ok(false, "should NOT invoke handler on empty array");
+        });
     });
 
     test("Appending object to array", function () {
+        expect(2);
+
         var tree = sntls.Tree.create()
             .setNode('foo>bar'.toPath(), [ 'hello', 'world' ])
             .appendNode('foo>bar'.toPath(), {
                 'hi': 'all'
+            }, function () {
+                ok(true, "should invoke handler");
             });
 
         deepEqual(tree.items, {
@@ -160,15 +182,23 @@
     });
 
     test("Appending value to primitive", function () {
+        expect(2);
+
         var tree = sntls.Tree.create()
             .setNode('foo>bar'.toPath(), 'hello')
-            .appendNode('foo>bar'.toPath(), 'hi');
+            .appendNode('foo>bar'.toPath(), 'hi', function () {
+                ok(true, "should invoke handler");
+            });
 
         deepEqual(tree.items, {
             foo: {
                 bar: 'hi'
             }
         }, "should replace primitive node");
+
+        tree.appendNode('foo>bar'.toPath(), 'hi', function () {
+            ok(false, "should NOT invoke handler on appending identical value");
+        });
     });
 
     test("Getting or setting node", function () {

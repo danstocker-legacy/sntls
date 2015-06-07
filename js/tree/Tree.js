@@ -105,26 +105,32 @@ troop.postpone(sntls, 'Tree', function () {
              * In case of conflict the new value wins.
              * @param {sntls.Path} path Path to node
              * @param {Object|Array} value Value to append to node
+             * @param {function} handler Called on change
              * @returns {sntls.Tree}
              */
-            appendNode: function (path, value) {
+            appendNode: function (path, value, handler) {
                 var node = this.getNode(path),
                     keys, keyCount,
-                    start, i, key;
+                    start, i, key,
+                    changed = false;
 
                 if (node instanceof Object) {
                     if (node instanceof Array) {
                         if (value instanceof Array) {
-                            // appending array to array
-                            start = node.length;
-                            keyCount = value.length;
-                            node.length = start + keyCount;
-                            for (i = 0; i < keyCount; i++) {
-                                node[start + i] = value[i];
+                            if (value.length > 0) {
+                                // appending non-empty array to array
+                                start = node.length;
+                                keyCount = value.length;
+                                node.length = start + keyCount;
+                                for (i = 0; i < keyCount; i++) {
+                                    node[start + i] = value[i];
+                                }
+                                changed = true;
                             }
                         } else {
                             // appending non-array to array
                             node.push(value);
+                            changed = true;
                         }
                     } else {
                         // appending object to object
@@ -132,13 +138,21 @@ troop.postpone(sntls, 'Tree', function () {
                         keyCount = keys.length;
                         for (i = 0; i < keyCount; i++) {
                             key = keys[i];
+                            if (!changed && node[key] !== value[key]) {
+                                changed = true;
+                            }
                             node[key] = value[key];
                         }
                     }
-                } else {
+                } else if (value !== node) {
                     // node is either undefined or primitive
                     // replacing node
                     this.setNode(path, value);
+                    changed = true;
+                }
+
+                if (changed && handler) {
+                    handler();
                 }
 
                 return this;
