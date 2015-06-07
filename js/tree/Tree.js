@@ -93,11 +93,20 @@ troop.postpone(sntls, 'Tree', function () {
              * Sets the node at the specified path to the given value.
              * @param {sntls.Path} path Path to node
              * @param {*} value Node value to set
+             * @param {function} [handler] Called on change
              * @returns {sntls.Tree}
              */
-            setNode: function (path, value) {
-                var node = this.getSafeNode(path.clone().trimRight());
-                node[path.getLastKey()] = value;
+            setNode: function (path, value, handler) {
+                var node = this.getSafeNode(path.clone().trimRight()),
+                    propertyName = path.getLastKey();
+
+                if (node[propertyName] !== value) {
+                    node[propertyName] = value;
+                    if (handler) {
+                        handler(path, value);
+                    }
+                }
+
                 return this;
             },
 
@@ -106,7 +115,7 @@ troop.postpone(sntls, 'Tree', function () {
              * In case of conflict the new value wins.
              * @param {sntls.Path} path Path to node
              * @param {Object|Array} value Value to append to node
-             * @param {function} handler Called on change
+             * @param {function} [handler] Called on change
              * @returns {sntls.Tree}
              */
             appendNode: function (path, value, handler) {

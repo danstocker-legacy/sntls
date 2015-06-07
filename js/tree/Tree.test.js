@@ -99,17 +99,24 @@
     });
 
     test("Node setter", function () {
-        var tree = sntls.Tree.create({}),
-            result;
+        expect(4);
 
-        result = tree.setNode('foo>bar'.toPath(), "Hello world!");
+        var tree = sntls.Tree.create({});
 
-        strictEqual(result, tree, "should be chainable");
+        strictEqual(tree.setNode('foo>bar'.toPath(), "Hello world!", function (path, node) {
+            ok(path.equals('foo>bar'.toPath()), "should pass path to handler");
+            equal(node, "Hello world!", "should pass new node to handler");
+        }), tree, "should be chainable");
+
         deepEqual(tree.items, {
             foo: {
                 bar: "Hello world!"
             }
         }, "should set node in tree");
+
+        tree.setNode('foo>bar'.toPath(), "Hello world!", function () {
+            ok(false, "should NOT invoke handler when setting the same value");
+        });
     });
 
     test("Appending object to object", function () {
