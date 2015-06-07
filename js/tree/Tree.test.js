@@ -98,22 +98,77 @@
         }, "Existing path overwritten");
     });
 
-    test("Node setting", function () {
+    test("Node setter", function () {
         var tree = sntls.Tree.create({}),
             result;
 
         result = tree.setNode('foo>bar'.toPath(), "Hello world!");
 
-        strictEqual(result, tree, "Tree.setNode is chainable");
-        deepEqual(
-            tree.items,
-            {
-                foo: {
-                    bar: "Hello world!"
+        strictEqual(result, tree, "should be chainable");
+        deepEqual(tree.items, {
+            foo: {
+                bar: "Hello world!"
+            }
+        }, "should set node in tree");
+    });
+
+    test("Appending object to object", function () {
+        var tree = sntls.Tree.create();
+
+        tree.setNode('foo>bar'.toPath(), {
+            hello: 'world'
+        });
+
+        strictEqual(tree.appendNode('foo>bar'.toPath(), {
+            hi: 'all'
+        }), tree, "should be chainable");
+
+        deepEqual(tree.items, {
+            foo: {
+                bar: {
+                    hello: 'world',
+                    hi   : 'all'
                 }
-            },
-            "Tree node set"
-        );
+            }
+        }, "should append node");
+    });
+
+    test("Appending array to array", function () {
+        var tree = sntls.Tree.create()
+            .setNode('foo>bar'.toPath(), [ 'hello', 'world' ])
+            .appendNode('foo>bar'.toPath(), [ 'hi', 'all' ]);
+
+        deepEqual(tree.items, {
+            foo: {
+                bar: [ 'hello', 'world', 'hi', 'all' ]
+            }
+        }, "should concatenate specified value node");
+    });
+
+    test("Appending object to array", function () {
+        var tree = sntls.Tree.create()
+            .setNode('foo>bar'.toPath(), [ 'hello', 'world' ])
+            .appendNode('foo>bar'.toPath(), {
+                'hi': 'all'
+            });
+
+        deepEqual(tree.items, {
+            foo: {
+                bar: [ 'hello', 'world', {'hi': 'all'} ]
+            }
+        }, "should push specified value to node");
+    });
+
+    test("Appending value to primitive", function () {
+        var tree = sntls.Tree.create()
+            .setNode('foo>bar'.toPath(), 'hello')
+            .appendNode('foo>bar'.toPath(), 'hi');
+
+        deepEqual(tree.items, {
+            foo: {
+                bar: 'hi'
+            }
+        }, "should replace primitive node");
     });
 
     test("Getting or setting node", function () {

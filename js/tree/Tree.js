@@ -101,6 +101,50 @@ troop.postpone(sntls, 'Tree', function () {
             },
 
             /**
+             * Appends the node with the specified value.
+             * In case of conflict the new value wins.
+             * @param {sntls.Path} path Path to node
+             * @param {Object|Array} value Value to append to node
+             * @returns {sntls.Tree}
+             */
+            appendNode: function (path, value) {
+                var node = this.getNode(path),
+                    keys, keyCount,
+                    start, i, key;
+
+                if (node instanceof Object) {
+                    if (node instanceof Array) {
+                        if (value instanceof Array) {
+                            // appending array to array
+                            start = node.length;
+                            keyCount = value.length;
+                            node.length = start + keyCount;
+                            for (i = 0; i < keyCount; i++) {
+                                node[start + i] = value[i];
+                            }
+                        } else {
+                            // appending non-array to array
+                            node.push(value);
+                        }
+                    } else {
+                        // appending object to object
+                        keys = Object.keys(value);
+                        keyCount = keys.length;
+                        for (i = 0; i < keyCount; i++) {
+                            key = keys[i];
+                            node[key] = value[key];
+                        }
+                    }
+                } else {
+                    // node is either undefined or primitive
+                    // replacing node
+                    this.setNode(path, value);
+                }
+
+                return this;
+            },
+
+            /**
              * Retrieves the value at the specified path, or
              * when the path does not exist, creates path and
              * assigns the return value of the generator.
@@ -494,7 +538,7 @@ troop.amendPostponed(sntls, 'Hash', function () {
 
         isTreeOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   sntls.Tree.isBaseOf(expr);
+                sntls.Tree.isBaseOf(expr);
         }
     });
 
