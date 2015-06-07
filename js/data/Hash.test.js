@@ -184,25 +184,39 @@
         );
     });
 
-    test("Clearing", function () {
-        var hash,
-            result;
+    test("Clearing object based hash", function () {
+        expect(4);
 
-        hash = sntls.Hash.create({
+        var hash = sntls.Hash.create({
             foo  : 'bar',
             hello: 'world'
         });
 
-        result = hash.clear();
-        strictEqual(result, hash, "Clearing is chainable");
-        deepEqual(hash.items, {}, "Object buffer emptied");
-        equal(hash.keyCount, 0, "Counter reset");
+        strictEqual(hash.clear(function (items) {
+            strictEqual(items, hash.items, "should pass new items to handler");
+        }), hash, "should be chainable");
 
-        hash = sntls.Hash.create(['foo', 'bar', 'hello', 'world']);
+        deepEqual(hash.items, {}, "should set buffer to empty object");
+        equal(hash.keyCount, 0, "should reset counter");
 
-        hash.clear();
-        deepEqual(hash.items, [], "Array buffer emptied");
-        equal(hash.keyCount, 0, "Counter reset");
+        hash.clear(function () {
+            ok(false, "should NOT call handler when buffer is already empty");
+        });
+    });
+
+    test("Clearing array based hash", function () {
+        expect(2);
+
+        var hash = sntls.Hash.create(['foo', 'bar', 'hello', 'world']);
+
+        hash.clear(function (items) {
+            strictEqual(items, hash.items, "should pass new items to handler");
+        });
+        deepEqual(hash.items, [], "should set buffer to empty array");
+
+        hash.clear(function () {
+            ok(false, "should NOT call handler when buffer is already empty");
+        });
     });
 
     test("Passing buffer to handler", function () {

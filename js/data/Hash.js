@@ -3,7 +3,8 @@ troop.postpone(sntls, 'Hash', function () {
     "use strict";
 
     var hOP = Object.prototype.hasOwnProperty,
-        slice = Array.prototype.slice;
+        slice = Array.prototype.slice,
+        isEmptyObject = sntls.Utils.isEmptyObject;
 
     /**
      * Instantiates class.
@@ -211,11 +212,18 @@ troop.postpone(sntls, 'Hash', function () {
             /**
              * Clears hash by replacing items buffer with an empty one.
              * Observes current buffer type, ie. if hash was array based, the new buffer will be also array.
+             * @param {function} handler Change handler callback. Receives the new `items` buffer.
              * @returns {sntls.Hash}
              */
-            clear: function () {
-                this.items = this.items instanceof Array ? [] : {};
-                this.keyCount = 0;
+            clear: function (handler) {
+                if (!isEmptyObject(this.items)) {
+                    this.items = this.items instanceof Array ? [] : {};
+                    this.keyCount = 0;
+
+                    if (handler) {
+                        handler(this.items);
+                    }
+                }
                 return this;
             },
 
@@ -263,7 +271,7 @@ troop.postpone(sntls, 'Hash', function () {
 
         isHashOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   sntls.Hash.isBaseOf(expr);
+                sntls.Hash.isBaseOf(expr);
         }
     });
 
