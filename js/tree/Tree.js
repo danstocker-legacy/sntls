@@ -97,13 +97,22 @@ troop.postpone(sntls, 'Tree', function () {
              * @returns {sntls.Tree}
              */
             setNode: function (path, value, handler) {
-                var node = this.getSafeNode(path.clone().trimRight()),
-                    propertyName = path.getLastKey();
+                var parentPath = path.clone().trimRight(),
+                    parentNode = this.getSafeNode(parentPath),
+                    propertyName = path.getLastKey(),
+                    hadPropertyBefore = hop.call(parentNode, propertyName);
 
-                if (node[propertyName] !== value) {
-                    node[propertyName] = value;
+                if (parentNode[propertyName] !== value) {
+                    parentNode[propertyName] = value;
+
                     if (handler) {
-                        handler(path, value);
+                        if (hadPropertyBefore) {
+                            // changing existing property on parent
+                            handler(path, value);
+                        } else {
+                            // adding new property to parent
+                            handler(parentPath, parentNode);
+                        }
                     }
                 }
 

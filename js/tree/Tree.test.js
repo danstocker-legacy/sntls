@@ -99,13 +99,16 @@
     });
 
     test("Node setter", function () {
-        expect(4);
+        expect(6);
 
         var tree = sntls.Tree.create({});
 
         strictEqual(tree.setNode('foo>bar'.toPath(), "Hello world!", function (path, node) {
-            ok(path.equals('foo>bar'.toPath()), "should pass path to handler");
-            equal(node, "Hello world!", "should pass new node to handler");
+            ok(path.equals('foo'.toPath()),
+                "should pass parent path to handler when adding new property");
+            deepEqual(node, {
+                bar: "Hello world!"
+            }, "should pass parent node to handler when adding new property");
         }), tree, "should be chainable");
 
         deepEqual(tree.items, {
@@ -116,6 +119,13 @@
 
         tree.setNode('foo>bar'.toPath(), "Hello world!", function () {
             ok(false, "should NOT invoke handler when setting the same value");
+        });
+
+        tree.setNode('foo>bar'.toPath(), "Hi all!", function (path, node) {
+            ok(path.equals('foo>bar'.toPath()),
+                "should pass target path to handler when changing existing property");
+            equal(node, "Hi all!",
+                "should pass new node to handler when changing existing property");
         });
     });
 
