@@ -357,14 +357,15 @@ troop.postpone(sntls, 'Tree', function () {
              * Moves node from one path to another.
              * @param {sntls.Path} fromPath
              * @param {sntls.Path} toPath
+             * @param {function} [handler]
              * @returns {sntls.Tree}
              */
-            moveNode: function (fromPath, toPath) {
+            moveNode: function (fromPath, toPath, handler) {
                 var node = this.getNode(fromPath);
 
                 this
                     .unsetNode(fromPath)
-                    .setNode(toPath, node);
+                    .setNode(toPath, node, handler);
 
                 return this;
             },
