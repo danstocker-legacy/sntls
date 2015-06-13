@@ -125,6 +125,5 @@ troop.amendPostponed(sntls, 'Hash', function () {
                 return sntls.OrderedStringList.create(this, orderType);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

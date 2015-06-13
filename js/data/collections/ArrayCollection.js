@@ -47,6 +47,5 @@ troop.amendPostponed(sntls, 'Hash', function () {
                 return sntls.ArrayCollection.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

@@ -243,8 +243,7 @@ troop.postpone(sntls, 'Path', function () {
                 return Path.create(this.split(Path.PATH_SEPARATOR).toUriDecoded());
             }
         },
-        false, false, false
-    );
+        false, false, false);
 
     troop.Properties.addProperties.call(
         Array.prototype,
@@ -257,6 +256,5 @@ troop.postpone(sntls, 'Path', function () {
                 return sntls.Path.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

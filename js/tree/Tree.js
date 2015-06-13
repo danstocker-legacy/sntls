@@ -583,6 +583,5 @@ troop.amendPostponed(sntls, 'Hash', function () {
                 return sntls.Tree.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

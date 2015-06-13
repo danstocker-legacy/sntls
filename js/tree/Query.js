@@ -299,8 +299,7 @@ troop.postpone(sntls, 'Query', function () {
                     this.toPath();
             }
         },
-        false, false, false
-    );
+        false, false, false);
 
     troop.Properties.addProperties.call(
         Array.prototype,
@@ -325,6 +324,5 @@ troop.postpone(sntls, 'Query', function () {
                     this.toPath();
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

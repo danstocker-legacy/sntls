@@ -55,6 +55,5 @@
                 return result;
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

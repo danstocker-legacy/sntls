@@ -286,6 +286,5 @@ troop.postpone(sntls, 'Hash', function () {
                 return sntls.Hash.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

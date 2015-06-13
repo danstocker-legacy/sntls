@@ -321,6 +321,5 @@ troop.amendPostponed(sntls, 'Hash', function () {
                 return sntls.Dictionary.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());

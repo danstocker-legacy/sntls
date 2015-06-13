@@ -401,8 +401,7 @@ troop.postpone(sntls, 'KeyValuePatternCollection', function () {
                 return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 
     troop.Properties.addProperties.call(
         Array.prototype,
@@ -424,6 +423,5 @@ troop.postpone(sntls, 'KeyValuePatternCollection', function () {
                 return /** @type {sntls.KeyValuePattern} */ sntls.KeyValuePattern.create(this);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());
