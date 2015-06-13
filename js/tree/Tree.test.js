@@ -74,8 +74,8 @@
             result;
 
         result = tree.getSafeNode(path, function (path, value) {
-            equal(path.toString(), 'foo>bar', "Affected path");
-            deepEqual(value, {}, "Affected value");
+            equal(path.toString(), 'foo>bar', "should pass affected path to handler");
+            deepEqual(value, {}, "should pass empty object to handler as new value");
         });
 
         deepEqual(tree.items, {
@@ -84,7 +84,8 @@
                 bar: {}
             }
         }, "Path built in tree");
-        strictEqual(result, tree.getNode(path), "Safe node retrieval returns new object");
+
+        strictEqual(result, tree.getNode(path), "should return created object");
 
         tree.getSafeNode('hello>world'.toPath());
 
@@ -95,7 +96,7 @@
             foo  : {
                 bar: {}
             }
-        }, "Existing path overwritten");
+        }, "should overwrite path contents");
     });
 
     test("Node setter", function () {

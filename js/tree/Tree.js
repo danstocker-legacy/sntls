@@ -82,7 +82,7 @@ troop.postpone(sntls, 'Tree', function () {
             /**
              * Retrieves safe value at path, wrapped in a hash.
              * @param {sntls.Path} path
-             * @param {function} [handler] Callback receiving the path affected by change.
+             * @param {function} [handler] Callback receiving the path and value affected by change.
              * @returns {sntls.Hash}
              */
             getSafeNodeAsHash: function (path, handler) {
@@ -181,14 +181,14 @@ troop.postpone(sntls, 'Tree', function () {
              * when the path does not exist, creates path and
              * assigns the return value of the generator.
              * @param {sntls.Path} path Path to node
-             * @param {function} generator Generator function returning value
+             * @param {function} generator Generator function returning value to be set.
              * @param {function} [handler] Callback receiving the path and value affected by change.
              * @returns {*}
              */
             getOrSetNode: function (path, generator, handler) {
                 var parentPath = path.clone().trimRight(),
-                    targetParent = this.getSafeNode(parentPath),
                     targetKey = path.getLastKey(),
+                    targetParent = this.getSafeNode(parentPath),
                     result;
 
                 if (targetParent.hasOwnProperty(targetKey)) {
@@ -279,14 +279,9 @@ troop.postpone(sntls, 'Tree', function () {
              */
             unsetPath: function (path, splice, handler) {
                 if (!path.asArray.length) {
-                    // empty path equivalent to clear
-                    this.clear();
-
-                    if (handler) {
-                        // root node changed, calling handler
-                        handler(path);
-                    }
-
+                    this.clear(handler && function (items) {
+                        handler(path, items);
+                    });
                     return this;
                 }
 
